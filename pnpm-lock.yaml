@@ -23,10 +23,10 @@ importers:
 
   apps/cli:
     dependencies:
-      '@repo/config':
+      '@md-oss/config':
         specifier: workspace:^
         version: link:../../packages/config
-      '@repo/utils':
+      '@md-oss/utils':
         specifier: workspace:^
         version: link:../../packages/utils
     devDependencies:
@@ -51,7 +51,7 @@ importers:
 
   packages/utils:
     dependencies:
-      '@repo/config':
+      '@md-oss/config':
         specifier: workspace:^
         version: link:../config
     devDependencies:

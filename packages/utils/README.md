@@ -1,11 +1,11 @@
-# @repo/utils
+# @md-oss/utils
 
 Shared utility functions for the monorepo.
 
 ## Usage
 
 ```typescript
-import { getGreeting } from "@repo/utils";
+import { getGreeting } from "@md-oss/utils";
 
 console.log(getGreeting("World"));
 ```

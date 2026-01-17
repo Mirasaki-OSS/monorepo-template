@@ -8,16 +8,21 @@ A modern TypeScript pnpm turbo monorepo.
 
 ```
 .
-├── apps/
-│   └── cli/          # Example CLI application
-├── packages/
-│   ├── config/       # Shared TypeScript configuration
-│   └── utils/        # Shared utility functions
-├── package.json      # Root workspace configuration
+├── apps/              # Template example applications
+│   └── cli/           # Example CLI application
+├── packages/          # Template example packages
+│   ├── config/        # Shared TypeScript configuration
+│   └── utils/         # Shared utility functions
+├── oss/               # Open-source projects (not included in template)
+│   ├── apps/
+│   └── packages/
+├── package.json       # Root workspace configuration
 ├── pnpm-workspace.yaml
-├── turbo.json        # Turbo build system configuration
-└── tsconfig.json     # Base TypeScript configuration
+├── turbo.json         # Turbo build system configuration
+└── tsconfig.json      # Base TypeScript configuration
 ```
+
+> **Template Usage:** When you fork this repository, or click "Use this template" on GitHub, a workflow automatically runs to remove non-template files (primarily the `oss/` directory) and personalize the repository. The process happens automatically via GitHub Actions on your first commit.
 
 ## Getting Started
 
@@ -34,7 +39,7 @@ pnpm install
 
 ### Development
 
-Run all development servers:
+Run all development apps:
 
 ```bash
 pnpm dev
@@ -75,6 +80,20 @@ pnpm format
 pnpm test
 ```
 
+## Generating New Packages
+
+Create new apps and packages using Turbo generators:
+
+```bash
+# Generate a new application
+pnpm gen:app
+
+# Generate a new package
+pnpm gen:package
+```
+
+The generators use templates from `turbo/generators/` and will prompt you for configuration.
+
 ## Docker Deployment
 
 Deploy with Docker Compose:
@@ -94,12 +113,12 @@ See the [docker instructions](./docker/README.md) for detailed Docker setup and 
 
 ### Apps
 
-- **@repo/cli** - CLI application example
+- **@md-oss/cli** - CLI application example
 
 ### Libraries
 
-- **@repo/config** - Shared TypeScript configuration
-- **@repo/utils** - Shared utility functions
+- **@md-oss/config** - Shared TypeScript configuration
+- **@md-oss/utils** - Shared utility functions
 
 ## Features
 

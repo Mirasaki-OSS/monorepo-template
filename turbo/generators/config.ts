@@ -1,6 +1,6 @@
 import type { PlopTypes } from '@turbo/gen';
 
-const SCOPE = '@repo';
+const SCOPE = '@md-oss';
 
 export default function generator(plop: PlopTypes.NodePlopAPI): void {
 	plop.setHelper(

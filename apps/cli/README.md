@@ -1,4 +1,4 @@
-# @repo/cli
+# @md-oss/cli
 
 CLI application example.
 

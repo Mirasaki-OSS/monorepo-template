@@ -1,5 +1,5 @@
 {
-	"name": "@repo/utils",
+	"name": "@md-oss/utils",
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",
@@ -25,7 +25,7 @@
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
-		"@repo/config": "workspace:^"
+		"@md-oss/config": "workspace:^"
 	},
 	"devDependencies": {
 		"pkgroll": "^2.21.5",

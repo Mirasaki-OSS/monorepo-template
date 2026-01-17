@@ -185,10 +185,10 @@ See [docker/README.md](../docker/README.md) for detailed Docker documentation.
 
 ## Questions or Need Help?
 
-- Check existing [issues](https://github.com/mirasaki/monorepo-template/issues)
+- Check existing [issues](https://github.com/Mirasaki-OSS/monorepo-template/issues)
 - Review the [README.md](../README.md)
 - Read the [docker/README.md](../docker/README.md)
-- Unable to figure it out? [Ask us](https://github.com/Mirasaki/monorepo-template/discussions)
+- Unable to figure it out? [Ask us](https://github.com/Mirasaki-OSS/monorepo-template/discussions)
 
 ## License
 

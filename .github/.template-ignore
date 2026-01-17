@@ -1,0 +1,8 @@
+# Files and directories to remove when repository is created from template
+# Patterns follow .gitignore format (glob patterns supported)
+
+# Open-source projects directory (open-source apps and packages belonging to the @md-oss organization)
+oss/
+
+# Template preparation (no longer needed after initialization)
+.github/workflows/prepare-template.yaml

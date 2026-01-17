@@ -1,4 +1,4 @@
-import { getGreeting } from '@repo/utils';
+import { getGreeting } from '@md-oss/utils';
 
 const VERSION = '1.0.0';
 

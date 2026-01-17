@@ -1,6 +1,8 @@
 packages:
   - apps/*
   - packages/*
+  - oss/apps/*
+  - oss/packages/*
 
 ignoredBuiltDependencies:
   - core-js-pure

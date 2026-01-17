@@ -1,4 +1,4 @@
-# @repo/config
+# @md-oss/config
 
 Shared TypeScript configuration for the monorepo.
 
@@ -8,7 +8,7 @@ Extend this configuration in package `tsconfig.json`:
 
 ```json
 {
-  "extends": "@repo/config/tsconfig.json",
+  "extends": "@md-oss/config/tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist"
   }

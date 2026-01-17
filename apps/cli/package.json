@@ -1,5 +1,5 @@
 {
-	"name": "@repo/cli",
+	"name": "@md-oss/cli",
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",
@@ -9,13 +9,13 @@
 	"scripts": {
 		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
 		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
-		"dev": "tsx --tsconfig @repo/config/tsconfig.tsx.json watch src/index.ts",
+		"dev": "tsx --tsconfig @md-oss/config/tsconfig.tsx.json watch src/index.ts",
 		"start": "node ./dist/index.js",
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
-		"@repo/config": "workspace:^",
-		"@repo/utils": "workspace:^"
+		"@md-oss/config": "workspace:^",
+		"@md-oss/utils": "workspace:^"
 	},
 	"devDependencies": {
 		"@types/node": "^25.0.9",
