@@ -23,6 +23,10 @@ services:
       target: dev
     image: my_app/dev:latest
     container_name: my_app-dev
+    # Run as host user to avoid permission issues
+    # For example (without this), if `dist` is created by the container,
+    # the host user may not have permission to read/write it
+    user: "${UID:-1000}:${GID:-1000}"
     volumes:
       - ..:/app  # Mount project root to /app
       - node_modules:/app/node_modules  # Use named volume for root node_modules
