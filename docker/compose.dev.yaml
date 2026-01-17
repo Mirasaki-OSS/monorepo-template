@@ -24,10 +24,11 @@ services:
     image: my_app/dev:latest
     container_name: my_app-dev
     volumes:
-      - .:/app
-      - /app/node_modules
-      - /app/apps/cli/node_modules
+      - ..:/app  # Mount project root to /app
+      - node_modules:/app/node_modules  # Use named volume for root node_modules
+      - /app/apps/cli/node_modules  # Anonymous volumes for workspace node_modules
       - /app/packages/utils/node_modules
+      - /app/packages/config/node_modules
     command: pnpm dev
     environment:
       - NODE_ENV=development

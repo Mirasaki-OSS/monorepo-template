@@ -9,7 +9,7 @@
 	"scripts": {
 		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
 		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
-		"dev": "tsx --tsconfig @md-oss/config/tsconfig.tsx.json watch src/index.ts",
+		"dev": "tsx watch --tsconfig ../../packages/config/tsconfig.tsx.json src/index.ts",
 		"start": "node ./dist/index.js",
 		"typecheck": "tsc --noEmit"
 	},
