@@ -8,14 +8,16 @@
   "scripts": {
     "build": "tsc",
     "clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
-    "dev": "node --loader ts-node/esm src/index.ts",
-    "start": "node ./dist/index.js"
+    "dev": "tsx --tsconfig @repo/config/tsconfig.tsx.json watch src/index.ts",
+    "start": "node ./dist/index.js",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@repo/config": "workspace:^",
     "@repo/utils": "workspace:^"
   },
   "devDependencies": {
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
 }

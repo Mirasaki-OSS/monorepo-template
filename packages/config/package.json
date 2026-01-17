@@ -5,7 +5,9 @@
   "type": "module",
   "license": "Proprietary",
   "exports": {
-    "./tsconfig.json": "./tsconfig.json"
+    "./tsconfig.base.json": "./tsconfig.base.json",
+    "./tsconfig.node.json": "./tsconfig.node.json",
+    "./tsconfig.tsx.json": "./tsconfig.tsx.json"
   },
   "scripts": {
     "clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo"

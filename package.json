@@ -13,8 +13,11 @@
     "clean": "turbo run clean && git clean -xdf node_modules .turbo pnpm-lock.yaml",
     "clean:full": "turbo run clean:full",
     "dev": "turbo run dev --parallel",
+    "no:git-hooks": "export SKIP_INSTALL_SIMPLE_GIT_HOOKS=1",
+    "prepare": "simple-git-hooks",
     "start": "turbo run start --parallel",
     "test": "turbo run test",
+    "typecheck": "turbo run typecheck",
     "up:minor": "pnpm up -r",
     "up:major": "pnpm up -r --latest",
     "docker:build": "docker compose build",
@@ -25,9 +28,17 @@
     "docker:logs": "docker compose logs -f",
     "docker:up": "docker compose up -d"
   },
+  "simple-git-hooks": {
+    "pre-commit": [
+      "pnpm dlx lint-staged",
+      "npm run type-check"
+    ],
+    "pre-push": "npm run format",
+    "preserveUnused": ["commit-msg"]
+  },
   "devDependencies": {
-    "turbo": "^2.7.5",
-    "typescript": "^5.9.3"
+    "simple-git-hooks": "^2.13.1",
+    "turbo": "^2.7.5"
   },
   "workspaces": [
     "apps/*",

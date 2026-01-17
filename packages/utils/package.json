@@ -16,7 +16,8 @@
   "scripts": {
     "build": "tsc",
     "clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@repo/config": "workspace:^"

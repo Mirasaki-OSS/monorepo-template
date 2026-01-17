@@ -5,6 +5,7 @@
     "appuser",
     "BUILDKIT",
     "buildx",
+    "esbuild",
     "pgbouncer",
     "usermod"
   ]
