@@ -1,7 +1,8 @@
 # syntax=docker/dockerfile:1
 
 # Base stage with pnpm
-FROM node:24-alpine AS base
+ARG NODE_VERSION=24.11.1-alpine
+FROM node:${NODE_VERSION} AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable && corepack prepare pnpm@10.28.0+sha512.05df71d1421f21399e053fde567cea34d446fa02c76571441bfc1c7956e98e363088982d940465fd34480d4d90a0668bc12362f8aa88000a64e83d0b0e47be48 --activate
