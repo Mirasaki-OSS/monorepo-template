@@ -3,8 +3,14 @@ name: Prepare Template
 run-name: Prepare new repository from template
 
 on:
-  # Trigger when a new repository is created from this template
-  create:
+  # Allow manual run in the generated repo (Actions > Prepare Template > Run workflow)
+  workflow_dispatch:
+  # Run on first push in the generated repo (run_number starts at 1 per repo)
+  # Note: This workflow file should be removed after running successfully once
+  push:
+    branches:
+      - main
+      - master
 
 # Ensure this only runs once when the repository is first created
 concurrency:
