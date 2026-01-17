@@ -1,4 +1,4 @@
-name: Code quality with reviewdog comments
+name: Code quality with reviewdog
 
 on: [pull_request]
 
