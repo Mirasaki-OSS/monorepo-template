@@ -1,23 +1,26 @@
 {
-  "name": "@repo/cli",
-  "version": "0.0.0",
-  "private": true,
-  "type": "module",
-  "description": "CLI application",
-  "license": "Proprietary",
-  "scripts": {
-    "build": "tsc",
-    "clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
-    "dev": "tsx --tsconfig @repo/config/tsconfig.tsx.json watch src/index.ts",
-    "start": "node ./dist/index.js",
-    "typecheck": "tsc --noEmit"
-  },
-  "dependencies": {
-    "@repo/config": "workspace:^",
-    "@repo/utils": "workspace:^"
-  },
-  "devDependencies": {
-    "tsx": "^4.21.0",
-    "typescript": "^5.9.3"
-  }
+	"name": "@repo/cli",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"description": "CLI application",
+	"license": "Proprietary",
+	"bin": "./dist/index.js",
+	"scripts": {
+		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
+		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
+		"dev": "tsx --tsconfig @repo/config/tsconfig.tsx.json watch src/index.ts",
+		"start": "node ./dist/index.js",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@repo/config": "workspace:^",
+		"@repo/utils": "workspace:^"
+	},
+	"devDependencies": {
+		"@types/node": "^25.0.9",
+		"pkgroll": "^2.21.5",
+		"tsx": "^4.21.0",
+		"typescript": "^5.9.3"
+	}
 }

@@ -1,12 +1,23 @@
 {
-  "cSpell.words": [
-    "addgroup",
-    "adduser",
-    "appuser",
-    "BUILDKIT",
-    "buildx",
-    "esbuild",
-    "pgbouncer",
-    "usermod"
-  ]
+	"editor.formatOnSave": true,
+	"editor.defaultFormatter": "biomejs.biome",
+	"editor.codeActionsOnSave": {
+		"source.fixAll.biome": "explicit",
+		"source.organizeImports.biome": "explicit"
+	},
+	"cSpell.words": [
+		"addgroup",
+		"adduser",
+		"appuser",
+		"biomejs",
+		"BUILDKIT",
+		"buildx",
+		"esbuild",
+		"lefthook",
+		"mongolyy",
+		"pgbouncer",
+		"pkgroll",
+		"reviewdog",
+		"usermod"
+	]
 }

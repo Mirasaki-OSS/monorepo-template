@@ -1,46 +1,39 @@
 {
-  "name": "monorepo",
-  "version": "0.0.0",
-  "private": true,
-  "description": "Modern TypeScript pnpm turbo monorepo",
-  "license": "Proprietary",
-  "packageManager": "pnpm@10.28.0+sha512.05df71d1421f21399e053fde567cea34d446fa02c76571441bfc1c7956e98e363088982d940465fd34480d4d90a0668bc12362f8aa88000a64e83d0b0e47be48",
-  "engines": {
-    "node": ">=18.0.0"
-  },
-  "scripts": {
-    "build": "turbo run build",
-    "clean": "turbo run clean && git clean -xdf node_modules .turbo pnpm-lock.yaml",
-    "clean:full": "turbo run clean:full",
-    "dev": "turbo run dev --parallel",
-    "prepare": "simple-git-hooks",
-    "start": "turbo run start --parallel",
-    "test": "turbo run test",
-    "typecheck": "turbo run typecheck",
-    "up:minor": "pnpm up -r",
-    "up:major": "pnpm up -r --latest",
-    "docker:build": "docker compose build",
-    "docker:clean": "docker compose down -v --rmi local",
-    "docker:debug": "docker compose -f docker/compose.dev.yaml --profile debug up --build && docker compose -f docker/compose.dev.yaml --profile debug down --remove-orphans --rmi=all",
-    "docker:dev": "docker compose -f docker/compose.dev.yaml --profile dev up",
-    "docker:down": "docker compose down",
-    "docker:logs": "docker compose logs -f",
-    "docker:up": "docker compose up -d"
-  },
-  "simple-git-hooks": {
-    "pre-commit": [
-      "pnpm dlx lint-staged",
-      "npm run type-check"
-    ],
-    "pre-push": "npm run format",
-    "preserveUnused": ["commit-msg"]
-  },
-  "devDependencies": {
-    "simple-git-hooks": "^2.13.1",
-    "turbo": "^2.7.5"
-  },
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ]
+	"name": "monorepo",
+	"version": "0.0.0",
+	"private": true,
+	"description": "Modern TypeScript pnpm turbo monorepo",
+	"license": "Proprietary",
+	"packageManager": "pnpm@10.28.0+sha512.05df71d1421f21399e053fde567cea34d446fa02c76571441bfc1c7956e98e363088982d940465fd34480d4d90a0668bc12362f8aa88000a64e83d0b0e47be48",
+	"engines": {
+		"node": ">=18.0.0"
+	},
+	"scripts": {
+		"build": "turbo run build",
+		"build:dry": "turbo run build --dry",
+		"checks": "pnpm exec biome check --write && turbo run typecheck",
+		"checks:ci": "pnpm exec biome ci && turbo run typecheck",
+		"clean": "turbo run clean && git clean -xdf node_modules .turbo pnpm-lock.yaml docker/.buildx-cache",
+		"dev": "turbo run dev --parallel",
+		"lint": "pnpm exec biome lint --write",
+		"format": "pnpm exec biome format --write",
+		"start": "turbo run start --parallel",
+		"test": "turbo run test",
+		"typecheck": "turbo run typecheck",
+		"up:minor": "pnpm up -r",
+		"up:major": "pnpm up -r --latest",
+		"docker:build": "docker compose build",
+		"docker:clean": "docker compose down -v --rmi local",
+		"docker:debug": "docker compose -f docker/compose.dev.yaml --profile debug up --build && docker compose -f docker/compose.dev.yaml --profile debug down --remove-orphans --rmi=all",
+		"docker:dev": "docker compose -f docker/compose.dev.yaml --profile dev up",
+		"docker:down": "docker compose down",
+		"docker:logs": "docker compose logs -f",
+		"docker:up": "docker compose up -d"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.3.11",
+		"lefthook": "^2.0.15",
+		"turbo": "^2.7.5"
+	},
+	"workspaces": ["apps/*", "packages/*"]
 }

@@ -1,3 +1,3 @@
 export const getGreeting = (name: string): string => {
-  return `Hello, ${name}!`;
+	return `Hello, ${name}!`;
 };

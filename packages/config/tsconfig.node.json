@@ -1,7 +1,10 @@
 {
-  "extends": "./tsconfig.base.json",
-  "compilerOptions": {
-    "module": "Node16", // Specify module code generation
-    "moduleResolution": "Node16", // Specify module resolution strategy
-  }
+	"extends": "./tsconfig.base.json",
+	"compilerOptions": {
+		"module": "Node16", // Specify module code generation
+		"moduleResolution": "Node16", // Specify module resolution strategy
+		"types": [
+			"node" // Include Node.js type definitions (@types/node)
+		]
+	}
 }

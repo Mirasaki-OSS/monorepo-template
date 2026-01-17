@@ -1,28 +1,28 @@
 {
-  "compilerOptions": {
-    "target": "ES2020", // Specify ECMAScript target version
-    "useDefineForClassFields": true, // Use ECMAScript standard for class fields
-    "lib": ["ES2020", "DOM"], // Specify library files to be included
-    "module": "Preserve", // Specify module code generation
-    "skipLibCheck": true, // Skip type checking of declaration files
-    "esModuleInterop": true, // Use correct ESM import behavior
-    "allowSyntheticDefaultImports": true, // Allow default imports from modules with no default export
-    "strict": true, // Enable all strict type-checking options
-    "noImplicitAny": true, // Raise error on expressions and declarations with an implied 'any' type
-    "strictNullChecks": true, // Enable strict null checks
-    "strictFunctionTypes": true, // Enable strict checking of function types
-    "strictBindCallApply": true, // Enable strict 'bind', 'call', and 'apply' methods on functions
-    "strictPropertyInitialization": true, // Enable strict checking of property initialization in classes
-    "noImplicitThis": true, // Raise error on 'this' expressions with an implied 'any' type
-    "alwaysStrict": true, // Parse in strict mode and emit "use strict" for each source file
-    "noUnusedLocals": true, // Report errors on unused locals
-    "noUnusedParameters": true, // Raise an error when a function parameter isn't read
-    "noImplicitReturns": true, // Report error when not all code paths in function return a value
-    "noFallthroughCasesInSwitch": true, // Report errors for fallthrough cases in switch statement
-    "resolveJsonModule": true, // Allow JSON modules to be imported
-    "isolatedModules": true, // Disallow features that require cross-file awareness
-    "declaration": true, // Generate .d.ts files from TypeScript files
-    "declarationMap": true, // Create sourcemaps for d.ts files
-    "sourceMap": true, // Generate corresponding .map files
-  }
+	"compilerOptions": {
+		"target": "ES2020", // Specify ECMAScript target version
+		"useDefineForClassFields": true, // Use ECMAScript standard for class fields
+		"lib": ["ES2020", "DOM"], // Specify library files to be included
+		"module": "Preserve", // Specify module code generation
+		"skipLibCheck": true, // Skip type checking of declaration files
+		"esModuleInterop": true, // Use correct ESM import behavior
+		"allowSyntheticDefaultImports": true, // Allow default imports from modules with no default export
+		"strict": true, // Enable all strict type-checking options
+		"noImplicitAny": true, // Raise error on expressions and declarations with an implied 'any' type
+		"strictNullChecks": true, // Enable strict null checks
+		"strictFunctionTypes": true, // Enable strict checking of function types
+		"strictBindCallApply": true, // Enable strict 'bind', 'call', and 'apply' methods on functions
+		"strictPropertyInitialization": true, // Enable strict checking of property initialization in classes
+		"noImplicitThis": true, // Raise error on 'this' expressions with an implied 'any' type
+		"alwaysStrict": true, // Parse in strict mode and emit "use strict" for each source file
+		"noUnusedLocals": true, // Report errors on unused locals
+		"noUnusedParameters": true, // Raise an error when a function parameter isn't read
+		"noImplicitReturns": true, // Report error when not all code paths in function return a value
+		"noFallthroughCasesInSwitch": true, // Report errors for fallthrough cases in switch statement
+		"resolveJsonModule": true, // Allow JSON modules to be imported
+		"isolatedModules": true, // Disallow features that require cross-file awareness
+		"declaration": true, // Generate .d.ts files from TypeScript files
+		"declarationMap": true, // Create sourcemaps for d.ts files
+		"sourceMap": true // Generate corresponding .map files
+	}
 }

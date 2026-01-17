@@ -1,18 +1,18 @@
 {
-  "name": "@repo/config",
-  "version": "0.0.0",
-  "private": true,
-  "type": "module",
-  "license": "Proprietary",
-  "exports": {
-    "./tsconfig.base.json": "./tsconfig.base.json",
-    "./tsconfig.node.json": "./tsconfig.node.json",
-    "./tsconfig.tsx.json": "./tsconfig.tsx.json"
-  },
-  "scripts": {
-    "clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo"
-  },
-  "devDependencies": {
-    "typescript": "^5.9.3"
-  }
+	"name": "@repo/config",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"license": "Proprietary",
+	"exports": {
+		"./tsconfig.base.json": "./tsconfig.base.json",
+		"./tsconfig.node.json": "./tsconfig.node.json",
+		"./tsconfig.tsx.json": "./tsconfig.tsx.json"
+	},
+	"scripts": {
+		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo"
+	},
+	"devDependencies": {
+		"typescript": "^5.9.3"
+	}
 }

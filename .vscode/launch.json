@@ -1,0 +1,38 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			// 1. In VSCode, open the JS/TS file you want to run
+			// 2. Go to VSCode's debug panel, select "tsx" in the drop down, and hit the play button (F5)
+			"name": "tsx",
+			"type": "node",
+			"request": "launch",
+			"program": "${file}", // Debug current file in VSCode
+			/*
+			 * Path to tsx binary
+			 * Assuming locally installed
+			 */
+			"runtimeExecutable": "tsx",
+			/*
+			 * Open terminal when debugging starts (Optional)
+			 * Useful to see console.logs
+			 */
+			"console": "integratedTerminal",
+			"internalConsoleOptions": "neverOpen",
+			// Files to exclude from debugger (e.g. call stack)
+			"skipFiles": [
+				"<node_internals>/**", // Node.js internal core modules
+				"${workspaceFolder}/node_modules/**" // Ignore all dependencies (optional)
+			]
+		},
+		{
+			// 1. Run tsx with --inspect-brk in a terminal window: tsx --inspect-brk ./your-file.ts
+			// 2. Go to VSCode's debug panel, select "Attach to process" in the drop down, and hit the play button (F5).
+			"name": "Attach to process",
+			"type": "node",
+			"request": "attach",
+			"port": 9229,
+			"skipFiles": ["<node_internals>/**", "${workspaceFolder}/node_modules/**"]
+		}
+	]
+}

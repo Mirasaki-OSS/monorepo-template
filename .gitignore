@@ -18,3 +18,8 @@ build
 # Docker Build
 docker/.buildx-cache
 docker/context-report
+
+# Local/Development files
+TODO.md
+.idea
+sandbox

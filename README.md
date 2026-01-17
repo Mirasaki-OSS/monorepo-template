@@ -1,5 +1,7 @@
 # Monorepo
 
+[![Checked with Biome](https://img.shields.io/badge/Checked_with-Biome-60a5fa?style=flat&logo=biome)](https://biomejs.dev)
+
 A modern TypeScript pnpm turbo monorepo.
 
 ## Project Structure
@@ -109,4 +111,4 @@ See the [docker instructions](./docker/README.md) for detailed Docker setup and 
 
 ## License
 
-Private source-code!
+[Proprietary](./LICENSE)
