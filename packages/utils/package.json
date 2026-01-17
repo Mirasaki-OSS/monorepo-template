@@ -1,0 +1,27 @@
+{
+  "name": "@repo/utils",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Shared utilities",
+  "license": "Proprietary",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@repo/config": "workspace:^"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

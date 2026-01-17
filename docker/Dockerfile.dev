@@ -1,0 +1,24 @@
+# syntax=docker/dockerfile:1
+
+# Development Dockerfile
+FROM node:24-alpine AS dev
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable && corepack prepare pnpm@10.28.0+sha512.05df71d1421f21399e053fde567cea34d446fa02c76571441bfc1c7956e98e363088982d940465fd34480d4d90a0668bc12362f8aa88000a64e83d0b0e47be48 --activate
+
+WORKDIR /app
+
+# Install dependencies for development
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml* ./
+COPY packages/config/package.json ./packages/config/package.json
+COPY packages/utils/package.json ./packages/utils/package.json
+COPY apps/cli/package.json ./apps/cli/package.json
+
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
+    pnpm install --frozen-lockfile
+
+COPY . .
+
+ENV NODE_ENV=development
+
+CMD ["pnpm", "dev"]

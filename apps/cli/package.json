@@ -1,0 +1,21 @@
+{
+  "name": "@repo/cli",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "CLI application",
+  "license": "Proprietary",
+  "scripts": {
+    "build": "tsc",
+    "clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
+    "dev": "node --loader ts-node/esm src/index.ts",
+    "start": "node ./dist/index.js"
+  },
+  "dependencies": {
+    "@repo/config": "workspace:^",
+    "@repo/utils": "workspace:^"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

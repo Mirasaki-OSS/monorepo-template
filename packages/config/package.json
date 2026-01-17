@@ -1,0 +1,16 @@
+{
+  "name": "@repo/config",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "license": "Proprietary",
+  "exports": {
+    "./tsconfig.json": "./tsconfig.json"
+  },
+  "scripts": {
+    "clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

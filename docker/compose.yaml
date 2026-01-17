@@ -1,0 +1,29 @@
+networks:
+  my_app-network:
+    driver: bridge
+
+services:
+  cli:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+      target: cli-runner
+      # Enable BuildKit inline cache and use a local cache directory
+      args:
+        BUILDKIT_INLINE_CACHE: "1"
+      cache_from:
+        - type=local,src=./docker/.buildx-cache
+      cache_to:
+        - type=local,dest=./docker/.buildx-cache,mode=max
+    image: my_app/cli:latest
+    container_name: my_app-cli
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    # Uncomment to override default command
+    # command: ["node", "dist/index.js"]
+    networks:
+      - my_app-network
+    # Uncomment if you need volumes
+    # volumes:
+    #   - ./data:/app/data

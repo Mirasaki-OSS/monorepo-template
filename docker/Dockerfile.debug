@@ -1,0 +1,10 @@
+# Minimal image to capture Docker build context contents and write reports
+FROM alpine:3.23 AS context-debug
+
+WORKDIR /ctx
+
+# Copy the filtered build context (honors .dockerignore)
+COPY . /ctx
+
+# Default command writes listings into a mounted /out volume then exits
+CMD ["/bin/sh", "-c", "set -e; mkdir -p /out; echo 'Context root: /ctx' > /out/summary.txt; du -sh /ctx >> /out/summary.txt; find /ctx -type f | sort > /out/file-list.txt; ls -laR /ctx > /out/context-tree.txt; echo 'Done' >> /out/summary.txt"]
