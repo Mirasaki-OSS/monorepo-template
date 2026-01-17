@@ -11,7 +11,7 @@ Please be respectful and constructive in all interactions with the community. We
 ### Prerequisites
 
 - Node.js 18+
-- pnpm 9+
+- pnpm 10+
 - Git
 
 ### Installation

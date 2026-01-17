@@ -24,7 +24,7 @@ A modern TypeScript pnpm turbo monorepo.
 ### Prerequisites
 
 - Node.js 18+
-- pnpm 9+
+- pnpm 10+
 
 ### Installation
 
