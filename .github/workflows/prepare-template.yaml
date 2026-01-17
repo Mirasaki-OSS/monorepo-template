@@ -52,8 +52,13 @@ jobs:
 
       - name: Verify preparation
         run: |
-          echo "Repository structure after preparation:"
-          find . -maxdepth 2 -type f -name "*.json" | head -20
+          echo "Repository structure after preparation (depth 2):"
+          find . -maxdepth 2 -mindepth 1 \
+            -not -path "./.git/*" \
+            -not -path "./node_modules/*" \
+            -not -path "./.turbo/*" \
+            -not -path "./.github/*" \
+            | sort | head -80
 
       - name: Commit preparation changes
         uses: stefanzweifel/git-auto-commit-action@v5
