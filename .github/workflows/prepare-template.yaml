@@ -60,8 +60,7 @@ jobs:
         with:
           commit_message: "chore: initialize repository from template"
           commit_options: "--no-verify --signoff"
-          tag_name: "v0.1.0"
-          tagging_message: "Initial release v0.1.0"
+          tagging_message: "v0.1.0"
           file_pattern: |
             .
           status_options: '--untracked-files=no'
