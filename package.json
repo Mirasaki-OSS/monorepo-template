@@ -17,6 +17,8 @@
 		"dev": "turbo run dev --parallel",
 		"lint": "pnpm exec biome lint --write",
 		"format": "pnpm exec biome format --write",
+		"gen:app": "turbo gen workspace --type app",
+		"gen:package": "turbo gen package",
 		"start": "turbo run start --parallel",
 		"test": "turbo run test",
 		"typecheck": "turbo run typecheck",
@@ -32,6 +34,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.3.11",
+		"@turbo/gen": "^2.7.5",
 		"lefthook": "^2.0.15",
 		"turbo": "^2.7.5"
 	},
