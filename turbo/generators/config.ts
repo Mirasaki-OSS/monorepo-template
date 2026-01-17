@@ -1,6 +1,8 @@
+import path from 'node:path';
 import type { PlopTypes } from '@turbo/gen';
 
 const SCOPE = '@md-oss';
+const TEMPLATE_BASE = path.resolve(__dirname, 'templates/package');
 
 export default function generator(plop: PlopTypes.NodePlopAPI): void {
 	plop.setHelper(
@@ -39,9 +41,9 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
 		actions: [
 			{
 				type: 'addMany',
-				base: 'turbo/generators/templates/package',
+				base: TEMPLATE_BASE,
 				destination: 'packages/{{kebabCase name}}',
-				templateFiles: 'turbo/generators/templates/package/**/*.hbs',
+				templateFiles: `${TEMPLATE_BASE}/**/*.hbs`,
 			},
 		],
 	});
