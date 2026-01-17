@@ -13,7 +13,6 @@
     "clean": "turbo run clean && git clean -xdf node_modules .turbo pnpm-lock.yaml",
     "clean:full": "turbo run clean:full",
     "dev": "turbo run dev --parallel",
-    "no:git-hooks": "export SKIP_INSTALL_SIMPLE_GIT_HOOKS=1",
     "prepare": "simple-git-hooks",
     "start": "turbo run start --parallel",
     "test": "turbo run test",
