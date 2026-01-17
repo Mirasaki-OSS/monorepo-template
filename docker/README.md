@@ -180,7 +180,3 @@ Ensure volume mounts are correct and file watchers are configured.
     docker tag my_app/cli:latest registry.example.com/my_app/cli:${{ github.sha }}
     docker push registry.example.com/my_app/cli:${{ github.sha }}
 ```
-
-## License
-
-Private source-code!

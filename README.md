@@ -111,4 +111,4 @@ See the [docker instructions](./docker/README.md) for detailed Docker setup and 
 
 ## License
 
-[Proprietary](./LICENSE)
+[ISC](./LICENSE)

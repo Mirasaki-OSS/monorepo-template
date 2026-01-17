@@ -1,7 +1,5 @@
 # Contributing Guidelines
 
-<!-- While the repository is currently private, and the license Proprietary, we do have plans to go open-source in th future -->
-
 Thank you for your interest in contributing to this project! We welcome contributions of all kinds, including bug reports, feature requests, documentation improvements, and code contributions.
 
 ## Code of Conduct

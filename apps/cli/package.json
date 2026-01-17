@@ -4,7 +4,7 @@
 	"private": true,
 	"type": "module",
 	"description": "CLI application",
-	"license": "Proprietary",
+	"license": "ISC",
 	"bin": "./dist/index.js",
 	"scripts": {
 		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
