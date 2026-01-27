@@ -16,6 +16,7 @@ env:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 permissions:
+  id-token: write  # Required for OIDC (publish-npm.yaml uses it)
   contents: write
   packages: write
   pull-requests: write # Note: Requires "Allow GitHub Actions to create and approve pull requests" for user account / organization
