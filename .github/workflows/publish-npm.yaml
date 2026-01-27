@@ -1,0 +1,37 @@
+name: Publish Package
+
+on:
+  workflow_call:   # Triggered by release workflow
+
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read   # To checkout the code
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: https://npm.pkg.github.com/
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install -w --frozen-lockfile --filter={./vendor/*}
+
+      - name: Sync license files
+        run: pnpm tsx ./scripts/node/sync-licenses.ts
+
+      - name: Create Release Pull Request or Publish to NPM
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          publish: pnpm publish:ci

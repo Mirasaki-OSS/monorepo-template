@@ -7,6 +7,7 @@ vendor/
 # Changeset versioning/publishing
 .changeset
 .github/workflows/release.yaml
+.github/workflows/publish-npm.yaml
 
 # .github files
 .github/CONTRIBUTING.md
