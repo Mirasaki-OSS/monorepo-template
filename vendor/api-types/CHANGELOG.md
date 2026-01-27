@@ -1,5 +1,14 @@
 # @md-oss/api-types
 
+## 0.1.2
+
+### Patch Changes
+
+- a2dcb78: force publish new version
+- Updated dependencies [a2dcb78]
+  - @md-oss/common@0.1.2
+  - @md-oss/config@0.1.2
+
 ## 0.1.1
 
 ### Patch Changes
