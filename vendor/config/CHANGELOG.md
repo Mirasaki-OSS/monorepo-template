@@ -1,5 +1,11 @@
 # @md-oss/config
 
+## 0.1.3
+
+### Patch Changes
+
+- 6f8a852: force new version publish
+
 ## 0.1.2
 
 ### Patch Changes

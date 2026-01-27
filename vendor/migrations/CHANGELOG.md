@@ -1,5 +1,13 @@
 # @md-oss/migrations
 
+## 0.1.3
+
+### Patch Changes
+
+- 6f8a852: force new version publish
+- Updated dependencies [6f8a852]
+  - @md-oss/config@0.1.3
+
 ## 0.1.2
 
 ### Patch Changes
