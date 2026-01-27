@@ -17,7 +17,7 @@ permissions:
   packages: write
   id-token: write # Required for OIDC
   pull-requests: write # Note: Requires "Allow GitHub Actions to create and approve pull requests" for user account / organization
-  # Note: Publishing requires "Workflows have read and write permissions in the repository for all scopes."
+  # Note: Publishing (with `commit`) requires "Workflows have read and write permissions in the repository for all scopes."
   # Note: If you're getting a write_package error, check https://github.com/orgs/YOUR_ORG/packages permissions.
 
 jobs:
