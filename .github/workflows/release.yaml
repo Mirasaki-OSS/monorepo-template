@@ -45,6 +45,11 @@ jobs:
       - name: Sync license files
         run: pnpm tsx ./scripts/node/sync-licenses.ts
 
+      - name: Configure npm authentication (for GitHub Packages)
+        run: |
+          echo "@md-oss:registry=https://npm.pkg.github.com/" >> ~/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
+
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
