@@ -42,7 +42,7 @@ while IFS= read -r line; do
   fi
 done < "$TEMPLATE_IGNORE_FILE"
 
-# Remove the .template-ignore file itself
+# Remove the .template-ignore file itself if it still exists
 if path_exists "$TEMPLATE_IGNORE_FILE"; then
   log_success "Removing: .github/.template-ignore"
   rm -f "$TEMPLATE_IGNORE_FILE"
@@ -77,9 +77,9 @@ fi
 # Remove `- vendor/*` from `pnpm-workspace.yaml`
 PNPM_WORKSPACE_FILE="$PROJECT_ROOT/pnpm-workspace.yaml"
 if file_exists "$PNPM_WORKSPACE_FILE"; then
-  if grep -q '^- vendor/\*' "$PNPM_WORKSPACE_FILE"; then
+  if grep -q 'vendor/\*' "$PNPM_WORKSPACE_FILE"; then
     log_section "Removing 'vendor/*' from pnpm-workspace.yaml"
-    sed -i.bak '/^- vendor\/\*/d' "$PNPM_WORKSPACE_FILE"
+    sed -i.bak '/^[[:space:]]*-[[:space:]]*vendor\/\*/d' "$PNPM_WORKSPACE_FILE"
     rm -f "$PNPM_WORKSPACE_FILE.bak"
     log_success "'vendor/*' removed from pnpm-workspace.yaml"
   else
@@ -90,10 +90,11 @@ else
 fi
 
 # Remove `vendor/*` from `/package.json#workspaces`
-if file_exists "$PROJECT_ROOT/package.json"; then
-  if grep -q '"vendor/*"' "$PROJECT_ROOT/package.json"; then
+PACKAGE_JSON_FILE="$PROJECT_ROOT/package.json"
+if file_exists "$PACKAGE_JSON_FILE"; then
+  if grep -q 'vendor/\*' "$PACKAGE_JSON_FILE"; then
     log_section "Removing 'vendor/*' from package.json workspaces"
-    npx -y json -I -f "$PROJECT_ROOT/package.json" -e 'this.workspaces = this.workspaces.filter(item => item !== "vendor/*");'
+    npx -y json -I -f "$PACKAGE_JSON_FILE" -e 'this.workspaces = this.workspaces.filter(item => item !== "vendor/*");'
     log_success "'vendor/*' removed from package.json workspaces"
   else
     log_info "'vendor/*' not found in package.json workspaces"
