@@ -1,5 +1,11 @@
 # @md-oss/config
 
+## 0.1.2
+
+### Patch Changes
+
+- a2dcb78: force publish new version
+
 ## 0.1.1
 
 ### Patch Changes
