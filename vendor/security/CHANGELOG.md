@@ -1,5 +1,13 @@
 # @md-oss/security
 
+## 0.1.4
+
+### Patch Changes
+
+- 1128b69: force publish
+- Updated dependencies [1128b69]
+  - @md-oss/common@0.1.4
+
 ## 0.1.3
 
 ### Patch Changes
