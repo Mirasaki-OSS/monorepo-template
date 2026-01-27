@@ -1,5 +1,11 @@
 # @md-oss/config
 
+## 0.1.5
+
+### Patch Changes
+
+- 421a464: force publish release
+
 ## 0.1.3
 
 ### Patch Changes
