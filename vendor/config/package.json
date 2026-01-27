@@ -1,9 +1,25 @@
 {
 	"name": "@md-oss/config",
 	"version": "0.0.0",
-	"private": true,
+	"private": false,
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://npm.pkg.github.com/"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+ssh://git@github.com/Mirasaki-OSS/monorepo-template.git",
+		"directory": "vendor/config"
+	},
 	"type": "module",
 	"license": "ISC",
+	"files": [
+		"tsconfig.base.json",
+		"tsconfig.node.json",
+		"tsconfig.tsx.json",
+		"README.md",
+		"LICENSE"
+	],
 	"exports": {
 		"./tsconfig.base.json": "./tsconfig.base.json",
 		"./tsconfig.node.json": "./tsconfig.node.json",

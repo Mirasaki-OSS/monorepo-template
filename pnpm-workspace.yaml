@@ -1,8 +1,7 @@
 packages:
   - apps/*
   - packages/*
-  - oss/apps/*
-  - oss/packages/*
+  - vendor/*
 
 ignoredBuiltDependencies:
   - core-js-pure
@@ -10,3 +9,4 @@ ignoredBuiltDependencies:
 onlyBuiltDependencies:
   - esbuild
   - lefthook
+  - sharp

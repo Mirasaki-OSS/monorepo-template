@@ -11,7 +11,7 @@ WORKDIR /app
 # Dependencies stage - install all dependencies
 FROM base AS deps
 COPY pnpm-workspace.yaml package.json pnpm-lock.yaml* ./
-COPY packages/config/package.json ./packages/config/package.json
+COPY vendor/config/package.json ./vendor/config/package.json
 COPY packages/utils/package.json ./packages/utils/package.json
 COPY apps/cli/package.json ./apps/cli/package.json
 
@@ -22,7 +22,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
 # Builder stage - build the application
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/packages/config/node_modules ./packages/config/node_modules
+COPY --from=deps /app/vendor/config/node_modules ./vendor/config/node_modules
 COPY --from=deps /app/packages/utils/node_modules ./packages/utils/node_modules
 COPY --from=deps /app/apps/cli/node_modules ./apps/cli/node_modules
 COPY . .
@@ -33,7 +33,7 @@ RUN pnpm build
 # Production dependencies stage
 FROM base AS prod-deps
 COPY pnpm-workspace.yaml package.json pnpm-lock.yaml* ./
-COPY packages/config/package.json ./packages/config/package.json
+COPY vendor/config/package.json ./vendor/config/package.json
 COPY packages/utils/package.json ./packages/utils/package.json
 COPY apps/cli/package.json ./apps/cli/package.json
 
@@ -53,7 +53,7 @@ COPY --from=prod-deps --chown=appuser:nodejs /app/packages/utils/node_modules ./
 COPY --from=prod-deps --chown=appuser:nodejs /app/apps/cli/node_modules ./apps/cli/node_modules
 
 # Copy built application
-COPY --from=builder --chown=appuser:nodejs /app/packages/config ./packages/config
+COPY --from=builder --chown=appuser:nodejs /app/vendor/config ./vendor/config
 COPY --from=builder --chown=appuser:nodejs /app/packages/utils/dist ./packages/utils/dist
 COPY --from=builder --chown=appuser:nodejs /app/packages/utils/package.json ./packages/utils/package.json
 COPY --from=builder --chown=appuser:nodejs /app/apps/cli/dist ./apps/cli/dist

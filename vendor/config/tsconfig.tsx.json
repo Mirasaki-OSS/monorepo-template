@@ -5,6 +5,7 @@
 		"moduleDetection": "force", // Treat files as modules even if it doesn't use import/export
 		"module": "Preserve", // Ignore module structure
 		"allowJs": true, // Allow JS files to be imported from TS and vice versa
-		"verbatimModuleSyntax": true // Preserve module syntax as-is
+		"verbatimModuleSyntax": true, // Preserve module syntax as-is
+		"jsx": "react-jsx"
 	}
 }

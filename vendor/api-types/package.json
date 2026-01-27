@@ -1,0 +1,48 @@
+{
+	"name": "@md-oss/api-types",
+	"version": "0.0.0",
+	"private": false,
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://npm.pkg.github.com/"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+ssh://git@github.com/Mirasaki-OSS/monorepo-template.git",
+		"directory": "vendor/api-types"
+	},
+	"type": "module",
+	"description": "Type-safe API contracts, client factory, and handler helpers built on Zod",
+	"license": "ISC",
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.cts",
+	"files": ["dist/**/*", "README.md", "LICENSE"],
+	"exports": {
+		"require": {
+			"types": "./dist/index.d.cts",
+			"default": "./dist/index.cjs"
+		},
+		"import": {
+			"types": "./dist/index.d.mts",
+			"default": "./dist/index.mjs"
+		}
+	},
+	"scripts": {
+		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
+		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
+		"dev": "tsc --watch",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@md-oss/common": "workspace:^",
+		"@md-oss/config": "workspace:^",
+		"@types/debug": "^4.1.12",
+		"debug": "^4.4.3",
+		"zod": "^4.3.6"
+	},
+	"devDependencies": {
+		"pkgroll": "^2.21.5",
+		"typescript": "^5.9.3"
+	}
+}

@@ -1,0 +1,80 @@
+{
+	"name": "@md-oss/analytics",
+	"version": "0.0.0",
+	"private": false,
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://npm.pkg.github.com/"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+ssh://git@github.com/Mirasaki-OSS/monorepo-template.git",
+		"directory": "vendor/analytics"
+	},
+	"type": "module",
+	"description": "Next.js analytics helpers with Vercel Analytics + optional Google Analytics",
+	"license": "ISC",
+	"files": ["dist/**/*", "README.md", "LICENSE"],
+	"exports": {
+		"./env": {
+			"require": {
+				"types": "./dist/env.d.cts",
+				"default": "./dist/env.cjs"
+			},
+			"import": {
+				"types": "./dist/env.d.mts",
+				"default": "./dist/env.mjs"
+			}
+		},
+		"./google": {
+			"require": {
+				"types": "./dist/google.d.cts",
+				"default": "./dist/google.cjs"
+			},
+			"import": {
+				"types": "./dist/google.d.mts",
+				"default": "./dist/google.mjs"
+			}
+		},
+		"./provider": {
+			"require": {
+				"types": "./dist/provider.d.cts",
+				"default": "./dist/provider.cjs"
+			},
+			"import": {
+				"types": "./dist/provider.d.mts",
+				"default": "./dist/provider.mjs"
+			}
+		},
+		"./vercel": {
+			"require": {
+				"types": "./dist/vercel.d.cts",
+				"default": "./dist/vercel.cjs"
+			},
+			"import": {
+				"types": "./dist/vercel.d.mts",
+				"default": "./dist/vercel.mjs"
+			}
+		}
+	},
+	"scripts": {
+		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
+		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
+		"dev": "tsc --watch",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@md-oss/config": "workspace:^",
+		"@next/third-parties": "^16.1.5",
+		"@t3-oss/env-nextjs": "^0.13.10",
+		"@types/react": "^19.2.10",
+		"@vercel/analytics": "^1.6.1",
+		"react": "^19.2.4",
+		"zod": "^4.3.6"
+	},
+	"devDependencies": {
+		"@types/node": "^25.0.9",
+		"pkgroll": "^2.21.5",
+		"typescript": "^5.9.3"
+	}
+}

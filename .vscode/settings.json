@@ -12,12 +12,18 @@
 		"biomejs",
 		"BUILDKIT",
 		"buildx",
+		"dryrun",
+		"ENOENT",
 		"esbuild",
 		"lefthook",
+		"maxsize",
+		"mdel",
 		"mongolyy",
+		"OSSL",
 		"pgbouncer",
 		"pkgroll",
 		"reviewdog",
+		"ROLLBACKABLE",
 		"stefanzweifel",
 		"usermod"
 	]

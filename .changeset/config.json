@@ -1,0 +1,22 @@
+{
+	"$schema": "https://unpkg.com/@changesets/config@3.1.2/schema.json",
+	"changelog": "@changesets/cli/changelog",
+	"commit": false,
+	"fixed": [],
+	"linked": [
+		[
+			"@md-oss/analytics",
+			"@md-oss/api-types",
+			"@md-oss/cache",
+			"@md-oss/common",
+			"@md-oss/migrations",
+			"@md-oss/mutex",
+			"@md-oss/observability",
+			"@md-oss/security"
+		]
+	],
+	"access": "public",
+	"baseBranch": "main",
+	"updateInternalDependencies": "patch",
+	"ignore": ["@md-oss/cli", "@md-oss/utils"]
+}

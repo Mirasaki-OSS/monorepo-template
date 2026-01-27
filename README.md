@@ -13,16 +13,14 @@ A modern TypeScript pnpm turbo monorepo.
 ├── packages/          # Template example packages
 │   ├── config/        # Shared TypeScript configuration
 │   └── utils/         # Shared utility functions
-├── oss/               # Open-source projects (not included in template)
-│   ├── apps/
-│   └── packages/
+├── vendor/            # Open-source projects (not included in template)
 ├── package.json       # Root workspace configuration
 ├── pnpm-workspace.yaml
 ├── turbo.json         # Turbo build system configuration
 └── tsconfig.json      # Base TypeScript configuration
 ```
 
-> **Template Usage:** When you fork this repository, or click "Use this template" on GitHub, a workflow automatically runs to remove non-template files (primarily the `oss/` directory) and personalize the repository. The process happens automatically via GitHub Actions on your first commit.
+> **Template Usage:** When you fork this repository, or click "Use this template" on GitHub, a workflow automatically runs to remove non-template files (primarily the `vendor/` directory) and personalize the repository. The process happens automatically via GitHub Actions on your first commit.
 
 ## Getting Started
 
@@ -94,6 +92,29 @@ pnpm gen:package
 
 The generators use templates from `turbo/generators/` and will prompt you for configuration.
 
+## Shared TypeScript Configuration
+
+This monorepo uses a centralized TypeScript configuration pattern via `@md-oss/config`. Instead of maintaining individual `tsconfig.json` files, packages extend from shared base configurations:
+
+```jsonc
+// packages/your-package/tsconfig.json
+{
+  "extends": "@md-oss/config/tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src"
+  }
+}
+```
+
+**Benefits:**
+- Consistent compiler settings across all packages
+- Update TypeScript config in one place
+- Automatically applied to new packages via generators
+- Multiple configs available for different use cases (base, node, tsx)
+
+See [`vendor/config/`](./vendor/config/) for available configurations.
+
 ## Docker Deployment
 
 Deploy with Docker Compose:
@@ -117,7 +138,7 @@ See the [docker instructions](./docker/README.md) for detailed Docker setup and 
 
 ### Libraries
 
-- **@md-oss/config** - Shared TypeScript configuration
+- **@md-oss/config** - Shared TypeScript configuration (base, node, tsx) used by all packages
 - **@md-oss/utils** - Shared utility functions
 
 ## Features

@@ -1,0 +1,123 @@
+{
+	"name": "@md-oss/cache",
+	"version": "0.0.0",
+	"private": false,
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://npm.pkg.github.com/"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+ssh://git@github.com/Mirasaki-OSS/monorepo-template.git",
+		"directory": "vendor/cache"
+	},
+	"type": "module",
+	"description": "Multi-layer caching with LRU, Redis, and async data fetching support",
+	"license": "ISC",
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.cts",
+	"files": ["dist/**/*", "README.md", "LICENSE"],
+	"exports": {
+		".": {
+			"require": {
+				"types": "./dist/index.d.cts",
+				"default": "./dist/index.cjs"
+			},
+			"import": {
+				"types": "./dist/index.d.mts",
+				"default": "./dist/index.mjs"
+			}
+		},
+		"./async": {
+			"require": {
+				"types": "./dist/async.d.cts",
+				"default": "./dist/async.cjs"
+			},
+			"import": {
+				"types": "./dist/async.d.mts",
+				"default": "./dist/async.mjs"
+			}
+		},
+		"./env": {
+			"require": {
+				"types": "./dist/env.d.cts",
+				"default": "./dist/env.cjs"
+			},
+			"import": {
+				"types": "./dist/env.d.mts",
+				"default": "./dist/env.mjs"
+			}
+		},
+		"./lru": {
+			"require": {
+				"types": "./dist/lru.d.cts",
+				"default": "./dist/lru.cjs"
+			},
+			"import": {
+				"types": "./dist/lru.d.mts",
+				"default": "./dist/lru.mjs"
+			}
+		},
+		"./manager": {
+			"require": {
+				"types": "./dist/manager.d.cts",
+				"default": "./dist/manager.cjs"
+			},
+			"import": {
+				"types": "./dist/manager.d.mts",
+				"default": "./dist/manager.mjs"
+			}
+		},
+		"./promise": {
+			"require": {
+				"types": "./dist/promise.d.cts",
+				"default": "./dist/promise.cjs"
+			},
+			"import": {
+				"types": "./dist/promise.d.mts",
+				"default": "./dist/promise.mjs"
+			}
+		},
+		"./redis-client": {
+			"require": {
+				"types": "./dist/redis-client.d.cts",
+				"default": "./dist/redis-client.cjs"
+			},
+			"import": {
+				"types": "./dist/redis-client.d.mts",
+				"default": "./dist/redis-client.mjs"
+			}
+		},
+		"./types": {
+			"require": {
+				"types": "./dist/types.d.cts"
+			},
+			"import": {
+				"types": "./dist/types.d.mts"
+			}
+		}
+	},
+	"scripts": {
+		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
+		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
+		"dev": "tsc --watch",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@md-oss/config": "workspace:^",
+		"@t3-oss/env-nextjs": "^0.13.10",
+		"@types/debug": "^4.1.12",
+		"cache-manager": "^7.2.8",
+		"debug": "^4.4.3",
+		"keyv": "^5.6.0",
+		"lru-cache": "^11.2.5",
+		"redis": "^5.10.0",
+		"zod": "^4.3.6"
+	},
+	"devDependencies": {
+		"@types/node": "^25.0.9",
+		"pkgroll": "^2.21.5",
+		"typescript": "^5.9.3"
+	}
+}

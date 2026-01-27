@@ -35,11 +35,25 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           # Value already defaults to true, but `persist-credentials` is required to push new commits to the repository
           persist-credentials: true
+
+      # After removing internal packages (/vendor) we need to regenerate the lockfile
+      # For this, we will need to setup Node.js and pnpm
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: "pnpm"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
 
       - name: Make preparation scripts executable
         run: chmod +x "${{ github.workspace }}/scripts/bash/template/"*.sh

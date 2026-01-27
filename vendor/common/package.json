@@ -1,0 +1,228 @@
+{
+	"name": "@md-oss/common",
+	"version": "0.0.0",
+	"private": false,
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://npm.pkg.github.com/"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+ssh://git@github.com/Mirasaki-OSS/monorepo-template.git",
+		"directory": "vendor/common"
+	},
+	"type": "module",
+	"description": "Constants, magic numbers, and utilities",
+	"license": "ISC",
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.cts",
+	"files": ["dist/**/*", "README.md", "LICENSE"],
+	"exports": {
+		".": {
+			"require": {
+				"types": "./dist/index.d.cts",
+				"default": "./dist/index.cjs"
+			},
+			"import": {
+				"types": "./dist/index.d.mts",
+				"default": "./dist/index.mjs"
+			}
+		},
+		"./api": {
+			"require": {
+				"types": "./dist/api/index.d.cts",
+				"default": "./dist/api/index.cjs"
+			},
+			"import": {
+				"types": "./dist/api/index.d.mts",
+				"default": "./dist/api/index.mjs"
+			}
+		},
+		"./api/errors": {
+			"require": {
+				"types": "./dist/api/errors.d.cts",
+				"default": "./dist/api/errors.cjs"
+			},
+			"import": {
+				"types": "./dist/api/errors.d.mts",
+				"default": "./dist/api/errors.mjs"
+			}
+		},
+		"./api/requests": {
+			"require": {
+				"types": "./dist/api/requests.d.cts"
+			},
+			"import": {
+				"types": "./dist/api/requests.d.mts"
+			}
+		},
+		"./api/status-codes": {
+			"require": {
+				"types": "./dist/api/status-codes.d.cts",
+				"default": "./dist/api/status-codes.cjs"
+			},
+			"import": {
+				"types": "./dist/api/status-codes.d.mts",
+				"default": "./dist/api/status-codes.mjs"
+			}
+		},
+		"./constants": {
+			"require": {
+				"types": "./dist/constants/index.d.cts",
+				"default": "./dist/constants/index.cjs"
+			},
+			"import": {
+				"types": "./dist/constants/index.d.mts",
+				"default": "./dist/constants/index.mjs"
+			}
+		},
+		"./constants/bytes": {
+			"require": {
+				"types": "./dist/constants/bytes.d.cts",
+				"default": "./dist/constants/bytes.cjs"
+			},
+			"import": {
+				"types": "./dist/constants/bytes.d.mts",
+				"default": "./dist/constants/bytes.mjs"
+			}
+		},
+		"./constants/discord": {
+			"require": {
+				"types": "./dist/constants/discord.d.cts",
+				"default": "./dist/constants/discord.cjs"
+			},
+			"import": {
+				"types": "./dist/constants/discord.d.mts",
+				"default": "./dist/constants/discord.mjs"
+			}
+		},
+		"./constants/time": {
+			"require": {
+				"types": "./dist/constants/time.d.cts",
+				"default": "./dist/constants/time.cjs"
+			},
+			"import": {
+				"types": "./dist/constants/time.d.mts",
+				"default": "./dist/constants/time.mjs"
+			}
+		},
+		"./utils": {
+			"require": {
+				"types": "./dist/utils/index.d.cts",
+				"default": "./dist/utils/index.cjs"
+			},
+			"import": {
+				"types": "./dist/utils/index.d.mts",
+				"default": "./dist/utils/index.mjs"
+			}
+		},
+		"./utils/arrays": {
+			"require": {
+				"types": "./dist/utils/arrays.d.cts",
+				"default": "./dist/utils/arrays.cjs"
+			},
+			"import": {
+				"types": "./dist/utils/arrays.d.mts",
+				"default": "./dist/utils/arrays.mjs"
+			}
+		},
+		"./utils/mime-types": {
+			"require": {
+				"types": "./dist/utils/mime-types.d.cts",
+				"default": "./dist/utils/mime-types.cjs"
+			},
+			"import": {
+				"types": "./dist/utils/mime-types.d.mts",
+				"default": "./dist/utils/mime-types.mjs"
+			}
+		},
+		"./utils/numbers": {
+			"require": {
+				"types": "./dist/utils/numbers.d.cts",
+				"default": "./dist/utils/numbers.cjs"
+			},
+			"import": {
+				"types": "./dist/utils/numbers.d.mts",
+				"default": "./dist/utils/numbers.mjs"
+			}
+		},
+		"./utils/objects": {
+			"require": {
+				"types": "./dist/utils/objects.d.cts",
+				"default": "./dist/utils/objects.cjs"
+			},
+			"import": {
+				"types": "./dist/utils/objects.d.mts",
+				"default": "./dist/utils/objects.mjs"
+			}
+		},
+		"./utils/random": {
+			"require": {
+				"types": "./dist/utils/random.d.cts",
+				"default": "./dist/utils/random.cjs"
+			},
+			"import": {
+				"types": "./dist/utils/random.d.mts",
+				"default": "./dist/utils/random.mjs"
+			}
+		},
+		"./utils/runtime": {
+			"require": {
+				"types": "./dist/utils/runtime.d.cts",
+				"default": "./dist/utils/runtime.cjs"
+			},
+			"import": {
+				"types": "./dist/utils/runtime.d.mts",
+				"default": "./dist/utils/runtime.mjs"
+			}
+		},
+		"./utils/strings": {
+			"require": {
+				"types": "./dist/utils/strings.d.cts",
+				"default": "./dist/utils/strings.cjs"
+			},
+			"import": {
+				"types": "./dist/utils/strings.d.mts",
+				"default": "./dist/utils/strings.mjs"
+			}
+		},
+		"./utils/time": {
+			"require": {
+				"types": "./dist/utils/time.d.cts",
+				"default": "./dist/utils/time.cjs"
+			},
+			"import": {
+				"types": "./dist/utils/time.d.mts",
+				"default": "./dist/utils/time.mjs"
+			}
+		},
+		"./schemas": {
+			"require": {
+				"types": "./dist/schemas.d.cts",
+				"default": "./dist/schemas.cjs"
+			},
+			"import": {
+				"types": "./dist/schemas.d.mts",
+				"default": "./dist/schemas.mjs"
+			}
+		}
+	},
+	"scripts": {
+		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
+		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
+		"dev": "tsc --watch",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@md-oss/config": "workspace:^",
+		"@types/qs": "^6.14.0",
+		"qs": "^6.14.1",
+		"zod": "^4.3.6"
+	},
+	"devDependencies": {
+		"@types/node": "^25.0.9",
+		"pkgroll": "^2.21.5",
+		"typescript": "^5.9.3"
+	}
+}

@@ -13,7 +13,7 @@ require_file "$TEMPLATE_IGNORE_FILE"
 
 log_section "Cleaning up template files"
 
-# Read the .template-ignore file line by line
+# Read the .template-ignore entries line by line
 removed_count=0
 while IFS= read -r line; do
   # Skip empty lines and comments
@@ -42,10 +42,36 @@ while IFS= read -r line; do
   fi
 done < "$TEMPLATE_IGNORE_FILE"
 
+# Remove the .template-ignore file itself
+if path_exists "$TEMPLATE_IGNORE_FILE"; then
+  log_success "Removing: .github/.template-ignore"
+  rm -f "$TEMPLATE_IGNORE_FILE"
+  removed_count=$((removed_count + 1))
+fi
+
+# Summary of removals
 if [[ $removed_count -gt 0 ]]; then
   log_success "Successfully removed $removed_count item(s)"
 else
   log_warning "No files matched for removal"
+fi
+
+# Remove @changesets/cli from workspace root dependencies
+if grep -q '"@changesets/cli"' "$PROJECT_ROOT/package.json"; then
+  log_section "Removing @changesets/cli from workspace root dependencies"
+  pnpm remove @changesets/cli --workspace-root
+  log_success "@changesets/cli removed from workspace root dependencies"
+else
+  log_info "@changesets/cli not found in workspace root dependencies"
+fi
+
+# Remove publish:ci and publish:dryrun scripts from workspace root package.json
+if grep -q '"publish:ci"' "$PROJECT_ROOT/package.json" || grep -q '"publish:dryrun"' "$PROJECT_ROOT/package.json"; then
+  log_section "Removing publish scripts from workspace root package.json"
+  npx -y json -I -f "$PROJECT_ROOT/package.json" -e 'delete this.scripts["publish:ci"]; delete this.scripts["publish:dryrun"];'
+  log_success "Publish scripts removed from workspace root package.json"
+else
+  log_info "No publish scripts found in workspace root package.json"
 fi
 
 exit 0

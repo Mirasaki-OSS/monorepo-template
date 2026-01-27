@@ -1,0 +1,78 @@
+{
+	"name": "@md-oss/security",
+	"version": "0.0.0",
+	"private": false,
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://npm.pkg.github.com/"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+ssh://git@github.com/Mirasaki-OSS/monorepo-template.git",
+		"directory": "vendor/security"
+	},
+	"type": "module",
+	"description": "Cryptographic utilities for encryption, signed URLs, and secure streaming",
+	"license": "ISC",
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.cts",
+	"files": ["dist/**/*", "README.md", "LICENSE"],
+	"exports": {
+		".": {
+			"require": {
+				"types": "./dist/index.d.cts",
+				"default": "./dist/index.cjs"
+			},
+			"import": {
+				"types": "./dist/index.d.mts",
+				"default": "./dist/index.mjs"
+			}
+		},
+		"./decryption-stream": {
+			"require": {
+				"types": "./dist/decryption-stream.d.cts",
+				"default": "./dist/decryption-stream.cjs"
+			},
+			"import": {
+				"types": "./dist/decryption-stream.d.mts",
+				"default": "./dist/decryption-stream.mjs"
+			}
+		},
+		"./encryption": {
+			"require": {
+				"types": "./dist/encryption.d.cts",
+				"default": "./dist/encryption.cjs"
+			},
+			"import": {
+				"types": "./dist/encryption.d.mts",
+				"default": "./dist/encryption.mjs"
+			}
+		},
+		"./signed-urls": {
+			"require": {
+				"types": "./dist/signed-urls.d.cts",
+				"default": "./dist/signed-urls.cjs"
+			},
+			"import": {
+				"types": "./dist/signed-urls.d.mts",
+				"default": "./dist/signed-urls.mjs"
+			}
+		}
+	},
+	"scripts": {
+		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
+		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
+		"dev": "tsc --watch",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@md-oss/config": "workspace:^",
+		"@md-oss/common": "workspace:^"
+	},
+	"devDependencies": {
+		"@types/node": "^25.0.9",
+		"pkgroll": "^2.21.5",
+		"typescript": "^5.9.3"
+	}
+}

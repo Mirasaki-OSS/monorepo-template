@@ -2,7 +2,19 @@
 # Patterns follow .gitignore format (glob patterns supported)
 
 # Open-source projects directory (open-source apps and packages belonging to the @md-oss organization)
-oss/
+vendor/
+
+# Changeset versioning/publishing
+.changeset
+.github/workflows/release.yaml
+
+# .github files
+.github/CONTRIBUTING.md
+.github/copilot-instructions.md
+.github/pull_request_template.md
+
+# Scripts
+scripts/node/sync-licenses.ts
 
 # Template preparation (no longer needed after initialization)
 .github/workflows/prepare-template.yaml
