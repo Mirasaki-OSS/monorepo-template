@@ -31,7 +31,7 @@
 		"docker:down": "docker compose down",
 		"docker:logs": "docker compose logs -f",
 		"docker:up": "docker compose up -d",
-		"publish:ci": "pnpm run lint && turbo run build --filter={./vendor/*} && changeset version && changeset publish",
+		"publish:ci": "pnpm run checks && turbo run build --filter={./vendor/*} && changeset version && changeset publish",
 		"publish:dryrun": "pnpm -r publish --access public --report-summary --dry-run --no-git-checks"
 	},
 	"devDependencies": {
