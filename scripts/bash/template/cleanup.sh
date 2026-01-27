@@ -74,4 +74,47 @@ else
   log_info "No publish scripts found in workspace root package.json"
 fi
 
+# Remove `- vendor/*` from `pnpm-workspace.yaml`
+PNPM_WORKSPACE_FILE="$PROJECT_ROOT/pnpm-workspace.yaml"
+if file_exists "$PNPM_WORKSPACE_FILE"; then
+  if grep -q '^- vendor/\*' "$PNPM_WORKSPACE_FILE"; then
+    log_section "Removing 'vendor/*' from pnpm-workspace.yaml"
+    sed -i.bak '/^- vendor\/\*/d' "$PNPM_WORKSPACE_FILE"
+    rm -f "$PNPM_WORKSPACE_FILE.bak"
+    log_success "'vendor/*' removed from pnpm-workspace.yaml"
+  else
+    log_info "'vendor/*' not found in pnpm-workspace.yaml"
+  fi
+else
+  log_warning "pnpm-workspace.yaml not found, skipping update"
+fi
+
+# Remove `vendor/*` from `/package.json#workspaces`
+if file_exists "$PROJECT_ROOT/package.json"; then
+  if grep -q '"vendor/*"' "$PROJECT_ROOT/package.json"; then
+    log_section "Removing 'vendor/*' from package.json workspaces"
+    npx -y json -I -f "$PROJECT_ROOT/package.json" -e 'this.workspaces = this.workspaces.filter(item => item !== "vendor/*");'
+    log_success "'vendor/*' removed from package.json workspaces"
+  else
+    log_info "'vendor/*' not found in package.json workspaces"
+  fi
+else
+  log_warning "package.json not found, skipping workspaces update"
+fi
+
+# Remove lines that have `vendor/` from `README.md`
+README_FILE="$PROJECT_ROOT/README.md"
+if file_exists "$README_FILE"; then
+  if grep -q 'vendor/' "$README_FILE"; then
+    log_section "Removing lines with 'vendor/' from README.md"
+    sed -i.bak '/vendor\//d' "$README_FILE"
+    rm -f "$README_FILE.bak"
+    log_success "Lines with 'vendor/' removed from README.md"
+  else
+    log_info "'vendor/' not found in README.md"
+  fi
+else
+  log_warning "README.md not found, skipping update"
+fi
+
 exit 0
