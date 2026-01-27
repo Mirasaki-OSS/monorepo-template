@@ -9,6 +9,7 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+    if: github.run_number > 1 # Skip first run to avoid issues with initial setup (template repo)
     steps:
       - uses: actions/checkout@6
       - uses: mongolyy/reviewdog-action-biome@bf7dffa9b14e8904941a18a28782b74fc40104f0 # v1.11.1

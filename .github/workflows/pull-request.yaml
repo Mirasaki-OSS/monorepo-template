@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    if: github.run_number > 1 # Skip first run to avoid issues with initial setup (template repo)
     steps:
       - name: Checkout
         uses: actions/checkout@v6
