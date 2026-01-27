@@ -3,18 +3,7 @@
 	"changelog": "@changesets/cli/changelog",
 	"commit": false,
 	"fixed": [],
-	"linked": [
-		[
-			"@md-oss/analytics",
-			"@md-oss/api-types",
-			"@md-oss/cache",
-			"@md-oss/common",
-			"@md-oss/migrations",
-			"@md-oss/mutex",
-			"@md-oss/observability",
-			"@md-oss/security"
-		]
-	],
+	"linked": [["./vendor/*"]],
 	"access": "public",
 	"baseBranch": "main",
 	"updateInternalDependencies": "patch",
