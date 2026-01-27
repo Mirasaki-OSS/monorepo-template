@@ -34,6 +34,8 @@ jobs:
       - name: Publish to NPM registry
         id: changesets
         uses: changesets/action@v1
+        env: # GITHUB_TOKEN is required by Changesets action to create GitHub Releases (which we don't need here, but the action requires it)
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           publish: pnpm publish:ci
           createGithubReleases: false
