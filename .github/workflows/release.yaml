@@ -77,7 +77,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Format package.json and commit to Changeset PR
-        if: ${{ steps.changesets.outputs.pullRequestNumber != '' }}
+        if: ${{ steps.changesets.outputs.published != 'true' }}
         run: |
           set -e
           BRANCH="changeset-release/${{ github.ref_name }}"
