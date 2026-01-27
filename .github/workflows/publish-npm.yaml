@@ -1,4 +1,4 @@
-name: Publish Package
+name: Publish Package to NPM
 
 on:
   workflow_call:   # Triggered by release workflow
@@ -30,7 +30,7 @@ jobs:
       - name: Sync license files
         run: pnpm tsx ./scripts/node/sync-licenses.ts
 
-      - name: Create Release Pull Request or Publish to NPM
+      - name: Publish to NPM registry
         id: changesets
         uses: changesets/action@v1
         with:

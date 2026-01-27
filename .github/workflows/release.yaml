@@ -27,6 +27,8 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    outputs:
+      published: ${{ steps.publish-npm.outputs.published }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v6
