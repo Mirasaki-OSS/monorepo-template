@@ -22,7 +22,7 @@ log_section "Personalizing repository for $REPO_OWNER/$REPO_NAME"
 # Old and new values
 OLD_OWNER="md-oss"
 OLD_NAME="monorepo-template"
-NEW_OWNER="$REPO_OWNER"
+NEW_OWNER="${REPO_OWNER,,}" # Convert to lowercase, as GitHub usernames are case-insensitive and NPM doesn't allow uppercase in package scopes
 NEW_NAME="$REPO_NAME"
 
 # Files to search and replace in
