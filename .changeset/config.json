@@ -3,7 +3,7 @@
 	"changelog": "@changesets/cli/changelog",
 	"commit": false,
 	"fixed": [],
-	"linked": [["./vendor/*"]],
+	"linked": [["vendor/*"]],
 	"access": "public",
 	"baseBranch": "main",
 	"updateInternalDependencies": "patch",
