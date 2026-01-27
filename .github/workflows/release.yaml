@@ -1,5 +1,8 @@
 name: Release
 
+# Github Packages/Organization: "@mirasaki-oss"
+# NPM Scope/Organization: "@md-oss"
+
 on:
   push:
     tags:
@@ -43,11 +46,20 @@ jobs:
         run: |
           cat << EOF > "$HOME/.npmrc"
             //npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}
-            @md-oss:registry=https://npm.pkg.github.com/
+            @mirasaki-oss:registry=https://npm.pkg.github.com/
+            @md-oss:registry=https://registry.npmjs.org/
           EOF
 
-      - name: Install dependencies
-        run: pnpm install -w --frozen-lockfile --filter={./vendor/*}
+      - name: Replace `@md-oss` with `@mirasaki-oss` across vendor (Github Packages)
+        run: |
+          pnpm exec tsx ./scripts/node/replace-scope.ts --scopeOld="@md-oss" --scopeNew="@mirasaki-oss" --paths="./.changeset/*,./apps,./packages,./vendor"
+
+      - name: Install dependencies (Github Packages)
+        run: pnpm install -w --no-frozen-lockfile --filter={./vendor/*}
+        # Note: Using `--no-frozen-lockfile` here to allow updating lockfile for Github scope change
+
+      # - name: Install dependencies (NPM)
+      #   run: pnpm install -w --frozen-lockfile --filter={./vendor/*}
 
       - name: Sync license files
         run: pnpm tsx ./scripts/node/sync-licenses.ts

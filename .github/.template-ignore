@@ -14,6 +14,7 @@ vendor/
 .github/pull_request_template.md
 
 # Scripts
+scripts/node/replace-scope.ts
 scripts/node/sync-licenses.ts
 
 # Template preparation (no longer needed after initialization)
