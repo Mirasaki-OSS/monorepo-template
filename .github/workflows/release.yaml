@@ -50,6 +50,9 @@ jobs:
             @md-oss:registry=https://registry.npmjs.org/
           EOF
 
+      - name: Install workspace root dependencies
+        run: pnpm install -w --frozen-lockfile
+
       - name: Replace `@md-oss` with `@mirasaki-oss` across monorepo (Github Packages)
         run: |
           pnpm exec tsx ./scripts/node/replace-scope.ts --scopeOld="@md-oss" --scopeNew="@mirasaki-oss" --paths="./.changeset/*,./apps,./packages,./vendor"
