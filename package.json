@@ -12,7 +12,7 @@
 		"build": "turbo run build",
 		"build:dry": "turbo run build --dry",
 		"checks": "pnpm exec biome check --write && turbo run typecheck",
-		"checks:ci": "pnpm exec biome ci && turbo run typecheck",
+		"checks:ci": "pnpm exec biome ci",
 		"clean": "turbo run clean && git clean -xdf node_modules .turbo pnpm-lock.yaml docker/.buildx-cache",
 		"dev": "turbo run dev --parallel",
 		"lint": "pnpm exec biome lint --write",
@@ -31,7 +31,7 @@
 		"docker:down": "docker compose down",
 		"docker:logs": "docker compose logs -f",
 		"docker:up": "docker compose up -d",
-		"publish:ci": "pnpm run checks && turbo run build --filter={./vendor/*} && changeset version && changeset publish",
+		"publish:ci": "pnpm run checks:ci && pnpm run build --filter={./vendor/*} && turbo run typecheck --filter={./vendor/*} && changeset version && changeset publish",
 		"publish:dryrun": "pnpm -r publish --access public --report-summary --dry-run --no-git-checks"
 	},
 	"devDependencies": {
