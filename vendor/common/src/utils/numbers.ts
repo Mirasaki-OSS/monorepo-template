@@ -3,6 +3,11 @@ const isFloat = (n: number): boolean => !isInt(n);
 const isEven = (n: number): boolean => n % 2 === 0;
 const isOdd = (n: number): boolean => n % 2 !== 0;
 
+const roundTo = (value: number, decimals = 2): number => {
+	const factor = 10 ** decimals;
+	return Math.round(value * factor) / factor;
+};
+
 const INT32_MAX: number = 2 ** 31 - 1;
 const INT32_MIN: number = -(2 ** 31);
 const INT64_MAX: bigint = BigInt(2) ** BigInt(63) - BigInt(1);
@@ -59,6 +64,7 @@ export {
 	isFloat,
 	isEven,
 	isOdd,
+	roundTo,
 	INT32_MAX,
 	INT32_MIN,
 	INT64_MAX,
