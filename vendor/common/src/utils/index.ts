@@ -1,4 +1,5 @@
 export * as ArrayUtils from './arrays';
+export * as FileUtils from './files';
 export * as MimeTypeUtils from './mime-types';
 export * as NumberUtils from './numbers';
 export * as ObjectUtils from './objects';
