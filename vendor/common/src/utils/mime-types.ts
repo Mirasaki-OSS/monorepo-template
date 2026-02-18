@@ -1,6 +1,16 @@
+/**
+ * MIME type category
+ */
 type MimeKind = 'IMAGE' | 'VIDEO' | 'AUDIO' | 'DOCUMENT' | 'ARCHIVE' | 'OTHER';
+
+/**
+ * MIME type category including SAFE (all safe types combined)
+ */
 type MimeKindWithSafe = MimeKind | 'SAFE';
 
+/**
+ * List of common image MIME types
+ */
 const imageMimeTypes = [
 	'image/png',
 	'image/jpeg',
@@ -16,6 +26,9 @@ const imageMimeTypes = [
 	'image/jpg',
 ] as const;
 
+/**
+ * List of common video MIME types
+ */
 const videoMimeTypes = [
 	'video/mp4',
 	'video/webm',
@@ -35,6 +48,9 @@ const videoMimeTypes = [
 	'video/x-flash-video',
 ] as const;
 
+/**
+ * List of common audio MIME types
+ */
 const audioMimeTypes = [
 	'audio/mpeg',
 	'audio/wav',
@@ -52,6 +68,9 @@ const audioMimeTypes = [
 	'audio/x-aac',
 ] as const;
 
+/**
+ * List of common document MIME types
+ */
 const documentMimeTypes = [
 	'text/plain',
 	'text/csv',
@@ -74,6 +93,9 @@ const documentMimeTypes = [
 	'application/vnd.oasis.opendocument.spreadsheet',
 ] as const;
 
+/**
+ * List of common archive/compression MIME types
+ */
 const archiveMimeTypes = [
 	'application/zip',
 	'application/x-7z-compressed',
@@ -90,6 +112,9 @@ const archiveMimeTypes = [
 	'application/x-bzip',
 ] as const;
 
+/**
+ * List of web asset MIME types (HTML, CSS, JS, fonts, etc.)
+ */
 const webAssetTypes = [
 	'text/html',
 	'text/css',
@@ -104,6 +129,9 @@ const webAssetTypes = [
 	'image/x-icon',
 ] as const;
 
+/**
+ * Combined list of all safe MIME types
+ */
 const safeMimeTypes = [
 	...imageMimeTypes,
 	...videoMimeTypes,
@@ -120,6 +148,9 @@ const safeMimeTypes = [
 	| (typeof webAssetTypes)[number]
 >;
 
+/**
+ * Map of MIME kind to list of MIME types
+ */
 const mimeTypeMap: Record<MimeKindWithSafe, readonly string[]> = {
 	IMAGE: imageMimeTypes,
 	VIDEO: videoMimeTypes,
@@ -132,12 +163,22 @@ const mimeTypeMap: Record<MimeKindWithSafe, readonly string[]> = {
 
 /**
  * Returns a comma-separated accept string for input elements based on the specified kind
- * @param kind The type of MIME kind to get the accept string for
+ * @param kind - The type of MIME kind to get the accept string for
+ * @returns Comma-separated MIME types string
+ * @example getInputAccept('IMAGE') // "image/png,image/jpeg,..."
  */
 const getInputAccept = (kind: MimeKindWithSafe = 'SAFE'): string => {
 	return mimeTypeMap[kind].join(',');
 };
 
+/**
+ * Check if a MIME type is allowed for a given kind
+ * @param mimeType - MIME type to check
+ * @param kind - The type of MIME kind to check against (default: 'SAFE')
+ * @returns True if MIME type is allowed
+ * @example isAllowedMimeType('image/png', 'IMAGE') // true
+ * @example isAllowedMimeType('application/exe', 'SAFE') // false
+ */
 const isAllowedMimeType = (
 	mimeType: string,
 	kind: MimeKindWithSafe = 'SAFE'
@@ -151,6 +192,9 @@ const isAllowedMimeType = (
 	return mimeTypeMap[kind].includes(lowerMimeType);
 };
 
+/**
+ * List of MIME types that should use inline Content-Disposition
+ */
 const inlineContentDispositionMimeTypes = [
 	'text/plain',
 	'text/xml',
@@ -158,6 +202,13 @@ const inlineContentDispositionMimeTypes = [
 	'application/pdf',
 ] as const;
 
+/**
+ * Check if a MIME type should use inline Content-Disposition
+ * @param mimeType - MIME type to check
+ * @returns True if should be inline
+ * @example isInlineContentDisposition('image/png') // true
+ * @example isInlineContentDisposition('application/zip') // false
+ */
 const isInlineContentDisposition = (mimeType: string): boolean => {
 	const lowerMimeType = mimeType.toLowerCase().split(';')[0].trim();
 	return (
@@ -170,6 +221,13 @@ const isInlineContentDisposition = (mimeType: string): boolean => {
 	);
 };
 
+/**
+ * Resolve a MIME type to its category
+ * @param _mimeType - MIME type to resolve
+ * @returns The MIME kind category
+ * @example mimeTypeResolver('image/png') // 'IMAGE'
+ * @example mimeTypeResolver('video/mp4') // 'VIDEO'
+ */
 const mimeTypeResolver = (_mimeType: string): MimeKind => {
 	const mimeType = _mimeType.toLowerCase().split(';')[0].trim();
 

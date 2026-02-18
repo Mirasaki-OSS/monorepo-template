@@ -1,10 +1,30 @@
 import { TimeMagic } from '../constants/time';
 
+/**
+ * Convert a timestamp in milliseconds to Unix timestamp (seconds)
+ * @param timestamp - Timestamp in milliseconds
+ * @returns Unix timestamp in seconds
+ * @example unix(1609459200000) // 1609459200
+ */
 const unix = (timestamp: number): number =>
 	Math.floor(timestamp / TimeMagic.MILLISECONDS_PER_SECOND);
 
+/**
+ * Get current Unix timestamp in seconds
+ * @returns Current Unix timestamp
+ * @example unixNow() // Current time in seconds
+ */
 const unixNow = (): number => unix(Date.now());
 
+/**
+ * Convert milliseconds to human readable format
+ * @param ms - Milliseconds to format
+ * @param maxParts - Maximum number of time parts to show (default: 2)
+ * @param msDisplay - What to display for very small values (default: "Just now")
+ * @returns Human readable string
+ * @example humanReadableMs(90000) // "1 minute and 30 seconds"
+ * @example humanReadableMs(3600000, 1) // "1 hour"
+ */
 const humanReadableMs = (
 	ms: number,
 	maxParts = 2,
@@ -40,15 +60,34 @@ const humanReadableMs = (
 		);
 };
 
+/**
+ * Convert high-resolution time to milliseconds
+ * @param hrTime - High-resolution time tuple [seconds, nanoseconds]
+ * @returns Time in milliseconds
+ * @example hrTimeToMs([1, 500000000]) // 1500 (1.5 seconds)
+ */
 const hrTimeToMs = (hrTime: [number, number]): number =>
 	hrTime[0] * 1e3 + hrTime[1] / 1e6;
 
+/**
+ * Convert BigInt duration to human readable string
+ * @param start - Start time from process.hrtime.bigint()
+ * @returns Human readable duration string
+ * @example bigIntDurationToHumanReadable(startTime) // "123.456ms"
+ */
 const bigIntDurationToHumanReadable = (start: bigint): string => {
 	const end = process.hrtime.bigint();
 	const ms = Number(end - start) / 1e6;
 	return `${ms.toFixed(3)}ms`;
 };
 
+/**
+ * Calculate average occurrences per interval from an array of dates
+ * @param dates - Array of dates
+ * @param interval - Interval in milliseconds
+ * @returns Average number of occurrences per interval
+ * @example occurrencesPerInterval([date1, date2, date3], 60000) // Avg per minute
+ */
 const occurrencesPerInterval = (dates: Date[], interval: number): number => {
 	if (dates.length === 0) return 0;
 

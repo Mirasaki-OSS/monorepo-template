@@ -5,6 +5,8 @@ import {
 	extname,
 	join,
 	parse as pathParse,
+	relative,
+	resolve,
 } from 'node:path';
 import { ByteMagic } from '../constants';
 
@@ -140,6 +142,7 @@ export function getFiles(
 	} = options;
 
 	const results: string[] = [];
+	const basePath = resolve(dirPath);
 
 	function traverse(currentPath: string, depth = 0): void {
 		if (depth > maxDepth) return;
@@ -149,7 +152,6 @@ export function getFiles(
 
 			for (const entry of entries) {
 				const fullPath = join(currentPath, entry.name);
-				const relativePath = absolutePaths ? fullPath : fullPath;
 
 				// Skip dotfiles if not included
 				if (!includeDotFiles && entry.name.startsWith('.')) {
@@ -191,7 +193,10 @@ export function getFiles(
 						continue;
 					}
 
-					results.push(absolutePaths ? fullPath : relativePath);
+					const resultPath = absolutePaths
+						? fullPath
+						: relative(basePath, fullPath);
+					results.push(resultPath);
 				}
 			}
 		} catch (error) {
