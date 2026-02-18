@@ -26,7 +26,7 @@ import { ByteMagic } from '../constants';
  * '500'.match(BYTE_STRING_PATTERN) // ['500', '500', undefined]
  * ```
  */
-export const BYTE_STRING_PATTERN = /^(\d+(?:\.\d+)?)\s*([a-z]+)?$/i;
+const BYTE_STRING_PATTERN = /^(\d+(?:\.\d+)?)\s*([a-z]+)?$/i;
 
 /**
  * Format bytes to human readable format
@@ -34,7 +34,7 @@ export const BYTE_STRING_PATTERN = /^(\d+(?:\.\d+)?)\s*([a-z]+)?$/i;
  * @param decimals - Number of decimal places (default: 2)
  * @returns Formatted string (e.g., "1.5 MB")
  */
-export function formatBytes(bytes: number, decimals = 2): string {
+function formatBytes(bytes: number, decimals = 2): string {
 	if (bytes === 0) return '0 Bytes';
 	if (bytes < 0) return `-${formatBytes(-bytes, decimals)}`;
 
@@ -52,7 +52,7 @@ export function formatBytes(bytes: number, decimals = 2): string {
  * @param value - String value (e.g., "1.5 MB")
  * @returns Number of bytes
  */
-export function parseBytes(value: string): number {
+function parseBytes(value: string): number {
 	const units: Record<string, number> = {
 		b: ByteMagic.BYTE,
 		bytes: ByteMagic.BYTE,
@@ -77,7 +77,7 @@ export function parseBytes(value: string): number {
 	return Math.floor(Number.parseFloat(num) * multiplier);
 }
 
-export interface GetFilesOptions {
+interface GetFilesOptions {
 	/**
 	 * File extensions to include (e.g., ['.ts', '.js'])
 	 * If not provided, all files are included
@@ -126,10 +126,7 @@ export interface GetFilesOptions {
  * @param options - Options for filtering files
  * @returns Array of file paths
  */
-export function getFiles(
-	dirPath: string,
-	options: GetFilesOptions = {}
-): string[] {
+function getFiles(dirPath: string, options: GetFilesOptions = {}): string[] {
 	const {
 		extensions,
 		includeDotFiles = false,
@@ -214,7 +211,7 @@ export function getFiles(
  * @param filePath - File path
  * @returns File extension
  */
-export function getExtension(filePath: string): string {
+function getExtension(filePath: string): string {
 	return extname(filePath);
 }
 
@@ -224,7 +221,7 @@ export function getExtension(filePath: string): string {
  * @param includeExtension - Whether to include the file extension (default: true)
  * @returns File name without directories (e.g., "index.ts" or "index" if includeExtension is false)
  */
-export function getBaseName(filePath: string, includeExtension = true): string {
+function getBaseName(filePath: string, includeExtension = true): string {
 	return includeExtension
 		? basename(filePath)
 		: basename(filePath, extname(filePath));
@@ -235,7 +232,7 @@ export function getBaseName(filePath: string, includeExtension = true): string {
  * @param filePath - File path
  * @returns Directory name
  */
-export function getDirName(filePath: string): string {
+function getDirName(filePath: string): string {
 	return dirname(filePath);
 }
 
@@ -244,7 +241,7 @@ export function getDirName(filePath: string): string {
  * @param filePath - File path
  * @returns Parsed path object
  */
-export function parseFilePath(filePath: string) {
+function parseFilePath(filePath: string) {
 	const parsed = pathParse(filePath);
 	return {
 		root: parsed.root,
@@ -260,7 +257,7 @@ export function parseFilePath(filePath: string) {
  * @param filePath - File path
  * @returns File size in bytes
  */
-export function getFileSize(filePath: string): number {
+function getFileSize(filePath: string): number {
 	try {
 		return statSync(filePath).size;
 	} catch {
@@ -274,7 +271,7 @@ export function getFileSize(filePath: string): number {
  * @param decimals - Number of decimal places (default: 2)
  * @returns Formatted file size
  */
-export function getFileSizeFormatted(filePath: string, decimals = 2): string {
+function getFileSizeFormatted(filePath: string, decimals = 2): string {
 	return formatBytes(getFileSize(filePath), decimals);
 }
 
@@ -283,7 +280,7 @@ export function getFileSizeFormatted(filePath: string, decimals = 2): string {
  * @param path - Path to check
  * @returns True if path is a directory
  */
-export function isDirectory(path: string): boolean {
+function isDirectory(path: string): boolean {
 	try {
 		return statSync(path).isDirectory();
 	} catch {
@@ -296,7 +293,7 @@ export function isDirectory(path: string): boolean {
  * @param path - Path to check
  * @returns True if path is a file
  */
-export function isFile(path: string): boolean {
+function isFile(path: string): boolean {
 	try {
 		return statSync(path).isFile();
 	} catch {
@@ -309,7 +306,7 @@ export function isFile(path: string): boolean {
  * @param filePath - File path
  * @returns True if file is a dotfile
  */
-export function isDotFile(filePath: string): boolean {
+function isDotFile(filePath: string): boolean {
 	const fileName = basename(filePath);
 	return fileName.startsWith('.');
 }
@@ -319,7 +316,7 @@ export function isDotFile(filePath: string): boolean {
  * @param ext - File extension
  * @returns Normalized extension
  */
-export function normalizeExtension(ext: string): string {
+function normalizeExtension(ext: string): string {
 	return ext.startsWith('.') ? ext : `.${ext}`;
 }
 
@@ -329,7 +326,7 @@ export function normalizeExtension(ext: string): string {
  * @param extensions - Extension or array of extensions to check
  * @returns True if file has one of the extensions
  */
-export function hasExtension(
+function hasExtension(
 	filePath: string,
 	extensions: string | string[]
 ): boolean {
@@ -344,9 +341,7 @@ export function hasExtension(
  * @param filePaths - Array of file paths
  * @returns Object with extensions as keys and file paths as values
  */
-export function groupByExtension(
-	filePaths: string[]
-): Record<string, string[]> {
+function groupByExtension(filePaths: string[]): Record<string, string[]> {
 	return filePaths.reduce(
 		(acc, filePath) => {
 			const ext = extname(filePath) || 'no-extension';
@@ -359,3 +354,23 @@ export function groupByExtension(
 		{} as Record<string, string[]>
 	);
 }
+
+export {
+	BYTE_STRING_PATTERN,
+	formatBytes,
+	parseBytes,
+	getFiles,
+	getExtension,
+	getBaseName,
+	getDirName,
+	parseFilePath,
+	getFileSize,
+	getFileSizeFormatted,
+	isDirectory,
+	isFile,
+	isDotFile,
+	normalizeExtension,
+	hasExtension,
+	groupByExtension,
+	type GetFilesOptions,
+};

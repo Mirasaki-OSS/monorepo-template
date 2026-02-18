@@ -178,7 +178,7 @@ const safeSetAsyncInterval = (
 /**
  * Result of a batch operation
  */
-export type BatchResult<T> = {
+type BatchResult<T> = {
 	/** Successfully processed results */
 	results: T[];
 	/** Errors that occurred during processing */
@@ -194,7 +194,7 @@ export type BatchResult<T> = {
 /**
  * Options for batch processing
  */
-export interface BatchProcessOptions {
+interface BatchProcessOptions {
 	/** Maximum number of concurrent executions (default: 5) */
 	concurrency?: number;
 	/** Whether to stop on first error (default: false) */
@@ -212,7 +212,7 @@ export interface BatchProcessOptions {
 /**
  * Options for batch processing with retry
  */
-export interface BatchProcessWithRetryOptions extends BatchProcessOptions {
+interface BatchProcessWithRetryOptions extends BatchProcessOptions {
 	/** Maximum number of retry attempts (default: 3) */
 	maxRetries?: number;
 	/** Delay between retries in milliseconds (default: 1000) */
@@ -486,4 +486,7 @@ export {
 	batchMap,
 	batchMapWithRetry,
 	processBatches,
+	type BatchResult,
+	type BatchProcessOptions,
+	type BatchProcessWithRetryOptions,
 };
