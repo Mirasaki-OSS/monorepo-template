@@ -1,6 +1,6 @@
 {
 	"name": "@md-oss/analytics",
-	"version": "0.1.6",
+	"version": "0.1.7",
 	"private": false,
 	"publishConfig": {
 		"access": "public",
@@ -14,7 +14,11 @@
 	"type": "module",
 	"description": "Next.js analytics helpers with Vercel Analytics + optional Google Analytics",
 	"license": "ISC",
-	"files": ["dist/**/*", "README.md", "LICENSE"],
+	"files": [
+		"dist/**/*",
+		"README.md",
+		"LICENSE"
+	],
 	"exports": {
 		"./env": {
 			"require": {

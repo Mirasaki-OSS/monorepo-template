@@ -1,5 +1,13 @@
 # @md-oss/analytics
 
+## 0.1.7
+
+### Patch Changes
+
+- 1510ccc: Update utils for completeness and accuracy
+- Updated dependencies [1510ccc]
+  - @md-oss/config@0.1.7
+
 ## 0.1.6
 
 ### Patch Changes
