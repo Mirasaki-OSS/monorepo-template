@@ -288,8 +288,7 @@ export class CacheManager<T extends NonNullable<unknown>>
 		const resolvedResult = result instanceof Promise ? await result : result;
 
 		if (
-			!validationFunction ||
-			!validationFunction(resolvedResult) ||
+			!validationFunction?.(resolvedResult) ||
 			typeof resolvedResult === 'undefined'
 		) {
 			return resolveReturnValue(resolvedResult, {

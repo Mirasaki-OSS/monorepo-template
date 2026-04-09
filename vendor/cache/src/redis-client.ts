@@ -151,12 +151,12 @@ class Redis {
 }
 
 export {
-	Redis,
-	RedisCacheManager,
+	getRedisClient,
+	initializeRedis,
 	type LazyResolver,
 	type NotFunction,
+	Redis,
+	RedisCacheManager,
 	redisSetKv,
-	initializeRedis,
-	getRedisClient,
 	withRedis,
 };

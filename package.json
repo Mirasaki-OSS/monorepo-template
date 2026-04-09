@@ -35,7 +35,7 @@
 		"publish:dryrun": "pnpm -r publish --access public --report-summary --dry-run --no-git-checks"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.3.11",
+		"@biomejs/biome": "2.4.10",
 		"@changesets/cli": "^2.29.8",
 		"@turbo/gen": "^2.7.5",
 		"@types/node": "^25.0.9",

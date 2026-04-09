@@ -19,7 +19,7 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
 				name: 'name',
 				message: 'Package name (without scope):',
 				validate: (input: string) => {
-					if (!input || !input.trim()) return 'Name is required';
+					if (!input?.trim()) return 'Name is required';
 					const kebab = plop.getHelper('kebabCase')(input);
 					const valid = /^[a-z][a-z0-9-]*$/.test(kebab);
 					return valid ? true : 'Use kebab-case: letters, numbers, dashes';

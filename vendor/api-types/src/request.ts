@@ -52,4 +52,4 @@ type ExtractResolvedContext<
 	ExtractQuery<Registry, API, TPath, TMethod> &
 	ExtractBody<Registry, API, TPath, TMethod>;
 
-export type { RequestOptions, ExtractResolvedContext };
+export type { ExtractResolvedContext, RequestOptions };
