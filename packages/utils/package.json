@@ -28,7 +28,7 @@
 		"@md-oss/config": "workspace:^"
 	},
 	"devDependencies": {
-		"pkgroll": "^2.21.5",
-		"typescript": "^5.9.3"
+		"pkgroll": "^2.27.0",
+		"typescript": "^6.0.2"
 	}
 }

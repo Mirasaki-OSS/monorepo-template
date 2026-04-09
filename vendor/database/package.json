@@ -1,9 +1,9 @@
 {
 	"name": "@md-oss/database",
-	"version": "0.2.0",
-	"private": true,
+	"version": "0.2.1",
+	"private": false,
 	"type": "module",
-	"description": "Dynamic queries for Drizzle",
+	"description": "Dynamic queries for Drizzle.",
 	"files": ["dist/**/*", "README.md"],
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.mjs",
@@ -41,7 +41,7 @@
 		"zod": "^4.3.6"
 	},
 	"devDependencies": {
-		"pkgroll": "^2.21.5",
-		"typescript": "^5.9.3"
+		"pkgroll": "^2.27.0",
+		"typescript": "^6.0.2"
 	}
 }

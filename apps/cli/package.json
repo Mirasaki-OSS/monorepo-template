@@ -18,9 +18,9 @@
 		"@md-oss/utils": "workspace:^"
 	},
 	"devDependencies": {
-		"@types/node": "^25.0.9",
-		"pkgroll": "^2.21.5",
+		"@types/node": "^25.5.2",
+		"pkgroll": "^2.27.0",
 		"tsx": "^4.21.0",
-		"typescript": "^5.9.3"
+		"typescript": "^6.0.2"
 	}
 }

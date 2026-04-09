@@ -1,6 +1,6 @@
 {
 	"name": "@md-oss/common",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"private": false,
 	"publishConfig": {
 		"access": "public",
@@ -404,13 +404,13 @@
 	},
 	"dependencies": {
 		"@md-oss/config": "workspace:^",
-		"@types/qs": "^6.14.0",
-		"qs": "^6.14.1",
+		"@types/qs": "^6.15.0",
+		"qs": "^6.15.1",
 		"zod": "^4.3.6"
 	},
 	"devDependencies": {
-		"@types/node": "^25.0.9",
-		"pkgroll": "^2.21.5",
-		"typescript": "^5.9.3"
+		"@types/node": "^25.5.2",
+		"pkgroll": "^2.27.0",
+		"typescript": "^6.0.2"
 	}
 }

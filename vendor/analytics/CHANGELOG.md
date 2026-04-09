@@ -1,5 +1,13 @@
 # @md-oss/analytics
 
+## 0.2.1
+
+### Patch Changes
+
+- force publish
+- Updated dependencies
+  - @md-oss/config@0.2.1
+
 ## 0.1.7
 
 ### Patch Changes

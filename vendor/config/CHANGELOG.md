@@ -1,5 +1,11 @@
 # @md-oss/config
 
+## 0.2.1
+
+### Patch Changes
+
+- force publish
+
 ## 0.1.7
 
 ### Patch Changes

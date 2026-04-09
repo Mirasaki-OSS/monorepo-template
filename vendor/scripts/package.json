@@ -1,7 +1,7 @@
 {
 	"name": "@md-oss/scripts",
-	"version": "0.2.0",
-	"private": true,
+	"version": "0.2.1",
+	"private": false,
 	"type": "module",
 	"description": "Re-usable scripts for monorepos and packages consumers",
 	"files": ["dist/**/*", "README.md"],
@@ -27,8 +27,8 @@
 		"@md-oss/config": "workspace:^"
 	},
 	"devDependencies": {
-		"pkgroll": "^2.21.5",
+		"pkgroll": "^2.27.0",
 		"tsx": "^4.21.0",
-		"typescript": "^5.9.3"
+		"typescript": "^6.0.2"
 	}
 }
