@@ -7,7 +7,21 @@
  * import { createApiClient, type RouteRegistry } from "@md-oss/api-types";
  * ```
  */
-export { type ApiClient, createApiClient, parseHeaders } from './client';
+export {
+	type APIResponse,
+	type ApiClient,
+	type ApiTypeTransformer,
+	type ApplyApiTypeTransformer,
+	type ClientConfig,
+	createApiClient,
+	type IdentityApiTypeTransformer,
+	type JsonPrimitive,
+	type Logger as APIClientLogger,
+	parseHeaders,
+	type SerializeForJson,
+	type SerializeForJsonTransformer,
+	stripProxyAndWebsocketHeaders,
+} from './client';
 
 export * from './debugger';
 
@@ -17,10 +31,7 @@ export {
 	parseRequestParameters,
 } from './params';
 
-export type {
-	ExtractResolvedContext,
-	RequestOptions,
-} from './request';
+export type { ExtractResolvedContext, RequestOptions } from './request';
 
 export {
 	type ContextProvider,
@@ -33,13 +44,12 @@ export {
 	sendTypedResponse,
 } from './response';
 
-export type {
-	EndpointDefinition,
-	InferApi,
-	MethodKeys,
-	PrefixRoutes,
-	RouteKeys,
-	RouteRegistry,
+export {
+	type EndpointDefinition,
+	type InferApi,
+	type MethodKeys,
+	type PrefixRoutes,
+	prefixRoutes,
+	type RouteKeys,
+	type RouteRegistry,
 } from './types';
-
-export { prefixRoutes } from './types';

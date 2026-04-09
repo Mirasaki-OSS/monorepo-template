@@ -81,17 +81,50 @@ export const parseHeaders = (
 	return resolvedHeaders;
 };
 
-type Logger = {
+export type Logger = {
 	error: (message: string, data?: Record<string, unknown>) => void;
 };
 
-type ClientConfig = {
+export type ClientConfig = {
 	baseUrl: string;
 	logger?: Logger;
 	defaultHeaders?:
 		| Record<string, string>
 		| (() => Record<string, string> | Promise<Record<string, string>>);
 };
+
+export type JsonPrimitive = string | number | boolean | null;
+
+/**
+ * Converts runtime javascript types into JSON-safe transport types.
+ * Example: Date -> string, bigint -> string.
+ */
+export type SerializeForJson<T> = T extends Date
+	? string
+	: T extends bigint
+		? string
+		: T extends JsonPrimitive
+			? T
+			: T extends Array<infer U>
+				? SerializeForJson<U>[]
+				: T extends ReadonlyArray<infer U>
+					? ReadonlyArray<SerializeForJson<U>>
+					: T extends object
+						? { [K in keyof T]: SerializeForJson<T[K]> }
+						: T;
+
+export type APIResponse<T> = SerializeForJson<T>;
+
+export type ApiTypeTransformer = 'identity' | 'json';
+
+export type IdentityApiTypeTransformer = 'identity';
+
+export type SerializeForJsonTransformer = 'json';
+
+export type ApplyApiTypeTransformer<
+	TTransformer extends ApiTypeTransformer,
+	T,
+> = TTransformer extends SerializeForJsonTransformer ? SerializeForJson<T> : T;
 
 /**
  * Creates a type-safe API client for a given route registry.
@@ -121,10 +154,10 @@ type ClientConfig = {
  * });
  * ```
  */
-export function createApiClient<TRegistry extends RouteRegistry>(
-	_registry: TRegistry,
-	config: ClientConfig
-) {
+export function createApiClient<
+	TRegistry extends RouteRegistry,
+	TTransformer extends ApiTypeTransformer = IdentityApiTypeTransformer,
+>(_registry: TRegistry, config: ClientConfig) {
 	const { baseUrl, logger: _logger = console } = config;
 
 	return {
@@ -155,10 +188,16 @@ export function createApiClient<TRegistry extends RouteRegistry>(
 				logger?: Logger;
 			}
 		): Promise<
-			InferApi<TRegistry>[TPath]['endpoints'][TMethod]['response'] | HTTPError
+			| ApplyApiTypeTransformer<
+					TTransformer,
+					InferApi<TRegistry>[TPath]['endpoints'][TMethod]['response']
+			  >
+			| HTTPError
 		> {
-			type LocalResponse =
-				InferApi<TRegistry>[TPath]['endpoints'][TMethod]['response'];
+			type LocalResponse = ApplyApiTypeTransformer<
+				TTransformer,
+				InferApi<TRegistry>[TPath]['endpoints'][TMethod]['response']
+			>;
 
 			const {
 				method,
@@ -187,9 +226,8 @@ export function createApiClient<TRegistry extends RouteRegistry>(
 				for (const [key, value] of Object.entries(query)) {
 					if (value != null) queryParams.append(key, String(value));
 				}
-				const queryString = queryParams.toString();
-				if (queryString.length > 0) {
-					fullPath += `?${queryString}`;
+				if ([...queryParams].length > 0) {
+					fullPath += `?${queryParams.toString()}`;
 				}
 			}
 
@@ -211,8 +249,13 @@ export function createApiClient<TRegistry extends RouteRegistry>(
 				requestHeaders = {
 					Accept: 'application/json',
 					...(body ? { 'Content-Type': 'application/json' } : {}),
-					...defaultHeaders,
-					...parseHeaders(headers, true),
+					...parseHeaders(
+						{
+							...headers,
+							...defaultHeaders,
+						},
+						true
+					),
 				};
 				requestBody = body ? JSON.stringify(body) : null;
 			} catch (error) {
@@ -342,6 +385,7 @@ export function createApiClient<TRegistry extends RouteRegistry>(
 	};
 }
 
-export type ApiClient<TRegistry extends RouteRegistry> = ReturnType<
-	typeof createApiClient<TRegistry>
->;
+export type ApiClient<
+	TRegistry extends RouteRegistry,
+	TTransformer extends ApiTypeTransformer = IdentityApiTypeTransformer,
+> = ReturnType<typeof createApiClient<TRegistry, TTransformer>>;
