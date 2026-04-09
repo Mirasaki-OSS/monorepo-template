@@ -4,10 +4,7 @@
 	"private": false,
 	"type": "module",
 	"description": "Fetch-based HTTP client with retries, timeouts, and typed results",
-	"files": [
-		"dist/**/*",
-		"README.md"
-	],
+	"files": ["dist/**/*", "README.md"],
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.mjs",
 	"types": "./dist/index.d.cts",

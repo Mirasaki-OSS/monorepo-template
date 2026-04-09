@@ -4,10 +4,7 @@
 	"private": false,
 	"type": "module",
 	"description": "Reusable monorepo maintenance scripts",
-	"files": [
-		"dist/**/*",
-		"README.md"
-	],
+	"files": ["dist/**/*", "README.md"],
 	"exports": {
 		"./find-dependency-mismatches": {
 			"require": {
