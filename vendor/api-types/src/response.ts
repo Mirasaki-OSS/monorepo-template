@@ -1,9 +1,10 @@
-import type { APIError, APISuccessResponse } from '@md-oss/common/api/errors';
+import type { HTTPError } from '@md-oss/common/http/errors';
 import type {
 	MinimalRequest,
 	MinimalRequestHandler,
 	MinimalResponse,
-} from '@md-oss/common/api/requests';
+} from '@md-oss/common/http/requests';
+import type { HTTPSuccessResponse } from '@md-oss/common/http/types';
 import { debugPerformance, debugRoute } from './debugger';
 import type { ExtractResolvedContext } from './request';
 import type { InferApi, MethodKeys, RouteKeys, RouteRegistry } from './types';
@@ -55,7 +56,7 @@ type ContextProvider<
 		session?: TConsumerSession | null,
 		req?: MinimalRequest,
 		res?: MinimalResponse
-	) => Promise<true | APIError>;
+	) => Promise<true | HTTPError>;
 };
 
 type EndpointDefinitionSession<
@@ -127,7 +128,7 @@ type ControllerFunction<
 	>,
 	respond: (
 		options:
-			| APIError
+			| HTTPError
 			| SignedAccessError
 			| Omit<
 					SendTypedResponseOptions<Registry, API, TPath, TMethod>,
@@ -187,7 +188,7 @@ const sendTypedResponse = <
 
 	const responseBodyNoData = {
 		ok: true,
-		code: status,
+		statusCode: status,
 		message,
 	} as const;
 
@@ -203,7 +204,7 @@ const sendTypedResponse = <
 	const responseBody = {
 		...responseBodyNoData,
 		data,
-	} satisfies APISuccessResponse<API[TPath]['endpoints'][TMethod]['response']>;
+	} satisfies HTTPSuccessResponse<API[TPath]['endpoints'][TMethod]['response']>;
 
 	debugRoute(
 		'Sending successful response with message: %s',
@@ -213,13 +214,13 @@ const sendTypedResponse = <
 };
 
 export {
-	type SignedAccessError,
-	type SendTypedResponseOptions,
-	type IsUserMe,
 	type ContextProvider,
-	type EndpointDefinitionSession,
-	type RouteHandler,
-	type GenericRouteHandler,
 	type ControllerFunction,
+	type EndpointDefinitionSession,
+	type GenericRouteHandler,
+	type IsUserMe,
+	type RouteHandler,
+	type SendTypedResponseOptions,
+	type SignedAccessError,
 	sendTypedResponse,
 };

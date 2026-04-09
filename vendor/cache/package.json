@@ -49,6 +49,16 @@
 				"default": "./dist/env.mjs"
 			}
 		},
+		"./keyed-promise-cache": {
+			"require": {
+				"types": "./dist/keyed-promise-cache.d.cts",
+				"default": "./dist/keyed-promise-cache.cjs"
+			},
+			"import": {
+				"types": "./dist/keyed-promise-cache.d.mts",
+				"default": "./dist/keyed-promise-cache.mjs"
+			}
+		},
 		"./lru": {
 			"require": {
 				"types": "./dist/lru.d.cts",
@@ -69,16 +79,6 @@
 				"default": "./dist/manager.mjs"
 			}
 		},
-		"./promise": {
-			"require": {
-				"types": "./dist/promise.d.cts",
-				"default": "./dist/promise.cjs"
-			},
-			"import": {
-				"types": "./dist/promise.d.mts",
-				"default": "./dist/promise.mjs"
-			}
-		},
 		"./redis-client": {
 			"require": {
 				"types": "./dist/redis-client.d.cts",
@@ -89,12 +89,42 @@
 				"default": "./dist/redis-client.mjs"
 			}
 		},
+		"./single-promise-cache": {
+			"require": {
+				"types": "./dist/single-promise-cache.d.cts",
+				"default": "./dist/single-promise-cache.cjs"
+			},
+			"import": {
+				"types": "./dist/single-promise-cache.d.mts",
+				"default": "./dist/single-promise-cache.mjs"
+			}
+		},
+		"./sliding-async-cache": {
+			"require": {
+				"types": "./dist/sliding-async-cache.d.cts",
+				"default": "./dist/sliding-async-cache.cjs"
+			},
+			"import": {
+				"types": "./dist/sliding-async-cache.d.mts",
+				"default": "./dist/sliding-async-cache.mjs"
+			}
+		},
 		"./types": {
 			"require": {
 				"types": "./dist/types.d.cts"
 			},
 			"import": {
 				"types": "./dist/types.d.mts"
+			}
+		},
+		"./utils": {
+			"require": {
+				"types": "./dist/utils.d.cts",
+				"default": "./dist/utils.cjs"
+			},
+			"import": {
+				"types": "./dist/utils.d.mts",
+				"default": "./dist/utils.mjs"
 			}
 		}
 	},

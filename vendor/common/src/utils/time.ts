@@ -5,6 +5,28 @@ const unix = (timestamp: number): number =>
 
 const unixNow = (): number => unix(Date.now());
 
+const toMillis = (value: Date | string | null | undefined): number => {
+	if (!value) {
+		return 0;
+	}
+
+	const date = value instanceof Date ? value : new Date(value);
+	const time = date.getTime();
+	return Number.isNaN(time) ? 0 : time;
+};
+
+const toUnix = (value: Date | string | null | undefined): number | null => {
+	const milliseconds = toMillis(value);
+	return milliseconds > 0
+		? Math.floor(milliseconds / TimeMagic.MILLISECONDS_PER_SECOND)
+		: null;
+};
+
+const toDateFromUnixSeconds = (unixSeconds?: number | null): Date | null =>
+	typeof unixSeconds === 'number' && unixSeconds > 0
+		? new Date(unixSeconds * TimeMagic.MILLISECONDS_PER_SECOND)
+		: null;
+
 const humanReadableMs = (
 	ms: number,
 	maxParts = 2,
@@ -82,11 +104,14 @@ const occurrencesPerInterval = (dates: Date[], interval: number): number => {
 };
 
 export {
-	unix,
-	unixNow,
-	humanReadableMs,
-	hrTimeToMs,
 	bigIntDurationToHumanReadable,
+	hrTimeToMs,
+	humanReadableMs,
 	occurrencesPerInterval,
 	TimeMagic,
+	toDateFromUnixSeconds,
+	toMillis,
+	toUnix,
+	unix,
+	unixNow,
 };

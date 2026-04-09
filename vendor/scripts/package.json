@@ -1,0 +1,34 @@
+{
+	"name": "@md-oss/scripts",
+	"version": "0.1.5",
+	"private": true,
+	"type": "module",
+	"description": "Re-usable scripts for monorepos and packages consumers",
+	"files": ["dist/**/*", "README.md"],
+	"exports": {
+		"./find-dependency-mismatches": {
+			"require": {
+				"types": "./dist/find-dependency-mismatches.d.cts",
+				"default": "./dist/find-dependency-mismatches.cjs"
+			},
+			"import": {
+				"types": "./dist/find-dependency-mismatches.d.mts",
+				"default": "./dist/find-dependency-mismatches.mjs"
+			}
+		}
+	},
+	"scripts": {
+		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
+		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
+		"dev": "tsc --watch",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@md-oss/config": "workspace:^"
+	},
+	"devDependencies": {
+		"pkgroll": "^2.21.5",
+		"tsx": "^4.21.0",
+		"typescript": "^5.9.3"
+	}
+}

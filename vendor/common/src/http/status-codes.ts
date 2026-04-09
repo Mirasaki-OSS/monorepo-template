@@ -1,4 +1,4 @@
-const statusCodes = {
+export const statusCodes = {
 	// 1xx Informational
 	CONTINUE: 100,
 	SWITCHING_PROTOCOLS: 101,
@@ -73,25 +73,19 @@ const statusCodes = {
 	NETWORK_AUTHENTICATION_REQUIRED: 511,
 } as const;
 
-type StatusCodeText = keyof typeof statusCodes;
-type StatusCode = (typeof statusCodes)[StatusCodeText];
+export type StatusCodeText = keyof typeof statusCodes;
+export type StatusCode = (typeof statusCodes)[StatusCodeText];
 
-const isStatusCodeText = (value: unknown): value is StatusCodeText => {
+export const isStatusCodeText = (value: unknown): value is StatusCodeText => {
 	return typeof value === 'string' && value in statusCodes;
 };
 
-const resolveStatusCode = (status: StatusCodeText | StatusCode): StatusCode => {
+export const resolveStatusCode = (
+	status: StatusCodeText | StatusCode
+): StatusCode => {
 	if (typeof status === 'number') {
 		return status;
 	}
 
 	return statusCodes[status] ?? statusCodes.INTERNAL_SERVER_ERROR;
-};
-
-export {
-	statusCodes,
-	type StatusCode,
-	type StatusCodeText,
-	isStatusCodeText,
-	resolveStatusCode,
 };

@@ -105,8 +105,8 @@ const cloned = ObjectUtils.deepClone({ a: { b: 1 } });
 const merged = ObjectUtils.deepMerge({ a: 1 }, { b: 2 }); // { a: 1, b: 2 }
 
 // Nested value access
-ObjectUtils.getNestedValue({ a: { b: { c: 1 } } }, 'a.b.c'); // 1
-ObjectUtils.getNestedValue({ user: { name: 'John' } }, 'user.name'); // 'John'
+ObjectUtils.getValueAtPath({ a: { b: { c: 1 } } }, 'a.b.c'); // 1
+ObjectUtils.getValueAtPath({ user: { name: 'John' } }, 'user.name'); // 'John'
 ```
 
 ### Random Utilities
@@ -212,17 +212,17 @@ statusCodes.INTERNAL_SERVER_ERROR; // 500
 
 ### API Errors
 ```typescript
-import { APIError, isAPIError, parseError } from '@md-oss/common';
+import { HTTPError, isHTTPError, parseError } from '@md-oss/common';
 
 // Create API errors
-const error = new APIError(404, {
+const error = new HTTPError(404, {
   code: 'NOT_FOUND',
   message: 'Resource not found',
   details: { id: '123' }
 });
 
 // Alternative constructor syntax
-const error2 = new APIError({
+const error2 = new HTTPError({
   status: 400,
   code: 'VALIDATION_ERROR',
   message: 'Invalid input',
@@ -230,16 +230,16 @@ const error2 = new APIError({
 });
 
 // Type guards
-if (isAPIError(error)) {
+if (isHTTPError(error)) {
   console.log(error.statusCode, error.body.code);
 }
 
-// Parse unknown errors into APIError
+// Parse unknown errors into HTTPError
 try {
   await someOperation();
 } catch (err) {
-  const apiError = parseError(err, 'OPERATION_FAILED', 'Operation failed');
-  throw apiError;
+  const HTTPError = parseError(err, 'OPERATION_FAILED', 'Operation failed');
+  throw HTTPError;
 }
 
 // Serialize to JSON

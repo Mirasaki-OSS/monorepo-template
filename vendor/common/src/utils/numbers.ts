@@ -3,6 +3,60 @@ const isFloat = (n: number): boolean => !isInt(n);
 const isEven = (n: number): boolean => n % 2 === 0;
 const isOdd = (n: number): boolean => n % 2 !== 0;
 
+const precisionModes = ['round', 'floor', 'ceil', 'trunc'] as const;
+type PrecisionMode = (typeof precisionModes)[number];
+
+type PrecisionOptions = {
+	precision?: number;
+	mode?: PrecisionMode;
+};
+
+const PRECISION_DEFAULT = 2;
+const PRECISION_MIN = 0;
+const PRECISION_MAX = 100;
+
+const normalizePrecision = (precision?: number): number => {
+	if (typeof precision !== 'number' || Number.isNaN(precision)) {
+		return PRECISION_DEFAULT;
+	}
+
+	return Math.min(
+		PRECISION_MAX,
+		Math.max(PRECISION_MIN, Math.floor(precision))
+	);
+};
+
+const isPrecisionMode = (mode: unknown): mode is PrecisionMode =>
+	typeof mode === 'string' && precisionModes.includes(mode as PrecisionMode);
+
+const getPrecisionMode = (mode?: unknown): PrecisionMode =>
+	isPrecisionMode(mode) ? mode : 'round';
+
+const toPrecision = (num: number, options: PrecisionOptions = {}): number => {
+	if (!Number.isFinite(num)) {
+		return num;
+	}
+
+	const precision = normalizePrecision(options.precision);
+	const mode = getPrecisionMode(options.mode);
+	const factor = 10 ** precision;
+	const scaled = num * factor;
+	const epsilonAdjusted = scaled + Number.EPSILON * Math.sign(scaled || 1);
+
+	switch (mode) {
+		case 'floor':
+			return Math.floor(epsilonAdjusted) / factor;
+		case 'ceil':
+			return Math.ceil(epsilonAdjusted) / factor;
+		case 'trunc':
+			return Math.trunc(epsilonAdjusted) / factor;
+		case 'round':
+			return Math.round(epsilonAdjusted) / factor;
+		default:
+			throw new Error(`Unsupported precision mode: ${mode}`);
+	}
+};
+
 const INT32_MAX: number = 2 ** 31 - 1;
 const INT32_MIN: number = -(2 ** 31);
 const INT64_MAX: bigint = BigInt(2) ** BigInt(63) - BigInt(1);
@@ -54,18 +108,23 @@ const bigIntSerializationHelper = (_: string, value: unknown): unknown =>
 			: Number(value) // Convert small/safe bigints to numbers
 		: value; // Return other values as is
 
+export type { PrecisionMode, PrecisionOptions };
 export {
-	isInt,
-	isFloat,
-	isEven,
-	isOdd,
+	bigIntSerializationHelper,
+	calculateMean,
+	calculateMedian,
+	calculateStandardDeviation,
+	calculateVariance,
 	INT32_MAX,
 	INT32_MIN,
 	INT64_MAX,
 	INT64_MIN,
-	calculateMean,
-	calculateMedian,
-	calculateVariance,
-	calculateStandardDeviation,
-	bigIntSerializationHelper,
+	isEven,
+	isFloat,
+	isInt,
+	isOdd,
+	isPrecisionMode,
+	normalizePrecision,
+	precisionModes,
+	toPrecision,
 };

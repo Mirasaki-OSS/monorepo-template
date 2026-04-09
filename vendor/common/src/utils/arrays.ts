@@ -45,6 +45,21 @@ const join = <T extends unknown[]>(
 	return withMaxLength(output);
 };
 
+const uniqueBy = <T>(arr: T[], fn: (item: T) => string | number): T[] => {
+	const seen = new Set<string | number>();
+	const result: T[] = [];
+
+	for (const item of arr) {
+		const key = fn(item);
+		if (!seen.has(key)) {
+			seen.add(key);
+			result.push(item);
+		}
+	}
+
+	return result;
+};
+
 const isStringArray = (arr: unknown[]): arr is string[] =>
 	arr.every((item) => typeof item === 'string');
 const isNumberArray = (arr: unknown[]): arr is number[] =>
@@ -79,10 +94,11 @@ type JoinOptions = {
 
 export {
 	chunk,
-	join,
-	isStringArray,
-	isNumberArray,
 	isBooleanArray,
+	isNumberArray,
 	isObjectArray,
+	isStringArray,
 	type JoinOptions,
+	join,
+	uniqueBy,
 };

@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
-import { APIError } from '@md-oss/common/api/errors';
-import { statusCodes } from '@md-oss/common/api/status-codes';
+import { HTTPError } from '@md-oss/common/http/errors';
+import { statusCodes } from '@md-oss/common/http/status-codes';
 
 type SignedUrlSchema = {
 	expires?: number | undefined;
@@ -192,7 +192,7 @@ export function withSignedAccess<T>(
 				error: string;
 		  },
 	noSignedAccessCheck: () => Promise<true | T>
-): Promise<true | T | APIError> {
+): Promise<true | T | HTTPError> {
 	if (signedAccess.type === 'verified') {
 		return Promise.resolve(true);
 	}
@@ -206,7 +206,7 @@ export function withSignedAccess<T>(
 	}
 
 	return Promise.resolve(
-		new APIError(statusCodes.FORBIDDEN, {
+		new HTTPError(statusCodes.FORBIDDEN, {
 			code: signedAccess.error,
 			message:
 				signedAccess.error === 'INVALID_SIGNATURE'

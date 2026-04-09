@@ -1,10 +1,10 @@
+import { HTTPError } from '@md-oss/common/http/errors';
 import {
-	APIError,
-	isAPIError,
-	isAPIErrorResponse,
+	isHTTPError,
+	isHTTPErrorResponse,
 	parseError,
-} from '@md-oss/common/api/errors';
-import { statusCodes } from '@md-oss/common/api/status-codes';
+} from '@md-oss/common/http/guards';
+import { statusCodes } from '@md-oss/common/http/status-codes';
 import type { RequestOptions } from './request';
 import type { InferApi, MethodKeys, RouteKeys, RouteRegistry } from './types';
 
@@ -155,7 +155,7 @@ export function createApiClient<TRegistry extends RouteRegistry>(
 				logger?: Logger;
 			}
 		): Promise<
-			InferApi<TRegistry>[TPath]['endpoints'][TMethod]['response'] | APIError
+			InferApi<TRegistry>[TPath]['endpoints'][TMethod]['response'] | HTTPError
 		> {
 			type LocalResponse =
 				InferApi<TRegistry>[TPath]['endpoints'][TMethod]['response'];
@@ -248,16 +248,16 @@ export function createApiClient<TRegistry extends RouteRegistry>(
 					error: String(error),
 					headers: JSON.stringify(requestHeaders, null, 2),
 				});
-				return new APIError(statusCodes.SERVICE_UNAVAILABLE, {
+				return new HTTPError(statusCodes.SERVICE_UNAVAILABLE, {
 					code: 'NETWORK_ERROR',
 					message: `Network error while requesting ${endpoint}`,
 					details: String(error),
 				});
 			});
 
-			if (isAPIErrorResponse(response)) {
+			if (isHTTPErrorResponse(response)) {
 				console.log('\n\n\n\n\n', response, '\n\n\n\n\n');
-				return new APIError(response.statusCode, response.body);
+				return new HTTPError(response.statusCode, response.body);
 			}
 
 			if (!response.ok) {
@@ -279,10 +279,10 @@ export function createApiClient<TRegistry extends RouteRegistry>(
 						}
 					);
 				}
-				if (isAPIErrorResponse(error)) {
-					return new APIError(error.statusCode, error.body);
+				if (isHTTPErrorResponse(error)) {
+					return new HTTPError(error.statusCode, error.body);
 				}
-				return new APIError(statusCodes.SERVICE_UNAVAILABLE, {
+				return new HTTPError(statusCodes.SERVICE_UNAVAILABLE, {
 					code: 'REQUEST_FAILED',
 					message: `Request failed with status ${response.status}`,
 					details: `Unexpected response from ${endpoint}: ${JSON.stringify(error, null, 2)}`,
@@ -294,7 +294,7 @@ export function createApiClient<TRegistry extends RouteRegistry>(
 			}
 
 			const json = await response.json().catch(() => {
-				return new APIError(statusCodes.SERVICE_UNAVAILABLE, {
+				return new HTTPError(statusCodes.SERVICE_UNAVAILABLE, {
 					code: 'INVALID_RESPONSE',
 					message: `Failed to parse response from ${endpoint}`,
 					details: {
@@ -308,7 +308,7 @@ export function createApiClient<TRegistry extends RouteRegistry>(
 				return json.data as LocalResponse;
 			}
 
-			if (isAPIError(json)) {
+			if (isHTTPError(json)) {
 				logger.error(`API error from ${endpoint}`, {
 					...metadata,
 					path,
@@ -333,7 +333,7 @@ export function createApiClient<TRegistry extends RouteRegistry>(
 				response: json,
 			});
 
-			return new APIError(statusCodes.SERVICE_UNAVAILABLE, {
+			return new HTTPError(statusCodes.SERVICE_UNAVAILABLE, {
 				code: 'UNEXPECTED_RESPONSE',
 				message: `Unexpected response from ${endpoint}`,
 				details: JSON.stringify(json, null, 2),

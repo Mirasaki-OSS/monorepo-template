@@ -1,14 +1,11 @@
-import {
-	APIError,
-	isAPIErrorResponse,
-	parseError,
-} from '@md-oss/common/api/errors';
+import { HTTPError } from '@md-oss/common/http/errors';
+import { isHTTPErrorResponse, parseError } from '@md-oss/common/http/guards';
 import type {
 	MinimalRequest,
 	MinimalRequestHandler,
 	MinimalResponse,
-} from '@md-oss/common/api/requests';
-import { statusCodes } from '@md-oss/common/api/status-codes';
+} from '@md-oss/common/http/requests';
+import { statusCodes } from '@md-oss/common/http/status-codes';
 import { debugErrors, debugPerformance, debugRoute } from './debugger';
 import { type ParsedParameters, parseRequestParameters } from './params';
 import {
@@ -22,11 +19,11 @@ import {
 import type { InferApi, MethodKeys, RouteKeys, RouteRegistry } from './types';
 
 export function parseSignedAccessError(
-	error: APIError | SignedAccessError
-): APIError {
-	if (isAPIErrorResponse(error)) {
+	error: HTTPError | SignedAccessError
+): HTTPError {
+	if (isHTTPErrorResponse(error)) {
 		debugErrors(
-			'#parseSignedAccessError Returning existing APIError: %s - %s',
+			'#parseSignedAccessError Returning existing HTTPError: %s - %s',
 			error.statusCode,
 			error.message
 		);
@@ -34,10 +31,10 @@ export function parseSignedAccessError(
 	}
 
 	debugErrors(
-		'#parseSignedAccessError Converting signed access error to APIError: %s',
+		'#parseSignedAccessError Converting signed access error to HTTPError: %s',
 		error
 	);
-	return new APIError(statusCodes.FORBIDDEN, {
+	return new HTTPError(statusCodes.FORBIDDEN, {
 		code: 'SIGNED_ACCESS_ERROR',
 		message: 'Signed access verification failed.',
 		details: {
@@ -55,7 +52,7 @@ export function generateRequestId(): string {
  */
 export interface AuthResult<TSession> {
 	session: TSession | null;
-	error?: APIError;
+	error?: HTTPError;
 }
 
 /**
@@ -377,7 +374,7 @@ export function createGenericRouteHandler<
 			const handler = controller(
 				resolvedContext || fallbackContext(),
 				(options) => {
-					if (isAPIErrorResponse(options) || typeof options === 'string') {
+					if (isHTTPErrorResponse(options) || typeof options === 'string') {
 						debugErrors(
 							'[%s] Controller responded with error: %o',
 							requestId,

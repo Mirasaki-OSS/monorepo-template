@@ -1,6 +1,6 @@
-import { APIError } from '@md-oss/common/api/errors';
-import type { MinimalRequest } from '@md-oss/common/api/requests';
-import { statusCodes } from '@md-oss/common/api/status-codes';
+import { HTTPError } from '@md-oss/common/http/errors';
+import type { MinimalRequest } from '@md-oss/common/http/requests';
+import { statusCodes } from '@md-oss/common/http/status-codes';
 import { prettifyError } from 'zod/v4';
 import { debugErrors, debugPerformance, debugRoute } from './debugger';
 import type { MethodKeys, RouteKeys, RouteRegistry } from './types';
@@ -14,7 +14,7 @@ export interface ParsedParameters {
 export interface ParameterParsingResult {
 	success: boolean;
 	data?: ParsedParameters;
-	error?: APIError;
+	error?: HTTPError;
 }
 
 export async function parseRequestParameters<
@@ -68,7 +68,7 @@ export async function parseRequestParameters<
 
 		return {
 			success: false,
-			error: new APIError(statusCodes.BAD_REQUEST, {
+			error: new HTTPError(statusCodes.BAD_REQUEST, {
 				code: body?.error?.issues.length
 					? 'INVALID_REQUEST_BODY'
 					: query?.error?.issues.length

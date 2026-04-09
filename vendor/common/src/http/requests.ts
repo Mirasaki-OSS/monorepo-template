@@ -1,18 +1,19 @@
 import type { ParsedQs } from 'qs';
 
-interface ParamsDictionary {
+export interface ParamsDictionary {
 	[key: string]: string | string[];
 	[key: number]: string;
 }
-interface ParamsFlatDictionary {
+export interface ParamsFlatDictionary {
 	[key: string | number]: string;
 }
-type Params =
+export type Params =
 	| Record<string, string | string[]>
 	| ParamsDictionary
 	| ParamsFlatDictionary;
 
-interface MinimalRequest {
+export interface MinimalRequest {
+	method: string;
 	protocol: string;
 	headers: Record<string, string | string[] | undefined>;
 	get(header: string): string | undefined;
@@ -26,7 +27,7 @@ interface MinimalRequest {
 	};
 }
 
-interface MinimalResponse {
+export interface MinimalResponse {
 	locals: Record<string, unknown>;
 	statusCode: number;
 	setHeader(name: string, value: string): void;
@@ -34,22 +35,21 @@ interface MinimalResponse {
 	send(...args: unknown[]): void;
 	json(data: unknown): void;
 	end(...args: unknown[]): void;
+	write(...args: unknown[]): void;
+	getHeader(name: string): string | number | string[] | undefined;
 }
 
-type MinimalNextFunction = (err?: unknown) => void;
+export type MinimalNextFunction = (err?: unknown) => void;
 
-type MinimalRequestHandler = (
+export type MinimalRequestHandler = (
 	req: MinimalRequest,
 	res: MinimalResponse,
 	next: MinimalNextFunction
 ) => Promise<void> | void;
 
-export type {
-	MinimalRequest,
-	MinimalResponse,
-	MinimalNextFunction,
-	MinimalRequestHandler,
-	Params,
-	ParamsDictionary,
-	ParamsFlatDictionary,
-};
+export type MinimalRequestHandlerWithContext<TContext> = (
+	req: MinimalRequest,
+	res: MinimalResponse,
+	next: MinimalNextFunction,
+	context: TContext
+) => Promise<void> | void;

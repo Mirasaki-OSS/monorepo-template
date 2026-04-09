@@ -49,6 +49,16 @@
 				"default": "./dist/encryption.mjs"
 			}
 		},
+		"./envelope-crypto": {
+			"require": {
+				"types": "./dist/envelope-crypto.d.cts",
+				"default": "./dist/envelope-crypto.cjs"
+			},
+			"import": {
+				"types": "./dist/envelope-crypto.d.mts",
+				"default": "./dist/envelope-crypto.mjs"
+			}
+		},
 		"./signed-urls": {
 			"require": {
 				"types": "./dist/signed-urls.d.cts",

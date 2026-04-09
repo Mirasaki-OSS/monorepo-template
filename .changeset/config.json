@@ -10,9 +10,13 @@
 			"@md-oss/cache",
 			"@md-oss/common",
 			"@md-oss/config",
+			"@md-oss/database",
+			"@md-oss/discord",
+			"@md-oss/http-client",
 			"@md-oss/migrations",
 			"@md-oss/mutex",
 			"@md-oss/observability",
+			"@md-oss/scripts",
 			"@md-oss/security"
 		]
 	],

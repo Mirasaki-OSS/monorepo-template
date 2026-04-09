@@ -2,6 +2,9 @@ import type EventEmitter from 'node:events';
 import type { CreateCacheOptions, Events } from 'cache-manager';
 import type Keyv from 'keyv';
 
+export type PromiseLoader<T> = () => Promise<T>;
+export type PromiseGenerator<T> = PromiseLoader<T>;
+
 export type AbstractCache<T> = {
 	get: (key: string) => Promise<T | null | undefined>;
 	mget: (keys: string[]) => Promise<(T | null | undefined)[]>;

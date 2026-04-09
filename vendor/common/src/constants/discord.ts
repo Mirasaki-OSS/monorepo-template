@@ -1,3 +1,9 @@
+export const DISCORD_API_URL = (version: string = 'v10') =>
+	`https://discord.com/api/${version}`;
+export const DISCORD_SNOWFLAKE_REGEX: RegExp = /^\d{16,22}$/;
+export const DISCORD_ESCAPED_SNOWFLAKE_REGEX: string =
+	DISCORD_SNOWFLAKE_REGEX.toString().slice(1, -1);
+
 export enum DiscordMagic {
 	// Messages
 	MESSAGE_CONTENT_MAX = 2000,

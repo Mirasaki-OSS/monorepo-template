@@ -159,18 +159,25 @@ const isUrl = (input: string): boolean => {
 	}
 };
 
+function asString(value: unknown): string | null {
+	if (typeof value !== 'string') return null;
+	const trimmed = value.trim();
+	return trimmed.length > 0 ? trimmed : null;
+}
+
 export {
-	truncate,
-	stringifyArray,
-	displayArray,
-	pluralize,
-	snakeCase,
-	titleCase,
-	kebabCase,
+	asString,
 	camelCase,
-	pascalCase,
-	splitOnUppercase,
-	replaceTags,
+	displayArray,
 	isUrl,
+	kebabCase,
+	pascalCase,
+	pluralize,
+	replaceTags,
 	type StringifyArrayOptions,
+	snakeCase,
+	splitOnUppercase,
+	stringifyArray,
+	titleCase,
+	truncate,
 };

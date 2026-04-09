@@ -1,81 +1,269 @@
-import path from 'node:path';
-import winston from 'winston';
-import { env } from './env';
+import createDebug from 'debug';
+import pino, {
+	multistream,
+	type Logger as PinoLogger,
+	type StreamEntry,
+} from 'pino';
 
-const { LOG_DIR, LOG_LEVEL, LOG_TO_CONSOLE } = env();
+export type LogLevel = 'trace' | 'debug' | 'info' | 'warn' | 'error';
 
-const TEN_MEGABYTES = 10 * 1024 * 1024;
-const { combine, timestamp, json, errors, splat, colorize, simple } =
-	winston.format;
+export type LegacyLogLevel =
+	| 'error'
+	| 'warn'
+	| 'info'
+	| 'verbose'
+	| 'debug'
+	| 'silly';
 
-const transports: winston.transport[] = [];
-const logLevel: 'error' | 'warn' | 'info' | 'verbose' | 'debug' | 'silly' =
-	LOG_LEVEL || 'info';
+export type LogTransport = 'console' | 'file' | 'both';
 
-const consoleTransport = () =>
-	new winston.transports.Console({
-		format: combine(
-			colorize(),
-			timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-			errors({ stack: true }),
-			splat(),
-			simple()
-		),
-		level: logLevel,
+export type LogContext = Record<string, unknown>;
+
+type LoggerMethod = (message: string, context?: LogContext) => void;
+
+export type Logger = {
+	trace: LoggerMethod;
+	debug: LoggerMethod;
+	info: LoggerMethod;
+	warn: LoggerMethod;
+	error: LoggerMethod;
+};
+
+const LOG_LEVEL_WEIGHTS: Record<LogLevel, number> = {
+	trace: 10,
+	debug: 20,
+	info: 30,
+	warn: 40,
+	error: 50,
+};
+
+const LOG_LEVELS = new Set<LogLevel>([
+	'trace',
+	'debug',
+	'info',
+	'warn',
+	'error',
+]);
+
+const DEFAULT_LOG_LEVEL: LogLevel = 'info';
+const DEFAULT_LOG_TRANSPORT: LogTransport = 'console';
+
+const LEGACY_LEVEL_MAP: Record<LegacyLogLevel, LogLevel> = {
+	error: 'error',
+	warn: 'warn',
+	info: 'info',
+	verbose: 'debug',
+	debug: 'debug',
+	silly: 'trace',
+};
+
+const stringifyValue = (value: unknown): unknown => {
+	if (value instanceof Error) {
+		return {
+			name: value.name,
+			message: value.message,
+			stack: value.stack,
+		};
+	}
+
+	if (typeof value === 'bigint') {
+		return value.toString();
+	}
+
+	return value;
+};
+
+const safeStringify = (value: unknown) => {
+	const seen = new WeakSet<object>();
+
+	return JSON.stringify(value, (_key, currentValue) => {
+		const normalized = stringifyValue(currentValue);
+
+		if (typeof normalized === 'object' && normalized !== null) {
+			if (seen.has(normalized)) {
+				return '[Circular]';
+			}
+			seen.add(normalized);
+		}
+
+		return normalized;
 	});
+};
 
-if (LOG_DIR) {
-	const resolvedPath = path.join(process.cwd(), LOG_DIR);
-	transports.push(
-		new winston.transports.File({
-			filename: path.join(resolvedPath, 'errors.log'),
-			level: 'error',
-			maxsize: TEN_MEGABYTES,
-			maxFiles: 3,
-			dirname: resolvedPath,
-		}),
-		new winston.transports.File({
-			filename: path.join(resolvedPath, 'combined.log'),
-			maxsize: TEN_MEGABYTES,
-			maxFiles: 7,
-			dirname: resolvedPath,
-		})
+export const resolveLogLevel = (value?: string): LogLevel => {
+	if (!value) {
+		return DEFAULT_LOG_LEVEL;
+	}
+
+	const normalized = value.toLowerCase();
+
+	if (normalized in LEGACY_LEVEL_MAP) {
+		return LEGACY_LEVEL_MAP[normalized as LegacyLogLevel];
+	}
+
+	if (LOG_LEVELS.has(normalized as LogLevel)) {
+		return normalized as LogLevel;
+	}
+
+	return DEFAULT_LOG_LEVEL;
+};
+
+export const resolveLegacyLogLevel = (value?: string): LegacyLogLevel => {
+	if (!value) {
+		return 'info';
+	}
+
+	const normalized = value.toLowerCase() as LegacyLogLevel;
+	return normalized in LEGACY_LEVEL_MAP ? normalized : 'info';
+};
+
+export const resolveLogTransport = (value?: string): LogTransport => {
+	if (!value) {
+		return DEFAULT_LOG_TRANSPORT;
+	}
+
+	const normalized = value.toLowerCase();
+	if (
+		normalized === 'console' ||
+		normalized === 'file' ||
+		normalized === 'both'
+	) {
+		return normalized;
+	}
+
+	return DEFAULT_LOG_TRANSPORT;
+};
+
+const shouldLog = (activeLevel: LogLevel, targetLevel: LogLevel) => {
+	return LOG_LEVEL_WEIGHTS[targetLevel] >= LOG_LEVEL_WEIGHTS[activeLevel];
+};
+
+const toDebugNamespace = (name: string) => {
+	if (name.startsWith('grid-00:')) {
+		return name;
+	}
+
+	return `grid-00:${name.replace(/\./g, ':')}`;
+};
+
+const resolveLogFilePath = () => {
+	return process.env.LOG_FILE_PATH || 'logs/app.log';
+};
+
+const createStreams = (): StreamEntry[] => {
+	const transport = resolveLogTransport(process.env.LOG_TRANSPORT);
+	const streams: StreamEntry[] = [];
+
+	if (transport === 'console' || transport === 'both') {
+		streams.push({
+			stream: pino.destination({
+				dest: 1,
+				sync: false,
+			}),
+		});
+	}
+
+	if (transport === 'file' || transport === 'both') {
+		streams.push({
+			stream: pino.destination({
+				dest: resolveLogFilePath(),
+				mkdir: true,
+				sync: false,
+			}),
+		});
+	}
+
+	if (streams.length === 0) {
+		streams.push({
+			stream: pino.destination({
+				dest: 1,
+				sync: false,
+			}),
+		});
+	}
+
+	return streams;
+};
+
+const transports = createStreams();
+const logLevel = resolveLegacyLogLevel(process.env.LOG_LEVEL);
+
+let rootLogger: PinoLogger | undefined;
+
+const getRootLogger = () => {
+	if (rootLogger) {
+		return rootLogger;
+	}
+
+	rootLogger = pino(
+		{
+			name: 'grid-00',
+			level: 'trace',
+			base: undefined,
+			timestamp: pino.stdTimeFunctions.isoTime,
+		},
+		multistream(transports)
 	);
-}
 
-if (LOG_TO_CONSOLE) {
-	transports.push(consoleTransport());
-}
+	return rootLogger;
+};
 
-const logger: winston.Logger = winston.createLogger({
-	level: logLevel,
-	format: combine(
-		timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-		errors({ stack: true }),
-		splat(),
-		json()
-	),
-	transports,
-	defaultMeta: {
-		service: process.env.npm_package_name || 'unknown',
-		version: process.env.npm_package_version || 'unknown',
-	},
-	exceptionHandlers: [
-		consoleTransport(),
-		new winston.transports.File({
-			filename: path.join(LOG_DIR || '', 'exceptions.log'),
-		}),
-	],
-	rejectionHandlers: [
-		consoleTransport(),
-		new winston.transports.File({
-			filename: path.join(LOG_DIR || '', 'rejections.log'),
-		}),
-	],
-});
+const logger = getRootLogger();
 
-const createChildLogger = (meta: Record<string, unknown>): winston.Logger => {
+const createChildLogger = (meta: Record<string, unknown>): PinoLogger => {
 	return logger.child(meta);
 };
 
-export { logger, logLevel, type winston, transports, createChildLogger };
+export const createLogger = ({
+	name,
+	level,
+	debugNamespace,
+}: {
+	name: string;
+	level?: LogLevel;
+	debugNamespace?: string;
+}): Logger => {
+	const activeLevel = level ?? resolveLogLevel(process.env.LOG_LEVEL);
+	const logger = getRootLogger().child({ logger: name });
+	const debugLogger = createDebug(debugNamespace ?? toDebugNamespace(name));
+
+	const write = (
+		targetLevel: LogLevel,
+		message: string,
+		context?: LogContext
+	) => {
+		if (!shouldLog(activeLevel, targetLevel)) {
+			return;
+		}
+
+		if (context) {
+			logger[targetLevel](context, message);
+		} else {
+			logger[targetLevel](message);
+		}
+
+		if (debugLogger.enabled) {
+			if (context) {
+				debugLogger(
+					`${targetLevel.toUpperCase()} ${message} ${safeStringify(context)}`
+				);
+			} else {
+				debugLogger(`${targetLevel.toUpperCase()} ${message}`);
+			}
+		}
+	};
+
+	return {
+		trace: (message, context) => write('trace', message, context),
+		debug: (message, context) => write('debug', message, context),
+		info: (message, context) => write('info', message, context),
+		warn: (message, context) => write('warn', message, context),
+		error: (message, context) => write('error', message, context),
+	};
+};
+
+export type winston = {
+	Logger: PinoLogger;
+};
+
+export { createChildLogger, logger, logLevel, type PinoLogger, transports };

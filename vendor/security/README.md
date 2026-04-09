@@ -133,7 +133,7 @@ const result = await withSignedAccess(
   }
 );
 
-if (result instanceof APIError) {
+if (result instanceof HTTPError) {
   // Signature validation failed
   res.status(result.statusCode).json(result.body);
 } else if (result === true) {

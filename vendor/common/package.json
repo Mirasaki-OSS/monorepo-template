@@ -29,42 +29,24 @@
 				"default": "./dist/index.mjs"
 			}
 		},
-		"./api": {
+		"./formatters": {
 			"require": {
-				"types": "./dist/api/index.d.cts",
-				"default": "./dist/api/index.cjs"
+				"types": "./dist/formatters.d.cts",
+				"default": "./dist/formatters.cjs"
 			},
 			"import": {
-				"types": "./dist/api/index.d.mts",
-				"default": "./dist/api/index.mjs"
+				"types": "./dist/formatters.d.mts",
+				"default": "./dist/formatters.mjs"
 			}
 		},
-		"./api/errors": {
+		"./performance-tracker": {
 			"require": {
-				"types": "./dist/api/errors.d.cts",
-				"default": "./dist/api/errors.cjs"
+				"types": "./dist/performance-tracker.d.cts",
+				"default": "./dist/performance-tracker.cjs"
 			},
 			"import": {
-				"types": "./dist/api/errors.d.mts",
-				"default": "./dist/api/errors.mjs"
-			}
-		},
-		"./api/requests": {
-			"require": {
-				"types": "./dist/api/requests.d.cts"
-			},
-			"import": {
-				"types": "./dist/api/requests.d.mts"
-			}
-		},
-		"./api/status-codes": {
-			"require": {
-				"types": "./dist/api/status-codes.d.cts",
-				"default": "./dist/api/status-codes.cjs"
-			},
-			"import": {
-				"types": "./dist/api/status-codes.d.mts",
-				"default": "./dist/api/status-codes.mjs"
+				"types": "./dist/performance-tracker.d.mts",
+				"default": "./dist/performance-tracker.mjs"
 			}
 		},
 		"./constants": {
@@ -107,6 +89,182 @@
 				"default": "./dist/constants/time.mjs"
 			}
 		},
+		"./http": {
+			"require": {
+				"types": "./dist/http/index.d.cts",
+				"default": "./dist/http/index.cjs"
+			},
+			"import": {
+				"types": "./dist/http/index.d.mts",
+				"default": "./dist/http/index.mjs"
+			}
+		},
+		"./http/errors": {
+			"require": {
+				"types": "./dist/http/errors.d.cts",
+				"default": "./dist/http/errors.cjs"
+			},
+			"import": {
+				"types": "./dist/http/errors.d.mts",
+				"default": "./dist/http/errors.mjs"
+			}
+		},
+		"./http/guards": {
+			"require": {
+				"types": "./dist/http/guards.d.cts",
+				"default": "./dist/http/guards.cjs"
+			},
+			"import": {
+				"types": "./dist/http/guards.d.mts",
+				"default": "./dist/http/guards.mjs"
+			}
+		},
+		"./http/requests": {
+			"require": {
+				"types": "./dist/http/requests.d.cts"
+			},
+			"import": {
+				"types": "./dist/http/requests.d.mts"
+			}
+		},
+		"./http/status-codes": {
+			"require": {
+				"types": "./dist/http/status-codes.d.cts",
+				"default": "./dist/http/status-codes.cjs"
+			},
+			"import": {
+				"types": "./dist/http/status-codes.d.mts",
+				"default": "./dist/http/status-codes.mjs"
+			}
+		},
+		"./http/types": {
+			"require": {
+				"types": "./dist/http/types.d.cts"
+			},
+			"import": {
+				"types": "./dist/http/types.d.mts"
+			}
+		},
+		"./schemas": {
+			"require": {
+				"types": "./dist/schemas/index.d.cts",
+				"default": "./dist/schemas/index.cjs"
+			},
+			"import": {
+				"types": "./dist/schemas/index.d.mts",
+				"default": "./dist/schemas/index.mjs"
+			}
+		},
+		"./schemas/best-effort": {
+			"require": {
+				"types": "./dist/schemas/best-effort.d.cts",
+				"default": "./dist/schemas/best-effort.cjs"
+			},
+			"import": {
+				"types": "./dist/schemas/best-effort.d.mts",
+				"default": "./dist/schemas/best-effort.mjs"
+			}
+		},
+		"./schemas/colors": {
+			"require": {
+				"types": "./dist/schemas/colors.d.cts",
+				"default": "./dist/schemas/colors.cjs"
+			},
+			"import": {
+				"types": "./dist/schemas/colors.d.mts",
+				"default": "./dist/schemas/colors.mjs"
+			}
+		},
+		"./schemas/discord": {
+			"require": {
+				"types": "./dist/schemas/discord.d.cts",
+				"default": "./dist/schemas/discord.cjs"
+			},
+			"import": {
+				"types": "./dist/schemas/discord.d.mts",
+				"default": "./dist/schemas/discord.mjs"
+			}
+		},
+		"./schemas/ids": {
+			"require": {
+				"types": "./dist/schemas/ids.d.cts",
+				"default": "./dist/schemas/ids.cjs"
+			},
+			"import": {
+				"types": "./dist/schemas/ids.d.mts",
+				"default": "./dist/schemas/ids.mjs"
+			}
+		},
+		"./schemas/logging": {
+			"require": {
+				"types": "./dist/schemas/logging.d.cts",
+				"default": "./dist/schemas/logging.cjs"
+			},
+			"import": {
+				"types": "./dist/schemas/logging.d.mts",
+				"default": "./dist/schemas/logging.mjs"
+			}
+		},
+		"./schemas/pagination": {
+			"require": {
+				"types": "./dist/schemas/pagination.d.cts",
+				"default": "./dist/schemas/pagination.cjs"
+			},
+			"import": {
+				"types": "./dist/schemas/pagination.d.mts",
+				"default": "./dist/schemas/pagination.mjs"
+			}
+		},
+		"./schemas/records": {
+			"require": {
+				"types": "./dist/schemas/records.d.cts",
+				"default": "./dist/schemas/records.cjs"
+			},
+			"import": {
+				"types": "./dist/schemas/records.d.mts",
+				"default": "./dist/schemas/records.mjs"
+			}
+		},
+		"./schemas/schema-object-form": {
+			"require": {
+				"types": "./dist/schemas/schema-object-form.d.cts",
+				"default": "./dist/schemas/schema-object-form.cjs"
+			},
+			"import": {
+				"types": "./dist/schemas/schema-object-form.d.mts",
+				"default": "./dist/schemas/schema-object-form.mjs"
+			}
+		},
+		"./schemas/slugs": {
+			"require": {
+				"types": "./dist/schemas/slugs.d.cts",
+				"default": "./dist/schemas/slugs.cjs"
+			},
+			"import": {
+				"types": "./dist/schemas/slugs.d.mts",
+				"default": "./dist/schemas/slugs.mjs"
+			}
+		},
+		"./schemas/strings": {
+			"require": {
+				"types": "./dist/schemas/strings.d.cts",
+				"default": "./dist/schemas/strings.cjs"
+			},
+			"import": {
+				"types": "./dist/schemas/strings.d.mts",
+				"default": "./dist/schemas/strings.mjs"
+			}
+		},
+		"./schemas/urls": {
+			"require": {
+				"types": "./dist/schemas/urls.d.cts",
+				"default": "./dist/schemas/urls.cjs"
+			},
+			"import": {
+				"types": "./dist/schemas/urls.d.mts",
+				"default": "./dist/schemas/urls.mjs"
+			}
+		},
 		"./utils": {
 			"require": {
 				"types": "./dist/utils/index.d.cts",
@@ -125,6 +283,16 @@
 			"import": {
 				"types": "./dist/utils/arrays.d.mts",
 				"default": "./dist/utils/arrays.mjs"
+			}
+		},
+		"./utils/files": {
+			"require": {
+				"types": "./dist/utils/files.d.cts",
+				"default": "./dist/utils/files.cjs"
+			},
+			"import": {
+				"types": "./dist/utils/files.d.mts",
+				"default": "./dist/utils/files.mjs"
 			}
 		},
 		"./utils/mime-types": {
@@ -157,6 +325,16 @@
 				"default": "./dist/utils/objects.mjs"
 			}
 		},
+		"./utils/payments": {
+			"require": {
+				"types": "./dist/utils/payments.d.cts",
+				"default": "./dist/utils/payments.cjs"
+			},
+			"import": {
+				"types": "./dist/utils/payments.d.mts",
+				"default": "./dist/utils/payments.mjs"
+			}
+		},
 		"./utils/random": {
 			"require": {
 				"types": "./dist/utils/random.d.cts",
@@ -165,6 +343,16 @@
 			"import": {
 				"types": "./dist/utils/random.d.mts",
 				"default": "./dist/utils/random.mjs"
+			}
+		},
+		"./utils/records": {
+			"require": {
+				"types": "./dist/utils/records.d.cts",
+				"default": "./dist/utils/records.cjs"
+			},
+			"import": {
+				"types": "./dist/utils/records.d.mts",
+				"default": "./dist/utils/records.mjs"
 			}
 		},
 		"./utils/runtime": {
@@ -197,14 +385,14 @@
 				"default": "./dist/utils/time.mjs"
 			}
 		},
-		"./schemas": {
+		"./utils/urls": {
 			"require": {
-				"types": "./dist/schemas.d.cts",
-				"default": "./dist/schemas.cjs"
+				"types": "./dist/utils/urls.d.cts",
+				"default": "./dist/utils/urls.cjs"
 			},
 			"import": {
-				"types": "./dist/schemas.d.mts",
-				"default": "./dist/schemas.mjs"
+				"types": "./dist/utils/urls.d.mts",
+				"default": "./dist/utils/urls.mjs"
 			}
 		}
 	},

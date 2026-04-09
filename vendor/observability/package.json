@@ -12,7 +12,7 @@
 		"directory": "vendor/observability"
 	},
 	"type": "module",
-	"description": "Structured logging with Winston",
+	"description": "Structured logging with Pino",
 	"license": "ISC",
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.mjs",
@@ -29,6 +29,16 @@
 				"default": "./dist/index.mjs"
 			}
 		},
+		"./debugger": {
+			"require": {
+				"types": "./dist/debugger.d.cts",
+				"default": "./dist/debugger.cjs"
+			},
+			"import": {
+				"types": "./dist/debugger.d.mts",
+				"default": "./dist/debugger.mjs"
+			}
+		},
 		"./env": {
 			"require": {
 				"types": "./dist/env.d.cts",
@@ -37,6 +47,44 @@
 			"import": {
 				"types": "./dist/env.d.mts",
 				"default": "./dist/env.mjs"
+			}
+		},
+		"./express": {
+			"require": {
+				"types": "./dist/express.d.cts",
+				"default": "./dist/express.cjs"
+			},
+			"import": {
+				"types": "./dist/express.d.mts",
+				"default": "./dist/express.mjs"
+			}
+		},
+		"./next-client": {
+			"require": {
+				"types": "./dist/next-client.d.cts",
+				"default": "./dist/next-client.cjs"
+			},
+			"import": {
+				"types": "./dist/next-client.d.mts",
+				"default": "./dist/next-client.mjs"
+			}
+		},
+		"./next-server": {
+			"require": {
+				"types": "./dist/next-server.d.cts",
+				"default": "./dist/next-server.cjs"
+			},
+			"import": {
+				"types": "./dist/next-server.d.mts",
+				"default": "./dist/next-server.mjs"
+			}
+		},
+		"./types": {
+			"require": {
+				"types": "./dist/types.d.cts"
+			},
+			"import": {
+				"types": "./dist/types.d.mts"
 			}
 		}
 	},
@@ -47,12 +95,15 @@
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
+		"@md-oss/common": "workspace:^",
 		"@md-oss/config": "workspace:^",
 		"@t3-oss/env-nextjs": "^0.13.10",
-		"winston": "^3.19.0",
+		"debug": "^4.4.3",
+		"pino": "^9.14.0",
 		"zod": "^4.3.6"
 	},
 	"devDependencies": {
+		"@types/debug": "^4.1.12",
 		"@types/node": "^25.0.9",
 		"pkgroll": "^2.21.5",
 		"typescript": "^5.9.3"

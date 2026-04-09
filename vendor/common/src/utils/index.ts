@@ -1,8 +1,12 @@
 export * as ArrayUtils from './arrays';
+export * as FileUtils from './files';
 export * as MimeTypeUtils from './mime-types';
 export * as NumberUtils from './numbers';
 export * as ObjectUtils from './objects';
+export * as PaymentUtils from './payments';
 export * as RandomUtils from './random';
+export * as RecordUtils from './records';
 export * as RuntimeUtils from './runtime';
 export * as StringUtils from './strings';
 export * as TimeUtils from './time';
+export * as UrlUtils from './urls';
