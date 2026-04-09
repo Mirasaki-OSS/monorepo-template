@@ -12,7 +12,7 @@
 		"directory": "vendor/discord"
 	},
 	"type": "module",
-	"description": "Discord bot framework with command handling, event management, and utility functions",
+	"description": "Type-safe Discord.js toolkit with component and event registries",
 	"license": "ISC",
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.mjs",

@@ -1,11 +1,29 @@
 # @md-oss/scripts
 
-Re-usable scripts for monorepos and packages consumers for the monorepo.
+Reusable package scripts for monorepo maintenance tasks.
+
+## Included Script
+
+- ./find-dependency-mismatches
+
+This script scans workspace package.json files and reports dependency version mismatches across:
+
+- dependencies
+- devDependencies
+- peerDependencies
+- optionalDependencies
 
 ## Usage
 
 ```typescript
-import * as pkg from "@md-oss/scripts";
-
-// Example usage
+import '@md-oss/scripts/find-dependency-mismatches';
 ```
+
+Or run it directly:
+
+```bash
+pnpm tsx ./vendor/scripts/src/find-dependency-mismatches.ts
+```
+
+It expects a pnpm-workspace.yaml file at the repository root.
+

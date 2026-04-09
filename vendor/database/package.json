@@ -3,7 +3,7 @@
 	"version": "0.2.1",
 	"private": false,
 	"type": "module",
-	"description": "Dynamic queries for Drizzle.",
+	"description": "Adapter-agnostic query helpers with typed pagination",
 	"files": ["dist/**/*", "README.md"],
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.mjs",

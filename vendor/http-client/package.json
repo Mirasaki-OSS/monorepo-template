@@ -3,7 +3,7 @@
 	"version": "0.2.1",
 	"private": false,
 	"type": "module",
-	"description": "Opinionated HTTP/fetch client",
+	"description": "Fetch-based HTTP client with retries, timeouts, and typed results",
 	"files": ["dist/**/*", "README.md"],
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.mjs",
