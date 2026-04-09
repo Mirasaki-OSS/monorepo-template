@@ -1,5 +1,11 @@
 # @md-oss/config
 
+## 0.2.4
+
+### Patch Changes
+
+- 9168c38: feat: api type transformer
+
 ## 0.2.3
 
 ### Patch Changes
