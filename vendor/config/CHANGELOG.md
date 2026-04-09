@@ -1,5 +1,17 @@
 # @md-oss/config
 
+## 0.1.7
+
+### Patch Changes
+
+- 1510ccc: Update utils for completeness and accuracy
+
+## 0.1.6
+
+### Patch Changes
+
+- 701c469: add `roundTo` to `NumberUtils`
+
 ## 0.1.5
 
 ### Patch Changes
