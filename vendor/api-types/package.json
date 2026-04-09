@@ -19,13 +19,83 @@
 	"types": "./dist/index.d.cts",
 	"files": ["dist/**/*", "README.md", "LICENSE"],
 	"exports": {
-		"require": {
-			"types": "./dist/index.d.cts",
-			"default": "./dist/index.cjs"
+		".": {
+			"require": {
+				"types": "./dist/index.d.cts",
+				"default": "./dist/index.cjs"
+			},
+			"import": {
+				"types": "./dist/index.d.mts",
+				"default": "./dist/index.mjs"
+			}
 		},
-		"import": {
-			"types": "./dist/index.d.mts",
-			"default": "./dist/index.mjs"
+		"./client": {
+			"require": {
+				"types": "./dist/client.d.cts",
+				"default": "./dist/client.cjs"
+			},
+			"import": {
+				"types": "./dist/client.d.mts",
+				"default": "./dist/client.mjs"
+			}
+		},
+		"./debugger": {
+			"require": {
+				"types": "./dist/debugger.d.cts",
+				"default": "./dist/debugger.cjs"
+			},
+			"import": {
+				"types": "./dist/debugger.d.mts",
+				"default": "./dist/debugger.mjs"
+			}
+		},
+		"./params": {
+			"require": {
+				"types": "./dist/params.d.cts",
+				"default": "./dist/params.cjs"
+			},
+			"import": {
+				"types": "./dist/params.d.mts",
+				"default": "./dist/params.mjs"
+			}
+		},
+		"./request": {
+			"require": {
+				"types": "./dist/request.d.cts",
+				"default": "./dist/request.cjs"
+			},
+			"import": {
+				"types": "./dist/request.d.mts",
+				"default": "./dist/request.mjs"
+			}
+		},
+		"./response": {
+			"require": {
+				"types": "./dist/response.d.cts",
+				"default": "./dist/response.cjs"
+			},
+			"import": {
+				"types": "./dist/response.d.mts",
+				"default": "./dist/response.mjs"
+			}
+		},
+		"./route-handler": {
+			"require": {
+				"types": "./dist/route-handler.d.cts",
+				"default": "./dist/route-handler.cjs"
+			},
+			"import": {
+				"types": "./dist/route-handler.d.mts",
+				"default": "./dist/route-handler.mjs"
+			}
+		},
+		"./types": {
+			"require": {
+				"types": "./dist/types.d.cts"
+			},
+			"import": {
+				"types": "./dist/types.d.mts"
+			}
 		}
 	},
 	"scripts": {
