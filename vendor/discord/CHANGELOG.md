@@ -1,5 +1,14 @@
 # @md-oss/discord
 
+## 0.2.2
+
+### Patch Changes
+
+- 8f1f77f: force publish patch version
+- Updated dependencies [8f1f77f]
+  - @md-oss/common@0.2.2
+  - @md-oss/config@0.2.2
+
 ## 0.2.1
 
 ### Patch Changes
