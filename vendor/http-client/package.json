@@ -2,6 +2,15 @@
 	"name": "@md-oss/http-client",
 	"version": "0.2.2",
 	"private": false,
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org/"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+ssh://git@github.com/Mirasaki-OSS/monorepo-template.git",
+		"directory": "vendor/http-client"
+	},
 	"type": "module",
 	"description": "Fetch-based HTTP client with retries, timeouts, and typed results",
 	"files": ["dist/**/*", "README.md"],
