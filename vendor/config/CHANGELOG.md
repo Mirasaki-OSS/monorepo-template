@@ -1,5 +1,11 @@
 # @md-oss/config
 
+## 0.2.3
+
+### Patch Changes
+
+- 83b4c90: fixed api-types exports
+
 ## 0.2.2
 
 ### Patch Changes
