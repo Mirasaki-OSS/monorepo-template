@@ -1,5 +1,14 @@
 # @md-oss/security
 
+## 0.2.4
+
+### Patch Changes
+
+- 9168c38: feat: api type transformer
+- Updated dependencies [9168c38]
+  - @md-oss/common@0.2.4
+  - @md-oss/config@0.2.4
+
 ## 0.2.3
 
 ### Patch Changes
