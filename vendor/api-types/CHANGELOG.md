@@ -1,5 +1,14 @@
 # @md-oss/api-types
 
+## 0.2.3
+
+### Patch Changes
+
+- 83b4c90: fixed api-types exports
+- Updated dependencies [83b4c90]
+  - @md-oss/common@0.2.3
+  - @md-oss/config@0.2.3
+
 ## 0.2.2
 
 ### Patch Changes
