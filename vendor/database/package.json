@@ -4,10 +4,7 @@
 	"private": true,
 	"type": "module",
 	"description": "Dynamic queries for Drizzle",
-	"files": [
-		"dist/**/*",
-		"README.md"
-	],
+	"files": ["dist/**/*", "README.md"],
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.mjs",
 	"types": "./dist/index.d.cts",
