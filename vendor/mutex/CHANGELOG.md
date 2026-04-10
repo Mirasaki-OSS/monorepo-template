@@ -1,5 +1,13 @@
 # @md-oss/mutex
 
+## 0.3.4
+
+### Patch Changes
+
+- ef405be: improved api/http error handling for consumers
+- Updated dependencies [ef405be]
+  - @md-oss/config@0.3.4
+
 ## 0.3.3
 
 ### Patch Changes
