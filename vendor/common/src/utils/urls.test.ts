@@ -15,6 +15,10 @@ const setNodeEnv = (value: string | undefined) => {
 	});
 };
 
+const getNodeEnv = () => process.env.NODE_ENV;
+
+const isProduction = () => getNodeEnv() === 'production';
+
 afterEach(() => {
 	setNodeEnv(originalNodeEnv);
 
@@ -32,6 +36,7 @@ describe('getEnvUrl', () => {
 		delete process.env.NEXT_PUBLIC_BASE_URL;
 		const baseUrl: string = getEnvUrl(
 			'NEXT_PUBLIC_BASE_URL',
+			isProduction(),
 			DEFAULT_DEV_BASE_URL
 		);
 
@@ -42,7 +47,7 @@ describe('getEnvUrl', () => {
 		setNodeEnv('development');
 		delete process.env.NEXT_PUBLIC_BASE_URL;
 
-		assert.equal(getEnvUrl('NEXT_PUBLIC_BASE_URL'), null);
+		assert.equal(getEnvUrl('NEXT_PUBLIC_BASE_URL', isProduction()), null);
 	});
 
 	it('throws in production when unset', () => {
@@ -50,7 +55,7 @@ describe('getEnvUrl', () => {
 		delete process.env.NEXT_PUBLIC_BASE_URL;
 
 		assert.throws(
-			() => getEnvUrl('NEXT_PUBLIC_BASE_URL'),
+			() => getEnvUrl('NEXT_PUBLIC_BASE_URL', isProduction()),
 			/NEXT_PUBLIC_BASE_URL must be set/
 		);
 	});
@@ -59,13 +64,16 @@ describe('getEnvUrl', () => {
 		setNodeEnv('production');
 		process.env.NEXT_PUBLIC_BASE_URL = 'http://example.com';
 
-		assert.throws(() => getEnvUrl('NEXT_PUBLIC_BASE_URL'), /must use HTTPS/);
+		assert.throws(
+			() => getEnvUrl('NEXT_PUBLIC_BASE_URL', isProduction()),
+			/must use HTTPS/
+		);
 	});
 
 	it('builds app urls from the validated base url', () => {
 		setNodeEnv('production');
 		process.env.NEXT_PUBLIC_BASE_URL = 'https://example.com/';
-		const baseUrl = getEnvUrl('NEXT_PUBLIC_BASE_URL');
+		const baseUrl = getEnvUrl('NEXT_PUBLIC_BASE_URL', isProduction());
 
 		assert.ok(baseUrl);
 
@@ -80,7 +88,7 @@ describe('getEnvUrl', () => {
 		delete process.env.NEXT_PUBLIC_BASE_URL;
 
 		assert.throws(
-			() => getEnvUrl('NEXT_PUBLIC_BASE_URL', '   '),
+			() => getEnvUrl('NEXT_PUBLIC_BASE_URL', isProduction(), '   '),
 			/defaultValue for getEnvUrl must be a valid absolute URL/
 		);
 	});
