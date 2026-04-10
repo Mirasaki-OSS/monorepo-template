@@ -35,16 +35,6 @@
 				"default": "./dist/index.mjs"
 			}
 		},
-		"./performance-tracker": {
-			"require": {
-				"types": "./dist/performance-tracker.d.cts",
-				"default": "./dist/performance-tracker.cjs"
-			},
-			"import": {
-				"types": "./dist/performance-tracker.d.mts",
-				"default": "./dist/performance-tracker.mjs"
-			}
-		},
 		"./constants": {
 			"require": {
 				"types": "./dist/constants/index.d.cts",
