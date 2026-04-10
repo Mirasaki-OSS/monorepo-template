@@ -1,5 +1,11 @@
 # @md-oss/config
 
+## 0.3.8
+
+### Patch Changes
+
+- c013046: update URL tests
+
 ## 0.3.7
 
 ### Patch Changes
