@@ -169,6 +169,7 @@ const formatPrice = (
 };
 
 export {
+	DEFAULT_CURRENCY,
 	DEFAULT_LOCALE,
 	DEFAULT_NULL_DISPLAY,
 	type FormatCurrencyOptions,
