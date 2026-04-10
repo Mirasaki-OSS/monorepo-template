@@ -95,7 +95,7 @@
 		}
 	},
 	"scripts": {
-		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
+		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false && pnpm exec md-oss-add-module-directive --directive='use client' dist/next-client.mjs dist/next-client.cjs",
 		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
 		"dev": "tsc --watch",
 		"typecheck": "tsc --noEmit"
@@ -110,6 +110,7 @@
 		"zod": "^4.3.6"
 	},
 	"devDependencies": {
+		"@md-oss/scripts": "workspace:^",
 		"@types/node": "^25.5.2",
 		"pkgroll": "^2.27.0",
 		"typescript": "^6.0.2"

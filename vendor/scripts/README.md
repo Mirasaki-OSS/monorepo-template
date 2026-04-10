@@ -2,9 +2,12 @@
 
 Reusable package scripts for monorepo maintenance tasks.
 
-## Included Script
+## Included Scripts
 
 - ./find-dependency-mismatches
+- ./add-module-directives
+
+## find-dependency-mismatches
 
 This script scans workspace package.json files and reports dependency version mismatches across:
 
@@ -13,17 +16,55 @@ This script scans workspace package.json files and reports dependency version mi
 - peerDependencies
 - optionalDependencies
 
-## Usage
-
-```typescript
-import '@md-oss/scripts/find-dependency-mismatches';
-```
-
-Or run it directly:
+### CLI usage
 
 ```bash
-pnpm tsx ./vendor/scripts/src/find-dependency-mismatches.ts
+pnpm exec md-oss-find-dependency-mismatches
+```
+
+Optional flags:
+
+- `--cwd <path>`: run against a specific workspace root.
+
+### Programmatic usage
+
+```typescript
+import { findDependencyMismatches } from '@md-oss/scripts/find-dependency-mismatches';
+
+const mismatches = findDependencyMismatches();
+
+if (mismatches.size > 0) {
+	console.debug(mismatches);
+}
 ```
 
 It expects a pnpm-workspace.yaml file at the repository root.
+
+## add-module-directives
+
+Adds a module-level directive (for example, `use client` or `use server`) to one or more built files.
+
+### CLI usage
+
+The directive is required and must be explicit.
+
+```bash
+pnpm exec md-oss-add-module-directive --directive='use client' dist/next-client.mjs dist/next-client.cjs
+```
+
+Optional flags:
+
+- `--cwd <path>`: resolve file paths from a specific directory.
+- `--directive <value>`: required module directive to prepend.
+
+### Programmatic usage
+
+```typescript
+import { addModuleDirectivesToFiles } from '@md-oss/scripts/add-module-directives';
+
+await addModuleDirectivesToFiles({
+	directive: 'use client',
+	files: ['dist/next-client.mjs', 'dist/next-client.cjs'],
+});
+```
 

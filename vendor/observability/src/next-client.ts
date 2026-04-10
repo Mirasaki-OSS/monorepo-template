@@ -1,5 +1,3 @@
-'use client';
-
 export function useLogger(
 	service: string,
 	componentOrAction: string
