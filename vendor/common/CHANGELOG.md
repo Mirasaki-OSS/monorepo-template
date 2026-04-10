@@ -1,5 +1,14 @@
 # @md-oss/common
 
+## 0.3.3
+
+### Patch Changes
+
+- 4540359: separation between node and browser exports
+- Updated dependencies [4540359]
+  - @md-oss/config@0.3.3
+  - @md-oss/serdes@0.3.3
+
 ## 0.3.2
 
 ### Patch Changes
