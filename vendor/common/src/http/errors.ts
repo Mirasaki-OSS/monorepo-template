@@ -1,99 +1,99 @@
-import type { HTTPErrorResponse } from './types';
+import type { HTTPErrorFields } from './guards';
+import { statusCodes } from './status-codes';
+import type { HeadersInit, HTTPErrorResponse } from './types';
+
+export const resolveStatusText = (
+	statusCode: number,
+	statusCodesMap: Record<string, number> = statusCodes
+): string => {
+	const entry = Object.entries(statusCodesMap).find(
+		([, code]) => code === statusCode
+	)?.[0];
+
+	if (!entry) {
+		return `Error ${statusCode}`;
+	}
+
+	return entry
+		.toLowerCase()
+		.replace(/_/g, ' ')
+		.replace(/\b\w/g, (char) => char.toUpperCase());
+};
 
 export class HTTPError extends Error {
 	readonly ok = false;
 	readonly statusCode: number;
+	readonly statusText: string;
 	readonly headers: HeadersInit;
-	readonly body: {
-		code: string;
-		message: string;
-		details?: string | Record<string, unknown>;
-	};
+	readonly body: HTTPErrorFields;
 
-	constructor(body: {
-		statusCode: number;
-		code: string;
-		message: string;
-		details?: string | Record<string, unknown>;
-		headers?: HeadersInit;
-	});
+	constructor(body: CreateHTTPErrorOptions);
+	constructor(statusCode: number, body: HTTPErrorFields, headers?: HeadersInit);
 	constructor(
-		statusCode: number,
-		body: {
-			code: string;
-			message: string;
-			details?: string | Record<string, unknown>;
-		},
-		headers?: HeadersInit
-	);
-	constructor(
-		statusCodeOrBody:
-			| number
-			| {
-					statusCode: number;
-					code: string;
-					message: string;
-					details?: string | Record<string, unknown>;
-					headers?: HeadersInit;
-			  },
-		body?: {
-			code: string;
-			message: string;
-			details?: string | Record<string, unknown>;
-		},
+		statusCodeOrBody: number | CreateHTTPErrorOptions,
+		body?: HTTPErrorFields,
 		headers?: HeadersInit
 	) {
-		super();
-
 		if (typeof statusCodeOrBody === 'object') {
-			// Single argument signature
+			super(`[${statusCodeOrBody.code}]: ${statusCodeOrBody.message}`);
 			this.statusCode = statusCodeOrBody.statusCode;
+			this.statusText =
+				statusCodeOrBody.statusText ??
+				resolveStatusText(statusCodeOrBody.statusCode);
 			this.headers = statusCodeOrBody.headers ?? {};
 			this.body = {
 				code: statusCodeOrBody.code,
 				message: statusCodeOrBody.message,
-				details: statusCodeOrBody.details,
+				details: statusCodeOrBody.details ?? null,
 			};
 		} else {
-			// Multi-argument signature
-			this.statusCode = statusCodeOrBody;
-			this.headers = headers ?? {};
 			if (!body) {
 				throw new Error(
 					'Body is required when using multi-argument constructor'
 				);
 			}
-			this.body = body;
+
+			super(`[${body.code}]: ${body.message}`);
+			this.statusCode = statusCodeOrBody;
+			this.statusText = resolveStatusText(statusCodeOrBody);
+			this.headers = headers ?? {};
+			this.body = {
+				code: body.code,
+				message: body.message,
+				details: body.details ?? null,
+			};
 		}
 
-		this.message = `[${this.body.code}]: ${this.body.message}`;
+		this.name = 'HTTPError';
 	}
 
 	toJSON(): HTTPErrorResponse {
 		return {
 			ok: this.ok,
 			statusCode: this.statusCode,
-			body: this.body,
-			headers: this.headers,
+			statusText: this.statusText,
+			code: this.body.code,
+			message: this.body.message,
+			details: this.body.details,
 		} satisfies HTTPErrorResponse;
 	}
 }
 
-export type HTTPErrorBody = HTTPErrorResponse['body'];
-export type CreateHTTPErrorOptions = HTTPErrorBody & {
+export type CreateHTTPErrorOptions = HTTPErrorFields & {
 	statusCode: number;
+	statusText?: string;
 	headers?: HeadersInit;
 };
 
 export function createHTTPError(options: CreateHTTPErrorOptions): HTTPError;
 export function createHTTPError(
 	statusCode: number,
-	body: HTTPErrorBody,
+	body: HTTPErrorFields,
 	headers?: HeadersInit
 ): HTTPError;
 export function createHTTPError(
 	statusCodeOrOptions: number | CreateHTTPErrorOptions,
-	body?: HTTPErrorBody,
+	body?: HTTPErrorFields,
 	headers?: HeadersInit
 ): HTTPError {
 	if (typeof statusCodeOrOptions === 'number') {
@@ -112,12 +112,12 @@ export function createHTTPErrorResponse(
 ): HTTPErrorResponse;
 export function createHTTPErrorResponse(
 	statusCode: number,
-	body: HTTPErrorBody,
+	body: HTTPErrorFields,
 	headers?: HeadersInit
 ): HTTPErrorResponse;
 export function createHTTPErrorResponse(
 	statusCodeOrOptions: number | CreateHTTPErrorOptions,
-	body?: HTTPErrorBody,
+	body?: HTTPErrorFields,
 	headers?: HeadersInit
 ): HTTPErrorResponse {
 	if (typeof statusCodeOrOptions === 'number') {

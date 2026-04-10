@@ -4,10 +4,14 @@ import type { HeadersInit, HTTPErrorResponse } from './types';
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
-const isDetails = (
-	value: unknown
-): value is string | Record<string, unknown> => {
-	return value === undefined || typeof value === 'string' || isRecord(value);
+export type HTTPErrorFields = {
+	code: HTTPErrorResponse['code'];
+	message: HTTPErrorResponse['message'];
+	details: HTTPErrorResponse['details'];
+};
+
+const isDetails = (value: unknown): value is HTTPErrorResponse['details'] => {
+	return value === null || isRecord(value);
 };
 
 const isHeadersInit = (value: unknown): value is HeadersInit => {
@@ -30,9 +34,7 @@ const isHeadersInit = (value: unknown): value is HeadersInit => {
 	);
 };
 
-const hasHTTPErrorBody = (
-	value: unknown
-): value is HTTPErrorResponse['body'] => {
+const hasHTTPErrorFields = (value: unknown): value is HTTPErrorFields => {
 	return (
 		isRecord(value) &&
 		'code' in value &&
@@ -52,10 +54,12 @@ export const isHTTPError = (r: unknown): r is HTTPError => {
 			r.ok === false &&
 			'statusCode' in r &&
 			typeof r.statusCode === 'number' &&
-			'headers' in r &&
-			isHeadersInit(r.headers) &&
-			'body' in r &&
-			hasHTTPErrorBody(r.body))
+			'statusText' in r &&
+			typeof r.statusText === 'string' &&
+			hasHTTPErrorFields(r) &&
+			(!('headers' in r) ||
+				r.headers === undefined ||
+				isHeadersInit(r.headers)))
 	);
 };
 
@@ -66,8 +70,9 @@ export const isHTTPErrorResponse = (r: unknown): r is HTTPErrorResponse => {
 		r.ok === false &&
 		'statusCode' in r &&
 		typeof r.statusCode === 'number' &&
-		'body' in r &&
-		hasHTTPErrorBody(r.body) &&
+		'statusText' in r &&
+		typeof r.statusText === 'string' &&
+		hasHTTPErrorFields(r) &&
 		(!('headers' in r) || r.headers === undefined || isHeadersInit(r.headers))
 	);
 };
@@ -78,18 +83,29 @@ export const parseError = (
 	message: string
 ): HTTPError => {
 	if (isHTTPError(error)) {
-		return new HTTPError(error.statusCode, {
+		return new HTTPError({
+			statusCode: error.statusCode,
+			statusText: error.statusText,
 			code, // Note: Use specified code, not the one from the original error
 			message: error.body.message,
 			details: error.body.details,
+			headers: error.headers,
 		});
 	}
 
 	if (isHTTPErrorResponse(error)) {
-		return new HTTPError(error.statusCode, {
+		return new HTTPError({
+			statusCode: error.statusCode,
+			statusText: error.statusText,
 			code, // Note: Use specified code, not the one from the error response
-			message: error.body.message,
-			details: error.body.details,
+			message: error.message,
+			details: error.details,
+			headers:
+				isRecord(error) &&
+				'headers' in error &&
+				(error.headers === undefined || isHeadersInit(error.headers))
+					? error.headers
+					: undefined,
 		});
 	}
 
@@ -99,7 +115,7 @@ export const parseError = (
 			message,
 			details:
 				NODE_ENV === 'production'
-					? undefined
+					? null
 					: {
 							message: error.message,
 							stack: error.stack,
@@ -111,6 +127,10 @@ export const parseError = (
 		code,
 		message,
 		details:
-			NODE_ENV === 'production' ? undefined : JSON.stringify(error, null, 2),
+			NODE_ENV === 'production'
+				? null
+				: {
+						value: JSON.stringify(error, null, 2),
+					},
 	});
 };

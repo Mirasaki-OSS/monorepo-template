@@ -282,13 +282,23 @@ export function createApiClient<
 				return new HTTPError(statusCodes.SERVICE_UNAVAILABLE, {
 					code: 'NETWORK_ERROR',
 					message: `Network error while requesting ${endpoint}`,
-					details: String(error),
+					details: null,
 				});
 			});
 
+			if (isHTTPError(response)) {
+				return response;
+			}
+
 			if (isHTTPErrorResponse(response)) {
-				console.log('\n\n\n\n\n', response, '\n\n\n\n\n');
-				return new HTTPError(response.statusCode, response.body);
+				return new HTTPError({
+					statusCode: response.statusCode,
+					statusText: response.statusText,
+					code: response.code,
+					message: response.message,
+					details: response.details,
+					headers: response.headers,
+				});
 			}
 
 			if (!response.ok) {
@@ -311,12 +321,21 @@ export function createApiClient<
 					);
 				}
 				if (isHTTPErrorResponse(error)) {
-					return new HTTPError(error.statusCode, error.body);
+					return new HTTPError({
+						statusCode: error.statusCode,
+						statusText: error.statusText,
+						code: error.code,
+						message: error.message,
+						details: error.details,
+					});
 				}
 				return new HTTPError(statusCodes.SERVICE_UNAVAILABLE, {
 					code: 'REQUEST_FAILED',
 					message: `Request failed with status ${response.status}`,
-					details: `Unexpected response from ${endpoint}: ${JSON.stringify(error, null, 2)}`,
+					details: {
+						endpoint,
+						response: JSON.stringify(error, null, 2),
+					},
 				});
 			}
 
@@ -343,7 +362,13 @@ export function createApiClient<
 				const error =
 					json instanceof HTTPError
 						? json
-						: new HTTPError(json.statusCode, json.body, json.headers);
+						: new HTTPError({
+								statusCode: json.statusCode,
+								statusText: json.statusText,
+								code: json.code,
+								message: json.message,
+								details: json.details,
+							});
 
 				logger.error(`API error from ${endpoint}`, {
 					...metadata,
@@ -372,7 +397,9 @@ export function createApiClient<
 			return new HTTPError(statusCodes.SERVICE_UNAVAILABLE, {
 				code: 'UNEXPECTED_RESPONSE',
 				message: `Unexpected response from ${endpoint}`,
-				details: JSON.stringify(json, null, 2),
+				details: {
+					response: JSON.stringify(json, null, 2),
+				},
 			});
 		},
 	};

@@ -2,8 +2,7 @@ import { HTTPError } from '@md-oss/common/http/errors';
 import { type StatusCode, statusCodes } from '@md-oss/common/http/status-codes';
 import type {
 	HTTPErrorResponse,
-	HTTPResponse,
-	HTTPSuccessResponse as HTTPSuccessResponseSuper,
+	HTTPSuccessResponse,
 } from '@md-oss/common/http/types';
 import { parseJson, stringifyJson } from '@md-oss/serdes';
 
@@ -14,15 +13,19 @@ export {
 	serializeJson,
 } from '@md-oss/serdes';
 
-export type HTTPSuccessResponse<T> = HTTPSuccessResponseSuper<T> & {
-	headers?: Headers;
+/**
+ * `http-client` attaches response headers and status-code to the success response.
+ * The data returned by the API is available under the `data` property, while
+ * `statusCode` and `headers` provide access to the HTTP response details.
+ */
+export type HTTPClientSuccessResponse<T> = HTTPSuccessResponse<T> & {
+	statusCode: number;
+	headers: Headers;
 };
 
-export type HTTPResult<T> = HTTPResponse<T> | HTTPSuccessResponse<T>;
-
-export const isHTTPFailure = <T>(
-	result: HTTPResult<T>
-): result is HTTPErrorResponse => !result.ok;
+export type HTTPClientResponse<T> =
+	| HTTPErrorResponse
+	| HTTPClientSuccessResponse<T>;
 
 type QueryPrimitive = string | number | boolean;
 type QueryValue =
@@ -175,7 +178,7 @@ export const createHttpClient = (config: HttpClientConfig) => {
 	const request = async <T = unknown>(
 		input: string,
 		options: HttpRequestOptions & { accessToken?: string } = {}
-	): Promise<HTTPResult<T>> => {
+	): Promise<HTTPClientResponse<T>> => {
 		const {
 			timeoutMs = DEFAULT_TIMEOUT_MS,
 			retries = DEFAULT_RETRIES,
@@ -228,18 +231,17 @@ export const createHttpClient = (config: HttpClientConfig) => {
 						code: 'API_ERROR',
 						message,
 						statusCode: response.status as StatusCode,
+						statusText: response.statusText,
+						details: null,
 						headers: response.headers,
 					}).toJSON();
 				}
-
-				const successMessage = response.statusText || null;
 
 				if (parseAs === 'raw') {
 					return {
 						ok: true,
 						data: response as unknown as T,
 						statusCode: response.status,
-						message: successMessage,
 						headers: response.headers,
 					};
 				}
@@ -249,7 +251,6 @@ export const createHttpClient = (config: HttpClientConfig) => {
 						ok: true,
 						data: (await response.text()) as T,
 						statusCode: response.status,
-						message: successMessage,
 						headers: response.headers,
 					};
 				}
@@ -260,7 +261,6 @@ export const createHttpClient = (config: HttpClientConfig) => {
 						ok: true,
 						data: undefined as T,
 						statusCode: response.status,
-						message: successMessage,
 						headers: response.headers,
 					};
 				}
@@ -270,7 +270,6 @@ export const createHttpClient = (config: HttpClientConfig) => {
 						ok: true,
 						data: parseJson<T>(text),
 						statusCode: response.status,
-						message: successMessage,
 						headers: response.headers,
 					};
 				} catch {
@@ -278,6 +277,7 @@ export const createHttpClient = (config: HttpClientConfig) => {
 						code: 'INVALID_RESPONSE',
 						message: `${config.serviceName} returned invalid JSON`,
 						statusCode: response.status as StatusCode,
+						statusText: response.statusText,
 						details: { responseText: text },
 						headers: response.headers,
 					}).toJSON();
@@ -296,6 +296,7 @@ export const createHttpClient = (config: HttpClientConfig) => {
 					code: 'NETWORK_ERROR',
 					message: `${config.serviceName} request failed due to a network error`,
 					statusCode: statusCodes.SERVICE_UNAVAILABLE,
+					statusText: 'Service Unavailable',
 					details: {
 						originalError:
 							error instanceof Error ? error.message : String(error),
@@ -308,6 +309,8 @@ export const createHttpClient = (config: HttpClientConfig) => {
 			code: 'RETRIES_EXCEEDED',
 			message: `${config.serviceName} request failed after retries`,
 			statusCode: statusCodes.SERVICE_UNAVAILABLE,
+			statusText: 'Service Unavailable',
+			details: null,
 		}).toJSON();
 	};
 

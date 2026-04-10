@@ -1,5 +1,5 @@
 import { HTTPError } from '@md-oss/common/http/errors';
-import { isHTTPErrorResponse, parseError } from '@md-oss/common/http/guards';
+import { isHTTPError, parseError } from '@md-oss/common/http/guards';
 import type {
 	MinimalRequest,
 	MinimalRequestHandler,
@@ -21,7 +21,7 @@ import type { InferApi, MethodKeys, RouteKeys, RouteRegistry } from './types';
 export function parseSignedAccessError(
 	error: HTTPError | SignedAccessError
 ): HTTPError {
-	if (isHTTPErrorResponse(error)) {
+	if (isHTTPError(error)) {
 		debugErrors(
 			'#parseSignedAccessError Returning existing HTTPError: %s - %s',
 			error.statusCode,
@@ -374,7 +374,7 @@ export function createGenericRouteHandler<
 			const handler = controller(
 				resolvedContext || fallbackContext(),
 				(options) => {
-					if (isHTTPErrorResponse(options) || typeof options === 'string') {
+					if (isHTTPError(options) || typeof options === 'string') {
 						debugErrors(
 							'[%s] Controller responded with error: %o',
 							requestId,
