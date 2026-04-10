@@ -5,7 +5,7 @@ import {
 	parseError,
 } from '@md-oss/common/http/guards';
 import { statusCodes } from '@md-oss/common/http/status-codes';
-import type { SerializeForJson } from '@md-oss/serdes';
+import type { SerializedJson } from '@md-oss/serdes';
 import { stringifyJson } from '@md-oss/serdes';
 import type { RequestOptions } from './request';
 import type { InferApi, MethodKeys, RouteKeys, RouteRegistry } from './types';
@@ -13,8 +13,8 @@ import type { InferApi, MethodKeys, RouteKeys, RouteRegistry } from './types';
 export {
 	type JsonPrimitive,
 	type JsonValueLike,
-	jsonify,
-	type SerializeForJson,
+	type SerializedJson,
+	serializeJson,
 } from '@md-oss/serdes';
 
 const interpolatePath = (
@@ -111,7 +111,7 @@ export type ResponseTypeTransformer =
 export type ApplyResponseTypeTransformer<
 	TTransformer extends ResponseTypeTransformer,
 	T,
-> = TTransformer extends JsonResponseTypeTransformer ? SerializeForJson<T> : T;
+> = TTransformer extends JsonResponseTypeTransformer ? SerializedJson<T> : T;
 
 /**
  * Creates a type-safe API client for a given route registry.

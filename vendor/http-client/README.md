@@ -41,7 +41,7 @@ console.log(result.data.total);
 ### Utility
 
 ```typescript
-import { jsonify } from '@md-oss/http-client';
+import { serializeJson } from '@md-oss/http-client';
 
-const payload = jsonify({ createdAt: new Date() });
+const payload = serializeJson({ createdAt: new Date() });
 ```

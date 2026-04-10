@@ -7,14 +7,13 @@ import { parseYaml, stringifyYaml } from './yaml';
 export { parseCbor, stringifyCbor } from './cbor';
 export {
 	bigIntSerializationHelper,
-	type Jsonify,
 	type JsonParseOptions,
 	type JsonPrimitive,
 	type JsonStringifyOptions,
 	type JsonValueLike,
-	jsonify,
 	parseJson,
-	type SerializeForJson,
+	type SerializedJson,
+	serializeJson,
 	stableSerializeForCacheKey,
 	stringifyJson,
 } from './json';

@@ -18,7 +18,7 @@ export {
 	type Logger as APIClientLogger,
 	parseHeaders,
 	type ResponseTypeTransformer,
-	type SerializeForJson,
+	type SerializedJson,
 	stripProxyAndWebsocketHeaders,
 } from './client';
 

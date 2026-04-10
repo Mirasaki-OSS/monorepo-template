@@ -7,7 +7,7 @@ Serializer/Deserializer for JSON, YAML, TOML, MessagePack, and CBOR for the mono
 ```typescript
 import {
 	deserialize,
-	jsonify,
+	serializeJson,
 	parseJson,
 	parseToml,
 	parseYaml,
@@ -32,7 +32,7 @@ const fromMessagePack = deserialize<typeof payload>("messagepack", msgpack);
 const cbor = serialize("cbor", payload) as Uint8Array;
 const fromCbor = deserialize<typeof payload>("cbor", cbor);
 
-const transportSafe = jsonify(payload); // Date and bigint become JSON-safe
+const transportSafe = serializeJson(payload); // Date and bigint become JSON-safe
 ```
 
 ## Formats

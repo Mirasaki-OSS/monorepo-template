@@ -67,12 +67,10 @@
 		},
 		"./request": {
 			"require": {
-				"types": "./dist/request.d.cts",
-				"default": "./dist/request.cjs"
+				"types": "./dist/request.d.cts"
 			},
 			"import": {
-				"types": "./dist/request.d.mts",
-				"default": "./dist/request.mjs"
+				"types": "./dist/request.d.mts"
 			}
 		},
 		"./response": {

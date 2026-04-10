@@ -7,10 +7,10 @@ import type {
 import { parseJson, stringifyJson } from '@md-oss/serdes';
 
 export {
-	type Jsonify,
 	type JsonPrimitive,
 	type JsonValueLike,
-	jsonify,
+	type SerializedJson,
+	serializeJson,
 } from '@md-oss/serdes';
 
 export type HTTPSuccessResponse<T> = Omit<

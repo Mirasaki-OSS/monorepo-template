@@ -4,34 +4,22 @@ export type JsonValueLike =
 	| { [key: string]: JsonValueLike }
 	| JsonValueLike[];
 
-export type Jsonify<T> = T extends Date
-	? string
-	: T extends bigint
-		? string
-		: T extends JsonValueLike
-			? T
-			: T extends ReadonlyArray<infer U>
-				? Jsonify<U>[]
-				: T extends object
-					? { [K in keyof T]: Jsonify<T[K]> }
-					: never;
-
 /**
  * Converts runtime javascript types into JSON-safe transport types.
  * Example: Date -> string, bigint -> string.
  */
-export type SerializeForJson<T> = T extends Date
+export type SerializedJson<T> = T extends Date
 	? string
 	: T extends bigint
 		? string
 		: T extends JsonValueLike
 			? T // Note: Preserves JSON-safe types as-is
 			: T extends Array<infer U>
-				? SerializeForJson<U>[]
+				? SerializedJson<U>[]
 				: T extends ReadonlyArray<infer U>
-					? ReadonlyArray<SerializeForJson<U>>
+					? ReadonlyArray<SerializedJson<U>>
 					: T extends object
-						? { [K in keyof T]: SerializeForJson<T[K]> }
+						? { [K in keyof T]: SerializedJson<T[K]> }
 						: T;
 
 const ISO_UTC_DATE_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
@@ -132,5 +120,5 @@ export const stringifyJson = (
 	);
 };
 
-export const jsonify = <T>(value: T): Jsonify<T> =>
-	parseJson<Jsonify<T>>(stringifyJson(value));
+export const serializeJson = <T>(value: T): SerializedJson<T> =>
+	parseJson<SerializedJson<T>>(stringifyJson(value));

@@ -193,6 +193,7 @@ export class MigrationRegistry<
 		filePath: string
 	): Promise<Migration<TContext>[]> {
 		// Dynamic import works for both .ts (with ts-node/tsx) and .js
+		// Note: These imports cannot be statically analyzed
 		const module = await import(filePath);
 
 		const migrations: Migration<TContext>[] = [];
