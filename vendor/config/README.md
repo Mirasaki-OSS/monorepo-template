@@ -1,6 +1,6 @@
 # @md-oss/config
 
-Shared TypeScript configuration for the monorepo. Provides consistent compiler settings across all packages.
+Shared TypeScript configuration. Provides consistent compiler settings across all packages.
 
 ## Available Configurations
 

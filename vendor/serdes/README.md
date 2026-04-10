@@ -1,6 +1,6 @@
 # @md-oss/serdes
 
-Serializer/Deserializer for JSON, YAML, TOML, MessagePack, and CBOR for the monorepo.
+Serializer/Deserializer for JSON, YAML, TOML, MessagePack, and CBOR.
 
 ## Usage
 
