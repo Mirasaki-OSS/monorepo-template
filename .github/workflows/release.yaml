@@ -57,7 +57,7 @@ jobs:
 
       - name: Replace `@md-oss` with `@mirasaki-oss` across monorepo (for Github Packages)
         run: |
-          pnpm exec tsx ./scripts/node/replace-scope.ts --scopeOld="@md-oss" --scopeNew="@mirasaki-oss" --paths="./.changeset/*,./apps,./packages,./vendor"
+          pnpm exec tsx ./scripts/node/replace-scope.ts --scopeOld="@md-oss" --scopeNew="@mirasaki-oss" --paths="./package.json,./.changeset/*,./apps,./packages,./vendor"
 
       - name: Install dependencies
         # Note: Using `--no-frozen-lockfile` here to allow updating lockfile for Github scope change
