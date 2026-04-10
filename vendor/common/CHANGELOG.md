@@ -1,5 +1,14 @@
 # @md-oss/common
 
+## 0.3.8
+
+### Patch Changes
+
+- c013046: update URL tests
+- Updated dependencies [c013046]
+  - @md-oss/config@0.3.8
+  - @md-oss/serdes@0.3.8
+
 ## 0.3.7
 
 ### Patch Changes
