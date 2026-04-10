@@ -8,20 +8,39 @@ const normalizePath = (path: string) => {
 	return path.startsWith('/') ? path : `/${path}`;
 };
 
-const validateProductionUrl = (value: string, message: string) => {
+const validateProductionUrl = (
+	value: string,
+	message: string,
+	isProductionAndShouldValidate: boolean
+) => {
 	const parsed = new URL(value);
 
-	if (process.env.NODE_ENV === 'production' && parsed.protocol !== 'https:') {
+	if (isProductionAndShouldValidate && parsed.protocol !== 'https:') {
 		throw new Error(message);
 	}
 
 	return normalizeUrl(parsed.toString());
 };
 
-function getEnvUrl(envVar: string): string | null;
-function getEnvUrl(envVar: string, defaultValue: string): string;
-function getEnvUrl(envVar: string, defaultValue?: string): string | null;
-function getEnvUrl(envVar: string, defaultValue?: string): string | null {
+function getEnvUrl(
+	envVar: string,
+	isProductionAndShouldValidate: boolean
+): string | null;
+function getEnvUrl(
+	envVar: string,
+	isProductionAndShouldValidate: boolean,
+	defaultValue: string
+): string;
+function getEnvUrl(
+	envVar: string,
+	isProductionAndShouldValidate: boolean,
+	defaultValue?: string
+): string | null;
+function getEnvUrl(
+	envVar: string,
+	isProductionAndShouldValidate: boolean,
+	defaultValue?: string
+): string | null {
 	const envValue = process.env[envVar]?.trim();
 	const normalizedDefaultValue = defaultValue?.trim();
 	const configuredBaseUrl = envValue || normalizedDefaultValue;
@@ -31,7 +50,11 @@ function getEnvUrl(envVar: string, defaultValue?: string): string | null {
 			? `${envVar} must use HTTPS in production.`
 			: 'The defaultValue for getEnvUrl must use HTTPS in production.';
 
-		return validateProductionUrl(configuredBaseUrl, validationMessage);
+		return validateProductionUrl(
+			configuredBaseUrl,
+			validationMessage,
+			isProductionAndShouldValidate
+		);
 	}
 
 	if (defaultValue !== undefined) {
@@ -40,7 +63,7 @@ function getEnvUrl(envVar: string, defaultValue?: string): string | null {
 		);
 	}
 
-	if (process.env.NODE_ENV === 'production') {
+	if (isProductionAndShouldValidate) {
 		throw new Error(`${envVar} must be set in production.`);
 	}
 
