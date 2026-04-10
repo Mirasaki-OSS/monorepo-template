@@ -88,7 +88,7 @@
 		"@md-oss/serdes": "workspace:^"
 	},
 	"devDependencies": {
-		"@types/node": "^25.5.2",
+		"@types/node": "^25.6.0",
 		"pkgroll": "^2.27.0",
 		"typescript": "^6.0.2"
 	}

@@ -2,6 +2,7 @@ import { HTTPError } from '@md-oss/common/http/errors';
 import { type StatusCode, statusCodes } from '@md-oss/common/http/status-codes';
 import type {
 	HTTPErrorResponse,
+	HTTPResponse,
 	HTTPSuccessResponse as HTTPSuccessResponseSuper,
 } from '@md-oss/common/http/types';
 import { parseJson, stringifyJson } from '@md-oss/serdes';
@@ -13,14 +14,11 @@ export {
 	serializeJson,
 } from '@md-oss/serdes';
 
-export type HTTPSuccessResponse<T> = Omit<
-	HTTPSuccessResponseSuper<T>,
-	'message'
-> & {
-	headers: Headers;
+export type HTTPSuccessResponse<T> = HTTPSuccessResponseSuper<T> & {
+	headers?: Headers;
 };
 
-export type HTTPResult<T> = HTTPSuccessResponse<T> | HTTPErrorResponse;
+export type HTTPResult<T> = HTTPResponse<T> | HTTPSuccessResponse<T>;
 
 export const isHTTPFailure = <T>(
 	result: HTTPResult<T>
@@ -234,11 +232,14 @@ export const createHttpClient = (config: HttpClientConfig) => {
 					}).toJSON();
 				}
 
+				const successMessage = response.statusText || null;
+
 				if (parseAs === 'raw') {
 					return {
 						ok: true,
 						data: response as unknown as T,
 						statusCode: response.status,
+						message: successMessage,
 						headers: response.headers,
 					};
 				}
@@ -248,6 +249,7 @@ export const createHttpClient = (config: HttpClientConfig) => {
 						ok: true,
 						data: (await response.text()) as T,
 						statusCode: response.status,
+						message: successMessage,
 						headers: response.headers,
 					};
 				}
@@ -258,6 +260,7 @@ export const createHttpClient = (config: HttpClientConfig) => {
 						ok: true,
 						data: undefined as T,
 						statusCode: response.status,
+						message: successMessage,
 						headers: response.headers,
 					};
 				}
@@ -267,6 +270,7 @@ export const createHttpClient = (config: HttpClientConfig) => {
 						ok: true,
 						data: parseJson<T>(text),
 						statusCode: response.status,
+						message: successMessage,
 						headers: response.headers,
 					};
 				} catch {
