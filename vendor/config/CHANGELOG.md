@@ -1,5 +1,11 @@
 # @md-oss/config
 
+## 0.3.2
+
+### Patch Changes
+
+- b266535: bin for scripts vendor
+
 ## 0.3.1
 
 ### Patch Changes
