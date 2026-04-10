@@ -1,5 +1,11 @@
 # @md-oss/config
 
+## 0.3.5
+
+### Patch Changes
+
+- 1a78528: improve interop between HTTPResult and HTTPResponse
+
 ## 0.3.4
 
 ### Patch Changes

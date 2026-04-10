@@ -1,5 +1,13 @@
 # @md-oss/mutex
 
+## 0.3.5
+
+### Patch Changes
+
+- 1a78528: improve interop between HTTPResult and HTTPResponse
+- Updated dependencies [1a78528]
+  - @md-oss/config@0.3.5
+
 ## 0.3.4
 
 ### Patch Changes
