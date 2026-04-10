@@ -1,40 +1,74 @@
+import { isRecord } from '../utils/records';
 import { HTTPError } from './errors';
-import type { HTTPErrorResponse } from './types';
+import type { HeadersInit, HTTPErrorResponse } from './types';
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
+const isDetails = (
+	value: unknown
+): value is string | Record<string, unknown> => {
+	return value === undefined || typeof value === 'string' || isRecord(value);
+};
+
+const isHeadersInit = (value: unknown): value is HeadersInit => {
+	if (typeof Headers !== 'undefined' && value instanceof Headers) {
+		return true;
+	}
+
+	if (Array.isArray(value)) {
+		return value.every(
+			(entry) =>
+				Array.isArray(entry) &&
+				entry.length === 2 &&
+				typeof entry[0] === 'string' &&
+				typeof entry[1] === 'string'
+		);
+	}
+
+	return (
+		isRecord(value) && Object.values(value).every((v) => typeof v === 'string')
+	);
+};
+
+const hasHTTPErrorBody = (
+	value: unknown
+): value is HTTPErrorResponse['body'] => {
+	return (
+		isRecord(value) &&
+		'code' in value &&
+		typeof value.code === 'string' &&
+		'message' in value &&
+		typeof value.message === 'string' &&
+		(!('details' in value) || isDetails(value.details))
+	);
+};
+
 export const isHTTPError = (r: unknown): r is HTTPError => {
-	if (r instanceof HTTPError) {
-		return true;
-	}
-
-	if (isHTTPErrorResponse(r)) {
-		r = new HTTPError(r.statusCode, {
-			code: r.body.code,
-			message: r.body.message,
-			details: r.body.details,
-		});
-		return true;
-	}
-
-	return false;
+	return (
+		r instanceof HTTPError ||
+		(r instanceof Error &&
+			isRecord(r) &&
+			'ok' in r &&
+			r.ok === false &&
+			'statusCode' in r &&
+			typeof r.statusCode === 'number' &&
+			'headers' in r &&
+			isHeadersInit(r.headers) &&
+			'body' in r &&
+			hasHTTPErrorBody(r.body))
+	);
 };
 
 export const isHTTPErrorResponse = (r: unknown): r is HTTPErrorResponse => {
 	return (
-		typeof r === 'object' &&
-		r !== null &&
+		isRecord(r) &&
 		'ok' in r &&
 		r.ok === false &&
 		'statusCode' in r &&
 		typeof r.statusCode === 'number' &&
 		'body' in r &&
-		typeof r.body === 'object' &&
-		r.body !== null &&
-		'code' in r.body &&
-		typeof r.body.code === 'string' &&
-		'message' in r.body &&
-		typeof r.body.message === 'string'
+		hasHTTPErrorBody(r.body) &&
+		(!('headers' in r) || r.headers === undefined || isHeadersInit(r.headers))
 	);
 };
 

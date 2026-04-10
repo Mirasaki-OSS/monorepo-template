@@ -78,3 +78,55 @@ export class HTTPError extends Error {
 		} satisfies HTTPErrorResponse;
 	}
 }
+
+export type HTTPErrorBody = HTTPErrorResponse['body'];
+export type CreateHTTPErrorOptions = HTTPErrorBody & {
+	statusCode: number;
+	headers?: HeadersInit;
+};
+
+export function createHTTPError(options: CreateHTTPErrorOptions): HTTPError;
+export function createHTTPError(
+	statusCode: number,
+	body: HTTPErrorBody,
+	headers?: HeadersInit
+): HTTPError;
+export function createHTTPError(
+	statusCodeOrOptions: number | CreateHTTPErrorOptions,
+	body?: HTTPErrorBody,
+	headers?: HeadersInit
+): HTTPError {
+	if (typeof statusCodeOrOptions === 'number') {
+		if (!body) {
+			throw new Error('Body is required when statusCode is provided');
+		}
+
+		return new HTTPError(statusCodeOrOptions, body, headers);
+	}
+
+	return new HTTPError(statusCodeOrOptions);
+}
+
+export function createHTTPErrorResponse(
+	options: CreateHTTPErrorOptions
+): HTTPErrorResponse;
+export function createHTTPErrorResponse(
+	statusCode: number,
+	body: HTTPErrorBody,
+	headers?: HeadersInit
+): HTTPErrorResponse;
+export function createHTTPErrorResponse(
+	statusCodeOrOptions: number | CreateHTTPErrorOptions,
+	body?: HTTPErrorBody,
+	headers?: HeadersInit
+): HTTPErrorResponse {
+	if (typeof statusCodeOrOptions === 'number') {
+		if (!body) {
+			throw new Error('Body is required when statusCode is provided');
+		}
+
+		return new HTTPError(statusCodeOrOptions, body, headers).toJSON();
+	}
+
+	return new HTTPError(statusCodeOrOptions).toJSON();
+}

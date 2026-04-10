@@ -339,7 +339,12 @@ export function createApiClient<
 				return json.data as LocalResponse;
 			}
 
-			if (isHTTPError(json)) {
+			if (isHTTPError(json) || isHTTPErrorResponse(json)) {
+				const error =
+					json instanceof HTTPError
+						? json
+						: new HTTPError(json.statusCode, json.body, json.headers);
+
 				logger.error(`API error from ${endpoint}`, {
 					...metadata,
 					path,
@@ -348,9 +353,9 @@ export function createApiClient<
 					query,
 					body,
 					status: response.status,
-					error: json,
+					error,
 				});
-				return json;
+				return error;
 			}
 
 			logger.error(`Unexpected response from ${endpoint}`, {

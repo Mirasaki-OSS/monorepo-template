@@ -20,3 +20,5 @@ export interface HTTPSuccessResponse<T> {
 	message: string | null;
 	data: T;
 }
+
+export type HTTPResponse<T> = HTTPSuccessResponse<T> | HTTPErrorResponse;
