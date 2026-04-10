@@ -1,5 +1,13 @@
 # @md-oss/serdes
 
+## 0.3.2
+
+### Patch Changes
+
+- b266535: bin for scripts vendor
+- Updated dependencies [b266535]
+  - @md-oss/config@0.3.2
+
 ## 0.3.1
 
 ### Patch Changes
