@@ -1,5 +1,13 @@
 # @md-oss/migrations
 
+## 0.3.7
+
+### Patch Changes
+
+- 38d7d42: improved url validation
+- Updated dependencies [38d7d42]
+  - @md-oss/config@0.3.7
+
 ## 0.3.6
 
 ### Patch Changes
