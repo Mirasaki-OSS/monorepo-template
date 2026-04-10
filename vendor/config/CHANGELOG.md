@@ -1,5 +1,11 @@
 # @md-oss/config
 
+## 0.3.7
+
+### Patch Changes
+
+- 38d7d42: improved url validation
+
 ## 0.3.6
 
 ### Patch Changes
