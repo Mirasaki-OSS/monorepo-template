@@ -2,8 +2,6 @@ import { isRecord } from '../utils/records';
 import { HTTPError } from './errors';
 import type { HeadersInit, HTTPErrorResponse } from './types';
 
-const NODE_ENV = process.env.NODE_ENV || 'development';
-
 export type HTTPErrorFields = {
 	code: HTTPErrorResponse['code'];
 	message: HTTPErrorResponse['message'];
@@ -108,6 +106,8 @@ export const parseError = (
 					: undefined,
 		});
 	}
+
+	const { NODE_ENV } = process.env;
 
 	if (error instanceof Error) {
 		return new HTTPError(500, {
