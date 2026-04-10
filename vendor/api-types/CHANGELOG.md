@@ -1,5 +1,15 @@
 # @md-oss/api-types
 
+## 0.3.5
+
+### Patch Changes
+
+- 1a78528: improve interop between HTTPResult and HTTPResponse
+- Updated dependencies [1a78528]
+  - @md-oss/common@0.3.5
+  - @md-oss/config@0.3.5
+  - @md-oss/serdes@0.3.5
+
 ## 0.3.4
 
 ### Patch Changes
