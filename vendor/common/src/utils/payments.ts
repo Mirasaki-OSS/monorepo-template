@@ -1,11 +1,10 @@
+import { DEFAULT_CURRENCY, SAFE_FALLBACK_FRACTION_DIGITS } from '../defaults';
 import {
-	DEFAULT_CURRENCY,
+	DEFAULT_LOCALE,
 	DEFAULT_NULL_DISPLAY,
 	formatInterval,
-	formatPrice,
-	normalizeCurrencyCode,
-} from '../formatters';
-import { toDateFromUnixSeconds } from './time';
+	toDateFromUnixSeconds,
+} from './time';
 
 type SubscriptionItemLike = {
 	id: string;
@@ -91,4 +90,93 @@ const resolveDiscountLabel = (
 	return DEFAULT_NULL_DISPLAY;
 };
 
-export { resolveDiscountLabel, resolveSubscriptionItems };
+// ===================================================================
+// Start Price Formatters
+// ===================================================================
+
+type FormatCurrencyOptions = {
+	currency?: string | null;
+	locale?: string;
+	minimumFractionDigits?: number;
+	maximumFractionDigits?: number;
+};
+
+const normalizeCurrencyCode = (currency?: string | null) =>
+	currency?.trim().toUpperCase() || DEFAULT_CURRENCY;
+
+const getCurrencyFractionDigits = (
+	currency: string,
+	locale = DEFAULT_LOCALE
+): number => {
+	try {
+		return (
+			new Intl.NumberFormat(locale, {
+				style: 'currency',
+				currency,
+			}).resolvedOptions().maximumFractionDigits ??
+			SAFE_FALLBACK_FRACTION_DIGITS
+		);
+	} catch {
+		return SAFE_FALLBACK_FRACTION_DIGITS;
+	}
+};
+
+const formatCurrencyAmount = (
+	amount: number | null,
+	options: FormatCurrencyOptions = {}
+) => {
+	if (amount === null) {
+		return 'N/A';
+	}
+
+	const currency = normalizeCurrencyCode(options.currency);
+	const locale = options.locale ?? DEFAULT_LOCALE;
+
+	try {
+		return new Intl.NumberFormat(locale, {
+			style: 'currency',
+			currency,
+			minimumFractionDigits: options.minimumFractionDigits,
+			maximumFractionDigits: options.maximumFractionDigits,
+		}).format(amount);
+	} catch {
+		const fractionDigits =
+			options.maximumFractionDigits ??
+			options.minimumFractionDigits ??
+			SAFE_FALLBACK_FRACTION_DIGITS;
+		return `${amount.toFixed(fractionDigits)} ${currency}`;
+	}
+};
+
+const formatPrice = (
+	amountInMinorUnits: number | null,
+	options: FormatCurrencyOptions = {}
+) => {
+	if (amountInMinorUnits === null) {
+		return 'N/A';
+	}
+
+	const currency = normalizeCurrencyCode(options.currency);
+	const locale = options.locale ?? DEFAULT_LOCALE;
+	const fractionDigits = getCurrencyFractionDigits(currency, locale);
+	const divisor = 10 ** fractionDigits;
+
+	return formatCurrencyAmount(amountInMinorUnits / divisor, {
+		...options,
+		currency,
+		locale,
+	});
+};
+
+export {
+	DEFAULT_LOCALE,
+	DEFAULT_NULL_DISPLAY,
+	type FormatCurrencyOptions,
+	formatCurrencyAmount,
+	formatPrice,
+	getCurrencyFractionDigits,
+	normalizeCurrencyCode,
+	resolveDiscountLabel,
+	resolveSubscriptionItems,
+	SAFE_FALLBACK_FRACTION_DIGITS,
+};
