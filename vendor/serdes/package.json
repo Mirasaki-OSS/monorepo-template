@@ -1,6 +1,6 @@
 {
 	"name": "@md-oss/serdes",
-	"version": "0.3.4",
+	"version": "0.3.5",
 	"private": false,
 	"publishConfig": {
 		"access": "public",
@@ -19,7 +19,10 @@
 	},
 	"type": "module",
 	"description": "Serializer/Deserializer for JSON, YAML, TOML, MessagePack, and CBOR",
-	"files": ["dist/**/*", "README.md"],
+	"files": [
+		"dist/**/*",
+		"README.md"
+	],
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.mjs",
 	"types": "./dist/index.d.cts",
