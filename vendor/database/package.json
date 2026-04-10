@@ -19,10 +19,7 @@
 	},
 	"type": "module",
 	"description": "Adapter-agnostic query helpers with typed pagination",
-	"files": [
-		"dist/**/*",
-		"README.md"
-	],
+	"files": ["dist/**/*", "README.md"],
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.mjs",
 	"types": "./dist/index.d.cts",
