@@ -1,7 +1,7 @@
 #!/usr/bin/env -S pnpm tsx
 import { execSync } from 'node:child_process';
 // Example: ./scripts/node/replace-scope.ts --scopeOld="@md-oss" --scopeNew="@mirasaki-oss" --paths="./.changeset/*,./vendor,./apps,./packages"
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, statSync, writeFileSync } from 'node:fs';
 import { parseArgs } from 'node:util';
 import { glob } from 'glob';
 
@@ -40,14 +40,35 @@ console.log(
 
 // Find all files from all paths
 const allFiles = new Set<string>();
-for (const path of pathList) {
-	// If path already contains a glob pattern (ends with *), use it directly
-	const globPattern = path.endsWith('*') ? path : `${path}/**/*`;
-	const files = glob.sync(globPattern, {
-		ignore: ['**/node_modules/**', '**/dist/**', '**/.turbo/**'],
-		nodir: true,
-	});
-	files.forEach((f) => void allFiles.add(f));
+for (const targetPath of pathList) {
+	const hasGlobPattern = /[*?[\]{}()!+@]/.test(targetPath);
+
+	if (hasGlobPattern) {
+		const files = glob.sync(targetPath, {
+			ignore: ['**/node_modules/**', '**/dist/**', '**/.turbo/**'],
+			nodir: true,
+		});
+		files.forEach((f) => void allFiles.add(f));
+		continue;
+	}
+
+	try {
+		const stats = statSync(targetPath);
+		if (stats.isFile()) {
+			allFiles.add(targetPath);
+			continue;
+		}
+
+		if (stats.isDirectory()) {
+			const files = glob.sync(`${targetPath}/**/*`, {
+				ignore: ['**/node_modules/**', '**/dist/**', '**/.turbo/**'],
+				nodir: true,
+			});
+			files.forEach((f) => void allFiles.add(f));
+		}
+	} catch {
+		console.warn(`  ! Skipping missing path: ${targetPath}`);
+	}
 }
 
 const files = Array.from(allFiles);
