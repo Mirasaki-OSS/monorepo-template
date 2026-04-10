@@ -1,4 +1,5 @@
 import type { MinimalRequestHandler } from '@md-oss/common/http/requests';
+import { parseJson } from '@md-oss/serdes';
 
 export const expressRequestLoggingMiddleware = (
 	logFunction: (msg: string, data?: unknown) => void
@@ -46,7 +47,7 @@ export const expressRequestLoggingMiddleware = (
 				res.getHeader('content-type')?.toString().includes('json')
 			) {
 				try {
-					responseBody = JSON.parse(body);
+					responseBody = parseJson(body);
 				} catch {
 					// Unable to parse, leave as string
 				}

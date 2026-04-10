@@ -183,6 +183,35 @@ See [docker/README.md](../docker/README.md) for detailed Docker documentation.
 └── README.md      # Project documentation
 ```
 
+## Publishing
+
+You might encounter the following error when trying to publish a package for the first time (locally):
+
+```
+Authenticate your account at:
+https://www.npmjs.com/auth/cli/***
+Press ENTER to open in the browser...
+```
+
+Even though you're already signed in through the NPM cli (`npm login`).
+
+This probably means you're on WSL2, and you should take the following steps to remedy this:
+
+1. Install [`wslview`](https://manpages.ubuntu.com/manpages/noble/man1/wslview.1.html):
+  ```
+  sudo apt update
+  sudo apt install -y wslu
+  ```
+2. Set the `BROWSER` environment for the current shell:
+  ```bash
+  export BROWSER=wslview
+  ```
+3. Persist it:
+  ```bash
+  echo 'export BROWSER=wslview' >> ~/.bashrc
+  source ~/.bashrc
+  ```
+
 ## Questions or Need Help?
 
 - Check existing [issues](https://github.com/Mirasaki-OSS/monorepo-template/issues)

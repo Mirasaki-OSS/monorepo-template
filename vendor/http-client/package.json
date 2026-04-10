@@ -1,6 +1,6 @@
 {
 	"name": "@md-oss/http-client",
-	"version": "0.2.3",
+	"version": "0.3.1",
 	"private": false,
 	"publishConfig": {
 		"access": "public",
@@ -10,6 +10,12 @@
 		"type": "git",
 		"url": "git+ssh://git@github.com/Mirasaki-OSS/monorepo-template.git",
 		"directory": "vendor/http-client"
+	},
+	"homepage": "https://github.com/Mirasaki-OSS/monorepo-template/tree/main/vendor/http-client#readme",
+	"author": {
+		"email": "contact@mirasaki.dev",
+		"name": "Mirasaki Development",
+		"url": "https://mirasaki.dev"
 	},
 	"type": "module",
 	"description": "Fetch-based HTTP client with retries, timeouts, and typed results",
@@ -35,7 +41,8 @@
 	},
 	"dependencies": {
 		"@md-oss/common": "workspace:^",
-		"@md-oss/config": "workspace:^"
+		"@md-oss/config": "workspace:^",
+		"@md-oss/serdes": "workspace:^"
 	},
 	"devDependencies": {
 		"pkgroll": "^2.27.0",

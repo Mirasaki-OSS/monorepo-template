@@ -9,6 +9,7 @@ import {
 	relative,
 	resolve,
 } from 'node:path';
+import { stringifyJson } from '@md-oss/serdes';
 import { ByteMagic } from '../constants';
 
 /**
@@ -357,7 +358,11 @@ function groupByExtension(filePaths: string[]): Record<string, string[]> {
 }
 
 const writeJsonFile = async (filePath: string, data: unknown) => {
-	await writeFile(filePath, `${JSON.stringify(data, null, 2)}\n`, 'utf8');
+	await writeFile(
+		filePath,
+		`${stringifyJson(data, { space: 2, stable: true })}\n`,
+		'utf8'
+	);
 };
 
 export {

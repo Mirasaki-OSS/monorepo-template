@@ -2,17 +2,28 @@ import { HTTPError } from '@md-oss/common/http/errors';
 import { type StatusCode, statusCodes } from '@md-oss/common/http/status-codes';
 import type {
 	HTTPErrorResponse,
-	HTTPSuccessResponse,
+	HTTPSuccessResponse as HTTPSuccessResponseSuper,
 } from '@md-oss/common/http/types';
+import { parseJson, stringifyJson } from '@md-oss/serdes';
 
-export type ApiSuccess<T> = Omit<HTTPSuccessResponse<T>, 'message'> & {
+export {
+	type Jsonify,
+	type JsonPrimitive,
+	type JsonValueLike,
+	jsonify,
+} from '@md-oss/serdes';
+
+export type HTTPSuccessResponse<T> = Omit<
+	HTTPSuccessResponseSuper<T>,
+	'message'
+> & {
 	headers: Headers;
 };
 
-export type ApiResult<T> = ApiSuccess<T> | HTTPErrorResponse;
+export type HTTPResult<T> = HTTPSuccessResponse<T> | HTTPErrorResponse;
 
-export const isApiFailure = <T>(
-	result: ApiResult<T>
+export const isHTTPFailure = <T>(
+	result: HTTPResult<T>
 ): result is HTTPErrorResponse => !result.ok;
 
 type QueryPrimitive = string | number | boolean;
@@ -123,7 +134,7 @@ const toBody = (body: unknown): BodyInit | undefined => {
 	) {
 		return body as BodyInit;
 	}
-	return JSON.stringify(body);
+	return stringifyJson(body);
 };
 
 const isRetryableNetworkError = (error: unknown) => {
@@ -146,8 +157,14 @@ const parseErrorMessage = async (response: Response, fallback: string) => {
 		if (!text) return fallback;
 
 		try {
-			const parsed = JSON.parse(text);
-			return parsed?.message || parsed?.error || fallback;
+			const parsed = parseJson<Record<string, unknown>>(text);
+			if (typeof parsed?.message === 'string') {
+				return parsed.message;
+			}
+			if (typeof parsed?.error === 'string') {
+				return parsed.error;
+			}
+			return fallback;
 		} catch {
 			return text;
 		}
@@ -156,26 +173,11 @@ const parseErrorMessage = async (response: Response, fallback: string) => {
 	}
 };
 
-export type JsonPrimitive = string | number | boolean | null;
-export type Jsonify<T> = T extends JsonPrimitive
-	? T
-	: T extends Date
-		? string
-		: T extends Array<infer U>
-			? Jsonify<U>[]
-			: T extends object
-				? { [K in keyof T]: Jsonify<T[K]> }
-				: never;
-
-export function jsonify<T>(value: T): Jsonify<T> {
-	return JSON.parse(JSON.stringify(value)) as Jsonify<T>;
-}
-
 export const createHttpClient = (config: HttpClientConfig) => {
 	const request = async <T = unknown>(
 		input: string,
 		options: HttpRequestOptions & { accessToken?: string } = {}
-	): Promise<ApiResult<T>> => {
+	): Promise<HTTPResult<T>> => {
 		const {
 			timeoutMs = DEFAULT_TIMEOUT_MS,
 			retries = DEFAULT_RETRIES,
@@ -263,7 +265,7 @@ export const createHttpClient = (config: HttpClientConfig) => {
 				try {
 					return {
 						ok: true,
-						data: JSON.parse(text) as T,
+						data: parseJson<T>(text),
 						statusCode: response.status,
 						headers: response.headers,
 					};

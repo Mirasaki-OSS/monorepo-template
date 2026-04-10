@@ -8,18 +8,17 @@
  * ```
  */
 export {
-	type APIResponse,
 	type ApiClient,
-	type ApiTypeTransformer,
-	type ApplyApiTypeTransformer,
+	type ApplyResponseTypeTransformer,
 	type ClientConfig,
 	createApiClient,
-	type IdentityApiTypeTransformer,
+	type IdentityResponseTypeTransformer,
 	type JsonPrimitive,
+	type JsonResponseTypeTransformer,
 	type Logger as APIClientLogger,
 	parseHeaders,
+	type ResponseTypeTransformer,
 	type SerializeForJson,
-	type SerializeForJsonTransformer,
 	stripProxyAndWebsocketHeaders,
 } from './client';
 

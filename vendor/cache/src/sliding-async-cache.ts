@@ -1,3 +1,5 @@
+import { stableSerializeForCacheKey } from '@md-oss/serdes';
+
 type CacheKeyResolver<Args extends unknown[]> = (...args: Args) => string;
 
 type SlidingAsyncCacheOptions<Args extends unknown[]> = {
@@ -11,7 +13,8 @@ type CacheEntry<Value> = {
 	expiresAt: number;
 };
 
-const defaultKeyResolver = (...args: unknown[]) => JSON.stringify(args);
+const defaultKeyResolver = (...args: unknown[]) =>
+	stableSerializeForCacheKey(args);
 
 export const createSlidingAsyncCache = <Args extends unknown[], Value>(
 	loader: (...args: Args) => Promise<Value>,

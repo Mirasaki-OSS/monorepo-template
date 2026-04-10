@@ -1,4 +1,5 @@
 import type EventEmitter from 'node:events';
+import { parseJson, stringifyJson } from '@md-oss/serdes';
 import { type Cache, createCache, type Events } from 'cache-manager';
 import debug from 'debug';
 import Keyv from 'keyv';
@@ -128,7 +129,7 @@ export class CacheManager<T extends NonNullable<unknown>>
 		this.debug('[GET] Retrieving data from cache', key);
 		const jsonFromCache = (await this.cache.get<string>(key)) ?? undefined;
 		const fromCache = jsonFromCache
-			? JSON.parse(jsonFromCache, CacheManager.deserializationHelper)
+			? parseJson<T>(jsonFromCache, { reviveDates: true })
 			: undefined;
 		const isCacheHit = typeof fromCache !== 'undefined';
 
@@ -153,7 +154,7 @@ export class CacheManager<T extends NonNullable<unknown>>
 	async set(key: string, value: T | null, ttl?: number): Promise<T | null> {
 		this.debug('[SET] Storing data in cache', key);
 
-		const jsonValue = JSON.stringify(value);
+		const jsonValue = stringifyJson(value);
 
 		return await this.cache.set(key, jsonValue, ttl).then(() => {
 			this.metadata.added++;
@@ -304,21 +305,5 @@ export class CacheManager<T extends NonNullable<unknown>>
 			cached: true,
 			cachedFor: ttl ?? null,
 		});
-	}
-
-	/**
-	 * Deserialization helper for {@link JSON.parse} to handle dates.
-	 * @param _key The key of the value, unused
-	 * @param value The value to deserialize
-	 * @returns The deserialized value
-	 */
-	private static deserializationHelper(_key: string, value: unknown) {
-		if (typeof value === 'string' && value.length > 20) {
-			const regexp = /^\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d.\d\d\dZ$/.exec(value);
-			if (regexp) {
-				return new Date(value);
-			}
-		}
-		return value;
 	}
 }

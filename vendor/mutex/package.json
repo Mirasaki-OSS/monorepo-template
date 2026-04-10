@@ -1,6 +1,6 @@
 {
 	"name": "@md-oss/mutex",
-	"version": "0.2.3",
+	"version": "0.3.1",
 	"private": false,
 	"publishConfig": {
 		"access": "public",
@@ -10,6 +10,12 @@
 		"type": "git",
 		"url": "git+ssh://git@github.com/Mirasaki-OSS/monorepo-template.git",
 		"directory": "vendor/mutex"
+	},
+	"homepage": "https://github.com/Mirasaki-OSS/monorepo-template/tree/main/vendor/mutex#readme",
+	"author": {
+		"email": "contact@mirasaki.dev",
+		"name": "Mirasaki Development",
+		"url": "https://mirasaki.dev"
 	},
 	"type": "module",
 	"description": "Mutex manager with automatic cleanup and TTL support",

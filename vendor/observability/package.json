@@ -1,6 +1,6 @@
 {
 	"name": "@md-oss/observability",
-	"version": "0.2.3",
+	"version": "0.3.1",
 	"private": false,
 	"publishConfig": {
 		"access": "public",
@@ -10,6 +10,12 @@
 		"type": "git",
 		"url": "git+ssh://git@github.com/Mirasaki-OSS/monorepo-template.git",
 		"directory": "vendor/observability"
+	},
+	"homepage": "https://github.com/Mirasaki-OSS/monorepo-template/tree/main/vendor/observability#readme",
+	"author": {
+		"email": "contact@mirasaki.dev",
+		"name": "Mirasaki Development",
+		"url": "https://mirasaki.dev"
 	},
 	"type": "module",
 	"description": "Structured logging with Pino",
@@ -97,6 +103,7 @@
 	"dependencies": {
 		"@md-oss/common": "workspace:^",
 		"@md-oss/config": "workspace:^",
+		"@md-oss/serdes": "workspace:^",
 		"@t3-oss/env-nextjs": "^0.13.11",
 		"debug": "^4.4.3",
 		"pino": "^10.3.1",

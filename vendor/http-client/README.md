@@ -13,7 +13,7 @@ Opinionated fetch-based HTTP client with retries, timeouts, and typed responses.
 ## Usage
 
 ```typescript
-import { createHttpClient, isApiFailure } from '@md-oss/http-client';
+import { createHttpClient, isHTTPFailure } from '@md-oss/http-client';
 
 const api = createHttpClient({
 	serviceName: 'billing-api',
@@ -30,7 +30,7 @@ const result = await api.request<{ id: string; total: number }>(
 	}
 );
 
-if (isApiFailure(result)) {
+if (isHTTPFailure(result)) {
 	console.error(result.message);
 	return;
 }

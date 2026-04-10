@@ -1,0 +1,105 @@
+{
+	"name": "@md-oss/serdes",
+	"version": "0.3.1",
+	"private": false,
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org/"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+ssh://git@github.com/Mirasaki-OSS/monorepo-template.git",
+		"directory": "vendor/serdes"
+	},
+	"homepage": "https://github.com/Mirasaki-OSS/monorepo-template/tree/main/vendor/serdes#readme",
+	"author": {
+		"email": "contact@mirasaki.dev",
+		"name": "Mirasaki Development",
+		"url": "https://mirasaki.dev"
+	},
+	"type": "module",
+	"description": "Serializer/Deserializer for JSON, YAML, TOML, MessagePack, and CBOR",
+	"files": ["dist/**/*", "README.md"],
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.cts",
+	"exports": {
+		".": {
+			"require": {
+				"types": "./dist/index.d.cts",
+				"default": "./dist/index.cjs"
+			},
+			"import": {
+				"types": "./dist/index.d.mts",
+				"default": "./dist/index.mjs"
+			}
+		},
+		"./cbor": {
+			"require": {
+				"types": "./dist/cbor.d.cts",
+				"default": "./dist/cbor.cjs"
+			},
+			"import": {
+				"types": "./dist/cbor.d.mts",
+				"default": "./dist/cbor.mjs"
+			}
+		},
+		"./json": {
+			"require": {
+				"types": "./dist/json.d.cts",
+				"default": "./dist/json.cjs"
+			},
+			"import": {
+				"types": "./dist/json.d.mts",
+				"default": "./dist/json.mjs"
+			}
+		},
+		"./messagepack": {
+			"require": {
+				"types": "./dist/messagepack.d.cts",
+				"default": "./dist/messagepack.cjs"
+			},
+			"import": {
+				"types": "./dist/messagepack.d.mts",
+				"default": "./dist/messagepack.mjs"
+			}
+		},
+		"./toml": {
+			"require": {
+				"types": "./dist/toml.d.cts",
+				"default": "./dist/toml.cjs"
+			},
+			"import": {
+				"types": "./dist/toml.d.mts",
+				"default": "./dist/toml.mjs"
+			}
+		},
+		"./yaml": {
+			"require": {
+				"types": "./dist/yaml.d.cts",
+				"default": "./dist/yaml.cjs"
+			},
+			"import": {
+				"types": "./dist/yaml.d.mts",
+				"default": "./dist/yaml.mjs"
+			}
+		}
+	},
+	"scripts": {
+		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
+		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
+		"dev": "tsc --watch",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@md-oss/config": "workspace:^",
+		"@msgpack/msgpack": "^3.1.3",
+		"cbor-x": "^1.6.4",
+		"smol-toml": "^1.6.1",
+		"yaml": "^2.8.3"
+	},
+	"devDependencies": {
+		"pkgroll": "^2.21.5",
+		"typescript": "^5.9.3"
+	}
+}

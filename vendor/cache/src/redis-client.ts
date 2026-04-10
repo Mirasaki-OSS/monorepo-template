@@ -1,3 +1,4 @@
+import { parseJson, stringifyJson } from '@md-oss/serdes';
 import debugFactory from 'debug';
 import redis from 'redis';
 import { env } from './env';
@@ -35,7 +36,7 @@ const redisSetKv = (
 	value: unknown,
 	ttlInSeconds: number
 ): Promise<string | null> => {
-	return redisClient.set(key, JSON.stringify(value), {
+	return redisClient.set(key, stringifyJson(value), {
 		condition: 'NX',
 		expiration: {
 			type: 'EX',
@@ -90,7 +91,7 @@ const withRedis = async <T extends NotFunction>(
 	const cached = await client.get(fullKey);
 	if (cached) {
 		debug(`[REDIS] Cache hit for key: ${fullKey}`);
-		return JSON.parse(cached) as T;
+		return parseJson<T>(cached);
 	} else {
 		debug(`[REDIS] Cache miss for key: ${fullKey}`);
 	}

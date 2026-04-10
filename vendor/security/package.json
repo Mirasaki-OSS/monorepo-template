@@ -1,6 +1,6 @@
 {
 	"name": "@md-oss/security",
-	"version": "0.2.3",
+	"version": "0.3.1",
 	"private": false,
 	"publishConfig": {
 		"access": "public",
@@ -10,6 +10,12 @@
 		"type": "git",
 		"url": "git+ssh://git@github.com/Mirasaki-OSS/monorepo-template.git",
 		"directory": "vendor/security"
+	},
+	"homepage": "https://github.com/Mirasaki-OSS/monorepo-template/tree/main/vendor/security#readme",
+	"author": {
+		"email": "contact@mirasaki.dev",
+		"name": "Mirasaki Development",
+		"url": "https://mirasaki.dev"
 	},
 	"type": "module",
 	"description": "Cryptographic utilities for encryption, signed URLs, and secure streaming",
@@ -78,7 +84,8 @@
 	},
 	"dependencies": {
 		"@md-oss/common": "workspace:^",
-		"@md-oss/config": "workspace:^"
+		"@md-oss/config": "workspace:^",
+		"@md-oss/serdes": "workspace:^"
 	},
 	"devDependencies": {
 		"@types/node": "^25.5.2",

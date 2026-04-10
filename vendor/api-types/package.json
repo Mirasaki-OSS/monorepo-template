@@ -1,6 +1,6 @@
 {
 	"name": "@md-oss/api-types",
-	"version": "0.2.3",
+	"version": "0.3.1",
 	"private": false,
 	"publishConfig": {
 		"access": "public",
@@ -10,6 +10,12 @@
 		"type": "git",
 		"url": "git+ssh://git@github.com/Mirasaki-OSS/monorepo-template.git",
 		"directory": "vendor/api-types"
+	},
+	"homepage": "https://github.com/Mirasaki-OSS/monorepo-template/tree/main/vendor/api-types#readme",
+	"author": {
+		"email": "contact@mirasaki.dev",
+		"name": "Mirasaki Development",
+		"url": "https://mirasaki.dev"
 	},
 	"type": "module",
 	"description": "Type-safe API contracts, client factory, and handler helpers built on Zod",
@@ -107,6 +113,7 @@
 	"dependencies": {
 		"@md-oss/common": "workspace:^",
 		"@md-oss/config": "workspace:^",
+		"@md-oss/serdes": "workspace:^",
 		"@types/debug": "^4.1.13",
 		"debug": "^4.4.3",
 		"zod": "^4.3.6"

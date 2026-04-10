@@ -1,4 +1,5 @@
 import { createCipheriv, createDecipheriv, randomBytes } from 'node:crypto';
+import { parseJson, stringifyJson } from '@md-oss/serdes';
 
 export type CredentialEnvelope = {
 	keyId: string;
@@ -19,7 +20,7 @@ const decodeBase64Key = (keyBase64: string): Buffer => {
 };
 
 const serializePayload = (payload: unknown): string => {
-	return JSON.stringify(payload);
+	return stringifyJson(payload);
 };
 
 export const encryptEnvelope = ({
@@ -69,5 +70,5 @@ export const decryptEnvelope = <T>({
 		decipher.final(),
 	]);
 
-	return JSON.parse(decrypted.toString('utf8')) as T;
+	return parseJson<T>(decrypted.toString('utf8'));
 };

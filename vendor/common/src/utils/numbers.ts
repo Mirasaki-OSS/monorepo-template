@@ -1,3 +1,5 @@
+import { bigIntSerializationHelper } from '@md-oss/serdes';
+
 /**
  * Check if a number is an integer
  * @param n - Number to check
@@ -241,21 +243,6 @@ const calculateStandardDeviation = (values: number[]): number | null => {
 	if (typeof variance !== 'number') return null;
 	return Math.sqrt(variance);
 };
-
-/**
- * Helper for JSON.stringify to handle BigInt serialization
- * Converts large bigints to strings and small ones to numbers
- * @param _ - Key (unused)
- * @param value - Value to serialize
- * @returns Serializable value
- * @example JSON.stringify({big: 9007199254740992n}, bigIntSerializationHelper)
- */
-const bigIntSerializationHelper = (_: string, value: unknown): unknown =>
-	typeof value === 'bigint'
-		? value > BigInt(Number.MAX_SAFE_INTEGER)
-			? value.toString() // Convert large bigints to strings
-			: Number(value) // Convert small/safe bigints to numbers
-		: value; // Return other values as is
 
 export type { PrecisionMode, PrecisionOptions };
 export {

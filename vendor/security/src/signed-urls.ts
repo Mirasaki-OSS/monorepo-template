@@ -91,13 +91,19 @@ export function verifySignedUrl({
 	  } {
 	const expectedSig = generateSignature(secret, path, expires);
 	const now = Math.floor(Date.now() / 1000);
-	const match =
-		typeof sig !== 'string'
-			? crypto.timingSafeEqual(
-					Buffer.from(JSON.stringify(sig)),
-					Buffer.from(expectedSig)
-				)
-			: sig === expectedSig;
+	const match = (() => {
+		if (typeof sig !== 'string') {
+			return false;
+		}
+
+		const left = Buffer.from(sig, 'utf8');
+		const right = Buffer.from(expectedSig, 'utf8');
+		if (left.length !== right.length) {
+			return false;
+		}
+
+		return crypto.timingSafeEqual(left, right);
+	})();
 
 	if (typeof sig !== 'string' || !match) {
 		return 'InvalidSignatureError';

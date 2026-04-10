@@ -1,5 +1,21 @@
 # @md-oss/config
 
+## 0.3.1
+
+### Patch Changes
+
+- include homepage and author details for packages
+
+## 0.3.0
+
+### Minor Changes
+
+- Implement (de)serialization lib
+
+### Patch Changes
+
+- 9168c38: feat: api type transformer
+
 ## 0.2.3
 
 ### Patch Changes
