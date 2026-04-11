@@ -21,14 +21,34 @@ export type LogContext = Record<string, unknown>;
 
 type LoggerMethod = (message: string, context?: LogContext) => void;
 
+type CommonLoggerOptions = {
+	/**
+	 * Full logger name for the child. If not provided, it will inherit the parent's name. If provided, we do NOT prefix it with the parent's name, as pino's child loggers already handle namespacing.
+	 */
+	name: string;
+	/**
+	 * Log level for the child logger. If not provided, it will inherit the parent's log level.
+	 */
+	level?: LogLevel;
+	/**
+	 * Optional debug namespace for the child logger. If not provided, it will be derived from the name.
+	 */
+	debugNamespace?: string;
+};
+
+type CreateChildLogger = (
+	options: Omit<pino.ChildLoggerOptions, 'level'> & CommonLoggerOptions,
+	bindings: pino.Bindings
+) => Logger;
+
 export type Logger = {
 	trace: LoggerMethod;
 	debug: LoggerMethod;
 	info: LoggerMethod;
 	warn: LoggerMethod;
 	error: LoggerMethod;
-	pino: pino.Logger<never, boolean>;
-	createChildLogger: pino.Logger<never, boolean>['child'];
+	pino: PinoLogger;
+	createChild: CreateChildLogger;
 };
 
 const LOG_LEVEL_WEIGHTS: Record<LogLevel, number> = {
@@ -216,13 +236,17 @@ export const createLogger = ({
 	name,
 	level,
 	debugNamespace,
-}: {
-	name: string;
-	level?: LogLevel;
-	debugNamespace?: string;
+	childFor,
+}: CommonLoggerOptions & {
+	childFor?: Logger | PinoLogger;
 }): Logger => {
 	const activeLevel = level ?? resolveLogLevel(process.env.LOG_LEVEL);
-	const logger = getRootLogger().child({ logger: name });
+	const parentLogger = childFor
+		? 'pino' in childFor
+			? childFor.pino
+			: childFor
+		: getRootLogger();
+	const pinoLogger = parentLogger.child({ logger: name });
 	const debugLogger = createDebug(debugNamespace ?? toDebugNamespace(name));
 
 	const write = (
@@ -235,9 +259,9 @@ export const createLogger = ({
 		}
 
 		if (context) {
-			logger[targetLevel](context, message);
+			pinoLogger[targetLevel](context, message);
 		} else {
-			logger[targetLevel](message);
+			pinoLogger[targetLevel](message);
 		}
 
 		if (debugLogger.enabled) {
@@ -252,8 +276,14 @@ export const createLogger = ({
 	};
 
 	return {
-		pino: logger,
-		createChildLogger: logger.child.bind(logger),
+		pino: pinoLogger,
+		createChild: (options, bindings) =>
+			createLogger({
+				name: options?.name || name,
+				level: options?.level || activeLevel,
+				debugNamespace: options?.debugNamespace,
+				childFor: pinoLogger.child(bindings, options),
+			}),
 		trace: (message, context) => write('trace', message, context),
 		debug: (message, context) => write('debug', message, context),
 		info: (message, context) => write('info', message, context),
