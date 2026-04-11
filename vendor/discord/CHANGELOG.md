@@ -1,5 +1,16 @@
 # @md-oss/discord
 
+## 0.5.0
+
+### Minor Changes
+
+- 780fcc6: discord embed schemas and utilities
+
+### Patch Changes
+
+- Updated dependencies [780fcc6]
+  - @md-oss/common@0.5.0
+
 ## 0.3.9
 
 ### Patch Changes

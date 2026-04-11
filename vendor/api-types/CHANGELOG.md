@@ -1,5 +1,13 @@
 # @md-oss/api-types
 
+## 0.5.0
+
+### Patch Changes
+
+- Updated dependencies [780fcc6]
+  - @md-oss/common@0.5.0
+  - @md-oss/http-client@0.5.0
+
 ## 0.4.0
 
 ### Patch Changes
