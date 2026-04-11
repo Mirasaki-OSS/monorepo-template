@@ -27,6 +27,8 @@ export type Logger = {
 	info: LoggerMethod;
 	warn: LoggerMethod;
 	error: LoggerMethod;
+	pino: pino.Logger<never, boolean>;
+	createChildLogger: pino.Logger<never, boolean>['child'];
 };
 
 const LOG_LEVEL_WEIGHTS: Record<LogLevel, number> = {
@@ -210,10 +212,6 @@ const getRootLogger = () => {
 
 const logger = getRootLogger();
 
-const createChildLogger = (meta: Record<string, unknown>): PinoLogger => {
-	return logger.child(meta);
-};
-
 export const createLogger = ({
 	name,
 	level,
@@ -254,6 +252,8 @@ export const createLogger = ({
 	};
 
 	return {
+		pino: logger,
+		createChildLogger: logger.child.bind(logger),
 		trace: (message, context) => write('trace', message, context),
 		debug: (message, context) => write('debug', message, context),
 		info: (message, context) => write('info', message, context),
@@ -266,4 +266,4 @@ export type winston = {
 	Logger: PinoLogger;
 };
 
-export { createChildLogger, logger, logLevel, type PinoLogger, transports };
+export { logger, logLevel, type PinoLogger, transports };
