@@ -1,5 +1,11 @@
 # @md-oss/http-client
 
+## 0.4.0
+
+### Minor Changes
+
+- 37f3fb6: feat(http-client): always include raw response
+
 ## 0.3.9
 
 ### Patch Changes
