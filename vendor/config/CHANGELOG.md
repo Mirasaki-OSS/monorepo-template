@@ -1,5 +1,11 @@
 # @md-oss/config
 
+## 0.3.9
+
+### Patch Changes
+
+- 877cfab: feat: api-client implements http-client
+
 ## 0.3.8
 
 ### Patch Changes

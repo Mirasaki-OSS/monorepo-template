@@ -1,5 +1,15 @@
 # @md-oss/http-client
 
+## 0.3.9
+
+### Patch Changes
+
+- 877cfab: feat: api-client implements http-client
+- Updated dependencies [877cfab]
+  - @md-oss/common@0.3.9
+  - @md-oss/config@0.3.9
+  - @md-oss/serdes@0.3.9
+
 ## 0.3.8
 
 ### Patch Changes
