@@ -1,7 +1,14 @@
 import { mergeHeaders, normalizeHeaders } from '@md-oss/common/http';
-import { HTTPError } from '@md-oss/common/http/errors';
+import {
+	type CreateHTTPErrorOptions,
+	HTTPError,
+} from '@md-oss/common/http/errors';
 import { statusCodes } from '@md-oss/common/http/status-codes';
-import type { HeadersInit, HTTPResponse } from '@md-oss/common/http/types';
+import type {
+	HeadersInit,
+	HTTPErrorResponse,
+	HTTPResponse,
+} from '@md-oss/common/http/types';
 import { RuntimeUtils } from '@md-oss/common/utils';
 import { parseJson } from '@md-oss/serdes';
 import {
@@ -62,6 +69,31 @@ export * from './resolvers';
 export * from './retry';
 export type * from './types';
 
+export type HTTPClientResponse<
+	T,
+	R extends HTTPResponse<T>,
+> = R extends HTTPErrorResponse
+	? HTTPErrorResponse & {
+			/** The original Response object from the Fetch API (cloned). May be null if the error was due to a network failure. */
+			response: Response | null;
+		}
+	: R & {
+			/** The original Response object from the Fetch API (cloned). */
+			response: Response;
+		};
+
+const createRequestError = <T>(
+	body: CreateHTTPErrorOptions,
+	response: Response | null
+): HTTPClientResponse<T, HTTPErrorResponse> => {
+	return {
+		...new HTTPError({
+			...body,
+		}).toJSON(),
+		response,
+	};
+};
+
 export class HttpClient {
 	readonly baseUrl: string;
 	readonly serviceName: string;
@@ -96,7 +128,7 @@ export class HttpClient {
 	async request<T = unknown>(
 		input: string,
 		options: HTTPClientRequestOptions
-	): Promise<HTTPResponse<T>> {
+	): Promise<HTTPClientResponse<T, HTTPResponse<T>>> {
 		const {
 			timeoutMs = DEFAULT_TIMEOUT_MS,
 			retries = DEFAULT_RETRIES,
@@ -139,10 +171,12 @@ export class HttpClient {
 				});
 				clearTimeout(timeout);
 
+				const responseClone = response.clone();
 				const responseFields = {
 					statusCode: response.status,
 					statusText: response.statusText,
 					headers: normalizeHeaders(response.headers),
+					response: responseClone,
 				};
 
 				if (!response.ok) {
@@ -169,18 +203,13 @@ export class HttpClient {
 						`${resolvedServiceName} request failed (${response.status})`
 					);
 
-					return new HTTPError({
-						...errorBody,
-						...responseFields,
-					}).toJSON();
-				}
-
-				if (parseAs === 'raw') {
-					return {
-						ok: true,
-						data: response as unknown as T,
-						...responseFields,
-					};
+					return createRequestError(
+						{
+							...errorBody,
+							...responseFields,
+						},
+						response
+					);
 				}
 
 				if (parseAs === 'text') {
@@ -207,12 +236,15 @@ export class HttpClient {
 						...responseFields,
 					};
 				} catch {
-					return new HTTPError({
-						code: 'INVALID_RESPONSE',
-						message: `${resolvedServiceName} returned invalid JSON`,
-						...responseFields,
-						details: { responseText: text },
-					}).toJSON();
+					return createRequestError(
+						{
+							code: 'INVALID_RESPONSE',
+							message: `${resolvedServiceName} returned invalid JSON`,
+							...responseFields,
+							details: { responseText: text },
+						},
+						response
+					);
 				}
 			} catch (error) {
 				clearTimeout(timeout);
@@ -235,26 +267,32 @@ export class HttpClient {
 					continue;
 				}
 
-				return new HTTPError({
-					code: 'NETWORK_ERROR',
-					message: `${resolvedServiceName} request failed due to a network error`,
-					statusCode: 0,
-					statusText: 'Network Error',
-					details: {
-						originalError:
-							error instanceof Error ? error.message : String(error),
+				return createRequestError(
+					{
+						code: 'NETWORK_ERROR',
+						message: `${resolvedServiceName} request failed due to a network error`,
+						statusCode: 0,
+						statusText: 'Network Error',
+						details: {
+							originalError:
+								error instanceof Error ? error.message : String(error),
+						},
 					},
-				}).toJSON();
+					null
+				);
 			}
 		}
 
-		return new HTTPError({
-			code: 'RETRIES_EXCEEDED',
-			message: `${resolvedServiceName} request failed after retries`,
-			statusCode: statusCodes.SERVICE_UNAVAILABLE,
-			statusText: 'Service Unavailable',
-			details: null,
-		}).toJSON();
+		return createRequestError(
+			{
+				code: 'RETRIES_EXCEEDED',
+				message: `${resolvedServiceName} request failed after retries`,
+				statusCode: statusCodes.SERVICE_UNAVAILABLE,
+				statusText: 'Service Unavailable',
+				details: null,
+			},
+			null
+		);
 	}
 }
 

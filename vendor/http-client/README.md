@@ -9,7 +9,7 @@ Opinionated fetch-based HTTP client with retries, timeouts, and typed responses.
 - Automatic JSON `Accept` / `Content-Type` defaults when appropriate
 - Timeout and retry with exponential backoff + jitter
 - Unified success/error result shape
-- JSON, text, or raw response parsing modes
+- JSON or text response parsing modes (raw response always included)
 
 ## Usage
 

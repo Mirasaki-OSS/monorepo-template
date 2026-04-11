@@ -16,7 +16,7 @@ export type HttpRequestOptions = Omit<RequestInit, 'body'> & {
 	retryBaseDelayMs?: number;
 	retryMaxDelayMs?: number;
 	retryOnStatuses?: number[];
-	parseAs?: 'json' | 'text' | 'raw';
+	parseAs?: 'json' | 'text';
 };
 
 export type HttpClientConfig = {
