@@ -1,5 +1,11 @@
 # @md-oss/observability
 
+## 0.3.10
+
+### Patch Changes
+
+- 8a08d54: refactor: normalize logger child instantiation and return types
+
 ## 0.3.9
 
 ### Patch Changes
