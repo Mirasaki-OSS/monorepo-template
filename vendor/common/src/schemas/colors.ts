@@ -6,4 +6,9 @@ const hexColorSchema = z.string().regex(new RegExp(hexColorRegex), {
 });
 type HexColor = z.infer<typeof hexColorSchema>;
 
-export { type HexColor, hexColorRegex, hexColorSchema };
+const hexColorToInt = (hex: string): number => {
+	const normalizedHex = hex.replace(/^#/, '');
+	return parseInt(normalizedHex, 16);
+};
+
+export { type HexColor, hexColorRegex, hexColorSchema, hexColorToInt };
