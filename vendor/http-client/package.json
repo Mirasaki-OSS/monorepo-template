@@ -24,13 +24,43 @@
 	"module": "./dist/index.mjs",
 	"types": "./dist/index.d.cts",
 	"exports": {
-		"require": {
-			"types": "./dist/index.d.cts",
-			"default": "./dist/index.cjs"
+		".": {
+			"require": {
+				"types": "./dist/index.d.cts",
+				"default": "./dist/index.cjs"
+			},
+			"import": {
+				"types": "./dist/index.d.mts",
+				"default": "./dist/index.mjs"
+			}
 		},
-		"import": {
-			"types": "./dist/index.d.mts",
-			"default": "./dist/index.mjs"
+		"./resolvers": {
+			"require": {
+				"types": "./dist/resolvers.d.cts",
+				"default": "./dist/resolvers.cjs"
+			},
+			"import": {
+				"types": "./dist/resolvers.d.mts",
+				"default": "./dist/resolvers.mjs"
+			}
+		},
+		"./retry": {
+			"require": {
+				"types": "./dist/retry.d.cts",
+				"default": "./dist/retry.cjs"
+			},
+			"import": {
+				"types": "./dist/retry.d.mts",
+				"default": "./dist/retry.mjs"
+			}
+		},
+		"./types": {
+			"require": {
+				"types": "./dist/types.d.cts"
+			},
+			"import": {
+				"types": "./dist/types.d.mts"
+			}
 		}
 	},
 	"scripts": {

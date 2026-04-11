@@ -113,6 +113,9 @@ importers:
       '@md-oss/config':
         specifier: workspace:^
         version: link:../config
+      '@md-oss/http-client':
+        specifier: workspace:^
+        version: link:../http-client
       '@md-oss/serdes':
         specifier: workspace:^
         version: link:../serdes

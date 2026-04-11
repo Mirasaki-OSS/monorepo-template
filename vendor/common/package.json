@@ -105,6 +105,16 @@
 				"default": "./dist/http/guards.mjs"
 			}
 		},
+		"./http/headers": {
+			"require": {
+				"types": "./dist/http/headers.d.cts",
+				"default": "./dist/http/headers.cjs"
+			},
+			"import": {
+				"types": "./dist/http/headers.d.mts",
+				"default": "./dist/http/headers.mjs"
+			}
+		},
 		"./http/requests": {
 			"require": {
 				"types": "./dist/http/requests.d.cts"

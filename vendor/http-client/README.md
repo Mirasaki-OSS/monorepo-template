@@ -6,6 +6,7 @@ Opinionated fetch-based HTTP client with retries, timeouts, and typed responses.
 
 - Base URL + path parameter resolution
 - Query serialization (including arrays)
+- Automatic JSON `Accept` / `Content-Type` defaults when appropriate
 - Timeout and retry with exponential backoff + jitter
 - Unified success/error result shape
 - JSON, text, or raw response parsing modes
@@ -13,7 +14,7 @@ Opinionated fetch-based HTTP client with retries, timeouts, and typed responses.
 ## Usage
 
 ```typescript
-import { createHttpClient, isHTTPFailure } from '@md-oss/http-client';
+import { createHttpClient, isHTTPErrorResponse } from '@md-oss/http-client';
 
 const api = createHttpClient({
 	serviceName: 'billing-api',
@@ -30,7 +31,7 @@ const result = await api.request<{ id: string; total: number }>(
 	}
 );
 
-if (isHTTPFailure(result)) {
+if (isHTTPErrorResponse(result)) {
 	console.error(result.message);
 	return;
 }

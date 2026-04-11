@@ -1,12 +1,6 @@
 import { isRecord } from '../utils/records';
 import { HTTPError } from './errors';
-import type { HeadersInit, HTTPErrorResponse } from './types';
-
-export type HTTPErrorFields = {
-	code: HTTPErrorResponse['code'];
-	message: HTTPErrorResponse['message'];
-	details: HTTPErrorResponse['details'];
-};
+import type { HeadersInit, HTTPErrorFields, HTTPErrorResponse } from './types';
 
 const isDetails = (value: unknown): value is HTTPErrorResponse['details'] => {
 	return value === null || isRecord(value);

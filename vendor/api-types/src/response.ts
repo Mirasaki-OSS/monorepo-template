@@ -1,4 +1,4 @@
-import type { HTTPError } from '@md-oss/common/http/errors';
+import { type HTTPError, resolveStatusText } from '@md-oss/common/http/errors';
 import type {
 	MinimalRequest,
 	MinimalRequestHandler,
@@ -25,7 +25,6 @@ type SendTypedResponseOptions<
 	data: API[TPath]['endpoints'][TMethod]['response'];
 	status?: number;
 	headers?: Record<string, string>;
-	message?: string;
 	flattenResponse?: boolean;
 };
 
@@ -154,7 +153,6 @@ const sendTypedResponse = <
 		data,
 		status = dataIsVoid ? 204 : 200,
 		headers = {},
-		message = null,
 		flattenResponse = false,
 	} = options;
 
@@ -186,30 +184,21 @@ const sendTypedResponse = <
 		return;
 	}
 
-	const responseBodyNoData = {
-		ok: true,
-		statusCode: status,
-		message,
-	} as const;
-
 	if (flattenResponse) {
-		debugRoute(
-			'Sending successful (flattened) response with message: %s',
-			message || '(no message)'
-		);
+		debugRoute('Sending successful (flattened) response with body: %O', data);
 		res.status(status).json(data);
 		return;
 	}
 
 	const responseBody = {
-		...responseBodyNoData,
+		ok: true,
+		statusCode: status,
+		statusText: resolveStatusText(status),
+		headers,
 		data,
 	} satisfies HTTPSuccessResponse<API[TPath]['endpoints'][TMethod]['response']>;
 
-	debugRoute(
-		'Sending successful response with message: %s',
-		message || '(no message)'
-	);
+	debugRoute('Sending successful response with body: %O', responseBody);
 	res.status(status).json(responseBody);
 };
 

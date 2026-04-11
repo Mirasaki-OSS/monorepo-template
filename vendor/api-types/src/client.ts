@@ -1,12 +1,18 @@
-import { HTTPError } from '@md-oss/common/http/errors';
 import {
-	isHTTPError,
+	type HeadersInit,
+	mergeHeaders,
+	parseHeaders,
+	stripProxyAndWebsocketHeaders,
+} from '@md-oss/common/http';
+import {
+	createHttpClient,
+	type HTTPClientRequestOptions,
+	HTTPError,
+	type HttpClientConfig,
 	isHTTPErrorResponse,
 	parseError,
-} from '@md-oss/common/http/guards';
-import { statusCodes } from '@md-oss/common/http/status-codes';
+} from '@md-oss/http-client';
 import type { SerializedJson } from '@md-oss/serdes';
-import { stringifyJson } from '@md-oss/serdes';
 import type { RequestOptions } from './request';
 import type { InferApi, MethodKeys, RouteKeys, RouteRegistry } from './types';
 
@@ -30,65 +36,7 @@ const interpolatePath = (
 	});
 };
 
-const forbiddenProxyHeaders = [
-	'proxy-authorization',
-	'proxy-authenticate',
-	'te',
-	'trailer',
-	'transfer-encoding',
-	'upgrade',
-	'via',
-];
-
-const forbiddenWebsocketHeaders = ['connection', 'host', 'upgrade'];
-
-const headersToRecord = (
-	headers: Headers | Record<string, string>
-): Record<string, string> => {
-	if (headers instanceof Headers) {
-		const result: Record<string, string> = {};
-		headers.forEach((value, key) => {
-			result[key] = value;
-		});
-		return result;
-	}
-
-	if (typeof headers === 'object' && headers !== null) {
-		return headers as Record<string, string>;
-	}
-
-	throw new TypeError('Headers must be an object or an instance of Headers');
-};
-
-export const stripProxyAndWebsocketHeaders = (
-	headers: Headers | Record<string, string>
-): Record<string, string> => {
-	const resolvedHeaders = headersToRecord(headers);
-
-	for (const header of [
-		...forbiddenProxyHeaders,
-		...forbiddenWebsocketHeaders,
-	]) {
-		if (header in resolvedHeaders) {
-			delete resolvedHeaders[header];
-		}
-	}
-
-	return resolvedHeaders;
-};
-
-export const parseHeaders = (
-	headers: Headers | Record<string, string>,
-	shouldStripProxyAndWebsocketHeaders = true
-): Record<string, string> => {
-	let resolvedHeaders = headersToRecord(headers);
-
-	if (shouldStripProxyAndWebsocketHeaders) {
-		resolvedHeaders = stripProxyAndWebsocketHeaders(resolvedHeaders);
-	}
-
-	return resolvedHeaders;
-};
+export { parseHeaders, stripProxyAndWebsocketHeaders };
 
 export type Logger = {
 	error: (message: string, data?: Record<string, unknown>) => void;
@@ -97,9 +45,20 @@ export type Logger = {
 export type ClientConfig = {
 	baseUrl: string;
 	logger?: Logger;
-	defaultHeaders?:
-		| Record<string, string>
-		| (() => Record<string, string> | Promise<Record<string, string>>);
+	defaultHeaders?: HeadersInit | (() => HeadersInit | Promise<HeadersInit>);
+	httpClientConfig?: Omit<HttpClientConfig, 'baseUrl' | 'serviceName'> & {
+		requestOptions?: Omit<
+			HTTPClientRequestOptions,
+			| 'accessToken'
+			| 'path'
+			| 'serviceName'
+			| 'method'
+			| 'headers'
+			| 'body'
+			| 'query'
+			| 'pathParams'
+		>;
+	};
 };
 
 export type IdentityResponseTypeTransformer = 'identity';
@@ -146,11 +105,54 @@ export function createApiClient<
 	TTransformer extends
 		ResponseTypeTransformer = IdentityResponseTypeTransformer,
 >(_registry: TRegistry, config: ClientConfig) {
-	const { baseUrl, logger: _logger = console } = config;
+	const {
+		baseUrl,
+		logger: _logger = console,
+		defaultHeaders,
+		httpClientConfig,
+	} = config;
+	const {
+		requestOptions: defaultRequestOptions = {},
+		defaultHeaders: httpClientDefaultHeaders,
+		...sharedHttpClientConfig
+	} = httpClientConfig ?? {};
+
+	const hasDynamicDefaultHeaders =
+		typeof defaultHeaders === 'function' ||
+		typeof httpClientDefaultHeaders === 'function';
+
+	const sharedDefaultHeaders = hasDynamicDefaultHeaders
+		? async ({ accessToken }: { accessToken?: string }) => {
+				const resolvedApiHeaders =
+					typeof defaultHeaders === 'function'
+						? await defaultHeaders()
+						: defaultHeaders;
+				const resolvedHttpClientHeaders =
+					typeof httpClientDefaultHeaders === 'function'
+						? await httpClientDefaultHeaders({ accessToken })
+						: httpClientDefaultHeaders;
+
+				return parseHeaders(
+					mergeHeaders(resolvedHttpClientHeaders, resolvedApiHeaders),
+					true
+				);
+			}
+		: parseHeaders(
+				mergeHeaders(httpClientDefaultHeaders, defaultHeaders),
+				true
+			);
+
+	const client = createHttpClient({
+		baseUrl,
+		serviceName: 'api-client',
+		...sharedHttpClientConfig,
+		defaultHeaders: sharedDefaultHeaders,
+	});
 
 	return {
+		client,
 		/**
-		 * Make a type-safe request to the API.
+		 * Make a type-safe request to an endpoint from the route registry.
 		 */
 		async request<
 			TPath extends RouteKeys<TRegistry>,
@@ -163,16 +165,8 @@ export function createApiClient<
 				TPath,
 				TMethod
 			> & {
-				headers?:
-					| Record<string, string>
-					| Headers
-					| (Headers & {
-							append(...args: unknown[]): void;
-							set(...args: unknown[]): void;
-							delete(...args: unknown[]): void;
-					  });
+				headers?: HeadersInit;
 				metadata?: Record<string, unknown>;
-				baseUrl?: string;
 				logger?: Logger;
 			}
 		): Promise<
@@ -198,54 +192,15 @@ export function createApiClient<
 			} = options;
 			const logger = requestLogger || _logger;
 
-			let fullPath: string;
+			let endpoint: string;
+			let requestHeaders: Record<string, string>;
+
 			try {
-				fullPath = interpolatePath(path, params || {});
-			} catch (error) {
-				return parseError(
-					error,
-					'BAD_REQUEST',
-					'Failed to interpolate path with provided params'
+				endpoint = interpolatePath(
+					path,
+					params as Record<string, string | number>
 				);
-			}
-
-			if (query && typeof query === 'object') {
-				const queryParams = new URLSearchParams();
-				for (const [key, value] of Object.entries(query)) {
-					if (value != null) queryParams.append(key, String(value));
-				}
-				if ([...queryParams].length > 0) {
-					fullPath += `?${queryParams.toString()}`;
-				}
-			}
-
-			let endpoint: string,
-				requestUrl: string,
-				requestHeaders: Record<string, string>,
-				requestBody: string | null;
-
-			try {
-				endpoint = fullPath;
-				requestUrl = new URL(endpoint, options?.baseUrl ?? baseUrl).toString();
-
-				// Resolve default headers
-				const defaultHeaders =
-					typeof config.defaultHeaders === 'function'
-						? await config.defaultHeaders()
-						: config.defaultHeaders || {};
-
-				requestHeaders = {
-					Accept: 'application/json',
-					...(body ? { 'Content-Type': 'application/json' } : {}),
-					...parseHeaders(
-						{
-							...headers,
-							...defaultHeaders,
-						},
-						true
-					),
-				};
-				requestBody = body ? stringifyJson(body) : null;
+				requestHeaders = parseHeaders(headers, true);
 			} catch (error) {
 				return parseError(
 					error,
@@ -254,153 +209,73 @@ export function createApiClient<
 				);
 			}
 
-			// Unset content-length so fetch can set it automatically
-			if ('content-length' in requestHeaders) {
-				delete requestHeaders['content-length'];
-			}
-			if ('Content-Length' in requestHeaders) {
-				delete requestHeaders['Content-Length'];
-			}
-
-			const response = await fetch(requestUrl, {
-				method,
-				credentials: 'include',
-				headers: requestHeaders,
-				body: requestBody,
-			}).catch((error) => {
-				console.error(`Network error while requesting ${endpoint}:`, error);
-				logger.error(`Network error while requesting ${endpoint}: ${error}`, {
-					...metadata,
-					path,
+			try {
+				const response = await client.request<
+					LocalResponse | { data: LocalResponse }
+				>(path, {
+					...defaultRequestOptions,
 					method,
-					params: JSON.stringify(params, null, 2),
-					query: JSON.stringify(query, null, 2),
-					body: requestBody,
-					error: String(error),
-					headers: JSON.stringify(requestHeaders, null, 2),
-				});
-				return new HTTPError(statusCodes.SERVICE_UNAVAILABLE, {
-					code: 'NETWORK_ERROR',
-					message: `Network error while requesting ${endpoint}`,
-					details: null,
-				});
-			});
-
-			if (isHTTPError(response)) {
-				return response;
-			}
-
-			if (isHTTPErrorResponse(response)) {
-				return new HTTPError({
-					statusCode: response.statusCode,
-					statusText: response.statusText,
-					code: response.code,
-					message: response.message,
-					details: response.details,
-					headers: response.headers,
-				});
-			}
-
-			if (!response.ok) {
-				const error = await response.json().catch(() => ({}));
-				const isRateLimitError = response.status === 429;
-				const isAuthError = response.status === 401 || response.status === 403;
-				if (!isAuthError && !isRateLimitError) {
-					logger.error(
-						`Request to ${endpoint} failed with status ${response.status}`,
-						{
-							...metadata,
-							path,
-							method,
-							params: JSON.stringify(params, null, 2),
-							query: JSON.stringify(query, null, 2),
-							body: body ? JSON.stringify(body, null, 2) : undefined,
-							status: response.status,
-							error: JSON.stringify(error, null, 2),
-						}
-					);
-				}
-				if (isHTTPErrorResponse(error)) {
-					return new HTTPError({
-						statusCode: error.statusCode,
-						statusText: error.statusText,
-						code: error.code,
-						message: error.message,
-						details: error.details,
-					});
-				}
-				return new HTTPError(statusCodes.SERVICE_UNAVAILABLE, {
-					code: 'REQUEST_FAILED',
-					message: `Request failed with status ${response.status}`,
-					details: {
-						endpoint,
-						response: JSON.stringify(error, null, 2),
-					},
-				});
-			}
-
-			if (response.status === 204) {
-				return null as LocalResponse;
-			}
-
-			const json = await response.json().catch(() => {
-				return new HTTPError(statusCodes.SERVICE_UNAVAILABLE, {
-					code: 'INVALID_RESPONSE',
-					message: `Failed to parse response from ${endpoint}`,
-					details: {
-						status: response.status,
-						statusText: response.statusText,
-					},
-				});
-			});
-
-			if (json && typeof json === 'object' && 'data' in json) {
-				return json.data as LocalResponse;
-			}
-
-			if (isHTTPError(json) || isHTTPErrorResponse(json)) {
-				const error =
-					json instanceof HTTPError
-						? json
-						: new HTTPError({
-								statusCode: json.statusCode,
-								statusText: json.statusText,
-								code: json.code,
-								message: json.message,
-								details: json.details,
-							});
-
-				logger.error(`API error from ${endpoint}`, {
-					...metadata,
-					path,
-					method,
-					params,
-					query,
+					credentials: defaultRequestOptions.credentials ?? 'include',
+					headers: requestHeaders,
 					body,
-					status: response.status,
-					error,
+					query,
+					pathParams: params as Record<string, string | number> | undefined,
+					serviceName: endpoint,
 				});
-				return error;
+
+				if (isHTTPErrorResponse(response)) {
+					const isRateLimitError = response.statusCode === 429;
+					const isAuthError =
+						response.statusCode === 401 || response.statusCode === 403;
+					const error = new HTTPError({
+						statusCode: response.statusCode,
+						statusText: response.statusText,
+						code: response.code,
+						message: response.message,
+						details: response.details,
+						headers: response.headers,
+					});
+
+					if (!isAuthError && !isRateLimitError) {
+						logger.error(
+							`Request to ${endpoint} failed with status ${response.statusCode}`,
+							{
+								...metadata,
+								path,
+								method,
+								params,
+								query,
+								body,
+								status: response.statusCode,
+								error,
+							}
+						);
+					}
+
+					return error;
+				}
+
+				if (response.statusCode === 204) {
+					return null as LocalResponse;
+				}
+
+				const responseData = response.data;
+				if (
+					responseData &&
+					typeof responseData === 'object' &&
+					'data' in responseData
+				) {
+					return responseData.data as LocalResponse;
+				}
+
+				return responseData as LocalResponse;
+			} catch (error) {
+				return parseError(
+					error,
+					'REQUEST_FAILED',
+					`Failed to execute request to ${endpoint}`
+				);
 			}
-
-			logger.error(`Unexpected response from ${endpoint}`, {
-				...metadata,
-				path,
-				method,
-				params,
-				query,
-				body,
-				status: response.status,
-				response: json,
-			});
-
-			return new HTTPError(statusCodes.SERVICE_UNAVAILABLE, {
-				code: 'UNEXPECTED_RESPONSE',
-				message: `Unexpected response from ${endpoint}`,
-				details: {
-					response: JSON.stringify(json, null, 2),
-				},
-			});
 		},
 	};
 }

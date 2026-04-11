@@ -111,6 +111,7 @@
 	"dependencies": {
 		"@md-oss/common": "workspace:^",
 		"@md-oss/config": "workspace:^",
+		"@md-oss/http-client": "workspace:^",
 		"@md-oss/serdes": "workspace:^",
 		"@types/debug": "^4.1.13",
 		"debug": "^4.4.3",
