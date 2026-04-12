@@ -1,5 +1,11 @@
 # @md-oss/common
 
+## 0.5.2
+
+### Patch Changes
+
+- 65fad13: feat(embeds): add max fields limit and description for embed fields
+
 ## 0.5.1
 
 ### Patch Changes
