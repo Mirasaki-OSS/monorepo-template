@@ -1,5 +1,12 @@
 # @md-oss/security
 
+## 0.5.0
+
+### Patch Changes
+
+- Updated dependencies [780fcc6]
+  - @md-oss/common@0.5.0
+
 ## 0.3.9
 
 ### Patch Changes
