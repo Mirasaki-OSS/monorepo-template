@@ -4,6 +4,7 @@ import {
 	type DiscordEmbeds,
 	discordEmbedSchema,
 	discordEmbedsSchema,
+	EmbedType,
 } from '@md-oss/common/schemas/discord';
 import { EmbedBuilder } from 'discord.js';
 
@@ -110,7 +111,9 @@ export const buildEmbedsFromData = (data: DiscordEmbeds): EmbedBuilder[] => {
  * @see {@link validateDiscordEmbedData} for validating the resulting embed data after merging.
  */
 export const mergeEmbedData = (...embeds: DiscordEmbed[]): DiscordEmbed => {
-	const merged: DiscordEmbed = {};
+	const merged: DiscordEmbed = {
+		type: EmbedType.Rich,
+	};
 
 	for (const embed of embeds) {
 		if (embed.title) merged.title = embed.title;
