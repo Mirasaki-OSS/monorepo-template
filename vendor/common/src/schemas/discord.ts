@@ -42,7 +42,12 @@ enum EmbedType {
 	PollResult = 'poll_result',
 }
 
-const discordSnowflakeSchema = z.string().regex(/^\d{17,19}$/);
+const discordSnowflakeSchema = z
+	.string()
+	.regex(/^\d{17,19}$/)
+	.describe(
+		'Discord snowflake ID represented as a numeric string (typically 17 to 19 digits).'
+	);
 
 type DiscordSnowflake = z.infer<typeof discordSnowflakeSchema>;
 
@@ -57,38 +62,43 @@ const allowedDiscordWebhookHosts = new Set([
 	'canary.discordapp.com',
 ]);
 
-const discordWebhookUrlSchema = z.url().transform((value, ctx) => {
-	const url = new URL(value);
+const discordWebhookUrlSchema = z
+	.url()
+	.describe(
+		'Discord webhook URL. Must use https and a supported Discord host; normalized to the canonical discord.com host.'
+	)
+	.transform((value, ctx) => {
+		const url = new URL(value);
 
-	if (url.protocol !== 'https:') {
-		ctx.issues.push({
-			code: 'custom',
-			input: value,
-			message: 'Discord webhook URL must use https.',
-		});
-		return z.NEVER;
-	}
+		if (url.protocol !== 'https:') {
+			ctx.issues.push({
+				code: 'custom',
+				input: value,
+				message: 'Discord webhook URL must use https.',
+			});
+			return z.NEVER;
+		}
 
-	if (!allowedDiscordWebhookHosts.has(url.hostname)) {
-		ctx.issues.push({
-			code: 'custom',
-			input: value,
-			message: 'Discord webhook URL host is not supported.',
-		});
-		return z.NEVER;
-	}
+		if (!allowedDiscordWebhookHosts.has(url.hostname)) {
+			ctx.issues.push({
+				code: 'custom',
+				input: value,
+				message: 'Discord webhook URL host is not supported.',
+			});
+			return z.NEVER;
+		}
 
-	if (!discordWebhookPathRegex.test(url.pathname)) {
-		ctx.issues.push({
-			code: 'custom',
-			input: value,
-			message: 'Discord webhook URL path is invalid.',
-		});
-		return z.NEVER;
-	}
+		if (!discordWebhookPathRegex.test(url.pathname)) {
+			ctx.issues.push({
+				code: 'custom',
+				input: value,
+				message: 'Discord webhook URL path is invalid.',
+			});
+			return z.NEVER;
+		}
 
-	return `https://discord.com${url.pathname}`;
-});
+		return `https://discord.com${url.pathname}`;
+	});
 
 type DiscordWebhookUrl = z.infer<typeof discordWebhookUrlSchema>;
 
@@ -249,7 +259,7 @@ const discordEmbedSchemaBase = z.object({
 		.optional()
 		.nullable()
 		.describe(
-			'Color of the Discord embed in hexadecimal format (e.g., #FF5733).'
+			'Left accent color for the embed, as a hexadecimal value (e.g., #FF5733). Set null to explicitly clear it.'
 		),
 	url: z
 		.url()
@@ -260,14 +270,19 @@ const discordEmbedSchemaBase = z.object({
 		.string()
 		.optional()
 		.nullable()
-		.describe('ISO 8601 timestamp displayed in the embed footer area.'),
+		.describe(
+			'ISO 8601 timestamp shown in the footer time area (for example, 2026-04-12T09:30:00.000Z).'
+		),
 	type: z
 		.enum([
 			EmbedType.Rich,
+			EmbedType.GIFV,
 			EmbedType.Image,
 			EmbedType.Video,
 			EmbedType.Article,
 			EmbedType.Link,
+			EmbedType.AutoModerationMessage,
+			EmbedType.PollResult,
 		])
 		.optional()
 		.default(EmbedType.Rich)
@@ -280,7 +295,16 @@ const _discordEmbedSchema = discordEmbedSchemaBase
 	.extend({
 		thumbnail: discordEmbedThumbnailSchema.optional(),
 		footer: discordEmbedFooterSchema.optional(),
-		fields: z.array(discordEmbedFieldSchema).optional(),
+		fields: z
+			.array(discordEmbedFieldSchema)
+			.max(
+				DiscordMagic.EMBED_FIELDS_MAX,
+				`A Discord embed can have at most ${DiscordMagic.EMBED_FIELDS_MAX} fields.`
+			)
+			.optional()
+			.describe(
+				'Optional array of fields to display in the embed. Fields are displayed in the order they are provided.'
+			),
 		provider: discordEmbedProviderSchema.optional(),
 		author: discordEmbedAuthorSchema.optional(),
 		image: discordEmbedImageSchema.optional(),
