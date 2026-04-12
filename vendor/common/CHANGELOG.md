@@ -1,5 +1,12 @@
 # @md-oss/common
 
+## 0.5.1
+
+### Patch Changes
+
+- d2d217a: update discord embed schema with defaults and optionals
+- 12248e1: feat(common): improve Discord embed schemas with detailed descriptions for clarity
+
 ## 0.5.0
 
 ### Minor Changes
