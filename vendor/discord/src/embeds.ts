@@ -1,3 +1,4 @@
+import { DiscordMagic } from '@md-oss/common/constants/discord';
 import { hexColorToInt } from '@md-oss/common/schemas/colors';
 import {
 	type DiscordEmbed,
@@ -6,6 +7,7 @@ import {
 	discordEmbedsSchema,
 	EmbedType,
 } from '@md-oss/common/schemas/discord';
+import { StringUtils } from '@md-oss/common/utils';
 import { EmbedBuilder } from 'discord.js';
 
 /**
@@ -103,6 +105,56 @@ export const buildEmbedsFromData = (data: DiscordEmbeds): EmbedBuilder[] => {
 	return data.map(buildEmbedFromData);
 };
 
+export const truncateEmbedData = (embed: DiscordEmbed): DiscordEmbed => {
+	if (embed.title) {
+		embed.title = StringUtils.truncate(
+			embed.title,
+			DiscordMagic.EMBED_TITLE_MAX
+		);
+	}
+	if (embed.description) {
+		embed.description = StringUtils.truncate(
+			embed.description,
+			DiscordMagic.EMBED_DESCRIPTION_MAX
+		);
+	}
+	if (embed.author?.name) {
+		embed.author.name = StringUtils.truncate(
+			embed.author.name,
+			DiscordMagic.EMBED_AUTHOR_MAX
+		);
+	}
+	if (embed.footer?.text) {
+		embed.footer.text = StringUtils.truncate(
+			embed.footer.text,
+			DiscordMagic.EMBED_FOOTER_MAX
+		);
+	}
+	if (embed.provider?.name) {
+		embed.provider.name = StringUtils.truncate(
+			embed.provider.name,
+			DiscordMagic.EMBED_PROVIDER_MAX
+		);
+	}
+	if (embed.fields) {
+		embed.fields = embed.fields
+			.slice(0, DiscordMagic.EMBED_FIELDS_MAX)
+			.map((field) => ({
+				name: StringUtils.truncate(
+					field.name,
+					DiscordMagic.EMBED_FIELD_NAME_MAX
+				),
+				value: StringUtils.truncate(
+					field.value,
+					DiscordMagic.EMBED_FIELD_VALUE_MAX
+				),
+				inline: field.inline,
+			}));
+	}
+
+	return embed;
+};
+
 /**
  * Merges multiple Discord embed objects into a single embed object.
  * Later embeds in the arguments list will override properties of earlier embeds if they have the same property defined.
@@ -110,7 +162,10 @@ export const buildEmbedsFromData = (data: DiscordEmbeds): EmbedBuilder[] => {
  * This is useful for cases where you want to construct an embed from multiple sources of data.
  * @see {@link validateDiscordEmbedData} for validating the resulting embed data after merging.
  */
-export const mergeEmbedData = (...embeds: DiscordEmbed[]): DiscordEmbed => {
+export const mergeEmbedData = (
+	truncate: boolean,
+	...embeds: DiscordEmbed[]
+): DiscordEmbed => {
 	const merged: DiscordEmbed = {
 		type: EmbedType.Rich,
 	};
@@ -132,5 +187,5 @@ export const mergeEmbedData = (...embeds: DiscordEmbed[]): DiscordEmbed => {
 		if (embed.type) merged.type = embed.type;
 	}
 
-	return merged;
+	return truncate ? truncateEmbedData(merged) : merged;
 };

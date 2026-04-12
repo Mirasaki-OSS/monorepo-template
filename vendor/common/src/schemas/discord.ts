@@ -401,10 +401,13 @@ export type {
 export {
 	allowedDiscordWebhookHosts,
 	discordEmbedColorSchema,
+	discordEmbedMaxCharactersRefinement,
 	discordEmbedSchema,
+	discordEmbedsMaxCharactersRefinement,
 	discordEmbedsSchema,
 	discordSnowflakeSchema,
 	discordWebhookPathRegex,
 	discordWebhookUrlSchema,
 	EmbedType,
+	getTotalEmbedCharacters,
 };
