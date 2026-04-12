@@ -1,5 +1,13 @@
 # @md-oss/discord
 
+## 0.5.3
+
+### Patch Changes
+
+- a396709: feat(embeds): add truncate functionality for embed data and update mergeEmbedData signature
+- Updated dependencies [a396709]
+  - @md-oss/common@0.5.3
+
 ## 0.5.0
 
 ### Minor Changes

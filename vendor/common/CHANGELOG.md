@@ -1,5 +1,11 @@
 # @md-oss/common
 
+## 0.5.3
+
+### Patch Changes
+
+- a396709: feat(embeds): add truncate functionality for embed data and update mergeEmbedData signature
+
 ## 0.5.2
 
 ### Patch Changes
