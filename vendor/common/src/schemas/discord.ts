@@ -103,11 +103,13 @@ const discordEmbedThumbnailSchema = z
 			.number()
 			.int()
 			.positive()
+			.optional()
 			.describe('Width of the thumbnail image in pixels.'),
 		height: z
 			.number()
 			.int()
 			.positive()
+			.optional()
 			.describe('Height of the thumbnail image in pixels.'),
 	})
 	.describe('Thumbnail information for the Discord embed.');
@@ -121,7 +123,10 @@ const discordEmbedFooterSchema = z
 				DiscordMagic.EMBED_FOOTER_MAX,
 				`Footer text cannot exceed ${DiscordMagic.EMBED_FOOTER_MAX} characters.`
 			),
-		icon_url: z.url().describe('URL of the icon image for the footer.'),
+		icon_url: z
+			.url()
+			.optional()
+			.describe('URL of the icon image for the footer.'),
 	})
 	.describe('Footer information for the Discord embed.');
 
@@ -188,11 +193,13 @@ const discordEmbedImageSchema = z
 			.number()
 			.int()
 			.positive()
+			.optional()
 			.describe('Width of the image in pixels.'),
 		height: z
 			.number()
 			.int()
 			.positive()
+			.optional()
 			.describe('Height of the image in pixels.'),
 	})
 	.describe('Image information for the Discord embed.');
@@ -222,7 +229,7 @@ const discordEmbedSchemaBase = z.object({
 		.describe(
 			'Color of the Discord embed in hexadecimal format (e.g., #FF5733).'
 		),
-	url: z.url().optional().describe('URL of the Discord embed.'),
+	url: z.url().optional().nullable().describe('URL of the Discord embed.'),
 	timestamp: z
 		.string()
 		.optional()
@@ -237,6 +244,7 @@ const discordEmbedSchemaBase = z.object({
 			EmbedType.Link,
 		])
 		.optional()
+		.default(EmbedType.Rich)
 		.describe('Type of the Discord embed.'),
 });
 
