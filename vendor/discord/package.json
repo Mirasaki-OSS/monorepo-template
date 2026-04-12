@@ -1,6 +1,6 @@
 {
 	"name": "@md-oss/discord",
-	"version": "0.5.0",
+	"version": "0.5.3",
 	"private": false,
 	"publishConfig": {
 		"access": "public",
