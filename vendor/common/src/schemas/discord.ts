@@ -93,123 +93,145 @@ const discordWebhookUrlSchema = z.url().transform((value, ctx) => {
 type DiscordWebhookUrl = z.infer<typeof discordWebhookUrlSchema>;
 
 const discordEmbedColorSchema = hexColorSchema.describe(
-	'Color of the Discord embed in hexadecimal format (e.g., #FF5733).'
+	'Color in hexadecimal format (e.g., #FF5733). Displayed as a colored strip on the left side of the embed.'
 );
 
 const discordEmbedThumbnailSchema = z
 	.object({
-		url: z.url().describe('URL of the thumbnail image for the Discord embed.'),
+		url: z
+			.url()
+			.describe(
+				'Image URL for the small thumbnail shown in the top-right of the embed.'
+			),
 		width: z
 			.number()
 			.int()
 			.positive()
 			.optional()
-			.describe('Width of the thumbnail image in pixels.'),
+			.describe('Known width of the thumbnail in pixels.'),
 		height: z
 			.number()
 			.int()
 			.positive()
 			.optional()
-			.describe('Height of the thumbnail image in pixels.'),
+			.describe('Known height of the thumbnail in pixels.'),
 	})
-	.describe('Thumbnail information for the Discord embed.');
+	.describe(
+		'Optional thumbnail to display in the top-right side of the embed. Can be used to provide a small preview image related to the embed content.'
+	);
 
 const discordEmbedFooterSchema = z
 	.object({
 		text: z
 			.string()
-			.describe('Footer text of the Discord embed message.')
+			.describe('Footer text shown at the bottom of the embed.')
 			.max(
 				DiscordMagic.EMBED_FOOTER_MAX,
-				`Footer text cannot exceed ${DiscordMagic.EMBED_FOOTER_MAX} characters.`
+				`Footer text exceeds the Discord limit of ${DiscordMagic.EMBED_FOOTER_MAX} characters.`
 			),
 		icon_url: z
 			.url()
 			.optional()
-			.describe('URL of the icon image for the footer.'),
+			.describe('Optional icon URL displayed next to the footer text.'),
 	})
-	.describe('Footer information for the Discord embed.');
+	.describe(
+		'Optional footer to display at the bottom of the embed. Can be used for additional context or information about the embed content.'
+	);
 
 const discordEmbedFieldSchema = z
 	.object({
 		name: z
 			.string()
-			.describe('Name of the field in the Discord embed.')
+			.describe('Field label shown above the field value.')
 			.max(
 				DiscordMagic.EMBED_FIELD_NAME_MAX,
-				`Field name cannot exceed ${DiscordMagic.EMBED_FIELD_NAME_MAX} characters.`
+				`Field name exceeds the Discord limit of ${DiscordMagic.EMBED_FIELD_NAME_MAX} characters.`
 			),
 		value: z
 			.string()
-			.describe('Value of the field in the Discord embed.')
+			.describe('Field body text; supports markdown-like Discord formatting.')
 			.max(
 				DiscordMagic.EMBED_FIELD_VALUE_MAX,
-				`Field value cannot exceed ${DiscordMagic.EMBED_FIELD_VALUE_MAX} characters.`
+				`Field value exceeds the Discord limit of ${DiscordMagic.EMBED_FIELD_VALUE_MAX} characters.`
 			),
 		inline: z
 			.boolean()
 			.optional()
-			.describe('Whether the field should be displayed inline.'),
+			.describe('Render this field in the same row as other inline fields.'),
 	})
-	.describe('Field information for the Discord embed.');
+	.describe(
+		'Field(s) to display in the Discord embed. Can be used to present additional information in a structured format within the embed.'
+	);
 
 const discordEmbedProviderSchema = z
 	.object({
 		name: z
 			.string()
-			.describe('Name of the provider for the Discord embed.')
+			.describe(
+				'Source/provider name shown above the author line, when present.'
+			)
 			.max(
 				DiscordMagic.EMBED_PROVIDER_MAX,
-				`Provider name cannot exceed ${DiscordMagic.EMBED_PROVIDER_MAX} characters.`
+				`Provider name exceeds the Discord limit of ${DiscordMagic.EMBED_PROVIDER_MAX} characters.`
 			),
-		url: z.url().describe('URL of the provider for the Discord embed.'),
+		url: z.url().describe('Canonical link for the provider/source.'),
 	})
-	.describe('Provider information for the Discord embed.');
+	.describe(
+		'Optional provider to display at the top of the embed, above the author. Can be used to indicate the source of the embed content.'
+	);
 
 const discordEmbedAuthorSchema = z
 	.object({
 		name: z
 			.string()
-			.describe('Name of the author for the Discord embed.')
+			.describe(
+				'Display name shown in the author row near the top of the embed.'
+			)
 			.max(
 				DiscordMagic.EMBED_AUTHOR_MAX,
-				`Author name cannot exceed ${DiscordMagic.EMBED_AUTHOR_MAX} characters.`
+				`Author name exceeds the Discord limit of ${DiscordMagic.EMBED_AUTHOR_MAX} characters.`
 			),
 		url: z
 			.url()
 			.optional()
-			.describe('URL of the author for the Discord embed.'),
+			.describe('Link opened when the author name is clicked.'),
 		icon_url: z
 			.url()
 			.optional()
-			.describe('URL of the icon image for the author.'),
+			.describe('Avatar/icon URL displayed before the author name.'),
 	})
-	.describe('Author information for the Discord embed.');
+	.describe(
+		'Optional author to display at the top of the embed, above the title - but underneath the provider. Can be used to indicate the creator of the embed content.'
+	);
 
 const discordEmbedImageSchema = z
 	.object({
-		url: z.url().describe('URL of the image for the Discord embed.'),
+		url: z
+			.url()
+			.describe('Image URL rendered in the main media area of the embed body.'),
 		width: z
 			.number()
 			.int()
 			.positive()
 			.optional()
-			.describe('Width of the image in pixels.'),
+			.describe('Known width of the image in pixels.'),
 		height: z
 			.number()
 			.int()
 			.positive()
 			.optional()
-			.describe('Height of the image in pixels.'),
+			.describe('Known height of the image in pixels.'),
 	})
-	.describe('Image information for the Discord embed.');
+	.describe(
+		'Optional image to display in the main body of the embed. Can be used to provide a large visual element related to the embed content. Rendered below the description and fields, and above the footer.'
+	);
 
 const discordEmbedSchemaBase = z.object({
 	title: z
 		.string()
 		.max(
 			DiscordMagic.EMBED_TITLE_MAX,
-			`Title cannot exceed ${DiscordMagic.EMBED_TITLE_MAX} characters.`
+			`Embed title exceeds the Discord limit of ${DiscordMagic.EMBED_TITLE_MAX} characters.`
 		)
 		.optional()
 		.nullable()
@@ -218,7 +240,7 @@ const discordEmbedSchemaBase = z.object({
 		.string()
 		.max(
 			DiscordMagic.EMBED_DESCRIPTION_MAX,
-			`Description cannot exceed ${DiscordMagic.EMBED_DESCRIPTION_MAX} characters.`
+			`Embed description exceeds the Discord limit of ${DiscordMagic.EMBED_DESCRIPTION_MAX} characters.`
 		)
 		.optional()
 		.nullable()
@@ -229,12 +251,16 @@ const discordEmbedSchemaBase = z.object({
 		.describe(
 			'Color of the Discord embed in hexadecimal format (e.g., #FF5733).'
 		),
-	url: z.url().optional().nullable().describe('URL of the Discord embed.'),
+	url: z
+		.url()
+		.optional()
+		.nullable()
+		.describe('Primary URL associated with the embed title or content.'),
 	timestamp: z
 		.string()
 		.optional()
 		.nullable()
-		.describe('Timestamp of the Discord embed in ISO 8601 format.'),
+		.describe('ISO 8601 timestamp displayed in the embed footer area.'),
 	type: z
 		.enum([
 			EmbedType.Rich,
@@ -245,7 +271,9 @@ const discordEmbedSchemaBase = z.object({
 		])
 		.optional()
 		.default(EmbedType.Rich)
-		.describe('Type of the Discord embed.'),
+		.describe(
+			'Embed render type. Use rich for custom embeds sent by bots/webhooks.'
+		),
 });
 
 const _discordEmbedSchema = discordEmbedSchemaBase
@@ -294,7 +322,7 @@ const discordEmbedMaxCharactersRefinement = (
 const discordEmbedSchema = _discordEmbedSchema.refine(
 	discordEmbedMaxCharactersRefinement,
 	{
-		message: `Total embed content cannot exceed ${DiscordMagic.EMBED_TOTAL_MAX} characters.`,
+		message: `Embed text content exceeds the Discord limit of ${DiscordMagic.EMBED_TOTAL_MAX} characters.`,
 	}
 );
 
@@ -313,10 +341,10 @@ const discordEmbedsSchema = z
 	.array(discordEmbedSchema)
 	.max(
 		DiscordMagic.MESSAGE_EMBEDS_MAX,
-		`Cannot have more than ${DiscordMagic.MESSAGE_EMBEDS_MAX} embeds in a single message.`
+		`A message can include at most ${DiscordMagic.MESSAGE_EMBEDS_MAX} embeds.`
 	)
 	.refine(discordEmbedsMaxCharactersRefinement, {
-		message: `Total content of combined embeds cannot exceed ${DiscordMagic.EMBED_TOTAL_MAX} characters.`,
+		message: `Combined embed text content exceeds the Discord limit of ${DiscordMagic.EMBED_TOTAL_MAX} characters.`,
 	})
 	.describe('Array of Discord embed objects.');
 
