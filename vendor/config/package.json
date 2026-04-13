@@ -18,6 +18,7 @@
 		"url": "https://mirasaki.dev"
 	},
 	"type": "module",
+	"sideEffects": false,
 	"license": "ISC",
 	"files": [
 		"tsconfig.base.json",

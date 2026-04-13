@@ -18,6 +18,7 @@
 		"url": "https://mirasaki.dev"
 	},
 	"type": "module",
+	"sideEffects": false,
 	"description": "Lightweight migration runner with registry, validation, progress, and rollback support",
 	"license": "ISC",
 	"main": "./dist/index.cjs",

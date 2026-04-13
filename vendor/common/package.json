@@ -18,6 +18,7 @@
 		"url": "https://mirasaki.dev"
 	},
 	"type": "module",
+	"sideEffects": false,
 	"description": "Constants, magic numbers, and utilities",
 	"license": "ISC",
 	"main": "./dist/index.cjs",

@@ -18,6 +18,7 @@
 		"url": "https://mirasaki.dev"
 	},
 	"type": "module",
+	"sideEffects": false,
 	"description": "Structured logging with Pino",
 	"license": "ISC",
 	"main": "./dist/index.cjs",

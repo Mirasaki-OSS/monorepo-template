@@ -18,6 +18,7 @@
 		"url": "https://mirasaki.dev"
 	},
 	"type": "module",
+	"sideEffects": false,
 	"description": "Mutex manager with automatic cleanup and TTL support",
 	"license": "ISC",
 	"main": "./dist/index.cjs",

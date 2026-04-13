@@ -18,6 +18,7 @@
 		"url": "https://mirasaki.dev"
 	},
 	"type": "module",
+	"sideEffects": false,
 	"description": "Type-safe Discord.js toolkit with component and event registries",
 	"license": "ISC",
 	"main": "./dist/index.cjs",

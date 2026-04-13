@@ -18,6 +18,7 @@
 		"url": "https://mirasaki.dev"
 	},
 	"type": "module",
+	"sideEffects": false,
 	"description": "Reusable monorepo maintenance scripts",
 	"files": ["dist/**/*", "README.md"],
 	"bin": {

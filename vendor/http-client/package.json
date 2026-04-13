@@ -18,6 +18,7 @@
 		"url": "https://mirasaki.dev"
 	},
 	"type": "module",
+	"sideEffects": false,
 	"description": "Fetch-based HTTP client with retries, timeouts, and typed results",
 	"files": ["dist/**/*", "README.md"],
 	"main": "./dist/index.cjs",

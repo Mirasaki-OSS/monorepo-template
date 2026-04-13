@@ -18,6 +18,7 @@
 		"url": "https://mirasaki.dev"
 	},
 	"type": "module",
+	"sideEffects": false,
 	"description": "Cryptographic utilities for encryption, signed URLs, and secure streaming",
 	"license": "ISC",
 	"main": "./dist/index.cjs",

@@ -18,6 +18,7 @@
 		"url": "https://mirasaki.dev"
 	},
 	"type": "module",
+	"sideEffects": false,
 	"description": "Next.js analytics helpers with Vercel Analytics + optional Google Analytics",
 	"license": "ISC",
 	"files": ["dist/**/*", "README.md", "LICENSE"],

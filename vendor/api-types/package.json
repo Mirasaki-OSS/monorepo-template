@@ -18,6 +18,7 @@
 		"url": "https://mirasaki.dev"
 	},
 	"type": "module",
+	"sideEffects": false,
 	"description": "Type-safe API contracts, client factory, and handler helpers built on Zod",
 	"license": "ISC",
 	"main": "./dist/index.cjs",

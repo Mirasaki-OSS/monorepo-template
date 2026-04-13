@@ -18,6 +18,7 @@
 		"url": "https://mirasaki.dev"
 	},
 	"type": "module",
+	"sideEffects": false,
 	"description": "Multi-layer caching with LRU, Redis, and async data fetching support",
 	"license": "ISC",
 	"main": "./dist/index.cjs",
