@@ -24,11 +24,11 @@ export const validateDiscordEmbedsData = (data: unknown) => {
 	return discordEmbedsSchema.parse(data);
 };
 
-export const validateDiscordEmbedDataSafe = (data: unknown) => {
+export const safeValidateDiscordEmbedData = (data: unknown) => {
 	return discordEmbedSchema.safeParse(data);
 };
 
-export const validateDiscordEmbedsDataSafe = (data: unknown) => {
+export const safeValidateDiscordEmbedsData = (data: unknown) => {
 	return discordEmbedsSchema.safeParse(data);
 };
 
