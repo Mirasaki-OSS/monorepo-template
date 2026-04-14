@@ -251,7 +251,11 @@ async function executeWithConcurrency<T>(
 	const worker = async (): Promise<void> => {
 		while (nextTaskIndex < tasks.length) {
 			const taskIndex = nextTaskIndex++;
-			results[taskIndex] = await tasks[taskIndex]();
+			const task = tasks[taskIndex];
+			if (typeof task === 'undefined') {
+				continue;
+			}
+			results[taskIndex] = await task();
 		}
 	};
 
@@ -313,6 +317,9 @@ async function batchProcess<T>(
 	const executeTask = async (index: number): Promise<void> => {
 		try {
 			const task = tasks[index];
+			if (!task) {
+				return;
+			}
 			const result = taskTimeout
 				? await awaitOrTimeout(task(), taskTimeout)
 				: await task();

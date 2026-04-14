@@ -109,7 +109,7 @@ This monorepo uses a centralized TypeScript configuration pattern via `@md-oss/c
 ```jsonc
 // packages/your-package/tsconfig.json
 {
-  "extends": "@md-oss/config/tsconfig.base.json",
+  "extends": "@md-oss/config/tsconfig.isomorphic.json",
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src"

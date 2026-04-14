@@ -62,7 +62,12 @@ function parseBytes(value: string): number {
 	const [, num, unit = 'b'] = match;
 	const multiplier = units[unit.toLowerCase()];
 
-	if (!multiplier) throw new Error(`Unknown unit: ${unit}`);
+	if (typeof num === 'undefined' || Number.isNaN(Number.parseFloat(num))) {
+		throw new Error(`Invalid number in byte string: ${num}`);
+	}
+	if (typeof multiplier === 'undefined') {
+		throw new Error(`Unknown unit: ${unit}`);
+	}
 
 	return Math.floor(Number.parseFloat(num) * multiplier);
 }

@@ -107,6 +107,9 @@ const setValueAtPath = (
 
 	for (let i = 0; i < path.length - 1; i++) {
 		const key = path[i];
+		if (typeof key === 'undefined') {
+			continue;
+		}
 		const current = cursor[key];
 		if (!current || typeof current !== 'object' || Array.isArray(current)) {
 			cursor[key] = {};
@@ -115,6 +118,11 @@ const setValueAtPath = (
 	}
 
 	const leafKey = path[path.length - 1];
+
+	if (typeof leafKey === 'undefined') {
+		return next;
+	}
+
 	if (value === undefined) {
 		delete cursor[leafKey];
 	} else {

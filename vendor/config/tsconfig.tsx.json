@@ -1,11 +1,11 @@
 {
 	"extends": "./tsconfig.base.json",
 	"compilerOptions": {
+		"lib": ["ESNext", "DOM", "DOM.Iterable"],
 		// https://tsx.is/typescript#recommendation
 		"moduleDetection": "force", // Treat files as modules even if it doesn't use import/export
-		"module": "Preserve", // Ignore module structure
+		"module": "Preserve", // Keep the module format as written in source (ESM stays ESM)
 		"allowJs": true, // Allow JS files to be imported from TS and vice versa
-		"verbatimModuleSyntax": true, // Preserve module syntax as-is
 		"jsx": "react-jsx"
 	}
 }

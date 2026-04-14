@@ -29,6 +29,7 @@
 	],
 	"exports": {
 		"./tsconfig.base.json": "./tsconfig.base.json",
+		"./tsconfig.isomorphic.json": "./tsconfig.isomorphic.json",
 		"./tsconfig.node.json": "./tsconfig.node.json",
 		"./tsconfig.tsx.json": "./tsconfig.tsx.json"
 	},

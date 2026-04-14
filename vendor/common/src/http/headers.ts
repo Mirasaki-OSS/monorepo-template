@@ -12,7 +12,9 @@ const strippedRequestHeaderNames = [
 	'host',
 ] as const;
 
-export const mergeHeaders = (...headerSets: Array<HeadersInit | undefined>) => {
+export const mergeHeaders = (
+	...headerSets: Array<HeadersInit | undefined>
+): Headers => {
 	const merged = new Headers();
 
 	for (const headerSet of headerSets) {
