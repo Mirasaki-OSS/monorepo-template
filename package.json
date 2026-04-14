@@ -11,11 +11,11 @@
 	"scripts": {
 		"build": "turbo run build",
 		"build:dry": "turbo run build --dry",
-		"checks": "pnpm exec biome check --write && turbo run typecheck && pnpm script:fdm",
+		"checks": "pnpm exec biome check --write --unsafe && turbo run typecheck && pnpm script:fdm",
 		"checks:ci": "pnpm exec biome ci && pnpm script:fdm",
 		"clean": "turbo run clean && git clean -xdf node_modules .turbo pnpm-lock.yaml docker/.buildx-cache",
 		"dev": "turbo run dev --parallel",
-		"lint": "pnpm exec biome lint --write",
+		"lint": "pnpm exec biome lint --write --unsafe",
 		"format": "pnpm exec biome format --write",
 		"gen:app": "turbo gen workspace --type app",
 		"gen:package": "turbo gen package",
