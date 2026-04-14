@@ -1,0 +1,7 @@
+{
+	"include": ["./scripts/node/*.ts", "turbo/generators/**/*.ts"],
+	"exclude": ["node_modules"],
+	"compilerOptions": {
+		"types": ["node"]
+	}
+}
