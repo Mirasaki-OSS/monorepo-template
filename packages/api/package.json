@@ -1,0 +1,80 @@
+{
+	"name": "@md-oss/api",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"sideEffects": false,
+	"description": "API routers and context",
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.cts",
+	"files": ["dist/**/*", "README.md"],
+	"exports": {
+		".": {
+			"require": {
+				"types": "./dist/index.d.cts",
+				"default": "./dist/index.cjs"
+			},
+			"import": {
+				"types": "./dist/index.d.mts",
+				"default": "./dist/index.mjs"
+			}
+		},
+		"./context": {
+			"require": {
+				"types": "./dist/context.d.cts",
+				"default": "./dist/context.cjs"
+			},
+			"import": {
+				"types": "./dist/context.d.mts",
+				"default": "./dist/context.mjs"
+			}
+		},
+		"./env": {
+			"require": {
+				"types": "./dist/env.d.cts",
+				"default": "./dist/env.cjs"
+			},
+			"import": {
+				"types": "./dist/env.d.mts",
+				"default": "./dist/env.mjs"
+			}
+		},
+		"./types": {
+			"require": {
+				"types": "./dist/types.d.cts"
+			},
+			"import": {
+				"types": "./dist/types.d.mts"
+			}
+		},
+		"./routers": {
+			"require": {
+				"types": "./dist/routers/index.d.cts",
+				"default": "./dist/routers/index.cjs"
+			},
+			"import": {
+				"types": "./dist/routers/index.d.mts",
+				"default": "./dist/routers/index.mjs"
+			}
+		}
+	},
+	"scripts": {
+		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
+		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
+		"dev": "pkgroll --watch --sourcemap  --define.process.env.NODE_ENV='\"development\"' --define.DEBUG=true",
+		"typecheck": "tsc --noEmit"
+	},
+	"devDependencies": {
+		"@md-oss/config": "workspace:^",
+		"pkgroll": "^2.27.0",
+		"typescript": "^6.0.2"
+	},
+	"dependencies": {
+		"@md-oss/auth": "workspace:^",
+		"@t3-oss/env-core": "^0.13.11",
+		"@trpc/server": "^11.16.0",
+		"hono": "^4.12.12",
+		"zod": "^4.3.6"
+	}
+}

@@ -23,7 +23,7 @@
 	"files": ["dist/**/*", "README.md"],
 	"bin": {
 		"md-oss-find-dependency-mismatches": "./bin/md-oss-find-dependency-mismatches.mjs",
-		"md-oss-add-module-directive": "./bin/md-oss-add-module-directive.mjs"
+		"md-oss-add-module-directives": "./bin/md-oss-add-module-directives.mjs"
 	},
 	"exports": {
 		"./find-dependency-mismatches": {
@@ -50,13 +50,13 @@
 	"scripts": {
 		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
 		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
-		"dev": "tsc --watch",
+		"dev": "pkgroll --watch --sourcemap  --define.process.env.NODE_ENV='\"development\"' --define.DEBUG=true",
 		"typecheck": "tsc --noEmit"
 	},
-	"dependencies": {
-		"@md-oss/config": "workspace:^"
-	},
+	"dependencies": {},
 	"devDependencies": {
+		"@md-oss/config": "workspace:^",
+		"@md-oss/common": "workspace:^",
 		"pkgroll": "^2.27.0",
 		"tsx": "^4.21.0",
 		"typescript": "^6.0.2"

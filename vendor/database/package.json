@@ -49,14 +49,14 @@
 	"scripts": {
 		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
 		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
-		"dev": "tsc --watch",
+		"dev": "pkgroll --watch --sourcemap  --define.process.env.NODE_ENV='\"development\"' --define.DEBUG=true",
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
-		"@md-oss/config": "workspace:^",
 		"zod": "^4.3.6"
 	},
 	"devDependencies": {
+		"@md-oss/config": "workspace:^",
 		"pkgroll": "^2.27.0",
 		"typescript": "^6.0.2"
 	}

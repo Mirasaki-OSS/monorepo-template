@@ -1,0 +1,77 @@
+{
+	"name": "@md-oss/db",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"sideEffects": false,
+	"description": "Database access layer using drizzle-orm (PostgreSQL)",
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.cts",
+	"files": ["dist/**/*", "README.md"],
+	"exports": {
+		".": {
+			"require": {
+				"types": "./dist/index.d.cts",
+				"default": "./dist/index.cjs"
+			},
+			"import": {
+				"types": "./dist/index.d.mts",
+				"default": "./dist/index.mjs"
+			}
+		},
+		"./env": {
+			"require": {
+				"types": "./dist/env.d.cts",
+				"default": "./dist/env.cjs"
+			},
+			"import": {
+				"types": "./dist/env.d.mts",
+				"default": "./dist/env.mjs"
+			}
+		},
+		"./schema": {
+			"require": {
+				"types": "./dist/schema/index.d.cts",
+				"default": "./dist/schema/index.cjs"
+			},
+			"import": {
+				"types": "./dist/schema/index.d.mts",
+				"default": "./dist/schema/index.mjs"
+			}
+		},
+		"./schema/auth": {
+			"require": {
+				"types": "./dist/schema/auth.d.cts",
+				"default": "./dist/schema/auth.cjs"
+			},
+			"import": {
+				"types": "./dist/schema/auth.d.mts",
+				"default": "./dist/schema/auth.mjs"
+			}
+		}
+	},
+	"scripts": {
+		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
+		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
+		"dev": "pkgroll --watch --sourcemap  --define.process.env.NODE_ENV='\"development\"' --define.DEBUG=true",
+		"typecheck": "tsc --noEmit",
+		"db:push": "drizzle-kit push",
+		"db:generate": "drizzle-kit generate",
+		"db:studio": "drizzle-kit studio",
+		"db:migrate": "drizzle-kit migrate"
+	},
+	"devDependencies": {
+		"@md-oss/config": "workspace:^",
+		"@types/pg": "^8.20.0",
+		"drizzle-kit": "^0.31.10",
+		"pkgroll": "^2.27.0",
+		"typescript": "^6.0.2"
+	},
+	"dependencies": {
+		"@t3-oss/env-core": "^0.13.11",
+		"drizzle-orm": "^0.45.2",
+		"pg": "^8.20.0",
+		"zod": "^4.3.6"
+	}
+}

@@ -12,7 +12,7 @@ A modern TypeScript pnpm turbo monorepo.
 - **Docker**: Production-ready containerization with multi-stage builds
 - **Minimal**: Clean structure focused on essentials
 
-> Please note: This monorepo is focused on a specific set of frameworks/tools. If you prefer to use a different framework, like [TanStack Router](https://tanstack.com/router/latest) over [Next.js](https://nextjs.org/), or [Hono](https://hono.dev/) over [express](https://expressjs.com/) - we recommend generating a monorepo using [Better T Stack](https://www.better-t-stack.dev/new).
+> Please note: This monorepo is focused on a specific set of frameworks/tools. If you prefer to use a different framework, like [Next.js](https://nextjs.org/) over [TanStack Router](https://tanstack.com/router/latest), or [express](https://expressjs.com/) over [Hono](https://hono.dev/) - we recommend generating a monorepo using [Better T Stack](https://www.better-t-stack.dev/new) instead.
 
 ## Project Structure
 

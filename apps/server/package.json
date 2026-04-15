@@ -1,0 +1,36 @@
+{
+	"name": "@md-oss/server",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"description": "API server application",
+	"license": "ISC",
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.cts",
+	"scripts": {
+		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
+		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
+		"dev": "tsx watch src/index.ts",
+		"start": "node ./dist/index.js",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@hono/node-server": "^1.19.14",
+		"@hono/trpc-server": "^0.4.2",
+		"@md-oss/api": "workspace:^",
+		"@md-oss/auth": "workspace:^",
+		"@md-oss/db": "workspace:^",
+		"@md-oss/utils": "workspace:^",
+		"@t3-oss/env-core": "^0.13.11",
+		"hono": "^4.12.12",
+		"zod": "^4.3.6"
+	},
+	"devDependencies": {
+		"@md-oss/config": "workspace:^",
+		"@types/node": "^25.6.0",
+		"pkgroll": "^2.27.0",
+		"tsx": "^4.21.0",
+		"typescript": "^6.0.2"
+	}
+}

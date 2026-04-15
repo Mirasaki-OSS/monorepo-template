@@ -1,0 +1,8 @@
+/** biome-ignore-all lint/complexity/noImportantStyles: This is a global style file. */
+
+@import "tailwindcss";
+@import "fumadocs-ui/css/neutral.css";
+@import "fumadocs-ui/css/preset.css";
+
+@import "@md-oss/design-system/styles/globals.css";
+@import "@md-oss/design-system/styles/persistent-scroll-bar.css";

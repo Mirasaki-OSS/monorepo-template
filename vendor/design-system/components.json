@@ -1,0 +1,25 @@
+{
+	"$schema": "https://ui.shadcn.com/schema.json",
+	"style": "radix-vega",
+	"rsc": true,
+	"tsx": true,
+	"tailwind": {
+		"config": "",
+		"css": "src/styles/globals.css",
+		"baseColor": "mist",
+		"cssVariables": true,
+		"prefix": ""
+	},
+	"iconLibrary": "lucide",
+	"rtl": true,
+	"aliases": {
+		"components": "@md-oss/design-system/components",
+		"utils": "@md-oss/design-system/lib/utils",
+		"ui": "@md-oss/design-system/components/ui",
+		"lib": "@md-oss/design-system/lib",
+		"hooks": "@md-oss/design-system/hooks"
+	},
+	"menuColor": "default",
+	"menuAccent": "subtle",
+	"registries": {}
+}

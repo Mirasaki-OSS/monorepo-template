@@ -96,14 +96,13 @@
 		}
 	},
 	"scripts": {
-		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false && pnpm exec md-oss-add-module-directive --directive='use client' dist/next-client.mjs dist/next-client.cjs",
+		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false && pnpm exec md-oss-add-module-directives --directive='use client' --extensions=mjs,cjs dist/next-client",
 		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
-		"dev": "tsc --watch",
+		"dev": "pkgroll --watch --sourcemap  --define.process.env.NODE_ENV='\"development\"' --define.DEBUG=true",
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
 		"@md-oss/common": "workspace:^",
-		"@md-oss/config": "workspace:^",
 		"@md-oss/serdes": "workspace:^",
 		"@t3-oss/env-nextjs": "^0.13.11",
 		"debug": "^4.4.3",
@@ -111,6 +110,7 @@
 		"zod": "^4.3.6"
 	},
 	"devDependencies": {
+		"@md-oss/config": "workspace:^",
 		"@md-oss/scripts": "workspace:^",
 		"@types/node": "^25.6.0",
 		"pkgroll": "^2.27.0",
