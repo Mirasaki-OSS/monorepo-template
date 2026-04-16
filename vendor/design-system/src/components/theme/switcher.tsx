@@ -65,9 +65,12 @@ export function ThemeSwitcherSkeleton({
 }: ThemeSwitcherSkeletonProps) {
 	return (
 		<Skeleton
+			aria-disabled="true"
+			aria-label="Loading theme toggle"
 			aria-hidden="true"
 			className={cn(
 				buttonVariants({ variant: 'outline', size: 'icon' }),
+				'animate-none',
 				className
 			)}
 			{...props}

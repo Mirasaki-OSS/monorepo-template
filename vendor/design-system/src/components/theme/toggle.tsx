@@ -13,19 +13,24 @@ import {
 import { Skeleton } from '@md-oss/design-system/components/ui/skeleton';
 import { cn } from '@md-oss/design-system/lib/utils';
 
-export function ThemeToggleSkeleton(
-	props: React.ComponentProps<typeof Skeleton>
-) {
+export function ThemeToggleSkeleton({
+	className,
+	...props
+}: React.ComponentProps<typeof Skeleton>) {
 	return (
 		<Skeleton
+			aria-disabled="true"
+			aria-label="Loading theme toggle"
 			aria-hidden="true"
 			className={cn(
-				'size-9 shrink-0 rounded-md',
 				buttonVariants({ variant: 'outline', size: 'icon' }),
-				props.className
+				'animate-none',
+				className
 			)}
 			{...props}
-		/>
+		>
+			<ThemeIcon theme={'system'} className="h-[1.2rem] w-[1.2rem]" />
+		</Skeleton>
 	);
 }
 

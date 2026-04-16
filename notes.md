@@ -9,3 +9,4 @@
 ## Other
 
 - Workspace root `package.json` and `README.md` from `/home/mirasaki/dev/sandbox/my-better-t-app`
+- https://trpc.io/docs/client/nextjs

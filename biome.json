@@ -29,7 +29,7 @@
 		"includes": [
 			"**",
 			"!apps/web/src/routeTree.gen.ts",
-			"!apps/fumadocs/next-env.d.ts"
+			"!apps/web/next-env.d.ts"
 		]
 	},
 	"formatter": {

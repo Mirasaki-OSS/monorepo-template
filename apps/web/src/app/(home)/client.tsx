@@ -1,5 +1,6 @@
 'use client';
 
+import { ThemeSwitcher } from '@md-oss/design-system/components/theme/switcher';
 import { ThemeToggle } from '@md-oss/design-system/components/theme/toggle';
 import { Button } from '@md-oss/design-system/components/ui/button';
 import {
@@ -49,8 +50,9 @@ export default function HomePageClient() {
         </Link>{' '}
         and see the documentation.
       </p>
-      <div className="debug flex items-center justify-center gap-2 mt-2">
+      <div className="flex items-center justify-center gap-2 mt-2">
         <ThemeToggle />
+        <ThemeSwitcher />
         <Drawer>
           <DrawerTrigger asChild>
             <Button variant="outline" size="sm">
