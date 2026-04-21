@@ -1,51 +1,188 @@
 {
 	"$schema": "https://biomejs.dev/schemas/2.4.11/schema.json",
-	"vcs": {
+	"root": true,
+	"assist": {
 		"enabled": true,
-		"clientKind": "git",
-		"useIgnoreFile": true
+		"includes": ["!**/package.json"],
+		"actions": {
+			"recommended": true,
+			"source": {
+				"noDuplicateClasses": "on",
+				"organizeImports": "on",
+				"recommended": true,
+				"useSortedAttributes": "on",
+				"useSortedInterfaceMembers": "on",
+				"useSortedProperties": "on",
+				"useSortedKeys": {
+					"level": "on",
+					"options": {
+						"groupByNesting": true,
+						"sortOrder": "natural"
+					}
+				}
+			}
+		}
 	},
 	"files": {
 		"ignoreUnknown": false
 	},
 	"formatter": {
-		"enabled": true,
-		"indentStyle": "tab",
 		"attributePosition": "auto",
 		"bracketSameLine": false,
 		"bracketSpacing": true,
+		"enabled": true,
 		"expand": "auto",
 		"formatWithErrors": false,
+		"indentStyle": "tab",
 		"indentWidth": 2,
 		"lineEnding": "auto",
 		"lineWidth": 80,
+		"trailingNewline": true,
 		"useEditorconfig": false
+	},
+	"javascript": {
+		"assist": {
+			"enabled": true
+		},
+		"formatter": {
+			"arrowParentheses": "always",
+			"attributePosition": "auto",
+			"bracketSameLine": false,
+			"bracketSpacing": true,
+			"enabled": true,
+			"expand": "auto",
+			"indentStyle": "tab",
+			"indentWidth": 2,
+			"jsxQuoteStyle": "double",
+			"lineEnding": "auto",
+			"lineWidth": 80,
+			"operatorLinebreak": "after",
+			"quoteProperties": "asNeeded",
+			"quoteStyle": "single",
+			"semicolons": "always",
+			"trailingCommas": "es5",
+			"trailingNewline": true
+		},
+		"linter": {
+			"enabled": true
+		}
 	},
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true
+			"a11y": "on",
+			"complexity": "on",
+			"nursery": "on",
+			"performance": "on",
+			"recommended": true,
+			"security": "on",
+			"style": "on",
+			"suspicious": "on"
 		}
 	},
-	"javascript": {
-		"formatter": {
-			"enabled": true,
-			"quoteStyle": "single",
-			"quoteProperties": "asNeeded",
-			"semicolons": "always",
-			"trailingCommas": "es5",
-			"arrowParentheses": "always",
-			"attributePosition": "auto",
-			"jsxQuoteStyle": "double",
-			"operatorLinebreak": "after"
-		}
-	},
-	"assist": {
-		"enabled": true,
-		"actions": {
-			"source": {
-				"organizeImports": "on"
+	"overrides": [
+		{
+			"includes": ["**/*"],
+			"linter": {
+				"rules": {
+					"complexity": {
+						"noVoid": "off",
+						"noExcessiveCognitiveComplexity": {
+							"level": "on",
+							"options": {
+								"maxAllowedComplexity": 15
+							}
+						},
+						"noExcessiveLinesPerFunction": {
+							"level": "on",
+							"options": {
+								"maxLines": 100,
+								"skipBlankLines": true,
+								"skipIifes": true
+							}
+						},
+						"useMaxParams": {
+							"level": "on",
+							"options": {
+								"max": 6
+							}
+						}
+					},
+					"nursery": {
+						"noContinue": "off",
+						"noTernary": "off",
+						"useExplicitType": "off",
+						"noExcessiveLinesPerFile": {
+							"level": "on",
+							"options": {
+								"maxLines": 500,
+								"skipBlankLines": true
+							}
+						}
+					},
+					"style": {
+						"noDefaultExport": "on",
+						"noExportedImports": "on",
+						"noNestedTernary": "off",
+						"useExplicitLengthCheck": "off",
+						"useExportsLast": "on",
+						"useExportType": "on",
+						"useComponentExportOnlyModules": {
+							"level": "on",
+							"options": {
+								"allowExportNames": [
+									"json",
+									"loader",
+									"headers",
+									"meta",
+									"links",
+									"scripts"
+								]
+							}
+						},
+						"useNamingConvention": {
+							"fix": "safe",
+							"level": "on",
+							"options": {
+								"requireAscii": true,
+								"strictCase": false
+							}
+						}
+					},
+					"suspicious": {
+						"noConsole": "off"
+					}
+				}
+			}
+		},
+		{
+			"includes": [
+				"**/env.ts",
+				"vendor/migrations/examples/import-legacy-data.ts"
+			],
+			"linter": {
+				"rules": {
+					"style": {
+						"noProcessEnv": "off",
+						"useNamingConvention": "off"
+					}
+				}
+			}
+		},
+		{
+			"includes": ["./vendor/**"],
+			"linter": {
+				"rules": {
+					"performance": {
+						"noBarrelFile": "off"
+					}
+				}
 			}
 		}
+	],
+	"vcs": {
+		"clientKind": "git",
+		"enabled": true,
+		"useIgnoreFile": true
 	}
 }
