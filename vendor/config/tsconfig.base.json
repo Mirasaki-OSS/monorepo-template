@@ -1,9 +1,12 @@
 {
 	"compilerOptions": {
-		"target": "ES2022", // Specify ECMAScript target version
+		"target": "ESNext", // Specify ECMAScript target version
+		"module": "ESNext", // Specify module code generation
+		"moduleResolution": "bundler", // Use bundler module resolution strategy
+		"lib": ["ESNext"], // Specify library files to be included
+		"verbatimModuleSyntax": true, // Preserve module syntax as-is
 		"useDefineForClassFields": true, // Use ECMAScript standard for class fields
-		"lib": ["ES2022", "DOM"], // Specify library files to be included
-		"module": "Preserve", // Specify module code generation
+		"forceConsistentCasingInFileNames": true, // Disallow inconsistently-cased references to the same file
 		"skipLibCheck": true, // Skip type checking of declaration files
 		"esModuleInterop": true, // Use correct ESM import behavior
 		"allowSyntheticDefaultImports": true, // Allow default imports from modules with no default export
@@ -21,6 +24,7 @@
 		"noFallthroughCasesInSwitch": true, // Report errors for fallthrough cases in switch statement
 		"resolveJsonModule": true, // Allow JSON modules to be imported
 		"isolatedModules": true, // Disallow features that require cross-file awareness
+		"noUncheckedIndexedAccess": true, // Add 'undefined' to a type when accessed using an index
 		"declaration": true, // Generate .d.ts files from TypeScript files
 		"declarationMap": true, // Create sourcemaps for d.ts files
 		"sourceMap": true // Generate corresponding .map files

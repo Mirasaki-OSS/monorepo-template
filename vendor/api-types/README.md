@@ -4,7 +4,7 @@ Type-safe API contracts and helpers for building clients and route handlers arou
 
 ## Features
 - Route registries with Zod schemas for params, query, and body validation
-- Typed API client factory (`createApiClient`) that strips unsafe headers and returns either data or `HTTPError`
+- Typed API client factory (`createApiClient`) that strips unsafe headers and returns full HTTP response metadata (`statusCode`, `headers`, raw `Response`, etc.)
 - Generic controller/route handler builders (`createGenericController`, `createGenericRouteHandler`) with pluggable auth/context/permission strategies
 - Response helpers (`sendTypedResponse`) and request parsers (`parseRequestParameters`) that serialize consistently with the common API shape
 - Utilities for prefixing routes, parsing/stripping proxy headers, and fine-grained debug namespaces (`md-oss:api-types:*`)
@@ -52,14 +52,16 @@ const client = createApiClient(routes, {
 	baseUrl: 'https://api.example.com',
 });
 
-const user = await client.request('/users/:id', {
+const result = await client.request('/users/:id', {
 	method: 'GET',
 	params: { id: '123' },
 });
 
-if ('code' in user) {
-	// HTTPError
+if (!result.ok) {
+	// HTTP error response with metadata
 }
+
+const user = result.data;
 ```
 
 ## Build controllers with typed context

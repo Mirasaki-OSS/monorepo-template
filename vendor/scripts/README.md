@@ -49,7 +49,7 @@ Adds a module-level directive (for example, `use client` or `use server`) to one
 The directive is required and must be explicit.
 
 ```bash
-pnpm exec md-oss-add-module-directive --directive='use client' dist/next-client.mjs dist/next-client.cjs
+pnpm exec md-oss-add-module-directives --directive='use client' dist/next-client.mjs dist/next-client.cjs
 ```
 
 Optional flags:

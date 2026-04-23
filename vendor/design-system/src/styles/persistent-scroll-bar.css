@@ -1,0 +1,25 @@
+/** biome-ignore-all lint/complexity/noImportantStyles: This is a global stylesheet, and only explicitly imported by consumers, not by default through the design system. */
+
+/*
+Avoids layout shift when ShadCN/ui components remove the scroll bar
+This version forces the scroll bar to always be visible, even when scroll is locked,
+allowing users to scroll, which closes modals, etc. but preventing layout shift.
+The commented-out version below removes the scroll bar entirely while avoiding layout shift.
+*/
+html {
+	scrollbar-gutter: stable;
+}
+
+html > body[data-scroll-locked] {
+	margin-right: 0px !important;
+	--removed-body-scroll-bar-size: 0px !important;
+}
+
+/* html body[data-scroll-locked] {
+	overflow: visible !important;
+	margin-right: 0 !important;
+}
+html body[data-scroll-locked] {
+  --removed-body-scroll-bar-size: 0 !important;
+  margin-right: 0 !important;
+}  */

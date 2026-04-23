@@ -1,12 +1,36 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.4.11/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.4.12/schema.json",
+	"root": true,
 	"vcs": {
 		"enabled": true,
 		"clientKind": "git",
 		"useIgnoreFile": true
 	},
+	"css": {
+		"assist": {
+			"enabled": true
+		},
+		"formatter": {
+			"enabled": true,
+			"indentStyle": "tab",
+			"lineEnding": "auto",
+			"lineWidth": 80,
+			"indentWidth": 2,
+			"quoteStyle": "double",
+			"trailingNewline": true
+		},
+		"parser": {
+			"allowWrongLineComments": false,
+			"tailwindDirectives": true
+		}
+	},
 	"files": {
-		"ignoreUnknown": false
+		"ignoreUnknown": false,
+		"includes": [
+			"**",
+			"!apps/web/src/routeTree.gen.ts",
+			"!apps/web/next-env.d.ts"
+		]
 	},
 	"formatter": {
 		"enabled": true,
@@ -47,5 +71,18 @@
 				"organizeImports": "on"
 			}
 		}
-	}
+	},
+	"overrides": [
+		{
+			"includes": ["vendor/design-system/src/**/*.{ts,tsx}"],
+			"linter": {
+				"rules": {
+					"a11y": {
+						"useSemanticElements": "off",
+						"useFocusableInteractive": "off"
+					}
+				}
+			}
+		}
+	]
 }

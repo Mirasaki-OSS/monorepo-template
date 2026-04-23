@@ -75,11 +75,11 @@ export type HTTPClientResponse<
 > = R extends HTTPErrorResponse
 	? HTTPErrorResponse & {
 			/** The original Response object from the Fetch API (cloned). May be null if the error was due to a network failure. */
-			response: Response | null;
+			raw: Response | null;
 		}
 	: R & {
 			/** The original Response object from the Fetch API (cloned). */
-			response: Response;
+			raw: Response;
 		};
 
 const createRequestError = <T>(
@@ -90,7 +90,7 @@ const createRequestError = <T>(
 		...new HTTPError({
 			...body,
 		}).toJSON(),
-		response,
+		raw: response,
 	};
 };
 
@@ -176,7 +176,7 @@ export class HttpClient {
 					statusCode: response.status,
 					statusText: response.statusText,
 					headers: normalizeHeaders(response.headers),
-					response: responseClone,
+					raw: responseClone,
 				};
 
 				if (!response.ok) {

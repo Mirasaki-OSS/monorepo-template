@@ -112,12 +112,16 @@ const bigIntDurationToHumanReadable = (start: bigint): string => {
  * @example occurrencesPerInterval([date1, date2, date3], 60000) // Avg per minute
  */
 const occurrencesPerInterval = (dates: Date[], interval: number): number => {
-	if (dates.length === 0) return 0;
+	const firstDate = dates[0];
+
+	if (typeof firstDate === 'undefined') {
+		return 0;
+	}
 
 	let totalCount = 0;
 	let intervalCount = 0;
 	const map: Record<string, number> = {};
-	const baseTime = dates[0].getTime();
+	const baseTime = firstDate.getTime();
 
 	// Iterate through the dates and count them in their respective intervals
 	for (const date of dates) {

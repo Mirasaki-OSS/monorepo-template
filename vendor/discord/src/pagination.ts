@@ -218,9 +218,17 @@ const handleInteractionPagination = async ({
 				components: paginationControls,
 			});
 		} else {
+			const embeds: EmbedBuilder[] = [];
+
+			if (Array.isArray(pageContent)) {
+				embeds.push(...pageContent);
+			} else if (typeof pageContent !== 'undefined') {
+				embeds.push(pageContent);
+			}
+
 			return client.safeReply(interaction, {
 				content: '',
-				embeds: Array.isArray(pageContent) ? pageContent : [pageContent],
+				embeds,
 				components: paginationControls,
 			});
 		}
@@ -278,10 +286,24 @@ const handleInteractionPagination = async ({
 					);
 					return;
 				}
-				const selectedPage = parseInt(i.values[0], 10);
-				if (!Number.isNaN(selectedPage)) {
-					currentPage = Math.max(0, Math.min(selectedPage, totalPages - 1));
+				const selectedValue = i.values[0];
+
+				if (typeof selectedValue === 'undefined') {
+					console.warn('No page selected in select menu interaction:', i);
+					return;
 				}
+
+				const selectedPage = parseInt(selectedValue, 10);
+
+				if (Number.isNaN(selectedPage)) {
+					console.warn(
+						'Selected page value is not a valid number:',
+						selectedValue
+					);
+					return;
+				}
+
+				currentPage = Math.max(0, Math.min(selectedPage, totalPages - 1));
 				break;
 			}
 			default:

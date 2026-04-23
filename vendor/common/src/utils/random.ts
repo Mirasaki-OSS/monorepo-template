@@ -144,7 +144,11 @@ const sample = <T>(items: T[], count: number): T[] => {
 
 	for (let i = 0; i < count; i++) {
 		const index = randomInt(0, copy.length - 1);
-		result.push(copy[index]);
+		const item = copy[index];
+		if (typeof item === 'undefined') {
+			continue;
+		}
+		result.push(item);
 		copy.splice(index, 1);
 	}
 
@@ -172,7 +176,11 @@ const weightedRandom = <T>(items: T[], weights: number[]): T | undefined => {
 	let random = Math.random() * totalWeight;
 
 	for (let i = 0; i < items.length; i++) {
-		random -= weights[i];
+		const weight = weights[i];
+		if (typeof weight === 'undefined' || weight < 0) {
+			throw new Error(`Invalid weight at index ${i}: ${weight}`);
+		}
+		random -= weight;
 		if (random <= 0) {
 			return items[i];
 		}

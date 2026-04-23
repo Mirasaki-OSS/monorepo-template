@@ -9,20 +9,23 @@ export const env = (): Readonly<{
 }> =>
 	createEnv({
 		server: {
-			NODE_ENV: z
-				.enum(['development', 'production', 'test'])
-				.default('development'),
+			LOG_DIR: z.string().optional(),
+			LOG_TO_CONSOLE: z.boolean().default(true),
 			LOG_LEVEL: z
 				.enum(['error', 'warn', 'info', 'verbose', 'debug', 'silly'])
 				.default('info'),
-			LOG_DIR: z.string().optional(),
-			LOG_TO_CONSOLE: z.boolean().default(true),
 		},
 		client: {},
 		runtimeEnv: {
+			LOG_DIR: process.env.LOG_DIR,
 			NODE_ENV: process.env.NODE_ENV || 'development',
 			LOG_LEVEL: process.env.LOG_LEVEL || 'info',
-			LOG_DIR: process.env.LOG_DIR,
 			LOG_TO_CONSOLE: process.env.LOG_TO_CONSOLE !== 'false',
 		},
+		shared: {
+			NODE_ENV: z
+				.enum(['development', 'production', 'test'])
+				.default('development'),
+		},
+		emptyStringAsUndefined: true,
 	});

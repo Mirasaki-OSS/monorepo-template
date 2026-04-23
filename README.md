@@ -4,6 +4,16 @@
 
 A modern TypeScript pnpm turbo monorepo.
 
+## Features
+
+- **TypeScript**: Strict mode configuration with proper path aliases
+- **Turbo**: Optimized monorepo build orchestration with caching
+- **pnpm**: Efficient package management with workspace support
+- **Docker**: Production-ready containerization with multi-stage builds
+- **Minimal**: Clean structure focused on essentials
+
+> Please note: This monorepo is focused on a specific set of frameworks/tools. If you prefer to use a different framework, like [Next.js](https://nextjs.org/) over [TanStack Router](https://tanstack.com/router/latest), or [express](https://expressjs.com/) over [Hono](https://hono.dev/) - we recommend generating a monorepo using [Better T Stack](https://www.better-t-stack.dev/new) instead.
+
 ## Project Structure
 
 ```
@@ -99,7 +109,7 @@ This monorepo uses a centralized TypeScript configuration pattern via `@md-oss/c
 ```jsonc
 // packages/your-package/tsconfig.json
 {
-  "extends": "@md-oss/config/tsconfig.base.json",
+  "extends": "@md-oss/config/tsconfig.isomorphic.json",
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src"
@@ -140,14 +150,6 @@ See the [docker instructions](./docker/README.md) for detailed Docker setup and 
 
 - **@md-oss/config** - Shared TypeScript configuration (base, node, tsx) used by all packages
 - **@md-oss/utils** - Shared utility functions
-
-## Features
-
-- **TypeScript**: Strict mode configuration with proper path aliases
-- **Turbo**: Optimized monorepo build orchestration with caching
-- **pnpm**: Efficient package management with workspace support
-- **Docker**: Production-ready containerization with multi-stage builds
-- **Minimal**: Clean structure focused on essentials
 
 ## License
 

@@ -1,4 +1,4 @@
-import { createEnv } from '@t3-oss/env-nextjs';
+import { createEnv } from '@t3-oss/env-core';
 import { z } from 'zod/v4';
 
 export const env = (): Readonly<{
@@ -6,10 +6,10 @@ export const env = (): Readonly<{
 }> =>
 	createEnv({
 		server: {
-			REDIS_URL: z.string().url().default('redis://localhost:6379'),
+			REDIS_URL: z.url().default('redis://localhost:6379'),
 		},
 		client: {},
-		runtimeEnv: {
-			REDIS_URL: process.env.REDIS_URL || 'redis://localhost:6379',
-		},
+		runtimeEnv: process.env,
+		clientPrefix: 'NEXT_PUBLIC_',
+		emptyStringAsUndefined: true,
 	});

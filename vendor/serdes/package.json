@@ -89,17 +89,17 @@
 	"scripts": {
 		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
 		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
-		"dev": "tsc --watch",
+		"dev": "pkgroll --watch --sourcemap  --define.process.env.NODE_ENV='\"development\"' --define.DEBUG=true",
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
-		"@md-oss/config": "workspace:^",
 		"@msgpack/msgpack": "^3.1.3",
 		"cbor-x": "^1.6.4",
 		"smol-toml": "^1.6.1",
 		"yaml": "^2.8.3"
 	},
 	"devDependencies": {
+		"@md-oss/config": "workspace:^",
 		"pkgroll": "^2.27.0",
 		"typescript": "^6.0.2"
 	}

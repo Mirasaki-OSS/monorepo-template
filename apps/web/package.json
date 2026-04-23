@@ -1,0 +1,46 @@
+{
+  "name": "@md-oss/web",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "clean": "git clean -xdf .turbo .next .source node_modules tsconfig.tsbuildinfo",
+    "dev": "next dev --port=3000",
+    "start": "next start",
+    "types:check": "fumadocs-mdx && next typegen && tsc --noEmit",
+    "postinstall": "fumadocs-mdx",
+    "lint": "biome check",
+    "format": "biome format --write"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
+    "@md-oss/api": "workspace:^",
+    "@md-oss/auth": "workspace:^",
+    "@md-oss/common": "workspace:^",
+    "@md-oss/design-system": "workspace:^",
+    "@t3-oss/env-core": "^0.13.11",
+    "better-auth": "^1.6.3",
+    "fumadocs-core": "16.7.14",
+    "fumadocs-mdx": "14.2.13",
+    "fumadocs-ui": "16.7.14",
+    "lucide-react": "catalog:",
+    "next": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "react-hook-form": "^7.72.1",
+    "sonner": "^2.0.7",
+    "tailwind-merge": "^3.5.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.11",
+    "@tailwindcss/postcss": "catalog:",
+    "@types/mdx": "^2.0.13",
+    "@types/node": "^25.6.0",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "postcss": "^8.5.9",
+    "tailwindcss": "catalog:",
+    "typescript": "^6.0.2"
+  }
+}

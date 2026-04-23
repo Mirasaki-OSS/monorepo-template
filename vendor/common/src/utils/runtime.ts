@@ -1,5 +1,5 @@
 import { INT32_MAX } from './numbers';
-import { TimeMagic } from './time';
+import { hrTimeToMs, humanReadableMs, TimeMagic } from './time';
 
 /**
  * Sleep for a specified number of milliseconds
@@ -251,7 +251,11 @@ async function executeWithConcurrency<T>(
 	const worker = async (): Promise<void> => {
 		while (nextTaskIndex < tasks.length) {
 			const taskIndex = nextTaskIndex++;
-			results[taskIndex] = await tasks[taskIndex]();
+			const task = tasks[taskIndex];
+			if (typeof task === 'undefined') {
+				continue;
+			}
+			results[taskIndex] = await task();
 		}
 	};
 
@@ -313,6 +317,9 @@ async function batchProcess<T>(
 	const executeTask = async (index: number): Promise<void> => {
 		try {
 			const task = tasks[index];
+			if (!task) {
+				return;
+			}
 			const result = taskTimeout
 				? await awaitOrTimeout(task(), taskTimeout)
 				: await task();
@@ -473,6 +480,96 @@ async function processBatches<T, R>(
 	return results;
 }
 
+type PrintProgressOptions = {
+	/** Current number of completed tasks */
+	completed: number;
+	/** Total number of tasks */
+	total: number;
+	/** Expected time (in ms) per item, used to estimate remaining time (ignored if startedAt is provided) */
+	timePerItem?: number;
+	/** Start times of each item in the format returned by process.hrtime(), used to calculate elapsed time and estimate remaining time */
+	startedAt?: [number, number][];
+	/** Optional message to prefix the progress output (default: 'Progress:') */
+	message?: string;
+	/** Whether or not to omit the message (output prefix) altogether */
+	omitMessage?: boolean;
+	/** Whether to show counts (default: true) */
+	showCounts?: boolean;
+	/** Whether to show percentage (default: true) */
+	showPercentage?: boolean;
+	/** Whether to show estimated remaining time (default: true) */
+	showRemainingTime?: boolean;
+	/**
+	 * Custom function to output/print/log the progress. By default, it uses console.log, but you can provide your own implementation (e.g., to update a UI element instead).
+	 * @param progressMessage - The formatted progress message to output
+	 */
+	outputFn?: (progressMessage: string) => void;
+};
+
+/**
+ * Print progress to the console with optional time estimation
+ * @param options - Progress options
+ * @example printProgress({ completed: 50, total: 100, timePerItem: 200 })
+ */
+function printProgress(options: PrintProgressOptions): void {
+	const {
+		completed,
+		total,
+		startedAt,
+		timePerItem,
+		message,
+		omitMessage,
+		showCounts = true,
+		showPercentage = true,
+		showRemainingTime = true,
+		outputFn,
+	} = options;
+
+	const remainingItems = Math.max(0, total - completed);
+	const percentage =
+		total > 0 ? ((completed / total) * 100).toFixed(2) : '0.00';
+	const remainingTime =
+		remainingItems === 0 || completed <= 0
+			? null
+			: startedAt && startedAt.length > 0
+				? (() => {
+						const oldestStart = startedAt.reduce((oldest, current) => {
+							if (current[0] < oldest[0]) return current;
+							if (current[0] === oldest[0] && current[1] < oldest[1]) {
+								return current;
+							}
+							return oldest;
+						});
+						const elapsedMs = hrTimeToMs(process.hrtime(oldestStart));
+						const averageTimePerCompletedItem = elapsedMs / completed;
+
+						return remainingItems * averageTimePerCompletedItem;
+					})()
+				: typeof timePerItem === 'number'
+					? remainingItems * timePerItem
+					: null;
+
+	const parts = [];
+
+	if (!omitMessage) {
+		parts.push(typeof message !== 'undefined' ? `${message} -` : 'Progress:');
+	}
+
+	if (showCounts) {
+		parts.push(`${completed}/${total}`);
+	}
+
+	if (showPercentage) {
+		parts.push(`(${percentage}%)`);
+	}
+
+	if (showRemainingTime && remainingTime !== null) {
+		parts.push(`- Est. remaining time: ${humanReadableMs(remainingTime)}`);
+	}
+
+	(outputFn ?? console.log)(parts.join(' '));
+}
+
 export {
 	awaitOrTimeout,
 	type BatchProcessOptions,
@@ -482,6 +579,8 @@ export {
 	batchMapWithRetry,
 	batchProcess,
 	executeWithConcurrency,
+	type PrintProgressOptions,
+	printProgress,
 	processBatches,
 	safeSetAsyncInterval,
 	safeSetInterval,

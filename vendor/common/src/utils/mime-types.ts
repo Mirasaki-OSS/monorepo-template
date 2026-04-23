@@ -187,7 +187,11 @@ const isAllowedMimeType = (
 		return false;
 	}
 
-	const lowerMimeType = mimeType.toLowerCase().split(';')[0].trim();
+	const lowerMimeType = mimeType.toLowerCase().split(';')[0]?.trim();
+
+	if (typeof lowerMimeType === 'undefined') {
+		return false;
+	}
 
 	return mimeTypeMap[kind].includes(lowerMimeType);
 };
@@ -210,7 +214,10 @@ const inlineContentDispositionMimeTypes = [
  * @example isInlineContentDisposition('application/zip') // false
  */
 const isInlineContentDisposition = (mimeType: string): boolean => {
-	const lowerMimeType = mimeType.toLowerCase().split(';')[0].trim();
+	const lowerMimeType = mimeType.toLowerCase().split(';')[0]?.trim();
+	if (typeof lowerMimeType === 'undefined') {
+		return false;
+	}
 	return (
 		inlineContentDispositionMimeTypes.includes(
 			lowerMimeType as (typeof inlineContentDispositionMimeTypes)[number]
@@ -229,7 +236,11 @@ const isInlineContentDisposition = (mimeType: string): boolean => {
  * @example mimeTypeResolver('video/mp4') // 'VIDEO'
  */
 const mimeTypeResolver = (_mimeType: string): MimeKind => {
-	const mimeType = _mimeType.toLowerCase().split(';')[0].trim();
+	const mimeType = _mimeType.toLowerCase().split(';')[0]?.trim();
+
+	if (typeof mimeType === 'undefined') {
+		return 'OTHER';
+	}
 
 	if (mimeType.startsWith('image/')) {
 		return 'IMAGE';

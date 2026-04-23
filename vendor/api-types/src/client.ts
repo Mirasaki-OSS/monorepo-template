@@ -7,14 +7,20 @@ import {
 import {
 	createHttpClient,
 	type HTTPClientRequestOptions,
-	HTTPError,
+	type HTTPClientResponse,
+	type HTTPResponse,
 	type HttpClientConfig,
-	isHTTPErrorResponse,
 	parseError,
 } from '@md-oss/http-client';
 import type { SerializedJson } from '@md-oss/serdes';
 import type { RequestOptions } from './request';
 import type { InferApi, MethodKeys, RouteKeys, RouteRegistry } from './types';
+
+export {
+	HTTPError,
+	isHTTPError,
+	isHTTPErrorResponse,
+} from '@md-oss/common/http';
 
 export {
 	type JsonPrimitive,
@@ -38,13 +44,8 @@ const interpolatePath = (
 
 export { parseHeaders, stripProxyAndWebsocketHeaders };
 
-export type Logger = {
-	error: (message: string, data?: Record<string, unknown>) => void;
-};
-
 export type ClientConfig = {
 	baseUrl: string;
-	logger?: Logger;
 	defaultHeaders?: HeadersInit | (() => HeadersInit | Promise<HeadersInit>);
 	httpClientConfig?: Omit<HttpClientConfig, 'baseUrl' | 'serviceName'> & {
 		requestOptions?: Omit<
@@ -71,6 +72,8 @@ export type ApplyResponseTypeTransformer<
 	TTransformer extends ResponseTypeTransformer,
 	T,
 > = TTransformer extends JsonResponseTypeTransformer ? SerializedJson<T> : T;
+
+export type ApiClientResponse<T> = HTTPClientResponse<T, HTTPResponse<T>>;
 
 /**
  * Creates a type-safe API client for a given route registry.
@@ -105,12 +108,7 @@ export function createApiClient<
 	TTransformer extends
 		ResponseTypeTransformer = IdentityResponseTypeTransformer,
 >(_registry: TRegistry, config: ClientConfig) {
-	const {
-		baseUrl,
-		logger: _logger = console,
-		defaultHeaders,
-		httpClientConfig,
-	} = config;
+	const { baseUrl, defaultHeaders, httpClientConfig } = config;
 	const {
 		requestOptions: defaultRequestOptions = {},
 		defaultHeaders: httpClientDefaultHeaders,
@@ -166,31 +164,21 @@ export function createApiClient<
 				TMethod
 			> & {
 				headers?: HeadersInit;
-				metadata?: Record<string, unknown>;
-				logger?: Logger;
 			}
 		): Promise<
-			| ApplyResponseTypeTransformer<
+			ApiClientResponse<
+				ApplyResponseTypeTransformer<
 					TTransformer,
 					InferApi<TRegistry>[TPath]['endpoints'][TMethod]['response']
-			  >
-			| HTTPError
+				>
+			>
 		> {
 			type LocalResponse = ApplyResponseTypeTransformer<
 				TTransformer,
 				InferApi<TRegistry>[TPath]['endpoints'][TMethod]['response']
 			>;
 
-			const {
-				method,
-				params,
-				body,
-				query,
-				headers = {},
-				metadata = {},
-				logger: requestLogger,
-			} = options;
-			const logger = requestLogger || _logger;
+			const { method, params, body, query, headers = {} } = options;
 
 			let endpoint: string;
 			let requestHeaders: Record<string, string>;
@@ -202,11 +190,14 @@ export function createApiClient<
 				);
 				requestHeaders = parseHeaders(headers, true);
 			} catch (error) {
-				return parseError(
-					error,
-					'BAD_REQUEST',
-					'Failed to construct request URL or headers'
-				);
+				return {
+					...parseError(
+						error,
+						'BAD_REQUEST',
+						'Failed to construct request URL or headers'
+					).toJSON(),
+					raw: null,
+				};
 			}
 
 			try {
@@ -223,58 +214,28 @@ export function createApiClient<
 					serviceName: endpoint,
 				});
 
-				if (isHTTPErrorResponse(response)) {
-					const isRateLimitError = response.statusCode === 429;
-					const isAuthError =
-						response.statusCode === 401 || response.statusCode === 403;
-					const error = new HTTPError({
-						statusCode: response.statusCode,
-						statusText: response.statusText,
-						code: response.code,
-						message: response.message,
-						details: response.details,
-						headers: response.headers,
-					});
-
-					if (!isAuthError && !isRateLimitError) {
-						logger.error(
-							`Request to ${endpoint} failed with status ${response.statusCode}`,
-							{
-								...metadata,
-								path,
-								method,
-								params,
-								query,
-								body,
-								status: response.statusCode,
-								error,
-							}
-						);
-					}
-
-					return error;
+				if (!response.ok) {
+					return response;
 				}
 
-				if (response.statusCode === 204) {
-					return null as LocalResponse;
-				}
+				const normalizedData =
+					response.statusCode === 204
+						? (null as LocalResponse)
+						: (response.data as LocalResponse);
 
-				const responseData = response.data;
-				if (
-					responseData &&
-					typeof responseData === 'object' &&
-					'data' in responseData
-				) {
-					return responseData.data as LocalResponse;
-				}
-
-				return responseData as LocalResponse;
+				return {
+					...response,
+					data: normalizedData,
+				};
 			} catch (error) {
-				return parseError(
-					error,
-					'REQUEST_FAILED',
-					`Failed to execute request to ${endpoint}`
-				);
+				return {
+					...parseError(
+						error,
+						'REQUEST_FAILED',
+						`Failed to execute request to ${endpoint}`
+					).toJSON(),
+					raw: null,
+				};
 			}
 		},
 	};
