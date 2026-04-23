@@ -1,5 +1,5 @@
 #!/usr/bin/env -S pnpm tsx
-import { execSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 // Example: ./scripts/node/replace-scope.ts --scopeOld="@md-oss" --scopeNew="@mirasaki-oss" --paths="./.changeset/*,./vendor,./apps,./packages"
 import { readFileSync, statSync, writeFileSync } from 'node:fs';
 import { parseArgs } from 'node:util';
@@ -106,9 +106,13 @@ console.log(`\n✓ Replaced scope in ${totalReplacements} file(s)`);
 if (modifiedFiles.length > 0) {
 	console.log('Formatting modified files...');
 	try {
-		execSync(`pnpm exec biome format --write ${modifiedFiles.join(' ')}`, {
-			stdio: 'inherit',
-		});
+		spawnSync(
+			'pnpm',
+			['exec', 'biome', 'format', '--write', ...modifiedFiles],
+			{
+				stdio: 'inherit',
+			}
+		);
 	} catch {
 		// Biome might fail on some file types, ignore
 		console.log('Note: Some files could not be formatted');
