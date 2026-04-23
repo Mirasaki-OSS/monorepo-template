@@ -1,6 +1,6 @@
 {
 	"name": "@md-oss/design-system",
-	"version": "0.0.1",
+	"version": "0.6.0",
 	"private": false,
 	"publishConfig": {
 		"access": "public",
@@ -775,7 +775,11 @@
 	"type": "module",
 	"sideEffects": false,
 	"description": "",
-	"files": ["dist/**/*", "src/styles", "README.md"],
+	"files": [
+		"dist/**/*",
+		"src/styles",
+		"README.md"
+	],
 	"exports": {
 		"./components/client-only": "./src/components/client-only.tsx",
 		"./components/pages/access-denied-page": "./src/components/pages/access-denied-page.tsx",

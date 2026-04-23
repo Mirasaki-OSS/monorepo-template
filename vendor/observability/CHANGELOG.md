@@ -1,5 +1,13 @@
 # @md-oss/observability
 
+## 0.6.0
+
+### Patch Changes
+
+- Updated dependencies [3434a1f]
+  - @md-oss/common@0.6.0
+  - @md-oss/serdes@0.3.9
+
 ## 0.5.0
 
 ### Patch Changes

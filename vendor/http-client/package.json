@@ -1,6 +1,6 @@
 {
 	"name": "@md-oss/http-client",
-	"version": "0.5.0",
+	"version": "0.6.0",
 	"private": false,
 	"publishConfig": {
 		"access": "public",
@@ -20,7 +20,10 @@
 	"type": "module",
 	"sideEffects": false,
 	"description": "Fetch-based HTTP client with retries, timeouts, and typed results",
-	"files": ["dist/**/*", "README.md"],
+	"files": [
+		"dist/**/*",
+		"README.md"
+	],
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.mjs",
 	"types": "./dist/index.d.cts",

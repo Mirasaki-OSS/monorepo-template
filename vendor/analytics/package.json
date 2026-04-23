@@ -21,7 +21,11 @@
 	"sideEffects": false,
 	"description": "Next.js analytics helpers with Vercel Analytics + optional Google Analytics",
 	"license": "ISC",
-	"files": ["dist/**/*", "README.md", "LICENSE"],
+	"files": [
+		"dist/**/*",
+		"README.md",
+		"LICENSE"
+	],
 	"exports": {
 		"./env": {
 			"require": {
