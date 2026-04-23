@@ -775,11 +775,7 @@
 	"type": "module",
 	"sideEffects": false,
 	"description": "",
-	"files": [
-		"dist/**/*",
-		"src/styles",
-		"README.md"
-	],
+	"files": ["dist/**/*", "src/styles", "README.md"],
 	"exports": {
 		"./components/client-only": "./src/components/client-only.tsx",
 		"./components/pages/access-denied-page": "./src/components/pages/access-denied-page.tsx",

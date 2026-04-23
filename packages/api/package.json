@@ -8,10 +8,7 @@
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.mjs",
 	"types": "./dist/index.d.cts",
-	"files": [
-		"dist/**/*",
-		"README.md"
-	],
+	"files": ["dist/**/*", "README.md"],
 	"exports": {
 		".": {
 			"require": {

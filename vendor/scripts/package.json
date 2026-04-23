@@ -20,10 +20,7 @@
 	"type": "module",
 	"sideEffects": false,
 	"description": "Reusable monorepo maintenance scripts",
-	"files": [
-		"dist/**/*",
-		"README.md"
-	],
+	"files": ["dist/**/*", "README.md"],
 	"bin": {
 		"md-oss-find-dependency-mismatches": "./bin/md-oss-find-dependency-mismatches.mjs",
 		"md-oss-add-module-directives": "./bin/md-oss-add-module-directives.mjs"
