@@ -1,5 +1,11 @@
 # @md-oss/migrations
 
+## 0.7.0
+
+### Minor Changes
+
+- c46e288: use renamed react tsconfig for browser consumers
+
 ## 0.6.1
 
 ### Patch Changes
