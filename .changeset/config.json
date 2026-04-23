@@ -7,5 +7,13 @@
 	"access": "public",
 	"baseBranch": "main",
 	"updateInternalDependencies": "patch",
-	"ignore": ["@md-oss/cli", "@md-oss/utils"]
+	"ignore": [
+		"@md-oss/cli",
+		"@md-oss/server",
+		"@md-oss/web",
+		"@md-oss/api",
+		"@md-oss/auth",
+		"@md-oss/db",
+		"@md-oss/utils"
+	]
 }
