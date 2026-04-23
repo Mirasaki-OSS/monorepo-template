@@ -1,5 +1,11 @@
 # @md-oss/config
 
+## 0.7.0
+
+### Minor Changes
+
+- 7b3971f: fix(tsconfig): rename tsx to react for clarity
+
 ## 0.6.1
 
 ### Patch Changes

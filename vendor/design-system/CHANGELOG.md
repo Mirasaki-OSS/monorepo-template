@@ -1,5 +1,15 @@
 # @md-oss/design-system
 
+## 0.7.0
+
+### Minor Changes
+
+- c46e288: use renamed react tsconfig for browser consumers
+
+### Patch Changes
+
+- @md-oss/common@0.6.1
+
 ## 0.6.1
 
 ### Patch Changes

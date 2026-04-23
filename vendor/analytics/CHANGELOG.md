@@ -1,5 +1,11 @@
 # @md-oss/analytics
 
+## 0.7.0
+
+### Minor Changes
+
+- 1b700fa: use renamed react tsconfig for browser consumers
+
 ## 0.6.1
 
 ### Patch Changes
