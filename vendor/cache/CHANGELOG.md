@@ -1,5 +1,13 @@
 # @md-oss/cache
 
+## 0.6.1
+
+### Patch Changes
+
+- 047d5f8: force release
+- Updated dependencies [047d5f8]
+  - @md-oss/serdes@0.6.1
+
 ## 0.3.9
 
 ### Patch Changes
