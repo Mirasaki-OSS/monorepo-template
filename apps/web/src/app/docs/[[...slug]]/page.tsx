@@ -11,6 +11,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { getMDXComponents } from '@/components/mdx';
+import { Footer } from '@/layouts/docs/page/slots/footer';
 import { clientEnv } from '@/lib/client/env';
 import { gitConfig } from '@/lib/shared';
 import { getPageImage, getPageMarkdownUrl, source } from '@/lib/source';
@@ -24,9 +25,28 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
 
   const MDX = page.data.body;
   const markdownUrl = getPageMarkdownUrl(page).url;
+  const { lastModified } = page.data;
 
   return (
-    <DocsPage toc={page.data.toc} full={page.data.full}>
+    <DocsPage
+      toc={page.data.toc}
+      full={page.data.full}
+      tableOfContent={{
+        style: 'clerk',
+      }}
+      footer={{
+        enabled: true,
+        component: (
+          <Footer lastModified={lastModified}>
+            <div className="flex flex-col items-center gap-4 mt-2">
+              <p className="text-sm text-muted-foreground">
+                {`© ${new Date().getFullYear()} ${env.NEXT_PUBLIC_SITE_NAME}. All rights reserved.`}
+              </p>
+            </div>
+          </Footer>
+        ),
+      }}
+    >
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription className="mb-0">
         {page.data.description}
@@ -35,7 +55,7 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
         <MarkdownCopyButton markdownUrl={markdownUrl} />
         <ViewOptionsPopover
           markdownUrl={markdownUrl}
-          githubUrl={`https://github.com/${gitConfig.user}/${gitConfig.repo}/blob/${gitConfig.branch}/content/docs/${page.path}`}
+          githubUrl={`https://github.com/${gitConfig.user}/${gitConfig.repo}/blob/${gitConfig.branch}/apps/web/content/docs/${page.path}`}
         />
       </div>
       <DocsBody>

@@ -6,3 +6,8 @@
 
 @import "@md-oss/design-system/styles/globals.css";
 @import "@md-oss/design-system/styles/persistent-scroll-bar.css";
+
+@plugin "@tailwindcss/typography" {
+	/** Avoid conflicting with fumadocs Typography component */
+	className: wysiwyg;
+}

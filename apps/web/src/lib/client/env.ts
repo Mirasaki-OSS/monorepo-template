@@ -7,6 +7,7 @@ export const clientEnv = () =>
   createEnv({
     extends: [apiClientEnv(), authClientEnv()],
     client: {
+      NEXT_PUBLIC_SITE_NAME: z.string().min(1).default('My App'),
       NEXT_PUBLIC_SITE_URL: z.url().min(1),
     },
     server: {},
