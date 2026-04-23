@@ -1,5 +1,20 @@
 # @md-oss/api-types
 
+## 0.6.0
+
+### Minor Changes
+
+- 8ab59be: preserve http-client response types in api-types/client
+
+### Patch Changes
+
+- 82a21fc: re-export common types from @md-oss/common
+- Updated dependencies [8ab59be]
+- Updated dependencies [3434a1f]
+  - @md-oss/http-client@0.6.0
+  - @md-oss/common@0.6.0
+  - @md-oss/serdes@0.3.9
+
 ## 0.5.0
 
 ### Patch Changes

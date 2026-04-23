@@ -1,5 +1,11 @@
 # @md-oss/config
 
+## 0.6.0
+
+### Minor Changes
+
+- 1ef6542: normalize tsconfig and intended consumer environment
+
 ## 0.3.9
 
 ### Patch Changes

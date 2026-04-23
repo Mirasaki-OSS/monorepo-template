@@ -1,5 +1,12 @@
 # @md-oss/discord
 
+## 0.6.0
+
+### Patch Changes
+
+- Updated dependencies [3434a1f]
+  - @md-oss/common@0.6.0
+
 ## 0.5.3
 
 ### Patch Changes

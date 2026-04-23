@@ -1,5 +1,12 @@
 # @md-oss/common
 
+## 0.6.0
+
+### Patch Changes
+
+- 3434a1f: Add print progress utility
+  - @md-oss/serdes@0.3.9
+
 ## 0.5.3
 
 ### Patch Changes

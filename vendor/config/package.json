@@ -1,6 +1,6 @@
 {
 	"name": "@md-oss/config",
-	"version": "0.3.9",
+	"version": "0.6.0",
 	"private": false,
 	"publishConfig": {
 		"access": "public",
