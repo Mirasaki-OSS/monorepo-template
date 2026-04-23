@@ -22,8 +22,9 @@
 	"license": "ISC",
 	"files": [
 		"tsconfig.base.json",
+		"tsconfig.isomorphic.json",
 		"tsconfig.node.json",
-		"tsconfig.tsx.json",
+		"tsconfig.react.json",
 		"README.md",
 		"LICENSE"
 	],
@@ -31,7 +32,7 @@
 		"./tsconfig.base.json": "./tsconfig.base.json",
 		"./tsconfig.isomorphic.json": "./tsconfig.isomorphic.json",
 		"./tsconfig.node.json": "./tsconfig.node.json",
-		"./tsconfig.tsx.json": "./tsconfig.tsx.json"
+		"./tsconfig.react.json": "./tsconfig.react.json"
 	},
 	"scripts": {
 		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo"
