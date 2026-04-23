@@ -55,9 +55,6 @@ jobs:
       - name: Install workspace root dependencies
         run: pnpm install -w --frozen-lockfile
 
-      - name: Installing tsx global
-        run: pnpm exec tsx --version || pnpm add -g tsx@^4.21.0
-
       - name: Replace `@md-oss` with `@mirasaki-oss` across monorepo (for Github Packages)
         run: |
           pnpm exec tsx ./scripts/node/replace-scope.ts --scopeOld="@md-oss" --scopeNew="@mirasaki-oss" --paths="./package.json,./.changeset/*,./apps,./packages,./vendor"
