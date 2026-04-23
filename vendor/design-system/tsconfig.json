@@ -1,5 +1,5 @@
 {
-	"extends": "@md-oss/config/tsconfig.tsx.json",
+	"extends": "@md-oss/config/tsconfig.react.json",
 	"compilerOptions": {
 		"outDir": "./dist",
 		"rootDir": "./src",
