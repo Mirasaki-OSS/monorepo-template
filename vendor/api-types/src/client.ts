@@ -17,6 +17,12 @@ import type { RequestOptions } from './request';
 import type { InferApi, MethodKeys, RouteKeys, RouteRegistry } from './types';
 
 export {
+	HTTPError,
+	isHTTPError,
+	isHTTPErrorResponse,
+} from '@md-oss/common/http';
+
+export {
 	type JsonPrimitive,
 	type JsonValueLike,
 	type SerializedJson,
