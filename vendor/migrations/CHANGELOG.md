@@ -1,5 +1,11 @@
 # @md-oss/migrations
 
+## 0.6.1
+
+### Patch Changes
+
+- 047d5f8: force release
+
 ## 0.3.9
 
 ### Patch Changes

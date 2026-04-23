@@ -1,6 +1,6 @@
 {
 	"name": "@md-oss/scripts",
-	"version": "0.3.9",
+	"version": "0.6.1",
 	"private": false,
 	"publishConfig": {
 		"access": "public",
@@ -20,7 +20,10 @@
 	"type": "module",
 	"sideEffects": false,
 	"description": "Reusable monorepo maintenance scripts",
-	"files": ["dist/**/*", "README.md"],
+	"files": [
+		"dist/**/*",
+		"README.md"
+	],
 	"bin": {
 		"md-oss-find-dependency-mismatches": "./bin/md-oss-find-dependency-mismatches.mjs",
 		"md-oss-add-module-directives": "./bin/md-oss-add-module-directives.mjs"

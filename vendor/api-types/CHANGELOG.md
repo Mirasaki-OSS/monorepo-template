@@ -1,5 +1,15 @@
 # @md-oss/api-types
 
+## 0.6.1
+
+### Patch Changes
+
+- 047d5f8: force release
+- Updated dependencies [047d5f8]
+  - @md-oss/http-client@0.6.1
+  - @md-oss/common@0.6.1
+  - @md-oss/serdes@0.6.1
+
 ## 0.6.0
 
 ### Minor Changes
