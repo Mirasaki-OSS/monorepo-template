@@ -7,7 +7,7 @@ Shared TypeScript configuration. Provides consistent compiler settings across al
 - **`tsconfig.base.json`** - Base configuration with strict settings. Extend this for all packages.
 - **`tsconfig.isomorphic.json`** - For packages that run in both Node.js and the browser (adds DOM types)
 - **`tsconfig.node.json`** - For Node.js-only packages (adds `@types/node`)
-- **`tsconfig.tsx.json`** - For React/TSX projects (adds DOM types and JSX support)
+- **`tsconfig.react.json`** - For React/TSX projects (adds DOM types and JSX support)
 
 ## Usage
 
@@ -57,7 +57,7 @@ Shared TypeScript configuration. Provides consistent compiler settings across al
 
 ```json
 {
-  "extends": "@md-oss/config/tsconfig.tsx.json",
+  "extends": "@md-oss/config/tsconfig.react.json",
   "compilerOptions": {
     "outDir": "./dist"
   }
