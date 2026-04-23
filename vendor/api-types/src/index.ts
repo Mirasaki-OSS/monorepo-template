@@ -9,13 +9,13 @@
  */
 export {
 	type ApiClient,
+	type ApiClientResponse,
 	type ApplyResponseTypeTransformer,
 	type ClientConfig,
 	createApiClient,
 	type IdentityResponseTypeTransformer,
 	type JsonPrimitive,
 	type JsonResponseTypeTransformer,
-	type Logger as APIClientLogger,
 	parseHeaders,
 	type ResponseTypeTransformer,
 	type SerializedJson,
