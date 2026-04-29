@@ -774,11 +774,13 @@
 	},
 	"type": "module",
 	"sideEffects": false,
-	"description": "",
+	"description": "Reusable React UI components, hooks, and styles",
+	"license": "ISC",
 	"files": [
 		"dist/**/*",
 		"src/styles",
-		"README.md"
+		"README.md",
+		"LICENSE"
 	],
 	"exports": {
 		"./components/client-only": "./src/components/client-only.tsx",

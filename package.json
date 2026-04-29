@@ -33,7 +33,8 @@
 		"docker:up": "docker compose up -d",
 		"publish:ci": "pnpm run checks:ci && pnpm run build --filter={./vendor/*} && turbo run typecheck --filter={./vendor/*} && changeset version && changeset publish",
 		"publish:dryrun": "pnpm -r publish --access public --report-summary --dry-run --no-git-checks",
-		"script:fdm": "pnpm dedupe && pnpm exec md-oss-find-dependency-mismatches"
+		"script:fdm": "pnpm dedupe && pnpm exec md-oss-find-dependency-mismatches",
+		"script:sl": "tsx ./scripts/node/sync-licenses.ts"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.4.13",

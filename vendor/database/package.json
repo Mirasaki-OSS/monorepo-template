@@ -20,9 +20,11 @@
 	"type": "module",
 	"sideEffects": false,
 	"description": "Adapter-agnostic query helpers with typed pagination",
+	"license": "ISC",
 	"files": [
 		"dist/**/*",
-		"README.md"
+		"README.md",
+		"LICENSE"
 	],
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.mjs",
