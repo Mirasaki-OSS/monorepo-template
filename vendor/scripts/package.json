@@ -20,9 +20,11 @@
 	"type": "module",
 	"sideEffects": false,
 	"description": "Reusable monorepo maintenance scripts",
+	"license": "ISC",
 	"files": [
 		"dist/**/*",
-		"README.md"
+		"README.md",
+		"LICENSE"
 	],
 	"bin": {
 		"md-oss-find-dependency-mismatches": "./bin/md-oss-find-dependency-mismatches.mjs",
@@ -56,12 +58,11 @@
 		"dev": "pkgroll --watch --sourcemap  --define.process.env.NODE_ENV='\"development\"' --define.DEBUG=true",
 		"typecheck": "tsc --noEmit"
 	},
-	"dependencies": {},
 	"devDependencies": {
-		"@md-oss/config": "workspace:^",
 		"@md-oss/common": "workspace:^",
+		"@md-oss/config": "workspace:^",
 		"pkgroll": "^2.27.0",
 		"tsx": "^4.21.0",
-		"typescript": "^6.0.2"
+		"typescript": "^6.0.3"
 	}
 }

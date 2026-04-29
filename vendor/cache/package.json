@@ -152,14 +152,14 @@
 		"cache-manager": "^7.2.8",
 		"debug": "^4.4.3",
 		"keyv": "^5.6.0",
-		"lru-cache": "^11.3.3",
-		"redis": "^5.11.0",
+		"lru-cache": "^11.3.5",
+		"redis": "^5.12.1",
 		"zod": "^4.3.6"
 	},
 	"devDependencies": {
 		"@md-oss/config": "workspace:^",
 		"@types/node": "^25.6.0",
 		"pkgroll": "^2.27.0",
-		"typescript": "^6.0.2"
+		"typescript": "^6.0.3"
 	}
 }
