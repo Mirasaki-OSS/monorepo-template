@@ -20,19 +20,15 @@ import {
 	toBody,
 } from './resolvers';
 import {
-	DEFAULT_RETRIES,
-	DEFAULT_RETRY_BASE_DELAY_MS,
-	DEFAULT_RETRY_MAX_DELAY_MS,
-	DEFAULT_RETRY_STATUSES,
 	DEFAULT_TIMEOUT_MS,
+	defaultRetryOptions,
 	evaluateRetry,
-	isRetryableNetworkError,
 } from './retry';
 import type {
 	DefaultHeadersResolver,
 	HTTPClientRequestOptions,
 	HttpClientConfig,
-	ResolveRetryOptions,
+	HttpRequestRetryOptions,
 } from './types';
 
 export type {
@@ -98,7 +94,8 @@ export class HttpClient {
 	readonly baseUrl: string;
 	readonly serviceName: string;
 	readonly defaultHeaders?: HeadersInit | DefaultHeadersResolver;
-	readonly resolveRetryOptions?: ResolveRetryOptions;
+	readonly defaultRetryOptions?: HttpRequestRetryOptions;
+
 	private readonly staticDefaultHeaders: Headers;
 	private readonly defaultHeadersResolver?: DefaultHeadersResolver;
 
@@ -106,7 +103,7 @@ export class HttpClient {
 		this.baseUrl = buildUrl(config.baseUrl, null);
 		this.serviceName = config.serviceName;
 		this.defaultHeaders = config.defaultHeaders;
-		this.resolveRetryOptions = config.resolveRetryOptions;
+		this.defaultRetryOptions = config.retryOptions;
 
 		if (typeof config.defaultHeaders === 'function') {
 			this.defaultHeadersResolver = config.defaultHeaders;
@@ -131,14 +128,10 @@ export class HttpClient {
 	): Promise<HTTPClientResponse<T, HTTPResponse<T>>> {
 		const {
 			timeoutMs = DEFAULT_TIMEOUT_MS,
-			retries = DEFAULT_RETRIES,
-			retryBaseDelayMs = DEFAULT_RETRY_BASE_DELAY_MS,
-			retryMaxDelayMs = DEFAULT_RETRY_MAX_DELAY_MS,
-			retryOnStatuses = DEFAULT_RETRY_STATUSES,
+			retryOptions: requestRetryOptions,
 			parseAs = 'json',
 			accessToken,
 			serviceName,
-			resolveRetryOptions: resolveRequestRetryOptions,
 			headers,
 			body,
 			query,
@@ -146,11 +139,19 @@ export class HttpClient {
 			...init
 		} = options;
 
+		const retryOptions = {
+			...defaultRetryOptions,
+			...this.defaultRetryOptions,
+			...requestRetryOptions,
+		};
+		const maxRetryAttempts = retryOptions.enabled
+			? Math.max(0, retryOptions.maxAttempts)
+			: 1;
+
 		const resolvedServiceName = serviceName ?? this.serviceName;
 		const resolvedPath = resolvePathParams(input, pathParams);
 		const url = appendQuery(buildUrl(this.baseUrl, resolvedPath), query);
-		const retryResolver =
-			resolveRequestRetryOptions ?? this.resolveRetryOptions;
+		const method = (init.method ?? 'GET').toUpperCase();
 		const defaultHeaders = await this.getDefaultHeaders(accessToken);
 		const mergedHeaders = resolveRequestHeaders(
 			mergeHeaders(defaultHeaders, headers),
@@ -158,7 +159,7 @@ export class HttpClient {
 			parseAs
 		);
 
-		for (let attempt = 0; attempt <= retries; attempt++) {
+		for (let attempt = 0; attempt < maxRetryAttempts; attempt++) {
 			const controller = new AbortController();
 			const timeout = setTimeout(() => controller.abort(), timeoutMs);
 
@@ -180,17 +181,15 @@ export class HttpClient {
 				};
 
 				if (!response.ok) {
-					const retryDecision = await evaluateRetry(retryResolver, {
+					const retryDecision = await evaluateRetry({
 						response,
 						attempt,
-						retries,
-						retryBaseDelayMs,
-						retryMaxDelayMs,
-						retryOnStatuses,
+						method,
 						input,
 						serviceName: resolvedServiceName,
 						request: options,
-						isRetryableError: isRetryableNetworkError,
+						...retryOptions,
+						maxAttempts: maxRetryAttempts,
 					});
 
 					if (retryDecision.retry) {
@@ -249,17 +248,15 @@ export class HttpClient {
 			} catch (error) {
 				clearTimeout(timeout);
 
-				const retryDecision = await evaluateRetry(retryResolver, {
+				const retryDecision = await evaluateRetry({
 					error,
 					attempt,
-					retries,
-					retryBaseDelayMs,
-					retryMaxDelayMs,
-					retryOnStatuses,
+					method,
 					input,
 					serviceName: resolvedServiceName,
 					request: options,
-					isRetryableError: isRetryableNetworkError,
+					...retryOptions,
+					maxAttempts: maxRetryAttempts,
 				});
 
 				if (retryDecision.retry) {

@@ -7,15 +7,27 @@ export type QueryValue =
 	| null[]
 	| undefined[];
 
+export type HttpRequestRetryOptions = {
+	enabled?: boolean;
+	maxAttempts?: number;
+	baseDelayMs?: number;
+	maxDelayMs?: number;
+	backoffFactor?: number;
+	jitterRatio?: number;
+	retryableMethods?: string[];
+	retryableStatusCodes?: number[];
+	capRateLimitDelayToMaxDelayMs?: boolean;
+	parseRateLimitDelayMs?: ParseRateLimitDelayMs;
+	isRetryableError?: (error: unknown) => boolean;
+	onRetry?: RetryHook;
+};
+
 export type HttpRequestOptions = Omit<RequestInit, 'body'> & {
 	body?: unknown;
 	query?: Record<string, QueryValue> | URLSearchParams;
 	pathParams?: Record<string, string | number>;
 	timeoutMs?: number;
-	retries?: number;
-	retryBaseDelayMs?: number;
-	retryMaxDelayMs?: number;
-	retryOnStatuses?: number[];
+	retryOptions?: HttpRequestRetryOptions;
 	parseAs?: 'json' | 'text';
 };
 
@@ -25,7 +37,7 @@ export type HttpClientConfig = {
 	defaultHeaders?:
 		| HeadersInit
 		| ((ctx: { accessToken?: string }) => HeadersInit | Promise<HeadersInit>);
-	resolveRetryOptions?: ResolveRetryOptions;
+	retryOptions?: HttpRequestRetryOptions;
 };
 
 export type DefaultHeadersResolver = Extract<
@@ -36,44 +48,45 @@ export type DefaultHeadersResolver = Extract<
 export type HTTPClientRequestOptions = HttpRequestOptions & {
 	accessToken?: string;
 	serviceName?: string;
-	resolveRetryOptions?: ResolveRetryOptions;
 };
 
 // =============================================================
 // Start Retry Types
 // =============================================================
 
-export type RetryOptions = {
-	retry?: boolean;
-	delayMs?: number;
-};
+export type ParseRateLimitDelayMs = (response: Response) => number | null;
 
-export type RetryContext<TRequest = unknown> = {
+export type RetryHookContext<TRequest = unknown> = {
 	response?: Response;
 	error?: unknown;
 	attempt: number;
-	maxRetries: number;
-	defaultRetry: boolean;
-	defaultDelayMs: number;
+	maxAttempts: number;
+	method: string;
+	delayMs: number;
 	input: string;
 	serviceName: string;
 	request: Readonly<TRequest>;
 };
 
-export type RetryOptionsResult = RetryOptions | boolean | undefined;
-
-export type ResolveRetryOptions<TRequest = unknown> = (
-	context: RetryContext<TRequest>
-) => RetryOptionsResult | Promise<RetryOptionsResult>;
+export type RetryHook<TRequest = unknown> = (
+	context: RetryHookContext<TRequest>
+) => void | Promise<void>;
 
 export type RetryEvaluationInput<TRequest = unknown> = {
 	response?: Response;
 	error?: unknown;
 	attempt: number;
-	retries: number;
-	retryBaseDelayMs: number;
-	retryMaxDelayMs: number;
-	retryOnStatuses: number[];
+	maxAttempts: number;
+	method: string;
+	baseDelayMs: number;
+	maxDelayMs: number;
+	backoffFactor: number;
+	jitterRatio: number;
+	retryableMethods: string[];
+	retryableStatusCodes: number[];
+	capRateLimitDelayToMaxDelayMs: boolean;
+	parseRateLimitDelayMs: ParseRateLimitDelayMs;
+	onRetry?: RetryHook<TRequest>;
 	input: string;
 	serviceName: string;
 	request: Readonly<TRequest>;
