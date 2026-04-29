@@ -867,7 +867,7 @@
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
-		"@base-ui/react": "^1.4.0",
+		"@base-ui/react": "^1.4.1",
 		"@md-oss/common": "workspace:^",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
@@ -880,8 +880,8 @@
 		"radix-ui": "^1.4.3",
 		"react-day-picker": "^9.14.0",
 		"react-resizable-panels": "^4.10.0",
-		"recharts": "3.8.0",
-		"shadcn": "^4.2.0",
+		"recharts": "3.8.1",
+		"shadcn": "^4.6.0",
 		"sonner": "^2.0.7",
 		"tailwind-merge": "^3.5.0",
 		"tw-animate-css": "^1.4.0",
@@ -893,7 +893,7 @@
 		"@md-oss/scripts": "workspace:^",
 		"@types/node": "^25.6.0",
 		"pkgroll": "^2.27.0",
-		"typescript": "^6.0.2"
+		"typescript": "^6.0.3"
 	},
 	"peerDependencies": {
 		"@types/react": "catalog:",

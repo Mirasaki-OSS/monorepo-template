@@ -118,7 +118,7 @@
 		"@md-oss/scripts": "workspace:^",
 		"@types/node": "^25.6.0",
 		"pkgroll": "^2.27.0",
-		"typescript": "^6.0.2"
+		"typescript": "^6.0.3"
 	},
 	"peerDependencies": {
 		"@types/debug": "^4.1.13"

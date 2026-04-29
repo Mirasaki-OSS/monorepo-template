@@ -22,8 +22,8 @@
 		"start": "turbo run start --parallel",
 		"test": "turbo run test",
 		"typecheck": "turbo run typecheck",
-		"up:minor": "pnpm up -r",
-		"up:major": "pnpm up -r --latest",
+		"up:minor": "pnpm up -r && pnpm script:fdm",
+		"up:major": "pnpm up -r --latest && pnpm script:fdm",
 		"docker:build": "docker compose build",
 		"docker:clean": "docker compose down -v --rmi local",
 		"docker:debug": "docker compose -f docker/compose.dev.yaml --profile debug up --build && docker compose -f docker/compose.dev.yaml --profile debug down --remove-orphans --rmi=all",
@@ -33,18 +33,22 @@
 		"docker:up": "docker compose up -d",
 		"publish:ci": "pnpm run checks:ci && pnpm run build --filter={./vendor/*} && turbo run typecheck --filter={./vendor/*} && changeset version && changeset publish",
 		"publish:dryrun": "pnpm -r publish --access public --report-summary --dry-run --no-git-checks",
-		"script:fdm": "pnpm exec md-oss-find-dependency-mismatches"
+		"script:fdm": "pnpm dedupe && pnpm exec md-oss-find-dependency-mismatches"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.4.12",
-		"@changesets/cli": "^2.30.0",
+		"@biomejs/biome": "2.4.13",
+		"@changesets/cli": "^2.31.0",
 		"@md-oss/scripts": "workspace:^",
 		"@turbo/gen": "^2.9.6",
 		"@types/node": "^25.6.0",
 		"glob": "^13.0.6",
-		"lefthook": "^2.1.5",
+		"lefthook": "^2.1.6",
 		"tsx": "^4.21.0",
 		"turbo": "^2.9.6"
 	},
-	"workspaces": ["apps/*", "packages/*", "vendor/*"]
+	"workspaces": [
+		"apps/*",
+		"packages/*",
+		"vendor/*"
+	]
 }

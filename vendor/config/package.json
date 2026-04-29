@@ -38,6 +38,6 @@
 		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo"
 	},
 	"devDependencies": {
-		"typescript": "^6.0.2"
+		"typescript": "^6.0.3"
 	}
 }
