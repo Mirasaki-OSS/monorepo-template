@@ -1,5 +1,13 @@
 # @md-oss/design-system
 
+## 0.7.1
+
+### Patch Changes
+
+- 52092ba: bump dependencies
+- Updated dependencies [52092ba]
+  - @md-oss/common@0.7.1
+
 ## 0.7.0
 
 ### Minor Changes

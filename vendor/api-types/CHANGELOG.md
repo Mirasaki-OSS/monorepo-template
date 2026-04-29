@@ -1,5 +1,16 @@
 # @md-oss/api-types
 
+## 0.7.1
+
+### Patch Changes
+
+- 52092ba: bump dependencies
+- Updated dependencies [52092ba]
+- Updated dependencies [5450550]
+  - @md-oss/http-client@0.7.1
+  - @md-oss/common@0.7.1
+  - @md-oss/serdes@0.7.1
+
 ## 0.6.1
 
 ### Patch Changes
