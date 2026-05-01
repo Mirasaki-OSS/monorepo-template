@@ -1,5 +1,11 @@
 # @md-oss/design-system
 
+## 0.8.0
+
+### Minor Changes
+
+- 5403d2e: feat: @mirasaki/design-system > @md-oss/design-system migration
+
 ## 0.7.1
 
 ### Patch Changes
