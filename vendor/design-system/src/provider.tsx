@@ -1,4 +1,4 @@
-import { ResponsiveTooltipProvider } from '@md-oss/design-system/components/responsive/tooltip';
+import { AdaptiveTooltipProvider } from '@md-oss/design-system/components/adaptive/tooltip';
 import { ThemeProvider } from '@md-oss/design-system/components/theme/provider';
 import { TouchContextProvider } from '@md-oss/design-system/lib/context/touch';
 import React from 'react';
@@ -6,9 +6,9 @@ import React from 'react';
 type DesignSystemProviderProps = {
 	children: React.ReactNode;
 	themeProviderProps?: React.ComponentProps<typeof ThemeProvider>;
-	tooltipProviderProps?: React.ComponentProps<typeof ResponsiveTooltipProvider>;
+	tooltipProviderProps?: React.ComponentProps<typeof AdaptiveTooltipProvider>;
 	useTouchContext?: boolean;
-	useResponsiveTooltip?: boolean;
+	useAdaptiveTooltip?: boolean;
 };
 
 function DesignSystemProvider({
@@ -16,13 +16,13 @@ function DesignSystemProvider({
 	themeProviderProps,
 	tooltipProviderProps,
 	useTouchContext = false,
-	useResponsiveTooltip = false,
+	useAdaptiveTooltip = false,
 }: DesignSystemProviderProps) {
 	const TouchContextComponent = useTouchContext
 		? TouchContextProvider
 		: React.Fragment;
-	const TooltipProviderComponent = useResponsiveTooltip
-		? ResponsiveTooltipProvider
+	const TooltipProviderComponent = useAdaptiveTooltip
+		? AdaptiveTooltipProvider
 		: React.Fragment;
 
 	return (

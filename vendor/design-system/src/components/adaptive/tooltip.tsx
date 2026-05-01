@@ -11,6 +11,7 @@ import {
 import {
 	Tooltip,
 	TooltipContent,
+	type TooltipContentProps,
 	type TooltipProps,
 	TooltipProvider,
 	type TooltipProviderProps,
@@ -18,21 +19,25 @@ import {
 	type TooltipTriggerProps,
 } from '@md-oss/design-system/components/ui/tooltip';
 import { useTouchContext } from '@md-oss/design-system/lib/context/touch';
-import type { TooltipContentProps } from 'recharts';
+import type React from 'react';
 
-const ResponsiveTooltipProvider = (props: TooltipProviderProps) => {
+function AdaptiveTooltipProvider(
+	props: TooltipProviderProps
+): React.JSX.Element {
 	return <TooltipProvider delayDuration={0} {...props} />;
-};
+}
 
-const ResponsiveTooltip = (props: TooltipProps & PopoverProps) => {
+function AdaptiveTooltip(
+	props: TooltipProps & PopoverProps
+): React.JSX.Element {
 	const isTouch = useTouchContext();
 
 	return isTouch ? <Popover {...props} /> : <Tooltip {...props} />;
-};
+}
 
-const ResponsiveTooltipTrigger = (
+function AdaptiveTooltipTrigger(
 	props: TooltipTriggerProps & PopoverTriggerProps
-) => {
+): React.JSX.Element {
 	const isTouch = useTouchContext();
 
 	return isTouch ? (
@@ -40,11 +45,11 @@ const ResponsiveTooltipTrigger = (
 	) : (
 		<TooltipTrigger {...props} />
 	);
-};
+}
 
-const ResponsiveTooltipContent = (
+function AdaptiveTooltipContent(
 	props: TooltipContentProps & PopoverContentProps
-) => {
+): React.JSX.Element {
 	const isTouch = useTouchContext();
 
 	return isTouch ? (
@@ -52,11 +57,11 @@ const ResponsiveTooltipContent = (
 	) : (
 		<TooltipContent {...props} />
 	);
-};
+}
 
 export {
-	ResponsiveTooltip,
-	ResponsiveTooltipContent,
-	ResponsiveTooltipProvider,
-	ResponsiveTooltipTrigger,
+	AdaptiveTooltip,
+	AdaptiveTooltipContent,
+	AdaptiveTooltipProvider,
+	AdaptiveTooltipTrigger,
 };

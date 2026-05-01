@@ -11,7 +11,7 @@ import {
 import { Skeleton } from '@md-oss/design-system/components/ui/skeleton';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { authClient } from '@/lib/auth-client';
+import { authClient } from '@/lib/client/auth';
 
 export default function UserMenu() {
   const router = useRouter();
