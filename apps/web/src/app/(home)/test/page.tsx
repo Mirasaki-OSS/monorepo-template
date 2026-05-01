@@ -1,5 +1,14 @@
 'use client';
 
+// [DEV] Docs customization and configuration:
+// http://localhost:3000/docs
+// https://www.fumadocs.dev/docs/ui/search
+// https://www.fumadocs.dev/docs/ui/layouts/root-provider#theme-provider
+
+// [DEV] Editor Component playgrounds:
+// https://playground.lexical.dev/
+// https://tiptap.dev/
+
 import { AdaptiveDialogPanel } from '@md-oss/design-system/components/adaptive/dialog';
 import {
   type AdaptiveTabItem,
