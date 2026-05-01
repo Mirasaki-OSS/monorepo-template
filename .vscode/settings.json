@@ -5,7 +5,18 @@
 		"source.fixAll.biome": "explicit",
 		"source.organizeImports.biome": "explicit"
 	},
+	"cSpell.ignorePaths": [
+		"package-lock.json",
+		"node_modules",
+		"vscode-extension",
+		".git/{info,lfs,logs,refs,objects}/**",
+		".git/{index,*refs,*HEAD}",
+		".vscode",
+		".vscode-insiders",
+		"apps/web/src/app/\\(home\\)/test"
+	],
 	"cSpell.words": [
+		"aceternity",
 		"addgroup",
 		"adduser",
 		"appuser",
@@ -31,9 +42,11 @@
 		"Glassmorphism",
 		"healthcheck",
 		"isready",
+		"labelledby",
 		"lefthook",
 		"lerp",
 		"llms",
+		"lpignore",
 		"lucide",
 		"maxsize",
 		"mdel",
