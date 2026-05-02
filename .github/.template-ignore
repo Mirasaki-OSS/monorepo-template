@@ -23,3 +23,6 @@ scripts/node/sync-licenses.ts
 
 # Changelogs
 packages/*/CHANGELOG.md
+
+# Development
+notes.md
