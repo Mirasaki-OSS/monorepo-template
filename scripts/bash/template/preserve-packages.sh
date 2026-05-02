@@ -59,7 +59,12 @@ for package in "${PACKAGES_TO_PRESERVE[@]}"; do
       const fs = require('fs');
       const pkg = JSON.parse(fs.readFileSync('$PACKAGE_JSON', 'utf8'));
       pkg.private = true;
-      delete pkg.publishConfig;
+      if (pkg.publishConfig && typeof pkg.publishConfig === 'object') {
+        delete pkg.publishConfig.access;
+        delete pkg.publishConfig.provenance;
+        delete pkg.publishConfig.registry;
+        delete pkg.publishConfig.tag;
+      }
       delete pkg.repository;
       delete pkg.license;
       if (Array.isArray(pkg.files)) {
@@ -68,7 +73,7 @@ for package in "${PACKAGES_TO_PRESERVE[@]}"; do
       fs.writeFileSync('$PACKAGE_JSON', JSON.stringify(pkg, null, '\t') + '\n');
     "
     
-    log_success "Updated package.json (set private=true, removed publishConfig, repository and licensing)"
+    log_success "Updated package.json (set private=true, removed publishConfig (excluding exports), repository and licensing)"
   else
     log_warning "package.json not found in packages/$package"
   fi
