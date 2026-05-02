@@ -20,3 +20,6 @@ scripts/node/sync-licenses.ts
 
 # Template preparation (no longer needed after initialization)
 .github/workflows/prepare-template.yaml
+
+# Changelogs
+packages/*/CHANGELOG.md
