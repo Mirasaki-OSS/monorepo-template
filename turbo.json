@@ -4,6 +4,7 @@
 	"envMode": "strict",
 	"globalEnv": ["NODE_ENV"],
 	"globalPassThroughEnv": ["DATABASE_URL", "CORS_ORIGIN", "BETTER_AUTH_SECRET"],
+	"concurrency": "100%",
 	"tasks": {
 		"build": {
 			"dependsOn": ["^build"],
@@ -19,7 +20,40 @@
 		},
 		"dev": {
 			"cache": false,
-			"persistent": true
+			"persistent": true,
+			"dependsOn": ["^build"]
+		},
+		"@md-oss/web#dev": {
+			"cache": false,
+			"persistent": true,
+			"dependsOn": [
+				"@md-oss/api#build",
+				"@md-oss/auth#build",
+				"@md-oss/common#build"
+			],
+			"with": ["@md-oss/api#dev", "@md-oss/auth#dev", "@md-oss/common#dev"]
+		},
+		"@md-oss/server#dev": {
+			"cache": false,
+			"persistent": true,
+			"dependsOn": [
+				"@md-oss/api#build",
+				"@md-oss/auth#build",
+				"@md-oss/db#build",
+				"@md-oss/utils#build"
+			],
+			"with": [
+				"@md-oss/api#dev",
+				"@md-oss/auth#dev",
+				"@md-oss/db#dev",
+				"@md-oss/utils#dev"
+			]
+		},
+		"@md-oss/cli#dev": {
+			"cache": false,
+			"persistent": true,
+			"dependsOn": ["@md-oss/utils#build"],
+			"with": ["@md-oss/utils#dev"]
 		},
 		"format": {
 			"cache": false
