@@ -35,13 +35,24 @@ const interpolatePath = (
 	path: string,
 	params: Record<string, string | number>
 ) => {
-	return path.replace(/:([a-zA-Z0-9_]+)/g, (_, key) => {
-		const value = params[key];
-		if (value == null) {
-			throw new Error(`Missing path param: ${key}`);
+	if (!path.includes(':') && !path.includes('{')) {
+		return path;
+	}
+
+	return path.replace(
+		/:([a-zA-Z0-9_]+)|\{([a-zA-Z0-9_]+)\}/g,
+		(_, colonKey?: string, bracketKey?: string) => {
+			const key = colonKey ?? bracketKey;
+			if (!key) {
+				return _;
+			}
+			const value = params[key];
+			if (value == null) {
+				throw new Error(`Missing path param: ${key}`);
+			}
+			return encodeURIComponent(String(value));
 		}
-		return encodeURIComponent(String(value));
-	});
+	);
 };
 
 export { parseHeaders, stripProxyAndWebsocketHeaders };
