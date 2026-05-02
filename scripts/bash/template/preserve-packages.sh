@@ -21,10 +21,16 @@ PACKAGES_TO_PRESERVE=(
 # Add relative paths from project root to automatically update references
 FILES_TO_UPDATE=(
   "README.md"
+  "biome.json"
   "apps/cli/package.json"
   "docker/compose.dev.yaml"
   "docker/Dockerfile"
   "docker/Dockerfile.dev"
+)
+
+FILES_TO_UPDATE_PACKAGE_FILE_PATTERNS=(
+  "package.json"
+  "CHANGELOG.md"
 )
 
 log_section "Preserving packages for template"
@@ -76,6 +82,13 @@ for package in "${PACKAGES_TO_PRESERVE[@]}"; do
   fi
   
   preserve_count=$((preserve_count + 1))
+done
+
+for pattern in "${FILES_TO_UPDATE_PACKAGE_FILE_PATTERNS[@]}"; do
+  while IFS= read -r package_file; do
+    relative_path=${package_file#"$PROJECT_ROOT/"}
+    FILES_TO_UPDATE+=("$relative_path")
+  done < <(find "$PROJECT_ROOT/packages" -type f -name "$pattern" | sort)
 done
 
 # Update references in configured files to point to packages/ instead of vendor/
