@@ -11,8 +11,9 @@ PROJECT_ROOT=$(get_project_root)
 # Add package names here to automatically copy and configure them
 PACKAGES_TO_PRESERVE=(
   "config" # Used by all non-vendor packages
-  "scripts" # Used in workspace root, depends on common
-  "common" # Required by common
+  "design-system" # Implemented in apps/web, depends on scripts and common
+  "scripts" # Used in workspace root, required by design-system, depends on common
+  "common" # Required by scripts and design-system
 )
 
 # List of files to update vendor/ references to packages/
