@@ -13,12 +13,17 @@ export {
 	type ApplyResponseTypeTransformer,
 	type ClientConfig,
 	createApiClient,
+	HTTPError,
 	type IdentityResponseTypeTransformer,
+	isHTTPError,
+	isHTTPErrorResponse,
 	type JsonPrimitive,
 	type JsonResponseTypeTransformer,
+	type JsonValueLike,
 	parseHeaders,
 	type ResponseTypeTransformer,
 	type SerializedJson,
+	serializeJson,
 	stripProxyAndWebsocketHeaders,
 } from './client';
 
@@ -29,14 +34,19 @@ export {
 	type ParsedParameters,
 	parseRequestParameters,
 } from './params';
-
-export type { ExtractResolvedContext, RequestOptions } from './request';
+export {
+	type ExtractResolvedContext,
+	isZodSchema,
+	type RequestOptions,
+} from './request';
 
 export {
 	type ContextProvider,
 	type ControllerFunction,
 	type EndpointDefinitionSession,
+	type GenericRouteHandler,
 	type IsUserMe,
+	noContentStatusCodes,
 	type RouteHandler,
 	type SendTypedResponseOptions,
 	type SignedAccessError,
@@ -45,6 +55,8 @@ export {
 
 export {
 	type EndpointDefinition,
+	type EndpointResponseDefinition,
+	type EndpointResponses,
 	type InferApi,
 	type MethodKeys,
 	type PrefixRoutes,

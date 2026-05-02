@@ -3,7 +3,7 @@
 Type-safe API contracts and helpers for building clients and route handlers around shared `@md-oss/common` errors and Zod-validated inputs/outputs.
 
 ## Features
-- Route registries with Zod schemas for params, query, and body validation
+- Route registries with Zod schemas for params, query, body, and optional response validation
 - Typed API client factory (`createApiClient`) that strips unsafe headers and returns full HTTP response metadata (`statusCode`, `headers`, raw `Response`, etc.)
 - Generic controller/route handler builders (`createGenericController`, `createGenericRouteHandler`) with pluggable auth/context/permission strategies
 - Response helpers (`sendTypedResponse`) and request parsers (`parseRequestParameters`) that serialize consistently with the common API shape
@@ -63,6 +63,58 @@ if (!result.ok) {
 
 const user = result.data;
 ```
+
+## Opt-in response validation with Zod
+
+When an endpoint declares `response` as a Zod schema, response typing and runtime validation are both enabled automatically.
+
+You can also declare `responses` as a status-code map of schemas.
+
+`response` and `responses` are mutually exclusive. Use exactly one.
+
+```typescript
+import { z } from 'zod';
+import type { RouteRegistry } from '@md-oss/api-types';
+
+const routes = {
+	'/users/:id': {
+		params: z.object({ id: z.string() }),
+		endpoints: {
+			GET: {
+				response: z.object({ id: z.string(), email: z.email() }),
+				permissions: null,
+			},
+		},
+	},
+} satisfies RouteRegistry;
+```
+
+- Server: `sendTypedResponse` validates the outgoing body when a response schema is present.
+- Client: `createApiClient(...).request(...)` validates successful responses when a response schema is present.
+- Non-Zod `response` values continue to work as before (type-only behavior, no runtime validation).
+
+### Status-code response schemas (`responses`)
+
+```typescript
+const routes = {
+	'/users/:id': {
+		params: z.object({ id: z.string() }),
+		endpoints: {
+			GET: {
+				responses: {
+					200: z.object({ id: z.string(), email: z.email() }),
+					304: z.null(),
+					default: apiErrorResponseSchema // <- Used if status code not included in mapping
+				},
+				permissions: null,
+			},
+		},
+	},
+} satisfies RouteRegistry;
+```
+
+- `responses[statusCode]` is used for runtime validation when present.
+- If `responses` is used and a status code has no schema, no runtime response validation is applied for that status.
 
 ## Build controllers with typed context
 

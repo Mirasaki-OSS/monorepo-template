@@ -383,11 +383,25 @@ export function createGenericRouteHandler<
 						return next(parseSignedAccessError(options));
 					}
 					debugRoute('[%s] Controller responded with success', requestId);
-					sendTypedResponse(res, {
-						path,
-						method,
-						...options,
-					} as SendTypedResponseOptions<Registry, API, TPath, TMethod>);
+					try {
+						sendTypedResponse(res, {
+							path,
+							method,
+							responseSchemas: {
+								response: endpoint.response,
+								responses: endpoint.responses,
+							},
+							...options,
+						} as SendTypedResponseOptions<Registry, API, TPath, TMethod>);
+					} catch (error) {
+						return next(
+							parseError(
+								error,
+								'ROUTE_HANDLER_ERROR',
+								'An error occurred while processing the request.'
+							)
+						);
+					}
 				}
 			);
 
