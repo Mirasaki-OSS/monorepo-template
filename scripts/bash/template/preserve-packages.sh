@@ -13,7 +13,8 @@ PACKAGES_TO_PRESERVE=(
   "config" # Used by all non-vendor packages
   "design-system" # Implemented in apps/web, depends on scripts and common
   "scripts" # Used in workspace root, required by design-system, depends on common
-  "common" # Required by scripts and design-system
+  "common" # Required by scripts and design-system, depends on serdes
+  "serdes" # Required by common
 )
 
 # List of files to update vendor/ references to packages/
