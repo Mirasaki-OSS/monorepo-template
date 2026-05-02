@@ -38,6 +38,11 @@ const resolveResponseSchema = (
 			return statusMappedSchema;
 		}
 
+		const defaultSchema = definitions.responses?.default;
+		if (isZodSchema(defaultSchema)) {
+			return defaultSchema;
+		}
+
 		return undefined;
 	}
 

@@ -9,7 +9,10 @@ type InferEndpointResponses<TResponses> =
 		? InferEndpointResponse<TResponse>
 		: never;
 
-export type EndpointResponses = Record<number | `${number}`, unknown>;
+export type EndpointResponses = Record<
+	number | `${number}` | 'default',
+	unknown
+>;
 
 export type EndpointResponseDefinition<
 	Resp,

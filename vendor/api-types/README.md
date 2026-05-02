@@ -104,6 +104,7 @@ const routes = {
 				responses: {
 					200: z.object({ id: z.string(), email: z.email() }),
 					304: z.null(),
+					default: apiErrorResponseSchema // <- Used if status code not included in mapping
 				},
 				permissions: null,
 			},
