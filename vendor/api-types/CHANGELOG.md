@@ -1,5 +1,13 @@
 # @md-oss/api-types
 
+## 0.8.1
+
+### Patch Changes
+
+- 5edbf5b: feat: improve path interpolation to support both colon and bracket syntax
+- 5edbf5b: response schema validation and status code mapping
+- 43a810a: feat: support default response schema
+
 ## 0.7.1
 
 ### Patch Changes
