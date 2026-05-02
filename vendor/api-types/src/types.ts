@@ -1,16 +1,40 @@
 import type z from 'zod/v4';
 
+type InferEndpointResponse<TResponse> = TResponse extends z.ZodType
+	? z.output<TResponse>
+	: TResponse;
+
+type InferEndpointResponses<TResponses> =
+	TResponses extends Record<PropertyKey, infer TResponse>
+		? InferEndpointResponse<TResponse>
+		: never;
+
+export type EndpointResponses = Record<number | `${number}`, unknown>;
+
+export type EndpointResponseDefinition<
+	Resp,
+	Responses extends EndpointResponses,
+> =
+	| {
+			response?: Resp;
+			responses?: never;
+	  }
+	| {
+			response?: never;
+			responses: Responses;
+	  };
+
 export type EndpointDefinition<
 	P = unknown,
 	Resp = unknown,
+	Responses extends EndpointResponses = EndpointResponses,
 	Q extends z.ZodType | undefined = z.ZodType | undefined,
 	B extends z.ZodType | undefined = z.ZodType | undefined,
 > = {
 	permissions: P;
-	response?: Resp;
 	query?: Q;
 	body?: B;
-};
+} & EndpointResponseDefinition<Resp, Responses>;
 
 /**
  * Generic route registry that can be used to create type-safe API clients.
@@ -69,9 +93,13 @@ export type InferApi<T extends RouteRegistry> = {
 						? P
 						: ExtractPermissionType<T>
 					: ExtractPermissionType<T>;
-				response: T[R]['endpoints'][M] extends { response: infer Resp }
-					? Resp
-					: undefined;
+				response: T[R]['endpoints'][M] extends {
+					responses: infer Responses;
+				}
+					? InferEndpointResponses<Responses>
+					: T[R]['endpoints'][M] extends { response: infer Resp }
+						? InferEndpointResponse<Resp>
+						: undefined;
 				query: T[R]['endpoints'][M] extends { query: infer Q }
 					? Q extends z.ZodType
 						? z.output<Q>

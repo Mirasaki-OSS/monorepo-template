@@ -13,7 +13,9 @@ import {
 	parseError,
 } from '@md-oss/http-client';
 import type { SerializedJson } from '@md-oss/serdes';
-import type { RequestOptions } from './request';
+import { prettifyError } from 'zod/v4';
+import { isZodSchema, type RequestOptions } from './request';
+import { noContentStatusCodes, resolveResponseSchema } from './response';
 import type { InferApi, MethodKeys, RouteKeys, RouteRegistry } from './types';
 
 export {
@@ -107,7 +109,7 @@ export function createApiClient<
 	TRegistry extends RouteRegistry,
 	TTransformer extends
 		ResponseTypeTransformer = IdentityResponseTypeTransformer,
->(_registry: TRegistry, config: ClientConfig) {
+>(registry: TRegistry, config: ClientConfig) {
 	const { baseUrl, defaultHeaders, httpClientConfig } = config;
 	const {
 		requestOptions: defaultRequestOptions = {},
@@ -201,6 +203,8 @@ export function createApiClient<
 			}
 
 			try {
+				const endpointDefinition = registry[path]?.endpoints?.[method];
+
 				const response = await client.request<
 					LocalResponse | { data: LocalResponse }
 				>(path, {
@@ -218,10 +222,45 @@ export function createApiClient<
 					return response;
 				}
 
-				const normalizedData =
-					response.statusCode === 204
-						? (null as LocalResponse)
-						: (response.data as LocalResponse);
+				const isEmptyContent = noContentStatusCodes.includes(
+					response.statusCode
+				);
+				const normalizedData = isEmptyContent
+					? (null as LocalResponse)
+					: (response.data as LocalResponse);
+				const responseSchema = resolveResponseSchema(
+					endpointDefinition
+						? {
+								response: endpointDefinition.response,
+								responses: endpointDefinition.responses,
+							}
+						: undefined,
+					response.statusCode
+				);
+				const shouldValidateResponse = isZodSchema(responseSchema);
+
+				if (shouldValidateResponse && !isEmptyContent) {
+					const parsedResponse =
+						await responseSchema.safeParseAsync(normalizedData);
+
+					if (!parsedResponse.success) {
+						return {
+							...parseError(
+								new Error(
+									`Invalid response body for ${String(method)} ${String(path)}: ${prettifyError(parsedResponse.error)}`
+								),
+								'INVALID_RESPONSE_BODY',
+								`Response validation failed for ${endpoint}`
+							).toJSON(),
+							raw: response.raw,
+						};
+					}
+
+					return {
+						...response,
+						data: parsedResponse.data as LocalResponse,
+					};
+				}
 
 				return {
 					...response,

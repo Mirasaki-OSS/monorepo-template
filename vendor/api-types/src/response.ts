@@ -5,9 +5,48 @@ import type {
 	MinimalResponse,
 } from '@md-oss/common/http/requests';
 import type { HTTPSuccessResponse } from '@md-oss/common/http/types';
+import { prettifyError, type ZodType } from 'zod/v4';
 import { debugPerformance, debugRoute } from './debugger';
-import type { ExtractResolvedContext } from './request';
+import { type ExtractResolvedContext, isZodSchema } from './request';
 import type { InferApi, MethodKeys, RouteKeys, RouteRegistry } from './types';
+
+type ResponseSchemas = {
+	response?: unknown;
+	responses?: Record<number | string, unknown>;
+};
+
+const resolveResponseSchema = (
+	definitions: ResponseSchemas | undefined,
+	statusCode: number
+): ZodType | undefined => {
+	if (!definitions) {
+		return undefined;
+	}
+
+	const hasResponse = definitions.response !== undefined;
+	const hasResponses = definitions.responses !== undefined;
+
+	if (hasResponse && hasResponses) {
+		throw new Error(
+			'Endpoint definition cannot include both response and responses. Use exactly one.'
+		);
+	}
+
+	if (hasResponses) {
+		const statusMappedSchema = definitions.responses?.[String(statusCode)];
+		if (isZodSchema(statusMappedSchema)) {
+			return statusMappedSchema;
+		}
+
+		return undefined;
+	}
+
+	if (isZodSchema(definitions.response)) {
+		return definitions.response;
+	}
+
+	return undefined;
+};
 
 type SignedAccessError =
 	| 'MISSING_SIGNATURE'
@@ -26,6 +65,7 @@ type SendTypedResponseOptions<
 	status?: number;
 	headers?: Record<string, string>;
 	flattenResponse?: boolean;
+	responseSchemas?: ResponseSchemas;
 };
 
 type IsUserMe<T> = T extends { isUserMe: true } ? string : null;
@@ -131,7 +171,7 @@ type ControllerFunction<
 			| SignedAccessError
 			| Omit<
 					SendTypedResponseOptions<Registry, API, TPath, TMethod>,
-					'path' | 'method'
+					'path' | 'method' | 'responseSchemas'
 			  >
 	) => void
 ) => TRequestHandler;
@@ -154,6 +194,7 @@ const sendTypedResponse = <
 		status = dataIsVoid ? 204 : 200,
 		headers = {},
 		flattenResponse = false,
+		responseSchemas,
 	} = options;
 
 	debugRoute(
@@ -175,6 +216,9 @@ const sendTypedResponse = <
 		res.setHeader(key, value);
 	}
 
+	// Note: Resolve early so response/response map exclusivity is enforced even for no-content responses.
+	const responseSchema = resolveResponseSchema(responseSchemas, status);
+
 	if (dataIsVoid || noContentStatusCodes.includes(status)) {
 		debugRoute(
 			'No response data to send, ending response with status %d',
@@ -182,6 +226,16 @@ const sendTypedResponse = <
 		);
 		res.status(status).end();
 		return;
+	}
+
+	if (responseSchema) {
+		const parsedResponse = responseSchema.safeParse(data);
+
+		if (!parsedResponse.success) {
+			throw new Error(
+				`Invalid response body for ${String(options.method)} ${String(options.path)}: ${prettifyError(parsedResponse.error)}`
+			);
+		}
 	}
 
 	if (flattenResponse) {
@@ -208,7 +262,9 @@ export {
 	type EndpointDefinitionSession,
 	type GenericRouteHandler,
 	type IsUserMe,
+	noContentStatusCodes,
 	type RouteHandler,
+	resolveResponseSchema,
 	type SendTypedResponseOptions,
 	type SignedAccessError,
 	sendTypedResponse,

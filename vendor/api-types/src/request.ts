@@ -1,3 +1,4 @@
+import { ZodType } from 'zod/v4';
 import type { InferApi, RouteRegistry } from './types';
 
 type RequestOptions<
@@ -52,4 +53,17 @@ type ExtractResolvedContext<
 	ExtractQuery<Registry, API, TPath, TMethod> &
 	ExtractBody<Registry, API, TPath, TMethod>;
 
-export type { ExtractResolvedContext, RequestOptions };
+const isZodSchema = (value: unknown): value is ZodType => {
+	if (value instanceof ZodType) {
+		return true;
+	}
+
+	return (
+		typeof value === 'object' &&
+		value !== null &&
+		'safeParse' in value &&
+		typeof value.safeParse === 'function'
+	);
+};
+
+export { type ExtractResolvedContext, isZodSchema, type RequestOptions };
