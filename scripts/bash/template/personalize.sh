@@ -36,6 +36,9 @@ FILE_PATTERNS=(
   "*.hbs"
   "*.yaml"
   "*.yml"
+  "*.example"
+  "*.config.mjs"
+  "*.css"
 )
 
 # Build find command with all patterns
@@ -86,6 +89,29 @@ if [[ $replaced_count -gt 0 ]]; then
   log_success "Personalized $replaced_count file(s) for $NEW_OWNER/$NEW_NAME"
 else
   log_warning "No files found needing personalization"
+fi
+
+# Files to rename if they contain the old name
+FILE_RENAME_PATTERNS=(
+  "packages/scripts/bin/*.mjs"
+)
+
+renamed_count=0
+for pattern in "${FILE_RENAME_PATTERNS[@]}"; do
+  while IFS= read -r -d '' file; do
+    if [[ "$file" == *"$OLD_NAME"* ]]; then
+      new_file="${file//$OLD_NAME/$NEW_NAME}"
+      mv "$file" "$new_file"
+      log_info "Renamed: $file -> $new_file"
+      renamed_count=$((renamed_count + 1))
+    fi
+  done < <(cd "$PROJECT_ROOT" && find . -type f -name "$(basename "$pattern")" -print0 2>/dev/null)
+done
+
+if [[ $renamed_count -gt 0 ]]; then
+  log_success "Renamed $renamed_count file(s) for $NEW_OWNER/$NEW_NAME"
+else
+  log_warning "No files found needing renaming"
 fi
 
 exit 0
