@@ -11,6 +11,7 @@ PROJECT_ROOT=$(get_project_root)
 # Add package names here to automatically copy and configure them
 PACKAGES_TO_PRESERVE=(
   "config"
+  "scripts"
 )
 
 # List of files to update vendor/ references to packages/
