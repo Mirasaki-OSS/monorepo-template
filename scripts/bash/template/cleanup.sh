@@ -24,21 +24,17 @@ while IFS= read -r line || [[ -n "$line" ]]; do
   
   # Expand pattern and remove matching files/directories
   if ! is_empty "$pattern"; then
-    # Use find with globstar-like expansion
+    # Normalize trailing slash so `vendor/` matches the `vendor` path.
+    normalized_pattern="${pattern%/}"
+
+    # Resolve glob-compatible path matches from project root.
     while IFS= read -r -d '' item; do
       if path_exists "$item"; then
         log_success "Removing: $item"
         rm -rf "$item"
         removed_count=$((removed_count + 1))
       fi
-    done < <(cd "$PROJECT_ROOT" && find . -maxdepth 2 -name "$(basename "$pattern")" -print0 2>/dev/null || true)
-    
-    # Also try direct path removal (for exact paths)
-    if path_exists "$PROJECT_ROOT/$pattern"; then
-      log_success "Removing: $pattern"
-      rm -rf "$PROJECT_ROOT/$pattern"
-      removed_count=$((removed_count + 1))
-    fi
+    done < <(find "$PROJECT_ROOT" -mindepth 1 -path "$PROJECT_ROOT/$normalized_pattern" -print0 2>/dev/null || true)
   fi
 done < "$TEMPLATE_IGNORE_FILE"
 
@@ -116,6 +112,41 @@ if file_exists "$README_FILE"; then
   fi
 else
   log_warning "README.md not found, skipping update"
+fi
+
+# Remove the template-only workflow instruction NOTE block from README.md
+if file_exists "$README_FILE"; then
+  PREPARE_NOTE_LINE='> Open `Actions` -> `Prepare Template` -> `Run workflow`, then choose the apps, packages, and vendor libraries you want to preserve as local workspaces (packages). Anything not preserved will fall back to its current published package version when possible.'
+
+  if grep -Fq "$PREPARE_NOTE_LINE" "$README_FILE"; then
+    log_section "Removing template workflow NOTE block from README.md"
+    awk -v note_line="$PREPARE_NOTE_LINE" '
+      {
+        if ($0 == "> [!NOTE]") {
+          note_header = $0
+          if ((getline next_line) > 0) {
+            if (next_line == note_line) {
+              next
+            }
+            print note_header
+            print next_line
+            next
+          }
+          print note_header
+          next
+        }
+
+        if ($0 == note_line) {
+          next
+        }
+
+        print
+      }
+    ' "$README_FILE" > "$README_FILE.tmp" && mv "$README_FILE.tmp" "$README_FILE"
+    log_success "Template workflow NOTE block removed from README.md"
+  else
+    log_info "Template workflow NOTE block not found in README.md"
+  fi
 fi
 
 exit 0
