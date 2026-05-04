@@ -23,6 +23,7 @@ log_section "Personalizing repository for $REPO_OWNER/$REPO_NAME"
 OLD_OWNERS=(
   "md-oss"
   "mirasaki-oss"
+  "Mirasaki-OSS"
 )
 OLD_NAME="monorepo-template"
 NEW_OWNER="${REPO_OWNER,,}" # Convert to lowercase, as GitHub usernames are case-insensitive and NPM doesn't allow uppercase in package scopes
