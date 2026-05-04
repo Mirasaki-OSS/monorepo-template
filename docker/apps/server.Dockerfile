@@ -19,6 +19,7 @@ COPY pnpm-workspace.yaml package.json pnpm-lock.yaml* ./
 COPY scripts/bash/docker/copy-workspace-manifests.sh /usr/local/bin/copy-workspace-manifests
 RUN chmod +x /usr/local/bin/copy-workspace-manifests
 RUN --mount=type=bind,source=.,target=/mnt/workspace,ro \
+    --mount=type=cache,id=pnpm,target=/pnpm/store \
     /usr/local/bin/copy-workspace-manifests /mnt/workspace /app && \
     pnpm fetch --frozen-lockfile --filter "@md-oss/server..."
 
@@ -29,9 +30,8 @@ FROM base AS builder
 COPY pnpm-workspace.yaml package.json pnpm-lock.yaml* turbo.json tsconfig.json ./
 RUN --mount=type=bind,source=.,target=/mnt/workspace,ro \
     node /mnt/workspace/scripts/bash/docker/copy-app-sources.js /mnt/workspace /app @md-oss/server
-COPY --from=deps /pnpm /pnpm
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
-    pnpm --filter "@md-oss/server..." install --frozen-lockfile --offline
+    pnpm --filter "@md-oss/server..." install --frozen-lockfile --prefer-offline
 RUN pnpm --filter "@md-oss/server..." build
 RUN pnpm --filter "@md-oss/server" --prod deploy /prod
 
