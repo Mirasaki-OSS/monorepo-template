@@ -3,10 +3,7 @@ networks:
     driver: bridge
 
 volumes:
-  node_modules:
-  cli_node_modules:
-  utils_node_modules:
-  config_node_modules:
+  my_app_postgres_data:
 
 services:
   context-debug:
@@ -32,15 +29,35 @@ services:
     user: "${UID:-1000}:${GID:-1000}"
     volumes:
       - ..:/app  # Mount project root to /app
-      # Use named volume for node_modules
-      - node_modules:/app/node_modules
-      - cli_node_modules:/app/apps/cli/node_modules
-      - utils_node_modules:/app/packages/utils/node_modules
-      - config_node_modules:/app/vendor/config/node_modules
     command: pnpm dev
     environment:
       - NODE_ENV=development
     networks:
       - my_app-network
+    profiles:
+      - dev
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres
+    container_name: my_app-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-my_app_db}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    networks:
+      - my_app-network
+    ports:
+      - "5432:5432"
+    volumes:
+      - my_app_postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-my_app_db} -h ${POSTGRES_HOST:-localhost} -p ${POSTGRES_PORT:-5432}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     profiles:
       - dev

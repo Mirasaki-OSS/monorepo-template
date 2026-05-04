@@ -2,6 +2,9 @@ networks:
   my_app-network:
     driver: bridge
 
+volumes:
+  my_app_postgres_data:
+
 services:
   cli:
     build:
@@ -27,3 +30,26 @@ services:
     # Uncomment if you need volumes
     # volumes:
     #   - ./data:/app/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres
+    container_name: my_app-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-my_app_db}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    networks:
+      - my_app-network
+    ports:
+      - "5432:5432"
+    volumes:
+      - my_app_postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-my_app_db} -h ${POSTGRES_HOST:-localhost} -p ${POSTGRES_PORT:-5432}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5

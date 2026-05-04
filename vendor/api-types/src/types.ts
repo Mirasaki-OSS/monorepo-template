@@ -1,5 +1,44 @@
 import type z from 'zod/v4';
 
+// [DEV] Consider Contract style for v2
+// const appsContracts = {
+// 	getAppById: {
+// 		method: "GET",
+// 		path: "/:appId",
+// 		request: {
+// 			params: appIdParamsSchema,
+// 		},
+// 		responses: {
+// 			"200": apiSuccessResponseSchema(appInfoDataSchema),
+// 			default: apiErrorResponseSchema,
+// 		},
+// 	},
+// 	getAppIds: {
+// 		method: "GET",
+// 		path: "/ids",
+// 		responses: {
+// 			"200": apiSuccessResponseSchema(appIdsDataSchema),
+// 			default: apiErrorResponseSchema,
+// 		},
+// 	},
+// 	getAppNames: {
+// 		method: "GET",
+// 		path: "/names",
+// 		responses: {
+// 			"200": apiSuccessResponseSchema(appNamesDataSchema),
+// 			default: apiErrorResponseSchema,
+// 		},
+// 	},
+// 	listApps: {
+// 		method: "GET",
+// 		path: "/",
+// 		responses: {
+// 			"200": apiSuccessResponseSchema(listAppsDataSchema),
+// 			default: apiErrorResponseSchema,
+// 		},
+// 	},
+// } as const;
+
 type InferEndpointResponse<TResponse> = TResponse extends z.ZodType
 	? z.output<TResponse>
 	: TResponse;

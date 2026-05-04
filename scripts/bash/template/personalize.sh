@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Personalize template for new repository owner & name
 
+# [DEV]Replacers for `my[ _-]app`, etc. (underscore or hyphens DO matter)
+ 
 source "$(dirname "${BASH_SOURCE[0]}")/../lib.sh"
 
 PROJECT_ROOT=$(get_project_root)
@@ -20,10 +22,15 @@ fi
 log_section "Personalizing repository for $REPO_OWNER/$REPO_NAME"
 
 # Old and new values
-OLD_OWNER="md-oss"
+OLD_OWNERS=(
+  "md-oss"
+  "mirasaki-oss"
+)
 OLD_NAME="monorepo-template"
 NEW_OWNER="${REPO_OWNER,,}" # Convert to lowercase, as GitHub usernames are case-insensitive and NPM doesn't allow uppercase in package scopes
 NEW_NAME="$REPO_NAME"
+
+OLD_OWNERS_REGEX="$(IFS='|'; echo "${OLD_OWNERS[*]}")"
 
 # Files to search and replace in
 FILE_PATTERNS=(
@@ -60,25 +67,29 @@ while IFS= read -r -d '' file; do
   fi
   
   # Check if file contains any old values
-  if grep -q -E "($OLD_OWNER/$OLD_NAME|$OLD_OWNER|$OLD_NAME)" "$file" 2>/dev/null; then
+  if grep -q -E "(($OLD_OWNERS_REGEX)/$OLD_NAME|($OLD_OWNERS_REGEX)|$OLD_NAME)" "$file" 2>/dev/null; then
     log_info "Updating: $file"
     
     # Use sed for in-place replacement
     # IMPORTANT: Order matters! Replace full slug first, then owner, then name
     if [[ "$OSTYPE" == "darwin"* ]]; then
       # macOS sed requires '' after -i
-      sed -i '' \
-        -e "s|$OLD_OWNER/$OLD_NAME|$NEW_OWNER/$NEW_NAME|g" \
-        -e "s/$OLD_OWNER/$NEW_OWNER/g" \
-        -e "s/$OLD_NAME/$NEW_NAME/g" \
-        "$file"
+      SED_ARGS=(-i '')
+      for old_owner in "${OLD_OWNERS[@]}"; do
+        SED_ARGS+=(-e "s|$old_owner/$OLD_NAME|$NEW_OWNER/$NEW_NAME|g")
+        SED_ARGS+=(-e "s/$old_owner/$NEW_OWNER/g")
+      done
+      SED_ARGS+=(-e "s/$OLD_NAME/$NEW_NAME/g")
+      sed "${SED_ARGS[@]}" "$file"
     else
       # Linux sed
-      sed -i \
-        -e "s|$OLD_OWNER/$OLD_NAME|$NEW_OWNER/$NEW_NAME|g" \
-        -e "s/$OLD_OWNER/$NEW_OWNER/g" \
-        -e "s/$OLD_NAME/$NEW_NAME/g" \
-        "$file"
+      SED_ARGS=(-i)
+      for old_owner in "${OLD_OWNERS[@]}"; do
+        SED_ARGS+=(-e "s|$old_owner/$OLD_NAME|$NEW_OWNER/$NEW_NAME|g")
+        SED_ARGS+=(-e "s/$old_owner/$NEW_OWNER/g")
+      done
+      SED_ARGS+=(-e "s/$OLD_NAME/$NEW_NAME/g")
+      sed "${SED_ARGS[@]}" "$file"
     fi
     
     replaced_count=$((replaced_count + 1))

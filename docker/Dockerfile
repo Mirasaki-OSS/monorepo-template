@@ -8,6 +8,10 @@ ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable && corepack prepare pnpm@10.28.0+sha512.05df71d1421f21399e053fde567cea34d446fa02c76571441bfc1c7956e98e363088982d940465fd34480d4d90a0668bc12362f8aa88000a64e83d0b0e47be48 --activate
 WORKDIR /app
 
+# DEV: 
+
+# /home/mirasaki/dev/work/ts/workshop-monitor-monorepo/docker/Dockerfile
+
 # Dependencies stage - install all dependencies
 FROM base AS deps
 COPY pnpm-workspace.yaml package.json pnpm-lock.yaml* ./

@@ -30,7 +30,17 @@ A modern TypeScript pnpm turbo monorepo.
 └── tsconfig.json      # Base TypeScript configuration
 ```
 
-> **Template Usage:** When you fork this repository, or click "Use this template" on GitHub, a workflow automatically runs to remove non-template files (primarily the `vendor/` directory) and personalize the repository. The process happens automatically via GitHub Actions on your first commit.
+> [!IMPORTANT]
+> After creating a new repository with GitHub's "Use this template" button, you must run the `Prepare Template` workflow manually from the Actions tab before working in the repo. This step removes template-only files, personalizes the repository, and applies your selected package list.
+
+<!--
+  Note: We cannot include a link to the action here, because the action we want the user to execute is
+  exactly the action that modifies repository references in this file - meaning the link would only be updated
+  to *their* repository *after* the action (we're trying to link them to) is ran.
+-->
+
+> [!NOTE]
+> Open `Actions` -> `Prepare Template` -> `Run workflow`, then choose the apps, packages, and vendor libraries you want to preserve as local workspaces (packages). Anything not preserved will fall back to its current published package version when possible.
 
 ## Getting Started
 
