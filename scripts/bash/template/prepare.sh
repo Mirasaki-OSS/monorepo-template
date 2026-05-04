@@ -27,6 +27,13 @@ pnpm install --lockfile-only --ignore-scripts
 log_info "Personalizing repository..."
 REPO_OWNER="$REPO_OWNER" REPO_NAME="$REPO_NAME" "$(dirname "${BASH_SOURCE[0]}")/personalize.sh" "$REPO_OWNER" "$REPO_NAME"
 
+# Remove transient node script used during personalization
+RESTORE_SCOPE_SCRIPT="$(get_project_root)/scripts/node/restore-nonlocal-scoped-deps.mjs"
+if file_exists "$RESTORE_SCOPE_SCRIPT"; then
+  log_info "Removing temporary script: $RESTORE_SCOPE_SCRIPT"
+  rm -f "$RESTORE_SCOPE_SCRIPT"
+fi
+
 # Finally, let's remove scripts/bash/template itself
 TEMPLATE_SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
 if dir_exists "$TEMPLATE_SCRIPT_DIR"; then

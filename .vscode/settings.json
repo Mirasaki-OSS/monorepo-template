@@ -59,6 +59,7 @@
 		"mset",
 		"multistream",
 		"nodir",
+		"nonlocal",
 		"npmjs",
 		"nums",
 		"oklch",
