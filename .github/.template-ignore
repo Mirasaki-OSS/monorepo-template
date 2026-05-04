@@ -18,6 +18,12 @@ vendor/
 scripts/node/replace-scope.ts
 scripts/node/sync-licenses.ts
 
+# Template preparation node scripts (only needed during template init)
+scripts/node/generate-workflow-inputs.mjs
+scripts/node/resolve-preserve-list.mjs
+scripts/node/rewrite-workspace-deps.mjs
+scripts/node/strip-vendor-pkg-metadata.mjs
+
 # Template preparation (no longer needed after initialization)
 .github/workflows/prepare-template.yaml
 

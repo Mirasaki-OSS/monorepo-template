@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Personalize template for new repository owner & name
 
+# [DEV]Replacers for `my[ _-]app`, etc. (underscore or hyphens DO matter)
+ 
 source "$(dirname "${BASH_SOURCE[0]}")/../lib.sh"
 
 PROJECT_ROOT=$(get_project_root)

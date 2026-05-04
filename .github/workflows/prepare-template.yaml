@@ -5,12 +5,104 @@ run-name: Prepare new repository from template
 on:
   # Allow manual run in the generated repo (Actions > Prepare Template > Run workflow)
   workflow_dispatch:
+    inputs:
+      # GEN:START:INPUTS
+      apps-cli:
+        description: "apps/cli (@md-oss/cli — CLI application)"
+        type: boolean
+        default: true
+      apps-server:
+        description: "apps/server (@md-oss/server — API server application)"
+        type: boolean
+        default: false
+      apps-web:
+        description: "apps/web (@md-oss/web — Next.js web application)"
+        type: boolean
+        default: false
+      packages-api:
+        description: "packages/api (@md-oss/api — API routers and context)"
+        type: boolean
+        default: false
+      packages-auth:
+        description: "packages/auth (@md-oss/auth — Authentication using better-auth)"
+        type: boolean
+        default: false
+      packages-db:
+        description: "packages/db (@md-oss/db — Database access layer using drizzle-orm (PostgreSQL))"
+        type: boolean
+        default: false
+      packages-utils:
+        description: "packages/utils (@md-oss/utils — Shared utilities)"
+        type: boolean
+        default: true
+      vendor-analytics:
+        description: "vendor/analytics (@md-oss/analytics — Next.js analytics helpers with Vercel Analytics + optional Google Analytics)"
+        type: boolean
+        default: false
+      vendor-api-types:
+        description: "vendor/api-types (@md-oss/api-types — Type-safe API contracts, client factory, and handler helpers built on Zod)"
+        type: boolean
+        default: false
+      vendor-cache:
+        description: "vendor/cache (@md-oss/cache — Multi-layer caching with LRU, Redis, and async data fetching support)"
+        type: boolean
+        default: false
+      vendor-common:
+        description: "vendor/common (@md-oss/common — Constants, magic numbers, and utilities)"
+        type: boolean
+        default: false
+      vendor-config:
+        description: "vendor/config (@md-oss/config — Shared TypeScript configuration presets)"
+        type: boolean
+        default: true
+      vendor-database:
+        description: "vendor/database (@md-oss/database — Adapter-agnostic query helpers with typed pagination)"
+        type: boolean
+        default: false
+      vendor-design-system:
+        description: "vendor/design-system (@md-oss/design-system — Reusable React UI components, hooks, and styles)"
+        type: boolean
+        default: false
+      vendor-discord:
+        description: "vendor/discord (@md-oss/discord — Type-safe Discord.js toolkit with component and event registries)"
+        type: boolean
+        default: false
+      vendor-http-client:
+        description: "vendor/http-client (@md-oss/http-client — Fetch-based HTTP client with retries, timeouts, and typed results)"
+        type: boolean
+        default: false
+      vendor-migrations:
+        description: "vendor/migrations (@md-oss/migrations — Lightweight migration runner with registry, validation, progress, and rollback support)"
+        type: boolean
+        default: false
+      vendor-mutex:
+        description: "vendor/mutex (@md-oss/mutex — Mutex manager with automatic cleanup and TTL support)"
+        type: boolean
+        default: false
+      vendor-observability:
+        description: "vendor/observability (@md-oss/observability — Structured logging with Pino)"
+        type: boolean
+        default: false
+      vendor-scripts:
+        description: "vendor/scripts (@md-oss/scripts — Reusable monorepo maintenance scripts)"
+        type: boolean
+        default: false
+      vendor-security:
+        description: "vendor/security (@md-oss/security — Cryptographic utilities for encryption, signed URLs, and secure streaming)"
+        type: boolean
+        default: false
+      vendor-serdes:
+        description: "vendor/serdes (@md-oss/serdes — Serializer/Deserializer for JSON, YAML, TOML, MessagePack, and CBOR)"
+        type: boolean
+        default: false
+      # GEN:END:INPUTS
   # Run on first push in the generated repo (run_number starts at 1 per repo)
   # Note: This workflow file should be removed after running successfully once
-  push:
-    branches:
-      - main
-      - master
+  # Edit: Disabled in preference of `workflow_dispatch` with preserve-list input
+  # push:
+  #   branches:
+  #     - main
+  #     - master
 
 # Ensure this only runs once when the repository is first created
 concurrency:
@@ -56,11 +148,47 @@ jobs:
       - name: Make preparation scripts executable
         run: chmod +x "${{ github.workspace }}/scripts/bash/template/"*.sh
 
+      # GEN:START:PRESERVE-STEP
+      - name: Build preserve list from checkbox inputs
+        id: preserve
+        shell: bash
+        run: |
+          list=()
+          [[ "${{ inputs.apps-cli }}" == "true" ]] && list+=(apps/cli)
+          [[ "${{ inputs.apps-server }}" == "true" ]] && list+=(apps/server)
+          [[ "${{ inputs.apps-web }}" == "true" ]] && list+=(apps/web)
+          [[ "${{ inputs.packages-api }}" == "true" ]] && list+=(packages/api)
+          [[ "${{ inputs.packages-auth }}" == "true" ]] && list+=(packages/auth)
+          [[ "${{ inputs.packages-db }}" == "true" ]] && list+=(packages/db)
+          [[ "${{ inputs.packages-utils }}" == "true" ]] && list+=(packages/utils)
+          [[ "${{ inputs.vendor-analytics }}" == "true" ]] && list+=(vendor/analytics)
+          [[ "${{ inputs.vendor-api-types }}" == "true" ]] && list+=(vendor/api-types)
+          [[ "${{ inputs.vendor-cache }}" == "true" ]] && list+=(vendor/cache)
+          [[ "${{ inputs.vendor-common }}" == "true" ]] && list+=(vendor/common)
+          [[ "${{ inputs.vendor-config }}" == "true" ]] && list+=(vendor/config)
+          [[ "${{ inputs.vendor-database }}" == "true" ]] && list+=(vendor/database)
+          [[ "${{ inputs.vendor-design-system }}" == "true" ]] && list+=(vendor/design-system)
+          [[ "${{ inputs.vendor-discord }}" == "true" ]] && list+=(vendor/discord)
+          [[ "${{ inputs.vendor-http-client }}" == "true" ]] && list+=(vendor/http-client)
+          [[ "${{ inputs.vendor-migrations }}" == "true" ]] && list+=(vendor/migrations)
+          [[ "${{ inputs.vendor-mutex }}" == "true" ]] && list+=(vendor/mutex)
+          [[ "${{ inputs.vendor-observability }}" == "true" ]] && list+=(vendor/observability)
+          [[ "${{ inputs.vendor-scripts }}" == "true" ]] && list+=(vendor/scripts)
+          [[ "${{ inputs.vendor-security }}" == "true" ]] && list+=(vendor/security)
+          [[ "${{ inputs.vendor-serdes }}" == "true" ]] && list+=(vendor/serdes)
+          result=""
+          for item in "${list[@]}"; do
+            result="${result:+${result},}${item}"
+          done
+          echo "list=${result}" >> "$GITHUB_OUTPUT"
+      # GEN:END:PRESERVE-STEP
+
       - name: Run template preparation
         run: "${{ github.workspace }}/scripts/bash/template/prepare.sh"
         env:
           REPO_OWNER: ${{ github.repository_owner }}
           REPO_NAME: ${{ github.event.repository.name }}
+          PRESERVE_LIST: ${{ steps.preserve.outputs.list }}
 
       - name: Verify preparation
         run: |
