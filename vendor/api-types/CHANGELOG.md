@@ -1,5 +1,11 @@
 # @md-oss/api-types
 
+## 0.8.4
+
+### Patch Changes
+
+- 648f1f2: prevent response body validation error from collapsing
+
 ## 0.8.3
 
 ### Patch Changes
