@@ -7,6 +7,16 @@ on:
   workflow_dispatch:
     inputs:
       # GEN:START:INPUTS
+      new-owner:
+        description: "Override repository owner (defaults to current repository owner)"
+        type: string
+        required: false
+        default: ""
+      new-name:
+        description: "Override repository name (defaults to current repository name)"
+        type: string
+        required: false
+        default: ""
       apps-cli:
         description: "apps/cli (@md-oss/cli — CLI application)"
         type: boolean
@@ -186,8 +196,8 @@ jobs:
       - name: Run template preparation
         run: "${{ github.workspace }}/scripts/bash/template/prepare.sh"
         env:
-          REPO_OWNER: ${{ github.repository_owner }}
-          REPO_NAME: ${{ github.event.repository.name }}
+          REPO_OWNER: ${{ inputs['new-owner'] != '' && inputs['new-owner'] || github.repository_owner }}
+          REPO_NAME: ${{ inputs['new-name'] != '' && inputs['new-name'] || github.event.repository.name }}
           PRESERVE_LIST: ${{ steps.preserve.outputs.list }}
 
       - name: Verify preparation

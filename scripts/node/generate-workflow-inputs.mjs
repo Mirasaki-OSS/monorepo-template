@@ -1,6 +1,8 @@
 #!/usr/bin/env node
-// Generates the workflow_dispatch.inputs section (one boolean checkbox per
-// workspace) and the "Build preserve list" step inside
+/** biome-ignore-all lint/suspicious/noTemplateCurlyInString: This file generates literal ${{ }} expressions for GitHub Actions workflow inputs, so we disable the "noTemplateCurlyInString" rule. */
+// Generates the workflow_dispatch.inputs section (owner/name override inputs,
+// workspace checkbox inputs, and optional overflow text input) and the
+// "Build preserve list" step inside
 // .github/workflows/prepare-template.yaml.
 //
 // Re-run whenever workspaces are added or removed:
@@ -33,6 +35,10 @@ const DEFAULT_CHECKED = new Set([
 ]);
 
 const MAX_INPUTS = 25;
+const OWNER_INPUT_KEY = 'new-owner';
+const NAME_INPUT_KEY = 'new-name';
+const OVERFLOW_INPUT_KEY = 'preserve-extra';
+const RESERVED_INPUT_COUNT = 2; // owner + name
 
 // Marker pairs that delimit the two generated sections in the workflow file.
 const MARKERS = {
@@ -102,17 +108,17 @@ for (const dir of WORKSPACE_DIRS) {
 	}
 }
 
-if (workspaces.length > MAX_INPUTS) {
-	process.stderr.write(
-		`Error: ${workspaces.length} workspaces exceed the GitHub Actions ` +
-			`workflow_dispatch input limit of ${MAX_INPUTS}.\n` +
-			`Remove unused workspaces or split the workflow before re-running.\n`
-	);
-	process.exit(1);
-}
+const maxCheckboxesWithoutOverflow = MAX_INPUTS - RESERVED_INPUT_COUNT;
+const needsOverflowInput = workspaces.length > maxCheckboxesWithoutOverflow;
+const maxCheckboxes = needsOverflowInput
+	? maxCheckboxesWithoutOverflow - 1
+	: maxCheckboxesWithoutOverflow;
+
+const checkboxWorkspaces = workspaces.slice(0, maxCheckboxes);
+const overflowWorkspaces = workspaces.slice(maxCheckboxes);
 
 process.stdout.write(
-	`Found ${workspaces.length} workspaces (limit: ${MAX_INPUTS})\n`
+	`Found ${workspaces.length} workspaces (input limit: ${MAX_INPUTS}; checkbox slots used: ${checkboxWorkspaces.length}; overflow entries: ${overflowWorkspaces.length})\n`
 );
 
 // ---- generate inputs block --------------------------------------------------
@@ -123,8 +129,20 @@ process.stdout.write(
 //     type: boolean
 //     default: true
 
-const inputLines = [];
-for (const { workspacePath, pkg } of workspaces) {
+const inputLines = [
+	`      ${OWNER_INPUT_KEY}:`,
+	`        description: "Override repository owner (defaults to current repository owner)"`,
+	`        type: string`,
+	`        required: false`,
+	`        default: ""`,
+	`      ${NAME_INPUT_KEY}:`,
+	`        description: "Override repository name (defaults to current repository name)"`,
+	`        type: string`,
+	`        required: false`,
+	`        default: ""`,
+];
+
+for (const { workspacePath, pkg } of checkboxWorkspaces) {
 	const key = inputKey(workspacePath);
 	const pkgName = typeof pkg.name === 'string' ? pkg.name : workspacePath;
 	const descSuffix =
@@ -142,6 +160,20 @@ for (const { workspacePath, pkg } of workspaces) {
 	);
 }
 
+if (needsOverflowInput) {
+	const overflowDefault = overflowWorkspaces
+		.map(({ workspacePath }) => workspacePath)
+		.join(',');
+
+	inputLines.push(
+		`      ${OVERFLOW_INPUT_KEY}:`,
+		`        description: "Additional workspaces to preserve (comma/space/newline separated)"`,
+		`        type: string`,
+		`        required: false`,
+		`        default: "${overflowDefault}"`
+	);
+}
+
 const inputsBlock = inputLines.join('\n');
 
 // ---- generate preserve step -------------------------------------------------
@@ -153,11 +185,31 @@ const inputsBlock = inputLines.join('\n');
 // evaluate to empty string, so the list is empty and preserve-packages.sh
 // falls back to its built-in defaults.
 
-const condLines = workspaces.map(({ workspacePath }) => {
+const condLines = checkboxWorkspaces.map(({ workspacePath }) => {
 	const key = inputKey(workspacePath);
 	// \${{ prevents JS template interpolation while producing literal ${{ }}
 	return `          [[ "\${{ inputs.${key} }}" == "true" ]] && list+=(${workspacePath})`;
 });
+
+const overflowCaseLines = overflowWorkspaces.map(
+	({ workspacePath }) =>
+		`                ${workspacePath}) list+=("${workspacePath}") ;;`
+);
+
+const overflowStepLines = needsOverflowInput
+	? [
+			`          extra="\${{ inputs.${OVERFLOW_INPUT_KEY} }}"`,
+			`          if [[ -n "${'${extra}'}" ]]; then`,
+			`            while IFS= read -r item; do`,
+			`              [[ -z "${'${item}'}" ]] && continue`,
+			`              case "${'${item}'}" in`,
+			...overflowCaseLines,
+			`                *) echo "Ignoring unknown workspace in ${OVERFLOW_INPUT_KEY}: ${'${item}'}" ;;`,
+			`              esac`,
+			`            done < <(printf '%s' "${'${extra}'}" | tr ',\\n\\t' '   ' | xargs -n1)`,
+			`          fi`,
+		]
+	: [];
 
 const preserveStep = [
 	`      - name: Build preserve list from checkbox inputs`,
@@ -166,6 +218,7 @@ const preserveStep = [
 	`        run: |`,
 	`          list=()`,
 	...condLines,
+	...overflowStepLines,
 	`          result=""`,
 	`          for item in "\${list[@]}"; do`,
 	`            result="\${result:+\${result},}\${item}"`,
