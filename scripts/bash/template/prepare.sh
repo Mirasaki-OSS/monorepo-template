@@ -18,11 +18,6 @@ REPO_OWNER="$REPO_OWNER" REPO_NAME="$REPO_NAME" PRESERVE_LIST="$PRESERVE_LIST" "
 log_info "Running cleanup task..."
 "$(dirname "${BASH_SOURCE[0]}")/cleanup.sh"
 
-# Regenerate lockfile after removing vendor/*
-log_info "Regenerating package lockfile..."
-cd "$(get_project_root)" || fail "Failed to change to project root"
-pnpm install --lockfile-only --ignore-scripts
-
 # Personalize repository with new owner's namespace
 log_info "Personalizing repository..."
 REPO_OWNER="$REPO_OWNER" REPO_NAME="$REPO_NAME" "$(dirname "${BASH_SOURCE[0]}")/personalize.sh" "$REPO_OWNER" "$REPO_NAME"
@@ -33,6 +28,11 @@ if file_exists "$RESTORE_SCOPE_SCRIPT"; then
   log_info "Removing temporary script: $RESTORE_SCOPE_SCRIPT"
   rm -f "$RESTORE_SCOPE_SCRIPT"
 fi
+
+# Regenerate lockfile after all manifest changes are finalized.
+log_info "Regenerating package lockfile..."
+cd "$(get_project_root)" || fail "Failed to change to project root"
+pnpm install --lockfile-only --ignore-scripts
 
 # Finally, let's remove scripts/bash/template itself
 TEMPLATE_SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
