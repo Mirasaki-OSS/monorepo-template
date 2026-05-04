@@ -128,6 +128,16 @@
 				"types": "./dist/http/requests.d.mts"
 			}
 		},
+		"./http/schemas": {
+			"require": {
+				"types": "./dist/http/schemas.d.cts",
+				"default": "./dist/http/schemas.cjs"
+			},
+			"import": {
+				"types": "./dist/http/schemas.d.mts",
+				"default": "./dist/http/schemas.mjs"
+			}
+		},
 		"./http/status-codes": {
 			"require": {
 				"types": "./dist/http/status-codes.d.cts",
