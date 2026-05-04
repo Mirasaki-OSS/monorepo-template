@@ -47,11 +47,11 @@ const { values } = parseArgs({
 const projectRoot = values['project-root'];
 const newOwner = values['new-owner'];
 if (!projectRoot) {
-	process.stderr.write('Error: --project-root is required\\n');
+	process.stderr.write('Error: --project-root is required\n');
 	process.exit(1);
 }
 if (!newOwner) {
-	process.stderr.write('Error: --new-owner is required\\n');
+	process.stderr.write('Error: --new-owner is required\n');
 	process.exit(1);
 }
 
@@ -109,5 +109,5 @@ for (const manifestPath of manifests) {
 }
 
 process.stdout.write(
-	`Restored non-local scoped deps in ${updated} manifest(s)\\n`
+	`Restored non-local scoped deps in ${updated} manifest(s)\n`
 );
