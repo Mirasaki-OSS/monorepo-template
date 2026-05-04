@@ -4,7 +4,7 @@
 	"envMode": "strict",
 	"globalEnv": ["NODE_ENV"],
 	"globalPassThroughEnv": ["DATABASE_URL", "CORS_ORIGIN", "BETTER_AUTH_SECRET"],
-	"concurrency": "100%",
+	"concurrency": "21",
 	"tasks": {
 		"build": {
 			"dependsOn": ["^build"],
