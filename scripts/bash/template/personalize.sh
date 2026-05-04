@@ -134,13 +134,22 @@ FILE_RENAME_PATTERNS=(
 renamed_count=0
 for pattern in "${FILE_RENAME_PATTERNS[@]}"; do
   while IFS= read -r -d '' file; do
-    if [[ "$file" == *"$OLD_NAME"* ]]; then
-      new_file="${file//$OLD_NAME/$NEW_NAME}"
+    new_file="$file"
+
+    # Replace owner aliases in filenames (e.g. md-oss-* -> <new-owner>-*).
+    for old_owner in "${OLD_OWNERS[@]}"; do
+      new_file="${new_file//$old_owner/$NEW_OWNER}"
+    done
+
+    # Replace old repository name in filenames when present.
+    new_file="${new_file//$OLD_NAME/$NEW_NAME}"
+
+    if [[ "$new_file" != "$file" ]]; then
       mv "$file" "$new_file"
       log_info "Renamed: $file -> $new_file"
       renamed_count=$((renamed_count + 1))
     fi
-  done < <(cd "$PROJECT_ROOT" && find . -type f -name "$(basename "$pattern")" -print0 2>/dev/null)
+  done < <(cd "$PROJECT_ROOT" && find . -type f -path "./$pattern" -print0 2>/dev/null)
 done
 
 if [[ $renamed_count -gt 0 ]]; then
