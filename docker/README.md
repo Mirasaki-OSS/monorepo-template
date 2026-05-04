@@ -5,7 +5,8 @@ Docker Compose setup for the pnpm monorepo.
 ## Features
 
 - **Multi-stage builds** for optimized image sizes
-- **Layer caching** with pnpm store cache
+- **Lockfile-only deps layer** for maximum cache reuse across builds
+- **Dynamic source resolution** — builder stages copy only the workspace packages each app needs
 - **Production-ready** non-root user configuration
 - **Development mode** with hot reload support
 - **BuildKit** syntax for better performance
@@ -14,8 +15,6 @@ Docker Compose setup for the pnpm monorepo.
 ## Quick Start
 
 ### Production
-
-Build and run the application:
 
 ```bash
 # Build Docker images
@@ -33,139 +32,113 @@ pnpm docker:down
 
 ### Development
 
-Run with hot reload:
-
 ```bash
 pnpm docker:dev
 ```
 
-This starts the development container with:
-- Volume mounts for live code updates
-- All development dependencies
-- Hot reload enabled
+Starts the development container with volume mounts for live code updates and hot reload.
+
+```bash
+pnpm docker:debug
+```
+
+Runs the context-debug profile to generate a build context report in `docker/context-report/`.
 
 ## Docker Commands
 
 | Command | Description |
 |---------|-------------|
-| `pnpm docker:build` | Build Docker images |
+| `pnpm docker:build` | Build all production images |
 | `pnpm docker:up` | Start services in detached mode |
 | `pnpm docker:down` | Stop and remove containers |
 | `pnpm docker:logs` | Follow container logs |
-| `pnpm docker:dev` | Start development environment |
-| `pnpm docker:clean` | Remove containers, volumes, and images |
+| `pnpm docker:dev` | Start development environment with hot reload |
+| `pnpm docker:debug` | Generate build context report |
+| `pnpm docker:clean` | Remove containers, volumes, and local images |
+
+## File Layout
+
+```
+docker/
+  apps/
+    cli.Dockerfile      # CLI app
+    server.Dockerfile   # Hono/Express API server
+    web.Dockerfile      # Next.js standalone app
+  compose/
+    compose.prod.yaml      # Production services
+    compose.dev.yaml       # Development + debug profiles
+    compose.postgres.yaml  # Shared postgres service + network
+  scripts/bash/docker/
+    copy-workspace-manifests.sh  # Copies all */package.json for the deps stage
+    copy-app-sources.js          # Copies only the transitive workspace sources for each app
+  Dockerfile.dev        # Development image
+  Dockerfile.debug      # Build context inspection image
+```
 
 ## Architecture
 
-### Production Image
+### Production build stages (per app)
 
-The production Dockerfile uses a multi-stage build:
+1. **Base** — Node.js + pnpm setup
+2. **Deps** — Copies all workspace `package.json` manifests only, then runs `pnpm fetch` scoped to the app's dependency graph. Tarballs are written to the BuildKit pnpm store cache so subsequent builds are fast even when the store is cold.
+3. **Builder** — Copies root config files and uses `copy-app-sources.js` to dynamically resolve and copy only the workspace packages the app transitively depends on via `workspace:` protocol. Installs from the shared pnpm cache (`--prefer-offline`) and builds.
+4. **Runner** — Minimal final image with only the deployed production output.
 
-1. **Base** - Sets up Node.js and pnpm
-2. **Deps** - Installs all dependencies (cached)
-3. **Builder** - Builds TypeScript code
-4. **Prod-deps** - Installs production dependencies only
-5. **Runner** - Final minimal runtime image
+### Dynamic workspace source resolution
 
-### Image Sizes
+`scripts/bash/docker/copy-app-sources.js` walks `pnpm-workspace.yaml` and each package's `package.json` at build time to determine exactly which workspace packages to copy into the builder stage. Only packages still using the `workspace:` protocol are included — packages whose versions have been replaced with published semver (e.g. after template personalization) are automatically excluded.
 
-- Production image: ~200MB (optimized)
-- Development image: ~500MB (includes dev dependencies)
+This means Dockerfiles **never need updating** when workspace dependencies change.
+
+### Development image
+
+`Dockerfile.dev` installs all workspace packages and mounts the project root as a volume, so code changes are reflected immediately without rebuilding the image.
 
 ## Configuration
 
 ### Environment Variables
 
-Add environment variables in `docker/compose/compose.prod.yml`:
+Add app-specific environment variables in `docker/compose/compose.prod.yaml`:
 
 ```yaml
 environment:
   - NODE_ENV=production
-  - API_KEY=${API_KEY}
   - DATABASE_URL=${DATABASE_URL}
 ```
 
-Or use an `.env` file:
+Or use an `.env` file at the repo root (or rather build context root, loaded automatically by Compose).
 
-```bash
-NODE_ENV=production
-API_KEY=your_key_here
-```
+## Adding a New App
 
-### Volumes
-
-Uncomment volume mounts in `docker/compose/compose.prod.yml` for persistent data:
-
-```yaml
-volumes:
-  - ./data:/app/data
-```
-
-### Custom Commands
-
-Override the default command:
-
-```yaml
-command: ["node", "dist/custom-script.js"]
-```
-
-## Adding New Services
-
-To add a new app to the Docker setup:
-
-1. Add the app's package.json to dependency copy in Dockerfile
-2. Copy built artifacts in the runner stage
-3. Add a new service in `docker/compose/compose.prod.yml`
-
-Example:
-
-```yaml
-api:
-  build:
-    context: .
-    dockerfile: Dockerfile
-    target: api-runner
-  image: my_app/api:latest
-  ports:
-    - "3000:3000"
-  networks:
-    - my_app-network
-```
-
-## Performance Tips
-
-1. **Use BuildKit**: Enabled by default with `# syntax=docker/dockerfile:1`
-2. **Cache dependencies**: Leverages Docker cache layers for faster builds
-3. **Parallel builds**: Use `docker compose build --parallel`
-4. **Prune regularly**: Run `docker system prune -a` to free space
+1. Create `docker/apps/<name>.Dockerfile` using the existing Dockerfiles as a template — only the `--filter` app name needs changing.
+2. Add a service block to `docker/compose/compose.prod.yaml`.
+3. If the new app has runtime dependencies on other services (not expressed via `workspace:`), add an entry to `SERVICE_DEPS` in `scripts/node/resolve-preserve-list.mjs`.
 
 ## Troubleshooting
 
 ### Build fails with permission errors
 
-Ensure Docker has proper permissions:
 ```bash
 sudo usermod -aG docker $USER
 ```
 
-### Cache not working
+### Stale cache causing unexpected behavior
 
-Clear BuildKit cache:
 ```bash
 docker builder prune
 ```
 
 ### Development hot reload not working
 
-Ensure volume mounts are correct and file watchers are configured.
+Ensure the volume mount in `compose.dev.yaml` points to your project root and that your bundler/framework has file-watching enabled.
 
 ## Security
 
-- Runs as non-root user (`appuser`)
+- Runs as non-root user (`appuser`, uid 1001)
 - Minimal base image (Alpine Linux)
-- Only production dependencies in final image
-- No unnecessary tools or packages
-- Excludes development files via .dockerignore
+- Only production output in final runner image
+- No source files or dev dependencies in runner
+- Excludes development files via `.dockerignore`
 
 ## CI/CD Integration
 
@@ -173,7 +146,7 @@ Ensure volume mounts are correct and file watchers are configured.
 
 ```yaml
 - name: Build Docker image
-  run: docker compose build
+  run: docker compose build cli
 
 - name: Push to registry
   run: |
