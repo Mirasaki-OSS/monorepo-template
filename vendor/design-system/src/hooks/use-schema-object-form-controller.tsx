@@ -153,11 +153,11 @@ export const useSchemaObjectFormController = <Schema extends z.ZodObject>(
 				await onValid(values, event);
 				form.reset(values);
 			} catch (err) {
-				const parsed = parseError(
-					err,
-					'FORM_SUBMIT_FAILED',
-					'There was an issue submitting the form.'
-				);
+				const baseMessage = 'There was an issue submitting the form.';
+				const parsedMessage =
+					err instanceof Error ? `${baseMessage} ${err.message}` : baseMessage;
+
+				const parsed = parseError(err, 'FORM_SUBMIT_FAILED', parsedMessage);
 				setFormError(parsed.body.message);
 				onError?.(parsed.body.message);
 			}

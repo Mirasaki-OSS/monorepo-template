@@ -394,12 +394,15 @@ export function createGenericRouteHandler<
 							...options,
 						} as SendTypedResponseOptions<Registry, API, TPath, TMethod>);
 					} catch (error) {
+						const baseMessage =
+							'An error occurred while processing the request.';
+						const parsedMessage =
+							error instanceof Error
+								? `${baseMessage} ${error.message}`
+								: baseMessage;
+
 						return next(
-							parseError(
-								error,
-								'ROUTE_HANDLER_ERROR',
-								'An error occurred while processing the request.'
-							)
+							parseError(error, 'ROUTE_HANDLER_ERROR', parsedMessage)
 						);
 					}
 				}
@@ -422,13 +425,13 @@ export function createGenericRouteHandler<
 				error
 			);
 
-			next(
-				parseError(
-					error,
-					'ROUTE_HANDLER_ERROR',
-					'An error occurred while processing the request.'
-				)
-			);
+			const baseMessage = 'An error occurred while processing the request.';
+			const parsedMessage =
+				error instanceof Error
+					? `${baseMessage} ${error.message}`
+					: baseMessage;
+
+			next(parseError(error, 'ROUTE_HANDLER_ERROR', parsedMessage));
 		}
 	};
 
