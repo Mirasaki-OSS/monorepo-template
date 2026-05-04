@@ -1,5 +1,13 @@
 # @md-oss/api-types
 
+## 0.8.3
+
+### Patch Changes
+
+- 9907f3f: feat(types): add success response inference for 2xx status codes
+- Updated dependencies [49625ae]
+  - @md-oss/common@0.8.3
+
 ## 0.8.1
 
 ### Patch Changes

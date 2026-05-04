@@ -1,5 +1,11 @@
 # @md-oss/common
 
+## 0.8.3
+
+### Patch Changes
+
+- 49625ae: feat: http error response schemas
+
 ## 0.7.1
 
 ### Patch Changes
