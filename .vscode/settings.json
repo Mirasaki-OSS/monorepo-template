@@ -82,6 +82,7 @@
 		"Stylesheet",
 		"Subdirs",
 		"tanstack",
+		"toupper",
 		"turbopack",
 		"usermod",
 		"vaul",
