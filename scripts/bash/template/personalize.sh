@@ -51,6 +51,7 @@ FILE_PATTERNS=(
   "*.example"
   "*.config.mjs"
   "*.css"
+  "*.Dockerfile"
 )
 
 # Build find command with all patterns
