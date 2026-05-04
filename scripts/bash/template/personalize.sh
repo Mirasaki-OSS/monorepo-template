@@ -31,9 +31,10 @@ NEW_NAME="$REPO_NAME"
 # Replacers for my-app / my_app / my app placeholders.
 # Value is based on the repository ref (<owner>/<name>) and normalized to the placeholder's delimiter style.
 NEW_REF_RAW="$NEW_OWNER/$NEW_NAME"
-NEW_REF_HYPHEN="$(printf '%s' "$NEW_REF_RAW" | tr '[:upper:]' '[:lower:]' | sed -E 's/[ _]+/-/g')"
-NEW_REF_UNDERSCORE="$(printf '%s' "$NEW_REF_RAW" | tr '[:upper:]' '[:lower:]' | sed -E 's/[- ]+/_/g')"
-NEW_REF_SPACE="$(printf '%s' "$NEW_REF_RAW" | tr '[:upper:]' '[:lower:]' | sed -E 's/[-_]+/ /g')"
+NEW_REF_HYPHEN="$(printf '%s' "$NEW_REF_RAW" | tr '[:upper:]' '[:lower:]' | sed -E 's#[/_ ]+#-#g')"
+NEW_REF_UNDERSCORE="$(printf '%s' "$NEW_REF_RAW" | tr '[:upper:]' '[:lower:]' | sed -E 's#[-/ ]+#_#g')"
+NEW_REF_SPACE="$(printf '%s' "$NEW_REF_RAW" | tr '[:upper:]' '[:lower:]' | sed -E 's#[-_/]+# #g')"
+NEW_REF_TITLE="$(printf '%s' "$NEW_REF_SPACE" | awk '{for (i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) substr($i,2)}1')"
 
 OLD_OWNERS_REGEX="$(IFS='|'; echo "${OLD_OWNERS[*]}")"
 
@@ -73,7 +74,7 @@ while IFS= read -r -d '' file; do
   fi
   
   # Check if file contains any old values
-  if grep -q -E "(($OLD_OWNERS_REGEX)/$OLD_NAME|($OLD_OWNERS_REGEX)|$OLD_NAME)" "$file" 2>/dev/null; then
+  if grep -q -E "(($OLD_OWNERS_REGEX)/$OLD_NAME|($OLD_OWNERS_REGEX)|$OLD_NAME|my-app|my_app|my app|My App)" "$file" 2>/dev/null; then
     log_info "Updating: $file"
     
     # Use sed for in-place replacement
@@ -88,6 +89,7 @@ while IFS= read -r -d '' file; do
       SED_ARGS+=(-e "s|my-app|$NEW_REF_HYPHEN|g")
       SED_ARGS+=(-e "s|my_app|$NEW_REF_UNDERSCORE|g")
       SED_ARGS+=(-e "s|my app|$NEW_REF_SPACE|g")
+      SED_ARGS+=(-e "s|My App|$NEW_REF_TITLE|g")
       SED_ARGS+=(-e "s/$OLD_NAME/$NEW_NAME/g")
       sed "${SED_ARGS[@]}" "$file"
     else
@@ -100,6 +102,7 @@ while IFS= read -r -d '' file; do
       SED_ARGS+=(-e "s|my-app|$NEW_REF_HYPHEN|g")
       SED_ARGS+=(-e "s|my_app|$NEW_REF_UNDERSCORE|g")
       SED_ARGS+=(-e "s|my app|$NEW_REF_SPACE|g")
+      SED_ARGS+=(-e "s|My App|$NEW_REF_TITLE|g")
       SED_ARGS+=(-e "s/$OLD_NAME/$NEW_NAME/g")
       sed "${SED_ARGS[@]}" "$file"
     fi
