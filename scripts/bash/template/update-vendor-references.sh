@@ -18,11 +18,6 @@ source "$(dirname "${BASH_SOURCE[0]}")/../lib.sh"
 : "${PROJECT_ROOT:?PROJECT_ROOT must be set}"
 VENDOR_PACKAGES=("$@")
 
-if [[ ${#VENDOR_PACKAGES[@]} -eq 0 ]]; then
-  log_info "No vendor packages to update references for"
-  exit 0
-fi
-
 # Config files that may contain literal "vendor/<package>" path strings
 STATIC_FILES=(
   "README.md"
@@ -54,6 +49,13 @@ for file_path in "${ALL_FILES[@]}"; do
   for package in "${VENDOR_PACKAGES[@]}"; do
     sed -i.bak "s|vendor/$package|packages/$package|g" "$target"
   done
+
+  # biome.json keeps path-based overrides that can still point at vendor/*.
+  # Rewrite those paths globally so template output contains no vendor refs.
+  if [[ "$file_path" == "biome.json" ]]; then
+    sed -i.bak 's|vendor/|packages/|g' "$target"
+  fi
+
   rm -f "$target.bak"
 
   log_info "Updated $file_path"

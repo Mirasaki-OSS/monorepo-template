@@ -4,8 +4,9 @@
 #   1. Resolve the preserve list (with transitive deps)  →  resolve-preserve-list.mjs
 #   2. Copy preserved vendor/ packages into packages/ and strip publishing metadata
 #   3. Remove unselected app workspaces
-#   4. Rewrite vendor/ path references in config files   →  update-vendor-references.sh
-#   5. Rewrite workspace: dep specs to pinned versions   →  rewrite-workspace-deps.mjs
+#   4. Remove unselected package workspaces
+#   5. Rewrite vendor/ path references in config files   →  update-vendor-references.sh
+#   6. Rewrite workspace: dep specs to pinned versions   →  rewrite-workspace-deps.mjs
 
 source "$(dirname "${BASH_SOURCE[0]}")/../lib.sh"
 
@@ -110,18 +111,50 @@ done < <(find "$PROJECT_ROOT/apps" -mindepth 1 -maxdepth 1 -type d -printf '%f\n
   || log_info "No app workspaces removed"
 
 # ============================================================================
-# Step 4 - Rewrite vendor/ → packages/ path references in config files
+# Step 4 - Pruning unselected package workspaces
 # ============================================================================
 
-log_section "Step 4 - Updating vendor/ → packages/ path references"
+log_section "Step 4 - Pruning unselected package workspaces"
+
+declare -A package_lookup=()
+for package in "${PACKAGES_TO_PRESERVE[@]}"; do
+  package_lookup["$package"]=1
+done
+
+for package in "${VENDOR_PACKAGES_TO_PRESERVE[@]}"; do
+  package_lookup["packages/$package"]=1
+done
+
+removed_packages=0
+while IFS= read -r name; do
+  [[ -z "$name" ]] && continue
+  workspace="packages/$name"
+  if [[ -n "${package_lookup[$workspace]:-}" ]]; then
+    log_info "Keeping  $workspace"
+  else
+    log_info "Removing $workspace"
+    rm -rf "$PROJECT_ROOT/$workspace"
+    removed_packages=$((removed_packages + 1))
+  fi
+done < <(find "$PROJECT_ROOT/packages" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort)
+
+[[ $removed_packages -gt 0 ]] \
+  && log_success "Removed $removed_packages package workspace(s)" \
+  || log_info "No package workspaces removed"
+
+# ============================================================================
+# Step 5 - Rewrite vendor/ → packages/ path references in config files
+# ============================================================================
+
+log_section "Step 5 - Updating vendor/ → packages/ path references"
 
 "$(dirname "${BASH_SOURCE[0]}")/update-vendor-references.sh" "${VENDOR_PACKAGES_TO_PRESERVE[@]}"
 
 # ============================================================================
-# Step 5 - Rewrite workspace: dep specs to pinned published versions
+# Step 6 - Rewrite workspace: dep specs to pinned published versions
 # ============================================================================
 
-log_section "Step 5 - Rewriting workspace: dependency specs"
+log_section "Step 6 - Rewriting workspace: dependency specs"
 
 node "$NODE_SCRIPTS/rewrite-workspace-deps.mjs" --project-root="$PROJECT_ROOT"
 log_success "Workspace dependency specs rewritten"

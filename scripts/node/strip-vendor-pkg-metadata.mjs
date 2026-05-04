@@ -4,8 +4,8 @@
 //
 // Changes applied:
 //   - Sets "private": true
-//   - Removes publishConfig.access, .provenance, .registry, .tag
-//   - Removes "repository" and "license" fields
+//   - Removes publishConfig.access, .provenance, .registry, .tag (and publishConfig root if empty after removals)
+//   - Removes "repository", "license", "homepage", and "author" fields
 //   - Removes "LICENSE" entry from the "files" array
 //
 // Usage: node strip-vendor-pkg-metadata.mjs --pkg=<path-to-package.json>
@@ -34,8 +34,14 @@ if (pkg.publishConfig && typeof pkg.publishConfig === 'object') {
 	delete pkg.publishConfig.tag;
 }
 
+if (pkg.publishConfig && Object.keys(pkg.publishConfig).length === 0) {
+	delete pkg.publishConfig;
+}
+
 delete pkg.repository;
 delete pkg.license;
+delete pkg.homepage;
+delete pkg.author;
 
 if (Array.isArray(pkg.files)) {
 	pkg.files = pkg.files.filter((entry) => entry !== 'LICENSE');
