@@ -15,7 +15,7 @@ log_section "Cleaning up template files"
 
 # Read the .template-ignore entries line by line
 removed_count=0
-while IFS= read -r line; do
+while IFS= read -r line || [[ -n "$line" ]]; do
   # Skip empty lines and comments
   [[ -z "$line" || "$line" =~ ^[[:space:]]*# ]] && continue
   
