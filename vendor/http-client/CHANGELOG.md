@@ -1,5 +1,11 @@
 # @md-oss/http-client
 
+## 0.8.2
+
+### Patch Changes
+
+- 02399fe: add http error response schemas
+
 ## 0.7.1
 
 ### Patch Changes
