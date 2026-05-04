@@ -43,9 +43,27 @@ type InferEndpointResponse<TResponse> = TResponse extends z.ZodType
 	? z.output<TResponse>
 	: TResponse;
 
-type InferEndpointResponses<TResponses> =
-	TResponses extends Record<PropertyKey, infer TResponse>
-		? InferEndpointResponse<TResponse>
+/** True only for 2xx status code keys (numeric or string form). */
+type IsSuccessStatusKey<K> = K extends `2${string}`
+	? true
+	: K extends number
+		? `${K}` extends `2${string}`
+			? true
+			: false
+		: false;
+
+/**
+ * Only includes responses for 2xx status
+ * codes, excluding `default` and error (4xx/5xx) entries. This prevents error
+ * schema types from leaking into `response.data` on the success path.
+ */
+type InferSuccessEndpointResponses<TResponses> =
+	TResponses extends Record<PropertyKey, unknown>
+		? {
+				[K in keyof TResponses]: IsSuccessStatusKey<K> extends true
+					? InferEndpointResponse<TResponses[K]>
+					: never;
+			}[keyof TResponses]
 		: never;
 
 export type EndpointResponses = Record<
@@ -138,7 +156,7 @@ export type InferApi<T extends RouteRegistry> = {
 				response: T[R]['endpoints'][M] extends {
 					responses: infer Responses;
 				}
-					? InferEndpointResponses<Responses>
+					? InferSuccessEndpointResponses<Responses>
 					: T[R]['endpoints'][M] extends { response: infer Resp }
 						? InferEndpointResponse<Resp>
 						: undefined;
