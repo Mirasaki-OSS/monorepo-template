@@ -30,6 +30,15 @@ const WORKSPACE_DIRS = ['apps', 'packages', 'vendor'];
 /** Workspace paths preserved when no explicit --preserve-list is given. */
 const DEFAULT_PRESERVE_LIST = ['apps/cli', 'packages/utils', 'vendor/config'];
 
+/**
+ * Runtime/service-level dependencies not expressed via workspace: protocol.
+ * If a key workspace path is preserved, all paths in its value array are also
+ * pulled in transitively (e.g. web requires server at Docker runtime).
+ */
+const SERVICE_DEPS = {
+	'apps/web': ['apps/server'],
+};
+
 // ---- helpers ----------------------------------------------------------------
 
 function readJson(filePath) {
@@ -105,6 +114,12 @@ function resolveTransitive(seeds, byName, byPath) {
 			const depInfo = byName.get(depName);
 			if (depInfo && !resolved.has(depInfo.workspacePath)) {
 				queue.push(depInfo.workspacePath);
+			}
+		}
+
+		for (const serviceDep of SERVICE_DEPS[workspacePath] ?? []) {
+			if (!resolved.has(serviceDep)) {
+				queue.push(serviceDep);
 			}
 		}
 	}

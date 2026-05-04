@@ -79,4 +79,23 @@ for (const appName of removed) {
 	}
 }
 
+// Strip dangling depends_on entries that reference removed services.
+// Handles both long form (  server:\n    condition: ...) and short form (  - server).
+for (const appName of removed) {
+	// Long form: "      <name>:\n" followed by deeper-indented lines
+	const longFormRe = new RegExp(
+		`\\n([ ]+)${appName}:\\n(?:\\1 [^\\n]*\\n)*`,
+		'g'
+	);
+	// Short form: "      - <name>" list entry
+	const shortFormRe = new RegExp(`\\n[ ]+-[ ]+${appName}\\b[^\\n]*`, 'g');
+
+	compose = compose.replace(longFormRe, '\n');
+	compose = compose.replace(shortFormRe, '');
+}
+
+// Remove depends_on blocks that became empty after stripping entries.
+// An empty depends_on has no deeper-indented child on the next non-blank line.
+compose = compose.replace(/\n([ ]+)depends_on:\n(?=\1[^ ]|\n)/g, '\n');
+
 writeFileSync(composePath, compose, 'utf8');
