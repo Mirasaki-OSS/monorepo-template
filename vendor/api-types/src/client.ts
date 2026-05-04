@@ -255,13 +255,13 @@ export function createApiClient<
 						await responseSchema.safeParseAsync(normalizedData);
 
 					if (!parsedResponse.success) {
+						const validationMessage = `Invalid response body for ${String(method)} ${String(path)}: ${prettifyError(parsedResponse.error)}`;
+
 						return {
 							...parseError(
-								new Error(
-									`Invalid response body for ${String(method)} ${String(path)}: ${prettifyError(parsedResponse.error)}`
-								),
+								new Error(validationMessage),
 								'INVALID_RESPONSE_BODY',
-								`Response validation failed for ${endpoint}`
+								`Response validation failed for ${endpoint}: ${validationMessage}`
 							).toJSON(),
 							raw: response.raw,
 						};

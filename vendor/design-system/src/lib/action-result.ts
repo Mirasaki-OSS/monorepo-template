@@ -44,12 +44,16 @@ async function withActionResult<T>(
 			data: isHTTPError(response) ? (response.toJSON() as T) : response,
 		};
 	} catch (error) {
+		const baseMessage = errorOptions.message;
+		const parsedMessage =
+			error instanceof Error ? `${baseMessage} ${error.message}` : baseMessage;
+
 		return {
 			ok: false,
 			error: parseError(
 				error,
 				errorOptions.code ?? 'INTERNAL_SERVER_ERROR',
-				errorOptions.message
+				parsedMessage
 			).toJSON(),
 		};
 	}
