@@ -998,6 +998,7 @@
 	"license": "ISC",
 	"files": [
 		"dist/**/*",
+		"src/**/*",
 		"src/styles",
 		"README.md",
 		"LICENSE"

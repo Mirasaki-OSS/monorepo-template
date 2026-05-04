@@ -146,3 +146,13 @@ The following list reflects the current component export entrypoints from this p
 - Import from package export entrypoints, not deep relative source paths.
 - Prefer the closest semantic component first (for example, `state` or `sections`) before dropping to low-level `ui` primitives.
 - Most components are designed to support class-based customization and slot-level prop overrides.
+
+## Why `src` Is Included In Published Artifacts
+
+We intentionally publish both `dist` and `src`.
+
+- Many design-system packages ship source for better debugging, source maps, IDE navigation, and static analysis.
+- In pnpm injected/packed workspace installs, exported source entrypoints must exist in the packaged artifact.
+- Public runtime entrypoints are still defined by package exports.
+
+Consumers should import documented package entrypoints only; `src` presence is not a promise that deep source paths are public API.
