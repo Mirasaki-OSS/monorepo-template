@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 # Personalize template for new repository owner & name
 
-# [DEV]Replacers for `my[ _-]app`, etc. (underscore or hyphens DO matter)
- 
 source "$(dirname "${BASH_SOURCE[0]}")/../lib.sh"
 
 PROJECT_ROOT=$(get_project_root)
@@ -29,6 +27,13 @@ OLD_OWNERS=(
 OLD_NAME="monorepo-template"
 NEW_OWNER="${REPO_OWNER,,}" # Convert to lowercase, as GitHub usernames are case-insensitive and NPM doesn't allow uppercase in package scopes
 NEW_NAME="$REPO_NAME"
+
+# Replacers for my-app / my_app / my app placeholders.
+# Value is based on the repository ref (<owner>/<name>) and normalized to the placeholder's delimiter style.
+NEW_REF_RAW="$NEW_OWNER/$NEW_NAME"
+NEW_REF_HYPHEN="$(printf '%s' "$NEW_REF_RAW" | tr '[:upper:]' '[:lower:]' | sed -E 's/[ _]+/-/g')"
+NEW_REF_UNDERSCORE="$(printf '%s' "$NEW_REF_RAW" | tr '[:upper:]' '[:lower:]' | sed -E 's/[- ]+/_/g')"
+NEW_REF_SPACE="$(printf '%s' "$NEW_REF_RAW" | tr '[:upper:]' '[:lower:]' | sed -E 's/[-_]+/ /g')"
 
 OLD_OWNERS_REGEX="$(IFS='|'; echo "${OLD_OWNERS[*]}")"
 
@@ -79,6 +84,9 @@ while IFS= read -r -d '' file; do
         SED_ARGS+=(-e "s|$old_owner/$OLD_NAME|$NEW_OWNER/$NEW_NAME|g")
         SED_ARGS+=(-e "s/$old_owner/$NEW_OWNER/g")
       done
+      SED_ARGS+=(-e "s|my-app|$NEW_REF_HYPHEN|g")
+      SED_ARGS+=(-e "s|my_app|$NEW_REF_UNDERSCORE|g")
+      SED_ARGS+=(-e "s|my app|$NEW_REF_SPACE|g")
       SED_ARGS+=(-e "s/$OLD_NAME/$NEW_NAME/g")
       sed "${SED_ARGS[@]}" "$file"
     else
@@ -88,6 +96,9 @@ while IFS= read -r -d '' file; do
         SED_ARGS+=(-e "s|$old_owner/$OLD_NAME|$NEW_OWNER/$NEW_NAME|g")
         SED_ARGS+=(-e "s/$old_owner/$NEW_OWNER/g")
       done
+      SED_ARGS+=(-e "s|my-app|$NEW_REF_HYPHEN|g")
+      SED_ARGS+=(-e "s|my_app|$NEW_REF_UNDERSCORE|g")
+      SED_ARGS+=(-e "s|my app|$NEW_REF_SPACE|g")
       SED_ARGS+=(-e "s/$OLD_NAME/$NEW_NAME/g")
       sed "${SED_ARGS[@]}" "$file"
     fi
