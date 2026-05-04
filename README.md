@@ -23,7 +23,7 @@ A modern TypeScript pnpm turbo monorepo.
 ├── packages/          # Template example packages
 │   ├── config/        # Shared TypeScript configuration
 │   └── utils/         # Shared utility functions
-├── vendor/            # Open-source projects (not included in template)
+├── vendor/            # Open-source projects (optionally included in template)
 ├── package.json       # Root workspace configuration
 ├── pnpm-workspace.yaml
 ├── turbo.json         # Turbo build system configuration

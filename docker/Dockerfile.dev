@@ -8,11 +8,12 @@ RUN corepack enable && corepack prepare pnpm@10.28.0+sha512.05df71d1421f21399e05
 
 WORKDIR /app
 
-# Install dependencies for development
+# Install dependencies for development (all workspace packages)
 COPY pnpm-workspace.yaml package.json pnpm-lock.yaml* ./
-COPY vendor/config/package.json ./vendor/config/package.json
-COPY packages/utils/package.json ./packages/utils/package.json
-COPY apps/cli/package.json ./apps/cli/package.json
+COPY scripts/bash/docker/copy-workspace-manifests.sh /usr/local/bin/copy-workspace-manifests
+RUN chmod +x /usr/local/bin/copy-workspace-manifests
+RUN --mount=type=bind,source=.,target=/mnt/workspace,ro \
+    /usr/local/bin/copy-workspace-manifests /mnt/workspace /app
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm install --frozen-lockfile

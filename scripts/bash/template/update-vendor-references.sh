@@ -22,8 +22,10 @@ VENDOR_PACKAGES=("$@")
 STATIC_FILES=(
   "README.md"
   "biome.json"
-  "docker/compose.dev.yaml"
-  "docker/Dockerfile"
+  "package.json"
+  "docker/apps/cli.Dockerfile"
+  "docker/apps/server.Dockerfile"
+  "docker/apps/web.Dockerfile"
   "docker/Dockerfile.dev"
 )
 

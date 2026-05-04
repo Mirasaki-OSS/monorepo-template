@@ -117,6 +117,10 @@ log_info "Restoring non-local published package scopes in package.json files..."
 node "$PROJECT_ROOT/scripts/node/restore-nonlocal-scoped-deps.mjs" --project-root="$PROJECT_ROOT" --new-owner="$NEW_OWNER"
 log_success "Restored non-local published package scopes"
 
+log_info "Cleaning up Docker artifacts for removed apps..."
+node "$PROJECT_ROOT/scripts/node/cleanup-docker-artifacts.mjs" --project-root="$PROJECT_ROOT"
+log_success "Docker artifact cleanup complete"
+
 # Files to rename if they contain the old name
 FILE_RENAME_PATTERNS=(
   "packages/scripts/bin/*.mjs"

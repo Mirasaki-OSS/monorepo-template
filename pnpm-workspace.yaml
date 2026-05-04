@@ -3,6 +3,8 @@ packages:
   - packages/*
   - vendor/*
 
+injectWorkspacePackages: true # Required for pnpm deploy (Dockerfile)
+
 catalog:
   '@tailwindcss/postcss': ^4.2.4
   '@types/react': ^19.2.14

@@ -76,7 +76,7 @@ The production Dockerfile uses a multi-stage build:
 
 ### Environment Variables
 
-Add environment variables in `docker-compose.yml`:
+Add environment variables in `docker/compose/compose.prod.yml`:
 
 ```yaml
 environment:
@@ -94,7 +94,7 @@ API_KEY=your_key_here
 
 ### Volumes
 
-Uncomment volume mounts in `docker-compose.yml` for persistent data:
+Uncomment volume mounts in `docker/compose/compose.prod.yml` for persistent data:
 
 ```yaml
 volumes:
@@ -115,7 +115,7 @@ To add a new app to the Docker setup:
 
 1. Add the app's package.json to dependency copy in Dockerfile
 2. Copy built artifacts in the runner stage
-3. Add a new service in docker-compose.yml
+3. Add a new service in `docker/compose/compose.prod.yml`
 
 Example:
 
