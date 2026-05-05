@@ -148,8 +148,7 @@ const getUser = createGenericController(
 	routes,
 	'/users/:id',
 	'GET',
-	authStrategy,
-	contextStrategy
+	{ authStrategy, contextStrategy }
 )((context, respond) => {
 	respond({
 		path: '/users/:id',
@@ -252,10 +251,7 @@ const getUserController = createGenericController(
 	routes,
 	'/users/:id',
 	'GET',
-	authStrategy,
-	contextStrategy,
-	permissionStrategy,
-	sendWithDefaultsAndAudit
+	{ authStrategy, contextStrategy, permissionStrategy, sendWithDefaultsAndAudit }
 )((context, respond) => {
 	respond({
 		data: { id: context.params.id, email: 'user@example.com' },
