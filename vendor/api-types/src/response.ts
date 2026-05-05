@@ -1,10 +1,9 @@
-import { type HTTPError, resolveStatusText } from '@md-oss/common/http/errors';
+import type { HTTPError } from '@md-oss/common/http/errors';
 import type {
 	MinimalRequest,
 	MinimalRequestHandler,
 	MinimalResponse,
 } from '@md-oss/common/http/requests';
-import type { HTTPSuccessResponse } from '@md-oss/common/http/types';
 import { prettifyError, type ZodType } from 'zod/v4';
 import { debugPerformance, debugRoute } from './debugger';
 import { type ExtractResolvedContext, isZodSchema } from './request';
@@ -69,9 +68,39 @@ type SendTypedResponseOptions<
 	data: API[TPath]['endpoints'][TMethod]['response'];
 	status?: number;
 	headers?: Record<string, string>;
-	flattenResponse?: boolean;
 	responseSchemas?: ResponseSchemas;
 };
+
+type SendTypedResponseHandler<
+	Registry extends RouteRegistry,
+	API extends InferApi<Registry>,
+	TPath extends RouteKeys<Registry>,
+	TMethod extends MethodKeys<Registry, TPath>,
+> = (
+	res: MinimalResponse,
+	options: SendTypedResponseOptions<Registry, API, TPath, TMethod>
+) => void;
+
+type SendTypedResponseDefaults<
+	Registry extends RouteRegistry,
+	API extends InferApi<Registry>,
+	TPath extends RouteKeys<Registry>,
+	TMethod extends MethodKeys<Registry, TPath>,
+> = Pick<
+	SendTypedResponseOptions<Registry, API, TPath, TMethod>,
+	'status' | 'headers'
+>;
+
+type SendTypedResponseExtension<
+	Registry extends RouteRegistry,
+	API extends InferApi<Registry>,
+	TPath extends RouteKeys<Registry>,
+	TMethod extends MethodKeys<Registry, TPath>,
+> = (context: {
+	res: MinimalResponse;
+	options: SendTypedResponseOptions<Registry, API, TPath, TMethod>;
+	next: SendTypedResponseHandler<Registry, API, TPath, TMethod>;
+}) => void;
 
 type IsUserMe<T> = T extends { isUserMe: true } ? string : null;
 
@@ -198,7 +227,6 @@ const sendTypedResponse = <
 		data,
 		status = dataIsVoid ? 204 : 200,
 		headers = {},
-		flattenResponse = false,
 		responseSchemas,
 	} = options;
 
@@ -243,34 +271,74 @@ const sendTypedResponse = <
 		}
 	}
 
-	if (flattenResponse) {
-		debugRoute('Sending successful (flattened) response with body: %O', data);
-		res.status(status).json(data);
-		return;
-	}
+	debugRoute('Sending successful response with body: %O', data);
+	res.status(status).json(data);
+};
 
-	const responseBody = {
-		ok: true,
-		statusCode: status,
-		statusText: resolveStatusText(status),
-		headers,
-		data,
-	} satisfies HTTPSuccessResponse<API[TPath]['endpoints'][TMethod]['response']>;
+const withSendTypedResponseDefaults = <
+	Registry extends RouteRegistry,
+	API extends InferApi<Registry>,
+	TPath extends RouteKeys<Registry>,
+	TMethod extends MethodKeys<Registry, TPath>,
+>(
+	defaults: SendTypedResponseDefaults<Registry, API, TPath, TMethod>,
+	sender: SendTypedResponseHandler<
+		Registry,
+		API,
+		TPath,
+		TMethod
+	> = sendTypedResponse
+): SendTypedResponseHandler<Registry, API, TPath, TMethod> => {
+	return (res, options) => {
+		sender(res, {
+			...options,
+			status: options.status ?? defaults.status,
+			headers: {
+				...(defaults.headers ?? {}),
+				...(options.headers ?? {}),
+			},
+		});
+	};
+};
 
-	debugRoute('Sending successful response with body: %O', responseBody);
-	res.status(status).json(responseBody);
+const extendSendTypedResponse = <
+	Registry extends RouteRegistry,
+	API extends InferApi<Registry>,
+	TPath extends RouteKeys<Registry>,
+	TMethod extends MethodKeys<Registry, TPath>,
+>(
+	extension: SendTypedResponseExtension<Registry, API, TPath, TMethod>,
+	sender: SendTypedResponseHandler<
+		Registry,
+		API,
+		TPath,
+		TMethod
+	> = sendTypedResponse
+): SendTypedResponseHandler<Registry, API, TPath, TMethod> => {
+	return (res, options) => {
+		extension({
+			res,
+			options,
+			next: sender,
+		});
+	};
 };
 
 export {
 	type ContextProvider,
 	type ControllerFunction,
 	type EndpointDefinitionSession,
+	extendSendTypedResponse,
 	type GenericRouteHandler,
 	type IsUserMe,
 	noContentStatusCodes,
 	type RouteHandler,
 	resolveResponseSchema,
+	type SendTypedResponseDefaults,
+	type SendTypedResponseExtension,
+	type SendTypedResponseHandler,
 	type SendTypedResponseOptions,
 	type SignedAccessError,
 	sendTypedResponse,
+	withSendTypedResponseDefaults,
 };

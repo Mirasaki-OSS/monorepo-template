@@ -26,9 +26,9 @@ const isEmptyObject = (item: unknown): item is GenericObject =>
  */
 const deepClone = <T>(obj: T): T => {
 	if (obj === null || typeof obj !== 'object') return obj;
-	if (obj instanceof Date) return new Date(obj.getTime()) as unknown as T;
+	if (obj instanceof Date) return new Date(obj.getTime()) as T;
 	if (Array.isArray(obj)) {
-		return obj.map((item) => deepClone(item)) as unknown as T;
+		return obj.map((item) => deepClone(item)) as T;
 	}
 	if (obj instanceof Object) {
 		const cloned = {} as T;

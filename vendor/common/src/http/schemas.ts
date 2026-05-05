@@ -9,3 +9,17 @@ export const httpErrorResponseSchema = z.object({
 	message: z.string(),
 	details: z.record(z.string(), z.unknown()).nullable(),
 });
+
+export const defaultHttpResponseEnvelope = <D extends z.ZodTypeAny>(data: D) =>
+	z.object({
+		ok: z.literal(true),
+		data,
+	});
+
+export const extendDefaultHttpResponseEnvelope = <
+	D extends z.ZodTypeAny,
+	E extends z.ZodTypeAny,
+>(
+	envelopeShape: E,
+	data: D
+) => defaultHttpResponseEnvelope(data).extend(envelopeShape);
