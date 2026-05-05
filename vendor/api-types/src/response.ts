@@ -119,7 +119,7 @@ type ContextProvider<
 		TMethod,
 		TConsumerSession
 	>;
-	endpoint: Registry[TPath]['endpoints'][TMethod];
+	endpoint: API[TPath]['endpoints'][TMethod];
 	ctx: TConsumerContext;
 	cps: <P extends API[TPath]['endpoints'][TMethod]['permissions'] | null>(
 		resourceUserId: P extends null

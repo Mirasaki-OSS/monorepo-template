@@ -116,7 +116,7 @@ export interface ContextBuildStrategy<
 	 */
 	buildContext(
 		session: TSession | null,
-		endpoint: Registry[TPath]['endpoints'][TMethod],
+		endpoint: API[TPath]['endpoints'][TMethod],
 		parsedParams: ParsedParameters<Registry, API, TPath, TMethod> | undefined,
 		injectedContext:
 			| Omit<
@@ -174,7 +174,7 @@ export type RouteHandlerStrategies<
 	TSession,
 	TConsumerContext = void,
 > = {
-	authStrategy?: AuthStrategy<TSession, Registry[TPath]['endpoints'][TMethod]>;
+	authStrategy?: AuthStrategy<TSession, API[TPath]['endpoints'][TMethod]>;
 	contextStrategy?: ContextBuildStrategy<
 		Registry,
 		API,
@@ -184,7 +184,7 @@ export type RouteHandlerStrategies<
 		TConsumerContext
 	>;
 	permissionStrategy?: PermissionTrackingStrategy<
-		Registry[TPath]['endpoints'][TMethod]
+		API[TPath]['endpoints'][TMethod]
 	>;
 	injectedContext?: Omit<
 		ContextProvider<Registry, API, TPath, TMethod, TSession, TConsumerContext>,
@@ -256,9 +256,12 @@ export function createGenericRouteHandler<
 	TConsumerContext,
 	TRequestHandler
 > {
-	const endpoint = routeDef.endpoints[
+	const rawEndpoint = routeDef.endpoints[
 		method as keyof typeof routeDef.endpoints
 	] as Registry[TPath]['endpoints'][TMethod];
+	const endpoint = routeDef.endpoints[
+		method as keyof typeof routeDef.endpoints
+	] as API[TPath]['endpoints'][TMethod];
 
 	const wrapper: MinimalRequestHandler = async (
 		req: MinimalRequest,
@@ -425,8 +428,8 @@ export function createGenericRouteHandler<
 							path,
 							method,
 							responseSchemas: {
-								response: endpoint.response,
-								responses: endpoint.responses,
+								response: rawEndpoint.response,
+								responses: rawEndpoint.responses,
 							},
 							...options,
 						} as SendTypedResponseOptions<Registry, API, TPath, TMethod>);
