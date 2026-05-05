@@ -8,10 +8,12 @@ import type {
 import { statusCodes } from '@md-oss/common/http/status-codes';
 import { debugErrors, debugPerformance, debugRoute } from './debugger';
 import { type ParsedParameters, parseRequestParameters } from './params';
+import type { ExtractResolvedContext } from './request';
 import {
 	type ContextProvider,
 	type ControllerFunction,
 	type RouteHandler,
+	type SendTypedResponseHandler,
 	type SendTypedResponseOptions,
 	type SignedAccessError,
 	sendTypedResponse,
@@ -115,7 +117,7 @@ export interface ContextBuildStrategy<
 	buildContext(
 		session: TSession | null,
 		endpoint: Registry[TPath]['endpoints'][TMethod],
-		parsedParams: ParsedParameters | undefined,
+		parsedParams: ParsedParameters<Registry, API, TPath, TMethod> | undefined,
 		injectedContext:
 			| Omit<
 					ContextProvider<
@@ -164,6 +166,33 @@ export interface PermissionTrackingStrategy<TEndpoint> {
 	): void;
 }
 
+export type RouteHandlerStrategies<
+	Registry extends RouteRegistry,
+	API extends InferApi<Registry>,
+	TPath extends RouteKeys<Registry>,
+	TMethod extends MethodKeys<Registry, TPath>,
+	TSession,
+	TConsumerContext = void,
+> = {
+	authStrategy?: AuthStrategy<TSession, Registry[TPath]['endpoints'][TMethod]>;
+	contextStrategy?: ContextBuildStrategy<
+		Registry,
+		API,
+		TPath,
+		TMethod,
+		TSession,
+		TConsumerContext
+	>;
+	permissionStrategy?: PermissionTrackingStrategy<
+		Registry[TPath]['endpoints'][TMethod]
+	>;
+	injectedContext?: Omit<
+		ContextProvider<Registry, API, TPath, TMethod, TSession, TConsumerContext>,
+		'cps' | 'session' | 'endpoint'
+	>;
+	responseSender?: SendTypedResponseHandler<Registry, API, TPath, TMethod>;
+};
+
 /**
  * Generic route handler factory.
  * This function creates a route handler that:
@@ -204,21 +233,19 @@ export function createGenericRouteHandler<
 		TConsumerContext,
 		TRequestHandler
 	>,
-	authStrategy: AuthStrategy<TSession, Registry[TPath]['endpoints'][TMethod]>,
-	contextStrategy?: ContextBuildStrategy<
+	{
+		authStrategy,
+		contextStrategy,
+		permissionStrategy,
+		injectedContext,
+		responseSender = sendTypedResponse,
+	}: RouteHandlerStrategies<
 		Registry,
 		API,
 		TPath,
 		TMethod,
 		TSession,
 		TConsumerContext
-	>,
-	permissionStrategy?: PermissionTrackingStrategy<
-		Registry[TPath]['endpoints'][TMethod]
-	>,
-	injectedContext?: Omit<
-		ContextProvider<Registry, API, TPath, TMethod, TSession, TConsumerContext>,
-		'cps' | 'session' | 'endpoint'
 	>
 ): RouteHandler<
 	Registry,
@@ -257,7 +284,7 @@ export function createGenericRouteHandler<
 			);
 
 			// Resolve authentication
-			const authResult = await authStrategy.resolveAuthentication(
+			const authResult = await authStrategy?.resolveAuthentication(
 				req,
 				res,
 				endpoint,
@@ -266,7 +293,7 @@ export function createGenericRouteHandler<
 				method as string
 			);
 
-			if (authResult.error) {
+			if (authResult?.error) {
 				return next(authResult.error);
 			}
 
@@ -288,10 +315,10 @@ export function createGenericRouteHandler<
 				);
 			}
 
-			// Parse parameters if not using injected context
-			let parsedParams: Awaited<
-				ReturnType<typeof parseRequestParameters>
-			>['data'];
+			let parsedParams:
+				| ParsedParameters<Registry, API, TPath, TMethod>
+				| undefined;
+
 			if (!injectedContext) {
 				const paramResult = await parseRequestParameters(
 					req,
@@ -306,12 +333,17 @@ export function createGenericRouteHandler<
 					return next(paramResult.error);
 				}
 
-				parsedParams = paramResult.data;
+				parsedParams = paramResult.data as ParsedParameters<
+					Registry,
+					API,
+					TPath,
+					TMethod
+				>;
 			}
 
 			// Build context
 			const resolvedContext = await contextStrategy?.buildContext(
-				authResult.session,
+				authResult?.session || null,
 				endpoint,
 				parsedParams,
 				injectedContext,
@@ -350,17 +382,22 @@ export function createGenericRouteHandler<
 					TConsumerContext
 				>['cps'];
 
-				const resolvedSession = authResult.session;
+				const resolvedRequestContext: ExtractResolvedContext<
+					Registry,
+					API,
+					TPath,
+					TMethod
+				> = parsedParams;
+
+				const resolvedSession = authResult?.session ?? null;
 
 				return {
 					cps: cpsFn,
 					endpoint,
 					session: resolvedSession,
-					params: parsedParams.params ?? {},
-					query: parsedParams.query ?? {},
-					body: parsedParams.body ?? {},
+					...resolvedRequestContext,
 					ctx: undefined as TConsumerContext,
-				} as unknown as ContextProvider<
+				} as ContextProvider<
 					Registry,
 					API,
 					TPath,
@@ -384,7 +421,7 @@ export function createGenericRouteHandler<
 					}
 					debugRoute('[%s] Controller responded with success', requestId);
 					try {
-						sendTypedResponse(res, {
+						responseSender(res, {
 							path,
 							method,
 							responseSchemas: {
@@ -446,16 +483,13 @@ export function createGenericRouteHandler<
 	>;
 
 	handlerWithInject.withContext = (ctx) => {
-		return createGenericRouteHandler(
-			routeDef,
-			path,
-			method,
-			controller,
+		return createGenericRouteHandler(routeDef, path, method, controller, {
 			authStrategy,
 			contextStrategy,
 			permissionStrategy,
-			ctx
-		) as TRequestHandler;
+			injectedContext: ctx,
+			responseSender,
+		}) as TRequestHandler;
 	};
 
 	return handlerWithInject;
@@ -513,17 +547,19 @@ export function createGenericController<
 	registry: Registry,
 	path: TPath,
 	method: TMethod,
-	authStrategy: AuthStrategy<TSession, Registry[TPath]['endpoints'][TMethod]>,
-	contextStrategy?: ContextBuildStrategy<
+	{
+		authStrategy,
+		contextStrategy,
+		permissionStrategy,
+		injectedContext,
+		responseSender = sendTypedResponse,
+	}: RouteHandlerStrategies<
 		Registry,
 		API,
 		TPath,
 		TMethod,
 		TSession,
 		TConsumerContext
-	>,
-	permissionStrategy?: PermissionTrackingStrategy<
-		Registry[TPath]['endpoints'][TMethod]
 	>
 ): RouteMethodBuilder<
 	Registry,
@@ -534,7 +570,7 @@ export function createGenericController<
 	TConsumerContext,
 	TRequestHandler
 > {
-	const routeDef = registry[path] as unknown as Registry[TPath];
+	const routeDef = registry[path] as Registry[TPath];
 
 	return (controller) => {
 		return createGenericRouteHandler<
@@ -545,14 +581,12 @@ export function createGenericController<
 			TSession,
 			TConsumerContext,
 			TRequestHandler
-		>(
-			routeDef,
-			path,
-			method,
-			controller,
+		>(routeDef, path, method, controller, {
 			authStrategy,
 			contextStrategy,
-			permissionStrategy
-		);
+			permissionStrategy,
+			injectedContext,
+			responseSender,
+		});
 	};
 }

@@ -6,7 +6,7 @@ Type-safe API contracts and helpers for building clients and route handlers arou
 - Route registries with Zod schemas for params, query, body, and optional response validation
 - Typed API client factory (`createApiClient`) that strips unsafe headers and returns full HTTP response metadata (`statusCode`, `headers`, raw `Response`, etc.)
 - Generic controller/route handler builders (`createGenericController`, `createGenericRouteHandler`) with pluggable auth/context/permission strategies
-- Response helpers (`sendTypedResponse`) and request parsers (`parseRequestParameters`) that serialize consistently with the common API shape
+- Response helpers (`sendTypedResponse`) and request parsers (`parseRequestParameters`) that serialize/validate against your route contract
 - Utilities for prefixing routes, parsing/stripping proxy headers, and fine-grained debug namespaces (`md-oss:api-types:*`)
 
 ## Installation
@@ -148,8 +148,7 @@ const getUser = createGenericController(
 	routes,
 	'/users/:id',
 	'GET',
-	authStrategy,
-	contextStrategy
+	{ authStrategy, contextStrategy }
 )((context, respond) => {
 	respond({
 		path: '/users/:id',
@@ -166,8 +165,99 @@ const getUser = createGenericController(
 ## Validate requests and respond consistently
 
 - `parseRequestParameters` validates params/query/body against Zod schemas and builds a typed context payload.
-- `sendTypedResponse` returns JSON with `{ ok, code, message, data }` by default, or flattens the payload when `flattenResponse` is set.
+- `sendTypedResponse` returns exactly the `data` you pass in.
 - Signed access errors can be converted to `HTTPError` via `parseSignedAccessError`.
+
+### Model envelope-style APIs with schemas
+
+For APIs that use envelope response bodies, define a re-usable zod schema:
+
+```typescript
+import { z } from 'zod/v4';
+import { extendDefaultHttpResponseEnvelope } from '@md-oss/common/http/schemas';
+
+const apiResponseEnvelope = <D extends z.ZodTypeAny>(data: D) =>
+	extendDefaultHttpResponseEnvelope(data, {
+		rid: z.uuid(),
+	});
+
+const routes = {
+	'/': {
+		endpoints: {
+			GET: {
+				permissions: { requireAuthentication: false },
+				responses: {
+					200: apiResponseEnvelope(apiInfoResponseDataSchema),
+					default: httpErrorResponseSchema,
+				},
+			},
+		},
+	},
+	'/health': {
+		endpoints: {
+			GET: {
+				permissions: { requireAuthentication: false },
+				responses: {
+					200: apiResponseEnvelope(healthResponseDataSchema),
+					default: httpErrorResponseSchema,
+				},
+			},
+		},
+	},
+} satisfies RouteRegistry;
+```
+
+This keeps the core transport behavior simple while still supporting arbitrary envelope shapes (including fields like `rid`) through your own schemas.
+
+### `sendTypedResponse` utilities
+
+You can wrap `sendTypedResponse` to set defaults and/or extend behavior:
+
+```typescript
+import {
+	createGenericController,
+	extendSendTypedResponse,
+	withSendTypedResponseDefaults,
+} from '@md-oss/api-types';
+
+const sendWithDefaults = withSendTypedResponseDefaults(
+	{
+		headers: {
+			'x-api-version': '2026-05-05',
+		},
+	},
+);
+
+const sendWithDefaultsAndAudit = extendSendTypedResponse(
+	({ options, res, next }) => {
+		res.setHeader('x-request-id', options.path);
+		next(res, options);
+	},
+	sendWithDefaults
+);
+
+// Respond directly anywhere
+sendWithDefaultsAndAudit(res, {
+	path: TPath;
+	method: TMethod;
+	data: API[TPath]['endpoints'][TMethod]['response'];
+	status?: number;
+	headers?: Record<string, string>;
+	responseSchemas?: ResponseSchemas;
+});
+
+// Or use in a route-handler
+const getUserController = createGenericController(
+	routes,
+	'/users/:id',
+	'GET',
+	{ authStrategy, contextStrategy, permissionStrategy, sendWithDefaultsAndAudit }
+)((context, respond) => {
+	respond({
+		data: { id: context.params.id, email: 'user@example.com' },
+	});
+});
+```
 
 ## Debugging
 

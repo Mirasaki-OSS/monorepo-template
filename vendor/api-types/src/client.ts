@@ -91,9 +91,9 @@ export type ApiClientResponse<T> = HTTPClientResponse<T, HTTPResponse<T>>;
 /**
  * Creates a type-safe API client for a given route registry.
  * This factory function allows external packages to create their own typed clients.
- *
  * @example
  * ```typescript
+ * const { baseUrl, defaultHeaders, httpClientConfig } = config;
  * const myRoutes = {
  *   "/users/:id": {
  *     params: z.object({ id: z.string() }),
@@ -216,9 +216,7 @@ export function createApiClient<
 			try {
 				const endpointDefinition = registry[path]?.endpoints?.[method];
 
-				const response = await client.request<
-					LocalResponse | { data: LocalResponse }
-				>(path, {
+				const response = await client.request<LocalResponse>(path, {
 					...defaultRequestOptions,
 					method,
 					credentials: defaultRequestOptions.credentials ?? 'include',

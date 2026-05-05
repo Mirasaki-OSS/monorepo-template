@@ -3,19 +3,30 @@ import type { MinimalRequest } from '@md-oss/common/http/requests';
 import { statusCodes } from '@md-oss/common/http/status-codes';
 import { prettifyError } from 'zod/v4';
 import { debugErrors, debugPerformance, debugRoute } from './debugger';
-import type { MethodKeys, RouteKeys, RouteRegistry } from './types';
+import type { ExtractResolvedContext } from './request';
+import type { InferApi, MethodKeys, RouteKeys, RouteRegistry } from './types';
 
-export interface ParsedParameters {
-	params?: unknown;
-	query?: unknown;
-	body?: unknown;
-}
+export type ParsedParameters<
+	Registry extends RouteRegistry,
+	API extends InferApi<Registry>,
+	TPath extends RouteKeys<Registry>,
+	TMethod extends MethodKeys<Registry, TPath>,
+> = ExtractResolvedContext<Registry, API, TPath, TMethod>;
 
-export interface ParameterParsingResult {
-	success: boolean;
-	data?: ParsedParameters;
-	error?: HTTPError;
-}
+export type ParameterParsingResult<
+	Registry extends RouteRegistry,
+	API extends InferApi<Registry>,
+	TPath extends RouteKeys<Registry>,
+	TMethod extends MethodKeys<Registry, TPath>,
+> =
+	| {
+			success: true;
+			data: ParsedParameters<Registry, API, TPath, TMethod>;
+	  }
+	| {
+			success: false;
+			error: HTTPError;
+	  };
 
 export async function parseRequestParameters<
 	Registry extends RouteRegistry,
@@ -28,7 +39,9 @@ export async function parseRequestParameters<
 	method: TMethod,
 	endpoint: Registry[TPath]['endpoints'][TMethod],
 	routeDef: Registry[TPath]
-): Promise<ParameterParsingResult> {
+): Promise<
+	ParameterParsingResult<Registry, InferApi<Registry>, TPath, TMethod>
+> {
 	debugRoute('[%s] Parsing request parameters', requestId);
 	const parseStart = Date.now();
 
@@ -98,9 +111,9 @@ export async function parseRequestParameters<
 	return {
 		success: true,
 		data: {
-			params: params?.data ?? {},
-			query: query?.data ?? {},
-			body: body?.data ?? {},
-		},
+			...(params?.data === undefined ? {} : { params: params.data }),
+			...(query?.data === undefined ? {} : { query: query.data }),
+			...(body?.data === undefined ? {} : { body: body.data }),
+		} as ParsedParameters<Registry, InferApi<Registry>, TPath, TMethod>,
 	};
 }

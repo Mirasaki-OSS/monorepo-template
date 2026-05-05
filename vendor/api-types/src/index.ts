@@ -44,13 +44,18 @@ export {
 	type ContextProvider,
 	type ControllerFunction,
 	type EndpointDefinitionSession,
+	extendSendTypedResponse,
 	type GenericRouteHandler,
 	type IsUserMe,
 	noContentStatusCodes,
 	type RouteHandler,
+	type SendTypedResponseDefaults,
+	type SendTypedResponseExtension,
+	type SendTypedResponseHandler,
 	type SendTypedResponseOptions,
 	type SignedAccessError,
 	sendTypedResponse,
+	withSendTypedResponseDefaults,
 } from './response';
 
 export {
