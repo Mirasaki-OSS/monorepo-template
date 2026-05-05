@@ -8,6 +8,7 @@ import type {
 import { statusCodes } from '@md-oss/common/http/status-codes';
 import { debugErrors, debugPerformance, debugRoute } from './debugger';
 import { type ParsedParameters, parseRequestParameters } from './params';
+import type { ExtractResolvedContext } from './request';
 import {
 	type ContextProvider,
 	type ControllerFunction,
@@ -116,7 +117,7 @@ export interface ContextBuildStrategy<
 	buildContext(
 		session: TSession | null,
 		endpoint: Registry[TPath]['endpoints'][TMethod],
-		parsedParams: ParsedParameters | undefined,
+		parsedParams: ParsedParameters<Registry, API, TPath, TMethod> | undefined,
 		injectedContext:
 			| Omit<
 					ContextProvider<
@@ -314,10 +315,10 @@ export function createGenericRouteHandler<
 				);
 			}
 
-			// Parse parameters if not using injected context
-			let parsedParams: Awaited<
-				ReturnType<typeof parseRequestParameters>
-			>['data'];
+			let parsedParams:
+				| ParsedParameters<Registry, API, TPath, TMethod>
+				| undefined;
+
 			if (!injectedContext) {
 				const paramResult = await parseRequestParameters(
 					req,
@@ -332,7 +333,12 @@ export function createGenericRouteHandler<
 					return next(paramResult.error);
 				}
 
-				parsedParams = paramResult.data;
+				parsedParams = paramResult.data as ParsedParameters<
+					Registry,
+					API,
+					TPath,
+					TMethod
+				>;
 			}
 
 			// Build context
@@ -376,17 +382,22 @@ export function createGenericRouteHandler<
 					TConsumerContext
 				>['cps'];
 
-				const resolvedSession = authResult?.session;
+				const resolvedRequestContext: ExtractResolvedContext<
+					Registry,
+					API,
+					TPath,
+					TMethod
+				> = parsedParams;
+
+				const resolvedSession = authResult?.session ?? null;
 
 				return {
 					cps: cpsFn,
 					endpoint,
 					session: resolvedSession,
-					params: parsedParams.params ?? {},
-					query: parsedParams.query ?? {},
-					body: parsedParams.body ?? {},
+					...resolvedRequestContext,
 					ctx: undefined as TConsumerContext,
-				} as unknown as ContextProvider<
+				} as ContextProvider<
 					Registry,
 					API,
 					TPath,
