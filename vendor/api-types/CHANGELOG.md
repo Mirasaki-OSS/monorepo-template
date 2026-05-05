@@ -1,5 +1,11 @@
 # @md-oss/api-types
 
+## 0.9.1
+
+### Patch Changes
+
+- c51db35: fix(api-types): differentiate between raw and inferred endpoint
+
 ## 0.9.0
 
 ### Minor Changes
