@@ -1,5 +1,11 @@
 # @md-oss/common
 
+## 0.9.0
+
+### Minor Changes
+
+- 3c0b77c: feat(http-client): normalize api/server data envelope
+
 ## 0.8.3
 
 ### Patch Changes

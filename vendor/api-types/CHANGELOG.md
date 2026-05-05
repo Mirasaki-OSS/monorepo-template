@@ -1,5 +1,18 @@
 # @md-oss/api-types
 
+## 0.9.0
+
+### Minor Changes
+
+- 3c0b77c: feat(http-client): normalize api/server data envelope
+
+### Patch Changes
+
+- d0cc74d: fix(api-types): avoid collapsing extracted request context
+- Updated dependencies [3c0b77c]
+  - @md-oss/common@0.9.0
+  - @md-oss/http-client@0.9.0
+
 ## 0.8.4
 
 ### Patch Changes
