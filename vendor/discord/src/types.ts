@@ -70,6 +70,15 @@ type InteractionForData<TData extends ClientComponentData> = TData extends
 type InteractionForDataWithoutAutocomplete<TData extends ClientComponentData> =
 	Exclude<InteractionForData<TData>, AutocompleteInteraction>;
 
+type InteractionAutocompleteHandler = (
+	interaction: AutocompleteInteraction,
+	query: string
+) => Promise<void>;
+
+type InteractionAutoCompleteHandlers = {
+	[optionName: string]: InteractionAutocompleteHandler;
+};
+
 type ClientComponentOptions<
 	TData extends ClientComponentData = ClientComponentData,
 > = {
@@ -80,12 +89,7 @@ type ClientComponentOptions<
 		interaction: InteractionForDataWithoutAutocomplete<TData>;
 	}) => Promise<void>;
 	cooldown?: ClientCooldownOptions;
-	autocompletes?: {
-		[optionName: string]: (
-			interaction: AutocompleteInteraction,
-			query: string
-		) => Promise<void>;
-	};
+	autocompletes?: InteractionAutoCompleteHandlers;
 };
 
 type ClientComponent<TData extends ClientComponentData = ClientComponentData> =
@@ -130,6 +134,8 @@ export type {
 	ClientEventListener,
 	ClientEventListenerOptions,
 	ComponentRegistry,
+	InteractionAutoCompleteHandlers,
+	InteractionAutocompleteHandler,
 	InteractionForData,
 	RegistryComponent,
 };
