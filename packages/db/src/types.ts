@@ -1,6 +1,7 @@
 import type {
 	account,
 	accountRelations,
+	authRelations,
 	session,
 	sessionRelations,
 	user,
@@ -21,6 +22,7 @@ type UserInsert = typeof user.$inferInsert;
 type VerificationInsert = typeof verification.$inferInsert;
 
 // === Relation Types ===
+type AuthRelations = typeof authRelations;
 type UserRelations = typeof userRelations;
 type AccountRelations = typeof accountRelations;
 type SessionRelations = typeof sessionRelations;
@@ -29,6 +31,7 @@ export type {
 	AccountInsert,
 	AccountRelations,
 	AccountSelect,
+	AuthRelations,
 	SessionInsert,
 	SessionRelations,
 	SessionSelect,

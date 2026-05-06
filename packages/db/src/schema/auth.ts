@@ -1,10 +1,16 @@
-import { relations } from 'drizzle-orm';
+import { defineRelations } from 'drizzle-orm';
 import { boolean, index, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import type {
+	UserClientMetadata,
+	UserClientReadOnlyMetadata,
+	UserServerMetadata,
+} from '../zod';
+import { metadataColumns } from './metadata';
 
 export const user = pgTable('user', {
 	id: text('id').primaryKey(),
 	name: text('name').notNull(),
-	email: text('email').notNull().unique(),
+	email: text('email').notNull().unique('user_email_unique'),
 	emailVerified: boolean('email_verified').default(false).notNull(),
 	image: text('image'),
 	createdAt: timestamp('created_at').defaultNow().notNull(),
@@ -12,6 +18,11 @@ export const user = pgTable('user', {
 		.defaultNow()
 		.$onUpdate(() => /* @__PURE__ */ new Date())
 		.notNull(),
+	...metadataColumns<
+		UserClientMetadata,
+		UserClientReadOnlyMetadata,
+		UserServerMetadata
+	>(),
 });
 
 export const session = pgTable(
@@ -19,7 +30,7 @@ export const session = pgTable(
 	{
 		id: text('id').primaryKey(),
 		expiresAt: timestamp('expires_at').notNull(),
-		token: text('token').notNull().unique(),
+		token: text('token').notNull().unique('session_token_unique'),
 		createdAt: timestamp('created_at').defaultNow().notNull(),
 		updatedAt: timestamp('updated_at')
 			.$onUpdate(() => /* @__PURE__ */ new Date())
@@ -73,21 +84,36 @@ export const verification = pgTable(
 	(table) => [index('verification_identifier_idx').on(table.identifier)]
 );
 
-export const userRelations = relations(user, ({ many }) => ({
-	sessions: many(session),
-	accounts: many(account),
-}));
+export const authRelations = defineRelations(
+	{ user, session, account, verification },
+	(r) => ({
+		user: {
+			sessions: r.many.session({
+				from: r.user.id,
+				to: r.session.userId,
+			}),
+			accounts: r.many.account({
+				from: r.user.id,
+				to: r.account.userId,
+			}),
+		},
+		session: {
+			user: r.one.user({
+				from: r.session.userId,
+				to: r.user.id,
+			}),
+		},
+		account: {
+			user: r.one.user({
+				from: r.account.userId,
+				to: r.user.id,
+			}),
+		},
+	})
+);
 
-export const sessionRelations = relations(session, ({ one }) => ({
-	user: one(user, {
-		fields: [session.userId],
-		references: [user.id],
-	}),
-}));
-
-export const accountRelations = relations(account, ({ one }) => ({
-	user: one(user, {
-		fields: [account.userId],
-		references: [user.id],
-	}),
-}));
+export const {
+	user: userRelations,
+	session: sessionRelations,
+	account: accountRelations,
+} = authRelations;
