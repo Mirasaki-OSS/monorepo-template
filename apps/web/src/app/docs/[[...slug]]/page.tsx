@@ -5,11 +5,11 @@ import {
   DocsTitle,
   MarkdownCopyButton,
   ViewOptionsPopover,
-} from 'fumadocs-ui/layouts/docs/page';
+} from 'fumadocs-ui/layouts/notebook/page';
 import { createRelativeLink } from 'fumadocs-ui/mdx';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-
+import { InlineTOC } from '@/components/inline-toc';
 import { getMDXComponents } from '@/components/mdx';
 import { Footer } from '@/layouts/docs/page/slots/footer';
 import { clientEnv } from '@/lib/client/env';
@@ -58,6 +58,9 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
           githubUrl={`https://github.com/${gitConfig.user}/${gitConfig.repo}/blob/${gitConfig.branch}/apps/web/content/docs/${page.path}`}
         />
       </div>
+      {page.data.renderInlineTOC ? (
+        <InlineTOC items={page.data.toc}>Table of Contents</InlineTOC>
+      ) : null}
       <DocsBody>
         <MDX
           components={getMDXComponents({

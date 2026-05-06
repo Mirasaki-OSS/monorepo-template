@@ -18,6 +18,9 @@ export default function Layout({ children }: LayoutProps<'/'>) {
       <body className="flex flex-col min-h-screen">
         <DesignSystemProvider>
           <RootProvider
+            search={{
+              enabled: true,
+            }}
             theme={{
               themes: [...defaultThemes],
               defaultTheme: defaultTheme,
