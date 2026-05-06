@@ -16,4 +16,5 @@ function createDb(): Database {
 
 const db = createDb();
 
+export * from 'drizzle-orm';
 export { createDb, db };

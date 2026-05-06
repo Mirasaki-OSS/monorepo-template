@@ -33,6 +33,14 @@
 				"default": "./dist/env.mjs"
 			}
 		},
+		"./types": {
+			"require": {
+				"types": "./dist/types.d.cts"
+			},
+			"import": {
+				"types": "./dist/types.d.mts"
+			}
+		},
 		"./schema": {
 			"require": {
 				"types": "./dist/schema/index.d.cts",
