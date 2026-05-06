@@ -11,4 +11,15 @@ const hexColorToInt = (hex: string): number => {
 	return parseInt(normalizedHex, 16);
 };
 
-export { type HexColor, hexColorRegex, hexColorSchema, hexColorToInt };
+const colorIntToHex = (colorInt: number): string => {
+	const hex = colorInt.toString(16).padStart(6, '0');
+	return `#${hex}`;
+};
+
+export {
+	colorIntToHex,
+	type HexColor,
+	hexColorRegex,
+	hexColorSchema,
+	hexColorToInt,
+};
