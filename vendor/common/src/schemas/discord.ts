@@ -285,7 +285,6 @@ const discordEmbedSchemaBase = z.object({
 			EmbedType.PollResult,
 		])
 		.optional()
-		.default(EmbedType.Rich)
 		.describe(
 			'Embed render type. Use rich for custom embeds sent by bots/webhooks.'
 		),
