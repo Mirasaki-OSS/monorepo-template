@@ -38,4 +38,19 @@ export enum DiscordMagic {
 
 	// Webhooks
 	WEBHOOK_USERNAME_MAX = 80,
+
+	// Interactions - Chat Input commands
+	CHAT_INPUT_NAME_MAX = 32,
+	CHAT_INPUT_DESCRIPTION_MAX = 100,
+	CHAT_INPUT_OPTIONS_MAX = 25,
+	CHAT_INPUT_OPTION_NAME_MAX = 32,
+	CHAT_INPUT_OPTION_DESCRIPTION_MAX = 100,
+
+	// Interactions - Context Menu commands
+	CONTEXT_MENU_NAME_MAX = 32,
+
+	// Interactions - Autocomplete
+	AUTOCOMPLETE_OPTIONS_MAX = 25,
+	AUTOCOMPLETE_OPTION_NAME_MAX = 100,
+	AUTOCOMPLETE_OPTION_VALUE_MAX = 100,
 }
