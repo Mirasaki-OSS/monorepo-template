@@ -25,6 +25,8 @@ services:
       dockerfile: docker/apps/cli.Dockerfile
     image: my_app/cli:latest
     container_name: my_app-cli
+    env_file:
+      - .env.production
     depends_on:
       postgres:
         condition: service_healthy
@@ -36,6 +38,10 @@ services:
       dockerfile: docker/apps/server.Dockerfile
     image: my_app/server:latest
     container_name: my_app-server
+    env_file:
+      - .env.production
+    environment:
+      - DATABASE_URL=${DATABASE_URL:-postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@${POSTGRES_HOST:-postgres}:${POSTGRES_PORT:-5432}/${POSTGRES_DB:-monorepo_template}}
     ports:
       - "3001:3001"
     depends_on:
@@ -52,6 +58,8 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
+    env_file:
+      - .env.production
     ports:
       - "3000:3000"
     depends_on:
