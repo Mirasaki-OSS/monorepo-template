@@ -10,6 +10,7 @@ import {
 	resolve,
 } from 'node:path';
 import { stringifyJson } from '@md-oss/serdes';
+import { getErrorMessage } from '../../errors';
 import { formatBytes } from '../bytes';
 
 interface GetFilesOptions {
@@ -133,7 +134,9 @@ function getFiles(dirPath: string, options: GetFilesOptions = {}): string[] {
 			}
 		} catch (error) {
 			// Skip directories we don't have permission to read
-			console.error(`Error reading directory ${currentPath}:`, error);
+			console.error(
+				`Error reading directory ${currentPath}: ${getErrorMessage(error)}`
+			);
 		}
 	}
 

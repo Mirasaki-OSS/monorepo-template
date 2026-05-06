@@ -1,6 +1,7 @@
 #!/usr/bin/env -S pnpm tsx
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
+import { getErrorMessage } from '@md-oss/common/errors';
 
 async function main() {
 	const root = path.resolve(__dirname, '..', '..');
@@ -18,7 +19,7 @@ async function main() {
 	try {
 		licenseContent = await fs.readFile(licensePath, 'utf8');
 	} catch (error) {
-		console.error('Failed to read root LICENSE', error);
+		console.error(`Failed to read root LICENSE: ${getErrorMessage(error)}`);
 		process.exit(1);
 	}
 
@@ -26,7 +27,9 @@ async function main() {
 	try {
 		entries = await fs.readdir(vendorDir);
 	} catch (error) {
-		console.error(`Failed to read vendor directory at ${vendorDir}`, error);
+		console.error(
+			`Failed to read vendor directory at ${vendorDir}: ${getErrorMessage(error)}`
+		);
 		process.exit(1);
 	}
 
@@ -48,7 +51,9 @@ async function main() {
 			await fs.writeFile(targetLicense, licenseContent, 'utf8');
 			copied += 1;
 		} catch (error) {
-			console.error(`Failed to write LICENSE for ${entry}`, error);
+			console.error(
+				`Failed to write LICENSE for ${entry}: ${getErrorMessage(error)}`
+			);
 		}
 	}
 

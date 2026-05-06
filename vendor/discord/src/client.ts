@@ -1,3 +1,4 @@
+import { parseError } from '@md-oss/common';
 import {
 	ButtonBuilder,
 	ChannelSelectMenuBuilder,
@@ -197,7 +198,12 @@ class Client<Ready extends boolean = boolean> extends DiscordClient<Ready> {
 					flags: [],
 				})
 				.catch(async (error) => {
-					console.error('Error editing reply:', error);
+					const normalizedError = parseError(
+						error,
+						'SAFE_REPLY_EDIT',
+						'An error occurred while editing the reply to the interaction.'
+					);
+					console.error(normalizedError);
 					return interaction.followUp({
 						...content,
 						flags: [MessageFlags.Ephemeral],
@@ -220,7 +226,12 @@ class Client<Ready extends boolean = boolean> extends DiscordClient<Ready> {
 			return interaction
 				.respond([{ name: response, value: response }])
 				.catch((error) => {
-					console.error('Error sending autocomplete response:', error);
+					const normalizedError = parseError(
+						error,
+						'SAFE_REPLY_AUTOCOMPLETE',
+						'An error occurred while sending the autocomplete response.'
+					);
+					console.error(normalizedError);
 				});
 		}
 
@@ -332,10 +343,12 @@ class Client<Ready extends boolean = boolean> extends DiscordClient<Ready> {
 			try {
 				await fn(interaction, focusedOption.value);
 			} catch (error) {
-				console.error(
-					`Error executing autocomplete for command ${command.id}:`,
-					error
+				const normalizedError = parseError(
+					error,
+					'COMMAND_AUTOCOMPLETE_EXECUTE',
+					`An error occurred while executing the autocomplete handler for command ${command.id} and option ${name}.`
 				);
+				console.error(normalizedError);
 			}
 			return;
 		}
@@ -343,10 +356,15 @@ class Client<Ready extends boolean = boolean> extends DiscordClient<Ready> {
 		try {
 			await command.execute({ client: this as Client<true>, interaction });
 		} catch (error) {
-			console.error(`Error executing command ${command.id}:`, error);
+			const normalizedError = parseError(
+				error,
+				'COMMAND_EXECUTE',
+				`An error occurred while executing command ${command.id}.`
+			);
+			console.error(normalizedError);
 			await this.safeReply(
 				interaction,
-				'There was an error while executing this command!'
+				'There was an error while executing this command, please try again later.'
 			);
 		}
 	};

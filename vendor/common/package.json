@@ -40,6 +40,16 @@
 				"default": "./dist/index.mjs"
 			}
 		},
+		"./errors": {
+			"require": {
+				"types": "./dist/errors.d.cts",
+				"default": "./dist/errors.cjs"
+			},
+			"import": {
+				"types": "./dist/errors.d.mts",
+				"default": "./dist/errors.mjs"
+			}
+		},
 		"./constants": {
 			"require": {
 				"types": "./dist/constants/index.d.cts",

@@ -39,6 +39,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "2.4.14",
 		"@changesets/cli": "^2.31.0",
+		"@md-oss/common": "workspace:^",
 		"@md-oss/scripts": "workspace:^",
 		"@turbo/gen": "^2.9.9",
 		"@types/node": "^25.6.0",

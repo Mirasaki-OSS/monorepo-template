@@ -1,3 +1,4 @@
+import { parseError } from '@md-oss/common/http/guards';
 import { getSessionCookie } from 'better-auth/cookies';
 import { isMarkdownPreferred, rewritePath } from 'fumadocs-core/negotiation';
 import { type NextRequest, NextResponse } from 'next/server';
@@ -37,10 +38,14 @@ const authMiddleware = {
 
     // Error checking session (network error, server error, etc.)
     if (!sessionResponse.ok) {
-      const error = sessionResponse.error;
-      console.error('Error checking session in auth middleware:', error);
+      const normalizedError = parseError(
+        sessionResponse.error,
+        'AUTH_MIDDLEWARE_SESSION_CHECK_FAILED',
+        'Unable to verify session.'
+      );
+      console.error(normalizedError);
       const url = new URL('/auth/error', request.url);
-      const message = `Unable to verify session: ${error.message}`;
+      const message = `Unable to verify session: ${normalizedError.message}`;
       url.searchParams.set('next', request.nextUrl.pathname);
       url.searchParams.set('error', message);
       return NextResponse.redirect(url);

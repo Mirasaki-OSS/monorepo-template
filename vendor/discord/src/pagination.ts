@@ -1,4 +1,4 @@
-import { StringUtils } from '@md-oss/common';
+import { parseError, StringUtils } from '@md-oss/common';
 import type { EmbedBuilder, RepliableInteraction } from 'discord.js';
 import {
 	ActionRowBuilder,
@@ -238,9 +238,14 @@ const handleInteractionPagination = async ({
 		interaction,
 		currentPage
 	).catch(async (error) => {
-		console.error('Error sending paginated content:', error);
+		const normalizedError = parseError(
+			error,
+			'HANDLE_INTERACTION_PAGINATION_SEND_PAGE',
+			'An error occurred while sending the paginated content.'
+		);
+		console.error(normalizedError);
 		return client.safeReply(interaction, {
-			content: 'An error occurred while sending the paginated content.',
+			content: normalizedError.message,
 			embeds: [],
 			components: [],
 		});
@@ -312,7 +317,12 @@ const handleInteractionPagination = async ({
 		}
 
 		await i.deferUpdate().catch((error) => {
-			console.error('Error deferring pagination interaction update:', error);
+			const normalizedError = parseError(
+				error,
+				'HANDLE_INTERACTION_PAGINATION_DEFER_UPDATE',
+				'An error occurred while deferring the pagination interaction update.'
+			);
+			console.error(normalizedError);
 		});
 		await sendPage(i, currentPage);
 	});
@@ -327,7 +337,12 @@ const handleInteractionPagination = async ({
 				}),
 			})
 			.catch((error) => {
-				console.error('Error disabling pagination controls:', error);
+				const normalizedError = parseError(
+					error,
+					'HANDLE_INTERACTION_PAGINATION_END',
+					'An error occurred while disabling pagination controls.'
+				);
+				console.error(normalizedError);
 			});
 	});
 };

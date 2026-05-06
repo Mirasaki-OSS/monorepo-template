@@ -1,3 +1,4 @@
+import { getErrorMessage } from '@md-oss/common/errors';
 import { parseJson, stringifyJson } from '@md-oss/serdes';
 import debugFactory from 'debug';
 import redis from 'redis';
@@ -47,7 +48,7 @@ const redisSetKv = (
 
 const initializeRedis = async (): Promise<void> => {
 	redisClient.on('error', (err) => {
-		logger.error('Redis Client Error', err);
+		logger.error(`Redis Client Error: ${getErrorMessage(err)}`);
 	});
 
 	redisClient.on('ready', () => {
@@ -57,7 +58,7 @@ const initializeRedis = async (): Promise<void> => {
 	try {
 		await redisClient.connect();
 	} catch (error) {
-		logger.error('Error initializing Redis client:', error);
+		logger.error(`Error initializing Redis client: ${getErrorMessage(error)}`);
 	}
 };
 
