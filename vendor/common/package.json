@@ -447,7 +447,7 @@
 		"@md-oss/serdes": "workspace:^",
 		"@types/qs": "^6.15.0",
 		"qs": "^6.15.1",
-		"zod": "^4.3.6"
+		"zod": "^4.4.3"
 	},
 	"devDependencies": {
 		"@md-oss/config": "workspace:^",

@@ -119,7 +119,7 @@
 		"@md-oss/serdes": "workspace:^",
 		"@types/debug": "^4.1.13",
 		"debug": "^4.4.3",
-		"zod": "^4.3.6"
+		"zod": "^4.4.3"
 	},
 	"devDependencies": {
 		"@md-oss/config": "workspace:^",

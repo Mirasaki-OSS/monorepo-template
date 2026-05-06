@@ -79,7 +79,7 @@
 		"@t3-oss/env-nextjs": "^0.13.11",
 		"@vercel/analytics": "^2.0.1",
 		"react": "catalog:",
-		"zod": "^4.3.6"
+		"zod": "^4.4.3"
 	},
 	"devDependencies": {
 		"@md-oss/config": "workspace:^",

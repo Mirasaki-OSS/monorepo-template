@@ -111,7 +111,7 @@
 		"@t3-oss/env-nextjs": "^0.13.11",
 		"debug": "^4.4.3",
 		"pino": "^10.3.1",
-		"zod": "^4.3.6"
+		"zod": "^4.4.3"
 	},
 	"devDependencies": {
 		"@md-oss/config": "workspace:^",
