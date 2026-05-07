@@ -58,7 +58,7 @@ services:
         condition: service_healthy
     profiles:
       - deploy
-      - apps
+      - tools
 
   server:
     <<: *service-app-common
