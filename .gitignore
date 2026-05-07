@@ -24,6 +24,7 @@ next-env.d.ts
 # Docker Build
 deploy/compose/.buildx-cache
 deploy/docker/context-report
+deploy/compose/compose.local.yaml
 
 # Local/Development files
 TODO.md
