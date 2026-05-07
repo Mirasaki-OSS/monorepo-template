@@ -1,5 +1,20 @@
 # @md-oss/discord
 
+## 0.9.0
+
+### Patch Changes
+
+- Updated dependencies [3c0b77c]
+  - @md-oss/common@0.9.0
+
+## 0.7.1
+
+### Patch Changes
+
+- 52092ba: bump dependencies
+- Updated dependencies [52092ba]
+  - @md-oss/common@0.7.1
+
 ## 0.6.1
 
 ### Patch Changes

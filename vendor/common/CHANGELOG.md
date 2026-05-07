@@ -1,5 +1,25 @@
 # @md-oss/common
 
+## 0.9.0
+
+### Minor Changes
+
+- 3c0b77c: feat(http-client): normalize api/server data envelope
+
+## 0.8.3
+
+### Patch Changes
+
+- 49625ae: feat: http error response schemas
+
+## 0.7.1
+
+### Patch Changes
+
+- 52092ba: bump dependencies
+- Updated dependencies [52092ba]
+  - @md-oss/serdes@0.7.1
+
 ## 0.6.1
 
 ### Patch Changes

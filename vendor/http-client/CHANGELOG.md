@@ -1,5 +1,28 @@
 # @md-oss/http-client
 
+## 0.9.0
+
+### Patch Changes
+
+- Updated dependencies [3c0b77c]
+  - @md-oss/common@0.9.0
+
+## 0.8.2
+
+### Patch Changes
+
+- 02399fe: add http error response schemas
+
+## 0.7.1
+
+### Patch Changes
+
+- 52092ba: bump dependencies
+- 5450550: normalize retry options
+- Updated dependencies [52092ba]
+  - @md-oss/common@0.7.1
+  - @md-oss/serdes@0.7.1
+
 ## 0.6.1
 
 ### Patch Changes

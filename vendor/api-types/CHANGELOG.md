@@ -1,5 +1,57 @@
 # @md-oss/api-types
 
+## 0.9.1
+
+### Patch Changes
+
+- c51db35: fix(api-types): differentiate between raw and inferred endpoint
+
+## 0.9.0
+
+### Minor Changes
+
+- 3c0b77c: feat(http-client): normalize api/server data envelope
+
+### Patch Changes
+
+- d0cc74d: fix(api-types): avoid collapsing extracted request context
+- Updated dependencies [3c0b77c]
+  - @md-oss/common@0.9.0
+  - @md-oss/http-client@0.9.0
+
+## 0.8.4
+
+### Patch Changes
+
+- 648f1f2: prevent response body validation error from collapsing
+
+## 0.8.3
+
+### Patch Changes
+
+- 9907f3f: feat(types): add success response inference for 2xx status codes
+- Updated dependencies [49625ae]
+  - @md-oss/common@0.8.3
+
+## 0.8.1
+
+### Patch Changes
+
+- 5edbf5b: feat: improve path interpolation to support both colon and bracket syntax
+- 5edbf5b: response schema validation and status code mapping
+- 43a810a: feat: support default response schema
+
+## 0.7.1
+
+### Patch Changes
+
+- 52092ba: bump dependencies
+- Updated dependencies [52092ba]
+- Updated dependencies [5450550]
+  - @md-oss/http-client@0.7.1
+  - @md-oss/common@0.7.1
+  - @md-oss/serdes@0.7.1
+
 ## 0.6.1
 
 ### Patch Changes

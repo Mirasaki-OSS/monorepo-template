@@ -1,5 +1,11 @@
 # @md-oss/database
 
+## 0.7.1
+
+### Patch Changes
+
+- 52092ba: bump dependencies
+
 ## 0.6.1
 
 ### Patch Changes

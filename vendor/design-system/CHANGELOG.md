@@ -1,5 +1,32 @@
 # @md-oss/design-system
 
+## 0.9.0
+
+### Patch Changes
+
+- Updated dependencies [3c0b77c]
+  - @md-oss/common@0.9.0
+
+## 0.8.4
+
+### Patch Changes
+
+- 648f1f2: prevent response body validation error from collapsing
+
+## 0.8.0
+
+### Minor Changes
+
+- 5403d2e: feat: @mirasaki/design-system > @md-oss/design-system migration
+
+## 0.7.1
+
+### Patch Changes
+
+- 52092ba: bump dependencies
+- Updated dependencies [52092ba]
+  - @md-oss/common@0.7.1
+
 ## 0.7.0
 
 ### Minor Changes
