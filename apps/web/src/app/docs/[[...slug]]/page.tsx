@@ -14,18 +14,32 @@ import { getMDXComponents } from '@/components/mdx';
 import { Footer } from '@/layouts/docs/page/slots/footer';
 import { clientEnv } from '@/lib/client/env';
 import { gitConfig } from '@/lib/shared';
-import { getPageImage, getPageMarkdownUrl, source } from '@/lib/source';
-
-const env = clientEnv();
+import {
+  generateDocsStaticParams,
+  getPageImage,
+  getPageMarkdownUrl,
+  resolveDocsPage,
+  source,
+} from '@/lib/source';
 
 export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
   const params = await props.params;
-  const page = source.getPage(params.slug);
-  if (!page) notFound();
+  const resolvedPage = await resolveDocsPage(params.slug);
+  if (!resolvedPage) notFound();
+
+  const page = resolvedPage.page;
+  const markdownUrl = getPageMarkdownUrl(page).url;
+  const githubPath = `apps/web/content/docs/${page.path}`;
 
   const MDX = page.data.body;
-  const markdownUrl = getPageMarkdownUrl(page).url;
-  const { lastModified } = page.data;
+  const content = (
+    <MDX
+      components={getMDXComponents({
+        // this allows you to link to other pages with relative file paths
+        a: createRelativeLink(source, page),
+      })}
+    />
+  );
 
   return (
     <DocsPage
@@ -37,10 +51,10 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
       footer={{
         enabled: true,
         component: (
-          <Footer lastModified={lastModified}>
+          <Footer lastModified={page.data.lastModified}>
             <div className="flex flex-col items-center gap-4 mt-2">
               <p className="text-sm text-muted-foreground">
-                {`© ${new Date().getFullYear()} ${env.NEXT_PUBLIC_SITE_NAME}. All rights reserved.`}
+                {`© ${new Date().getFullYear()} ${clientEnv.NEXT_PUBLIC_SITE_NAME}. All rights reserved.`}
               </p>
             </div>
           </Footer>
@@ -55,41 +69,37 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
         <MarkdownCopyButton markdownUrl={markdownUrl} />
         <ViewOptionsPopover
           markdownUrl={markdownUrl}
-          githubUrl={`https://github.com/${gitConfig.user}/${gitConfig.repo}/blob/${gitConfig.branch}/apps/web/content/docs/${page.path}`}
+          githubUrl={`https://github.com/${gitConfig.user}/${gitConfig.repo}/blob/${gitConfig.branch}/${githubPath}`}
         />
       </div>
       {page.data.renderInlineTOC ? (
         <InlineTOC items={page.data.toc}>Table of Contents</InlineTOC>
       ) : null}
-      <DocsBody>
-        <MDX
-          components={getMDXComponents({
-            // this allows you to link to other pages with relative file paths
-            a: createRelativeLink(source, page),
-          })}
-        />
-      </DocsBody>
+      <DocsBody>{content}</DocsBody>
     </DocsPage>
   );
 }
 
 export async function generateStaticParams() {
-  return source.generateParams();
+  return generateDocsStaticParams();
 }
 
 export async function generateMetadata(
   props: PageProps<'/docs/[[...slug]]'>
 ): Promise<Metadata> {
   const params = await props.params;
-  const page = source.getPage(params.slug);
-  if (!page) notFound();
+  const resolvedPage = await resolveDocsPage(params.slug);
+  if (!resolvedPage) notFound();
+
+  const page = resolvedPage.page;
+  const image = getPageImage(page).url;
 
   return {
     title: page.data.title,
     description: page.data.description,
-    metadataBase: new URL(env.NEXT_PUBLIC_SITE_URL),
+    metadataBase: new URL(clientEnv.NEXT_PUBLIC_SITE_URL),
     openGraph: {
-      images: getPageImage(page).url,
+      images: image,
     },
   };
 }

@@ -1,13 +1,11 @@
 import { serve } from '@hono/node-server';
 import app from './app';
-import { serverEnv } from './env';
-
-const env = serverEnv();
+import { parsedEnv } from './env';
 
 const server = serve(
 	{
 		fetch: app.fetch,
-		port: env.SERVER_PORT,
+		port: parsedEnv.SERVER_PORT,
 	},
 	(info) => {
 		console.log(

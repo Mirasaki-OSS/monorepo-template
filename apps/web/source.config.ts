@@ -1,8 +1,14 @@
+import { remarkMdxFiles } from 'fumadocs-core/mdx-plugins/remark-mdx-files';
 import { metaSchema, pageSchema } from 'fumadocs-core/source/schema';
 import { defineConfig, defineDocs } from 'fumadocs-mdx/config';
 import indexFilePlugin from 'fumadocs-mdx/plugins/index-file';
 import jsonSchemaPlugin from 'fumadocs-mdx/plugins/json-schema';
 import lastModifiedPlugin from 'fumadocs-mdx/plugins/last-modified';
+import rehypeKatex from 'rehype-katex';
+import remarkDirective from 'remark-directive';
+import remarkGfm from 'remark-gfm';
+import remarkGithubBlockquoteAlert from 'remark-github-blockquote-alert';
+import remarkMath from 'remark-math';
 import { z } from 'zod';
 
 // You can customize Zod schemas for frontmatter and `meta.json` here
@@ -28,6 +34,13 @@ export const docs = defineDocs({
 export default defineConfig({
   plugins: [lastModifiedPlugin(), jsonSchemaPlugin(), indexFilePlugin()],
   mdxOptions: {
-    // MDX options
+    remarkPlugins: [
+      remarkDirective,
+      remarkMdxFiles,
+      remarkGfm,
+      remarkGithubBlockquoteAlert,
+      remarkMath,
+    ],
+    rehypePlugins: (v) => [rehypeKatex, ...v],
   },
 });

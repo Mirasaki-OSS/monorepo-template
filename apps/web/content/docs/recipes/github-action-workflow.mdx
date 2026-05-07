@@ -1,0 +1,18 @@
+---
+title: "GitHub Action Workflow"
+description: Learn how to set up a GitHub Action workflow for building and deploying your application using @md-oss/monorepo-template.
+renderInlineTOC: false
+full: false
+---
+
+Coming soon, trust.
+
+```yaml
+- name: Build Docker image
+  run: docker compose build cli
+
+- name: Push to registry
+  run: |
+    docker tag my_app/cli:latest registry.example.com/my_app/cli:${{ github.sha }}
+    docker push registry.example.com/my_app/cli:${{ github.sha }}
+```

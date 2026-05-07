@@ -1,0 +1,7 @@
+{
+  "title": "@md-oss/migrations",
+  "icon": "ArrowDownUp",
+  "pages": ["usage", "quick-reference"],
+  "defaultOpen": false,
+  "root": false
+}

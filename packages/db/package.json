@@ -92,7 +92,7 @@
 	"dependencies": {
 		"@md-oss/serdes": "workspace:^",
 		"@t3-oss/env-core": "^0.13.11",
-		"drizzle-orm": "^1.0.0-rc",
+		"drizzle-orm": "1.0.0-rc.2-e38a2ba",
 		"pg": "^8.20.0",
 		"zod": "^4.4.3"
 	}

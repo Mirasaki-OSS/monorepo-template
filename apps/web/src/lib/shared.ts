@@ -1,8 +1,6 @@
 import { clientEnv } from './client/env';
 
-const env = clientEnv();
-
-export const appName = env.NEXT_PUBLIC_SITE_NAME;
+export const appName = clientEnv.NEXT_PUBLIC_SITE_NAME;
 export const docsRoute = '/docs';
 export const docsImageRoute = '/og/docs';
 export const docsContentRoute = '/llms.mdx/docs';

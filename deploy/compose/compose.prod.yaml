@@ -1,0 +1,105 @@
+include:
+  - ./compose.postgres.yaml
+
+x-build-common: &build-common
+  context: ../../
+  # args:
+  #   BUILDKIT_INLINE_CACHE: "1"
+  # cache_from:
+  #   - type=local,src=./.buildx-cache
+  # cache_to:
+  #   - type=local,dest=./.buildx-cache,mode=max
+
+x-service-app-common: &service-app-common
+  restart: unless-stopped
+  environment:
+    - NODE_ENV=production
+  networks:
+    - my_app-network
+
+services:
+  migrate:
+    build:
+      <<: *build-common
+      dockerfile: deploy/docker/server.Dockerfile
+      target: builder
+    image: my_app/migrate:latest
+    container_name: my_app-migrate
+    command:
+      - sh
+      - -lc
+      - |
+        set -e
+        if [ -d /app/packages/db/drizzle ] && find /app/packages/db/drizzle -type f | grep -q .; then
+          pnpm --filter '@workshop-monitor/db' db:migrate
+        else
+          echo 'No generated Drizzle migrations found; applying schema with drizzle-kit push'
+          pnpm --filter '@workshop-monitor/db' db:push
+        fi
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-my_app_production}?schema=public&pgbouncer=false
+    networks:
+      - my_app-network
+    restart: "no"
+    profiles:
+      - deploy
+
+  cli:
+    <<: *service-app-common
+    build:
+      <<: *build-common
+      dockerfile: deploy/docker/cli.Dockerfile
+    image: my_app/cli:latest
+    container_name: my_app-cli
+    env_file: ${RUNTIME_ENV_FILE:-../../.env.production}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles:
+      - deploy
+      - apps
+
+  server:
+    <<: *service-app-common
+    build:
+      <<: *build-common
+      dockerfile: deploy/docker/server.Dockerfile
+    image: my_app/server:latest
+    container_name: my_app-server
+    env_file: ${RUNTIME_ENV_FILE:-../../.env.production}
+    environment:
+      - DATABASE_URL=${DATABASE_URL:-postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@${POSTGRES_HOST:-postgres}:${POSTGRES_PORT:-5432}/${POSTGRES_DB:-my_app_production}}
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles:
+      - deploy
+      - apps
+
+  web:
+    <<: *service-app-common
+    build:
+      <<: *build-common
+      dockerfile: deploy/docker/web.Dockerfile
+      args:
+        - NEXT_PUBLIC_SITE_NAME=${NEXT_PUBLIC_SITE_NAME}
+        - NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL}
+        - NEXT_PUBLIC_BETTER_AUTH_URL=${NEXT_PUBLIC_BETTER_AUTH_URL}
+        - NEXT_PUBLIC_GA_MEASUREMENT_ID=${NEXT_PUBLIC_GA_MEASUREMENT_ID}
+    image: my_app/web:latest
+    container_name: my_app-web
+    env_file: ${RUNTIME_ENV_FILE:-../../.env.production}
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      server:
+        condition: service_started
+    profiles:
+      - deploy
+      - apps

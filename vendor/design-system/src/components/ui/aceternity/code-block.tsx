@@ -82,6 +82,7 @@ export type CodeBlockProps = {
 		filename?: React.HTMLAttributes<HTMLDivElement>;
 		copyButton?: CodeBlockCopyButtonProps;
 	};
+	onCopyToClipboard?: (content: string) => void;
 } & (
 	| {
 			code: string;
@@ -106,6 +107,7 @@ export const CodeBlock = ({
 	className,
 	classNames,
 	slotProps,
+	onCopyToClipboard,
 }: CodeBlockProps) => {
 	const [activeTab, setActiveTab] = React.useState(0);
 	const lineNumberGutter = '2.125rem';
@@ -225,6 +227,7 @@ export const CodeBlock = ({
 							getText={() => activeCode || ''}
 							hideLabel
 							disabled={!activeCode}
+							onCopied={onCopyToClipboard}
 						/>
 					</div>
 				)}

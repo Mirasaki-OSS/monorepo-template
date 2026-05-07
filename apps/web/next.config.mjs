@@ -7,6 +7,39 @@ const config = {
   reactStrictMode: true,
   output: 'standalone',
   transpilePackages: ['@md-oss/design-system'],
+  images: {
+    remotePatterns: [
+      // Dashboard Icons: Homarr Labs CDN
+      {
+        protocol: 'https',
+        hostname: 'cdn.jsdelivr.net',
+        port: '',
+        pathname: '/gh/homarr-labs/dashboard-icons/**',
+      },
+      // Dashboard Icons: @lobehub/icons-static-svg
+      {
+        protocol: 'https',
+        hostname: 'cdn.jsdelivr.net',
+        port: '',
+        pathname: '/npm/@lobehub/icons-static-svg@latest/icons/**',
+      },
+      // Dashboard Icons: @lobehub/icons-static-png
+      {
+        protocol: 'https',
+        hostname: 'cdn.jsdelivr.net',
+        port: '',
+        pathname: '/npm/@lobehub/icons-static-png@latest/dark/**',
+      },
+      // /docs README badges
+      {
+        protocol: 'https',
+        hostname: 'img.shields.io',
+        port: '',
+        pathname: '/badge/**',
+        // search: '?style=flat&logo=biome',
+      },
+    ],
+  },
 };
 
 export default withMDX(config);

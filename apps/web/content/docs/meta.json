@@ -1,3 +1,18 @@
 {
-  "root": true
+  "root": false,
+  "pages": [
+    "index.mdx",
+    "---[GraduationCap]Guides---",
+    "...guides",
+    "---[Container]Consumers---",
+    "...apps",
+    "---[LibraryBig]Libraries---",
+    "vendor",
+    "packages",
+    "---",
+    "recipes",
+    "---[Link]Quick Links---",
+    "[GithubIcon][GithubIcon](https://github.com/Mirasaki-OSS)",
+    "external:[DiscordIcon][Discord](https://discord.mirasaki.dev/)"
+  ]
 }

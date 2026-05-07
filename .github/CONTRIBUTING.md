@@ -158,27 +158,26 @@ If contributing to Docker-related changes:
 
 ```bash
 # Build Docker images
-pnpm docker:build
+ENV=production PROFILE=deploy make docker-build
 
 # Start services
-pnpm docker:up
+ENV=production PROFILE=deploy make docker-up
 
 # Development with hot reload
-pnpm docker:dev
+ENV=development PROFILE=dev make docker-up
 
 # Stop services
-pnpm docker:down
+ENV=production PROFILE=deploy make docker-down
 ```
 
-See [docker/README.md](../docker/README.md) for detailed Docker documentation.
+See [deploy/README.md](../deploy/README.md) for detailed Docker documentation.
 
 ## Project Structure
 
-```
-.
+```bash
 ├── apps/          # Applications (CLI, Web, etc.)
 ├── packages/      # Shared libraries
-├── docker/        # Docker configuration
+├── deploy/        # App deployment artifacts
 ├── .github/       # GitHub workflows and templates
 └── README.md      # Project documentation
 ```
@@ -216,7 +215,7 @@ This probably means you're on WSL2, and you should take the following steps to r
 
 - Check existing [issues](https://github.com/Mirasaki-OSS/monorepo-template/issues)
 - Review the [README.md](../README.md)
-- Read the [docker/README.md](../docker/README.md)
+- Read the [deploy/README.md](../deploy/README.md)
 - Unable to figure it out? [Ask us](https://github.com/Mirasaki-OSS/monorepo-template/discussions)
 
 ## License

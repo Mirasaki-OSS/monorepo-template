@@ -1,5 +1,6 @@
 {
   "title": "@md-oss/common",
-  "description": "Constants, magic numbers, and utilities",
-  "root": true
+  "icon": "Boxes",
+  "defaultOpen": false,
+  "root": false
 }

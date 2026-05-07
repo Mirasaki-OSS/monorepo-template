@@ -1,0 +1,117 @@
+---
+title: Docker (compose)
+description: Learn how to use Docker and compose v2 with @md-oss/monorepo-template.
+renderInlineTOC: false
+icon: Container
+full: false
+---
+
+## Features
+
+- **Multi-stage builds** for optimized image sizes
+- **Lockfile-only deps layer** for maximum cache reuse across builds
+- **Dynamic source resolution** — builder stages copy only the workspace packages each app needs
+- **Production-ready** non-root user configuration
+- **Development mode** with hot reload support
+- **BuildKit** syntax for better performance
+- **Security** best practices (non-root user, minimal attack surface)
+
+## Prerequisites
+
+### Docker & Compose
+
+- Docker 20.10+ with BuildKit support
+- Docker Compose v2 (included with recent Docker versions)
+
+> [!NOTE]
+> For Linux, [Docker Engine](https://docs.docker.com/engine/install/) normalizes the installation of Docker and Compose. If you're on Windows, try [Docker Desktop](https://www.docker.com/products/docker-desktop/) instead.
+
+### Make
+
+We use a `Makefile` to orchestrate common Docker commands. To use it, you will need to install `make` on your system if you don't have it already:
+
+```bash tab="Debian/Ubuntu" lineNumbers
+sudo apt update
+sudo apt install -y build-essential
+```
+```bash tab="macOS"
+# On macOS, make is included in the Xcode Command Line Tools
+xcode-select --install
+```
+```bash tab="Windows"
+# On Windows, you can use WSL or install make through Chocolatey
+choco install make
+```
+
+<include>../include/creating-the-repository.mdx</include>
+
+<include>../include/creating-the-env.mdx</include>
+
+## Production
+
+```bash
+# Build Docker images
+ENV=production PROFILE=deploy make docker-build
+
+# Start services
+ENV=production PROFILE=deploy make docker-up
+
+# View logs
+ENV=production PROFILE=deploy make docker-logs
+
+# Stop services
+ENV=production PROFILE=deploy make docker-down
+```
+
+## Development
+
+```bash
+ENV=development PROFILE=dev make docker-up
+```
+
+Starts the development container with volume mounts for live code updates and hot reload.
+
+```bash
+ENV=development PROFILE=debug make docker-build
+ENV=development PROFILE=debug make docker-up
+```
+
+Runs the context-debug profile to generate a build context report in `deploy/docker/context-report/`.
+
+## Individual services
+
+Most stack-level commands also have a service-level variant for targeting specific services:
+
+```bash
+# Build only the web service
+ENV=production PROFILE=deploy make docker-build-web
+
+# Start only the API server
+ENV=production PROFILE=deploy make docker-up-server
+
+# Show logs for only the CLI app
+ENV=production PROFILE=deploy make docker-logs-cli
+```
+
+Additionally, some commands are only available at the top-level, others only at the service-level. Please run `make help` to see the full list of available commands and their descriptions.
+
+## Environment Variables
+
+Add app-specific environment variables in `deploy/compose/compose.prod.yaml`:
+
+```yaml
+environment:
+  - NODE_ENV=production
+  - DATABASE_URL=${DATABASE_URL}
+```
+
+Or add to your local `.env` file. If you don't know which file a deployment is using, use `ENV=YOUR_ENV PROFILE=YOUR_PROFILE make docker-info` to see the exact compose file and env file paths.
+
+## Adding a New App
+
+1. Create `deploy/docker/<name>.Dockerfile` using the existing Dockerfiles as a template — only the `--filter` app name needs changing.
+2. Add a service block to `docker/compose/compose.prod.yaml`.
+
+> [!NOTE]
+> That's all you really need to know, but here's some resources if you want to learn more:
+> <Cards><Card href="./docker/architecture" title="Docker Architecture" description="Learn more about the architecture, design decisions, and how to extend the Docker setup." /><Card href="./docker/troubleshooting" title="Docker Troubleshooting" description="Learn more about troubleshooting common Docker issues and best practices." /></Cards>

@@ -23,10 +23,10 @@ STATIC_FILES=(
   "README.md"
   "biome.json"
   "package.json"
-  "docker/apps/cli.Dockerfile"
-  "docker/apps/server.Dockerfile"
-  "docker/apps/web.Dockerfile"
-  "docker/Dockerfile.dev"
+  "deploy/docker/cli.Dockerfile"
+  "deploy/docker/server.Dockerfile"
+  "deploy/docker/web.Dockerfile"
+  "deploy/Dockerfile.dev"
 )
 
 # Dynamically find all package.json and CHANGELOG.md under packages/ and apps/

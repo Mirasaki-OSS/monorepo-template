@@ -1,0 +1,26 @@
+---
+title: Troubleshooting
+description: Learn how to troubleshoot common issues with Docker and Docker Compose in @md-oss/monorepo-template.
+renderInlineTOC: false
+icon: Wrench
+full: false
+---
+
+## Troubleshooting
+
+### Build fails with permission errors
+
+```bash
+sudo usermod -aG docker $USER
+```
+
+### Stale cache causing unexpected behavior
+
+```bash
+docker builder prune
+```
+
+### Development hot reload not working
+
+Ensure the volume mount in `compose.dev.yaml` points to your project root and that your bundler/framework has file-watching enabled.
+

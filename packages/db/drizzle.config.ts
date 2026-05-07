@@ -5,7 +5,7 @@ const env = serverEnv();
 
 export default defineConfig({
 	schema: './src/schema',
-	out: './src/migrations',
+	out: './drizzle',
 	dialect: 'postgresql',
 	dbCredentials: {
 		url: env.DATABASE_URL,
