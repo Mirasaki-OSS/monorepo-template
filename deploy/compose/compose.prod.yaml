@@ -30,6 +30,7 @@ services:
       - -lc
       - |
         set -e
+        pnpm --filter '@md-oss/db' db:ensure
         if [ -d /app/packages/db/drizzle ] && find /app/packages/db/drizzle -type f | grep -q .; then
           pnpm --filter '@md-oss/db' db:migrate
         else
@@ -39,6 +40,7 @@ services:
     environment:
       - NODE_ENV=${NODE_ENV:-production}
       - DATABASE_URL=${DATABASE_URL:-postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@${POSTGRES_HOST:-postgres}:${POSTGRES_PORT:-5432}/${POSTGRES_DB:-my_app_production}}
+      - POSTGRES_ADMIN_DB=${POSTGRES_ADMIN_DB:-postgres}
     networks:
       - my_app-network
     restart: "no"
