@@ -1,11 +1,48 @@
 # @md-oss/api
 
-API routers and context.
+tRPC router primitives, context creation, and shared API surface for the monorepo.
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Exports](#exports)
+- [Usage](#usage)
+- [Development](#development)
+
+## Overview
+
+This package centralizes the shared API layer used by the server and any consumers that need the application router types. It defines the base tRPC instance, request context creation, and the root router exported to the Hono server.
+
+## Exports
+
+The package currently exposes:
+
+- `router`, `publicProcedure`, and `protectedProcedure` from the root module
+- `createContext` and `Context` from `@md-oss/api/context`
+- `appRouter` and `AppRouter` from `@md-oss/api/routers`
+- validated environment helpers from `@md-oss/api/env`
+- shared type exports from `@md-oss/api/types`
 
 ## Usage
 
 ```typescript
-import * as pkg from "@md-oss/api";
+import { router, publicProcedure, protectedProcedure } from '@md-oss/api';
 
-// Do something...
+export const exampleRouter = router({
+	ping: publicProcedure.query(() => 'pong'),
+	me: protectedProcedure.query(({ ctx }) => ctx.session.user),
+});
+```
+
+```typescript
+import { appRouter } from '@md-oss/api/routers';
+import { createContext } from '@md-oss/api/context';
+```
+
+## Development
+
+```bash
+pnpm --filter @md-oss/api dev
+pnpm --filter @md-oss/api build
+pnpm --filter @md-oss/api typecheck
 ```
