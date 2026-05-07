@@ -32,4 +32,16 @@ scripts/node/strip-vendor-pkg-metadata.mjs
 packages/*/CHANGELOG.md
 
 # Development
-notes.md
+TODO.md
+
+# Documentation ([DEV]: should be able to be preserved, if not, clean package.json deps, etc.)
+apps/web/content/docs
+apps/web/src/app/docs
+apps/web/src/app/(api)
+apps/web/src/components/mdx
+apps/web/src/components/mdx.tsx
+apps/web/src/lib/source.ts
+docs/
+apps/*/docs
+packages/*/docs
+vendor/*/docs

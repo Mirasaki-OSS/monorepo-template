@@ -7,6 +7,7 @@ import {
 } from '@md-oss/design-system/components/ui/aceternity/code-block';
 import { Checkbox } from '@md-oss/design-system/components/ui/checkbox';
 import { Callout } from '@md-oss/design-system/components/ui/extended/callout';
+import { Label } from '@md-oss/design-system/components/ui/label';
 import { mergePropsWithClassName } from '@md-oss/design-system/lib/utils';
 import React from 'react';
 
@@ -35,9 +36,14 @@ export type HTTPErrorAlertProps = {
 		>;
 		message?: React.HTMLAttributes<HTMLParagraphElement>;
 		detailsToggle?: React.ComponentPropsWithoutRef<typeof Checkbox>;
-		detailsLabel?: React.HTMLAttributes<HTMLSpanElement>;
+		detailsLabel?: React.ComponentPropsWithoutRef<typeof Label>;
 		codeBlock?: Omit<CodeBlockProps, 'language' | 'code' | 'tabs' | 'title'>;
 	};
+	prefixStatusCodeTag?: boolean;
+	includeFullErrorInDetails?: boolean;
+	detailsOpenByDefault?: boolean;
+	onClose?: () => void;
+	onCopyDetailsToClipboard?: (content: string) => void;
 };
 
 export const HTTPErrorAlert = ({
@@ -45,11 +51,17 @@ export const HTTPErrorAlert = ({
 	className,
 	classNames,
 	slotProps,
+	prefixStatusCodeTag = false,
+	includeFullErrorInDetails = false,
+	detailsOpenByDefault = false,
+	onClose,
+	onCopyDetailsToClipboard,
 }: HTTPErrorAlertProps): React.JSX.Element | null => {
 	const [isDismissed, setIsDismissed] = React.useState(false);
-	const [showDetails, setShowDetails] = React.useState(false);
+	const [showDetails, setShowDetails] = React.useState(detailsOpenByDefault);
+	const detailsToggleId = React.useId();
 
-	const details = error.details || null;
+	const details = includeFullErrorInDetails ? error : error.details || null;
 	const title =
 		errorCodeFriendlyNames[error.code] || errorCodeFriendlyNames.rest;
 
@@ -83,30 +95,40 @@ export const HTTPErrorAlert = ({
 	>({}, slotProps?.detailsToggle, classNames?.detailsToggle);
 
 	const detailsLabelProps = mergePropsWithClassName<
-		React.HTMLAttributes<HTMLSpanElement>
-	>({}, slotProps?.detailsLabel, classNames?.detailsLabel);
+		React.ComponentPropsWithoutRef<typeof Label>
+	>(
+		{
+			className: 'inline-flex cursor-pointer items-center gap-1',
+			htmlFor: detailsToggleId,
+		},
+		slotProps?.detailsLabel,
+		classNames?.detailsLabel
+	);
 
 	if (isDismissed) {
+		if (onClose) {
+			onClose();
+		}
 		return null;
 	}
 
 	return (
 		<Callout {...calloutProps} variant="error" title={title}>
 			<p {...messageProps}>
-				[{error.statusCode}] {error.message}
+				{prefixStatusCodeTag && `[${error.statusCode}] `}
+				{error.message}
 			</p>
 			{details && (
 				<>
-					<div className="inline-flex items-center gap-1">
+					<Label {...detailsLabelProps}>
 						<Checkbox
 							{...detailsToggleProps}
+							id={detailsToggleId}
 							checked={showDetails}
 							onCheckedChange={(checked) => setShowDetails(!!checked)}
-						></Checkbox>
-						<span {...detailsLabelProps}>
-							{showDetails ? 'Hide' : 'Show'} Details
-						</span>
-					</div>
+						/>
+						<span>{showDetails ? 'Hide' : 'Show'} Details</span>
+					</Label>
 					{showDetails && (
 						<CodeBlock
 							{...slotProps?.codeBlock}
@@ -119,6 +141,7 @@ export const HTTPErrorAlert = ({
 									JSON Details
 								</p>
 							}
+							onCopyToClipboard={onCopyDetailsToClipboard}
 						/>
 					)}
 				</>

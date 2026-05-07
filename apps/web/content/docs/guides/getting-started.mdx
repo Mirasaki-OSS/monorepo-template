@@ -1,0 +1,81 @@
+---
+title: Getting Started
+description: Learn how to get started on your own project using @md-oss/monorepo-template.
+renderInlineTOC: false
+icon: Rocket
+full: false
+---
+
+## Prerequisites
+
+Please note that these are only required for local (non-Docker) development. For Docker-based development and deployment, see the [Docker instructions](./docker).
+
+- Node.js 18+
+- pnpm 10+
+
+<include>./include/creating-the-repository.mdx</include>
+
+<include>./include/creating-the-env.mdx</include>
+
+## Installation
+
+```bash
+pnpm install
+```
+
+## Development
+
+Run all development apps:
+
+```bash
+pnpm dev
+```
+
+Run a specific package:
+
+```bash
+cd apps/cli
+pnpm dev
+```
+
+## Building
+
+Build all packages:
+
+```bash
+pnpm build
+```
+
+Build a specific package:
+
+```bash
+cd packages/utils
+pnpm build
+```
+
+## Linting & Formatting
+
+```bash
+pnpm lint
+pnpm format
+```
+
+## Testing
+
+```bash
+pnpm test
+```
+
+## Generating New Packages
+
+Create new apps and packages using Turbo generators:
+
+```bash
+# Generate a new application
+pnpm gen:app
+
+# Generate a new package
+pnpm gen:package
+```
+
+The generators use templates from `turbo/generators/` and will prompt you for configuration.

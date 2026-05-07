@@ -1,0 +1,51 @@
+---
+title: Architecture
+description: Learn more about the architecture, design decisions, and how to extend the Docker setup in @md-oss/monorepo-template.
+renderInlineTOC: false
+icon: FileSliders
+full: false
+---
+
+import { File, Folder, Files } from 'fumadocs-ui/components/files';
+
+## Architecture
+
+### Production build stages (per app)
+
+1. **Base** — Node.js + pnpm setup
+2. **Deps** — Copies all workspace `package.json` manifests only, then runs `pnpm fetch` scoped to the app's dependency graph. Tarballs are written to the BuildKit pnpm store cache so subsequent builds are fast even when the store is cold.
+3. **Builder** — Copies root config files and uses `copy-app-sources.js` to dynamically resolve and copy only the workspace packages the app transitively depends on via `workspace:` protocol. Installs from the shared pnpm cache (`--prefer-offline`) and builds.
+4. **Runner** — Minimal final image with only the deployed production output.
+
+### Dynamic workspace source resolution
+
+`scripts/bash/deploy/copy-app-sources.js` walks `pnpm-workspace.yaml` and each package's `package.json` at build time to determine exactly which workspace packages to copy into the builder stage. Only packages still using the `workspace:` protocol are included — packages whose versions have been replaced with published semver (e.g. after template personalization) are automatically excluded.
+
+This means Dockerfiles **never need updating** when workspace dependencies change.
+
+### File Structure
+
+<Files>
+  <Folder name="deploy - Deployment orchestration" defaultOpen>
+    <Folder name="compose - Compose files" defaultOpen>
+      <File name="compose.prod.yaml: Production services" />
+      <File name="compose.dev.yaml: Development + debug profiles" />
+      <File name="compose.postgres.yaml: Shared postgres service + network" />
+    </Folder>
+    <Folder name="docker - Dockerfiles" defaultOpen>
+      <File name="cli.Dockerfile: CLI app" />
+      <File name="server.Dockerfile: Hono API server" />
+      <File name="web.Dockerfile: Next.js standalone app" />
+      <File name="Dockerfile.dev: Development image" />
+      <File name="Dockerfile.debug: Build context inspection image" />
+    </Folder>
+    <File name="Dockerfile.dev: Development image" />
+    <File name="Dockerfile.debug: Build context inspection image" />
+  </Folder>
+  <Folder name="scripts/bash/deploy - Deployment scripts" defaultOpen>
+    <File name="copy-workspace-manifests.sh: Copies all */package.json for the deps stage" />
+    <File name="copy-app-sources.js: Dynamically resolves and copies workspace packages for the builder stage" />
+  </Folder>
+  <File name=".dockerignore: Exclude files from Docker context" />
+  <File name="Makefile: Orchestrates Docker commands and profiles" />
+</Files>

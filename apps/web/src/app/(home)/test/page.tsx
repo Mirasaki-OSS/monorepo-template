@@ -1,14 +1,16 @@
 'use client';
 
-// [DEV] Docs customization and configuration:
-// http://localhost:3000/docs
-// https://www.fumadocs.dev/docs/ui/search
-// https://www.fumadocs.dev/docs/ui/layouts/root-provider#theme-provider
+// [DEV] After auth-ui, etc. - serve API spec: https://www.fumadocs.dev/docs/integrations/openapi/api-page
+// [DEV] Consider Story for ui-components: https://www.fumadocs.dev/docs/integrations/story
 
 // [DEV] Editor Component playgrounds:
 // https://playground.lexical.dev/
 // https://tiptap.dev/
 
+// [DEV] Biome-style blog: https://biomejs.dev/blog/
+// [DEV] Astro-inspired docs (best boii): https://docs.astro.build/en/tutorial/3-components/
+
+import { createHTTPErrorResponse } from '@md-oss/common';
 import { AdaptiveDialogPanel } from '@md-oss/design-system/components/adaptive/dialog';
 import {
   type AdaptiveTabItem,
@@ -22,6 +24,7 @@ import { ParticleBackground } from '@md-oss/design-system/components/sections/pa
 import { ConfirmationDialog } from '@md-oss/design-system/components/state/confirmation-dialog';
 import { DateRenderer } from '@md-oss/design-system/components/state/date-renderer';
 import { FullPageLoader } from '@md-oss/design-system/components/state/full-page-loader';
+import { HTTPErrorAlert } from '@md-oss/design-system/components/state/http-error-alert';
 import {
   LoaderWithContainer,
   Loader as MDLoader,
@@ -45,15 +48,19 @@ import { Spoiler } from '@md-oss/design-system/components/ui/extended/spoiler';
 import { useConfirmationStore } from '@md-oss/design-system/hooks/use-confirmation-store';
 import { RocketIcon } from 'lucide-react';
 import { useState } from 'react';
+import json from 'react-syntax-highlighter/dist/esm/languages/prism/json';
 import jsx from 'react-syntax-highlighter/dist/esm/languages/prism/jsx';
 import rust from 'react-syntax-highlighter/dist/esm/languages/prism/rust';
 import tsx from 'react-syntax-highlighter/dist/esm/languages/prism/tsx';
+import { toast } from 'sonner';
 import Loader from '@/components/loader';
+import { GithubIcon } from '@/lib/client/icons';
 import SchemaObjectFormTest from './schema-object-form';
 
 registerCodeBlockLanguage('jsx', jsx);
 registerCodeBlockLanguage('tsx', tsx);
 registerCodeBlockLanguage('rust', rust);
+registerCodeBlockLanguage('json', json);
 
 const marqueeItems = [
   'Type-safe primitives',
@@ -163,381 +170,391 @@ export default function TestPage() {
   const { openConfirmation } = useConfirmationStore();
 
   return (
-    <>
+    <PageContainer className="relative z-1 flex flex-col gap-4 *:relative *:border *:border-red-500/60 *:before:absolute *:before:-top-2 *:before:left-2 *:before:text-[10px] *:before:px-1 *:before:bg-red-500 *:before:text-white">
       <ParticleBackground
-        className="fixed"
         particleCount={100}
         particleSize={2}
         particleSpeed={0.5}
         lineDistance={100}
         color="#ff0000"
       />
-      <PageContainer className="relative flex flex-col gap-4 *:relative *:border *:border-red-500/60 *:before:absolute *:before:-top-2 *:before:left-2 *:before:text-[10px] *:before:px-1 *:before:bg-red-500 *:before:text-white">
-        <Loader />
-        <MDLoader />
-        <LoaderWithContainer
-          slotProps={{
-            loader: {
-              asComponent: RocketIcon,
-            },
-          }}
-        />
-        <AccessDenied variant="default" />
-        <AccessDenied variant="card" />
-        <Spoiler variant="minimal">
-          <CodeBlock
-            filename="example.js"
-            title={<h3>Example Code</h3>}
-            language="javascript"
-            highlightLines={[1, 5, 6]}
-            code={`function greet(name) {
+      <GithubIcon size={32} className="text-gray-500" />
+      <Loader />
+      <MDLoader />
+      <LoaderWithContainer
+        slotProps={{
+          loader: {
+            asComponent: RocketIcon,
+          },
+        }}
+      />
+      <AccessDenied variant="default" />
+      <AccessDenied variant="card" />
+      <HTTPErrorAlert
+        prefixStatusCodeTag
+        includeFullErrorInDetails
+        onCopyDetailsToClipboard={(content) => {
+          toast.success(`Copied ${content.length} characters to clipboard`);
+        }}
+        error={createHTTPErrorResponse({
+          statusCode: 500,
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'An unexpected error occurred on the server.',
+          headers: {
+            'Retry-After': '120',
+          },
+          details: {
+            requestId: 'abc123',
+            timestamp: new Date().toISOString(),
+          },
+        })}
+      />
+      <Spoiler variant="minimal">
+        <CodeBlock
+          filename="example.js"
+          title={<h3>Example Code</h3>}
+          language="javascript"
+          highlightLines={[1, 5, 6]}
+          code={`function greet(name) {
   return 'Hello, ' + name + '!';
 }
 
 console.log(greet('World'));
 console.log(greet('This is a veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeery long string with little-to-no word break'));`}
+        />
+      </Spoiler>
+      <Spoiler variant="card">
+        <LargeDummyContent />
+      </Spoiler>
+      <div className="overflow-hidden rounded-2xl border border-border/70 bg-card/70 px-4 py-6">
+        <ContentMarquee
+          items={marqueeItems}
+          speed="slow"
+          className="max-w-full"
+          classNames={{
+            track: 'gap-3',
+          }}
+        />
+      </div>
+
+      <section className="space-y-3 rounded-2xl border border-border/70 bg-card/70 p-4">
+        <h2 className="text-lg font-semibold">Adaptive Tabs</h2>
+        <AdaptiveTabs
+          tabs={tabItems}
+          defaultValue="overview"
+          title="Select Tab"
+          description="Choose a tab to view its content"
+          onValueChange={(value) => console.log('Tab changed:', value)}
+          classNames={{
+            wrapper: 'w-full',
+          }}
+        />
+      </section>
+
+      <section className="space-y-3 rounded-2xl border border-border/70 bg-card/70 p-4">
+        <h2 className="text-lg font-semibold">Adaptive Dialog Panel</h2>
+        <AdaptiveDialogPanel
+          trigger={<Button variant="outline">Open Adaptive Panel</Button>}
+          title="Edit Pull Request"
+          description="Desktop renders as Dialog, mobile renders as Drawer."
+          closeAction={<Button variant="outline">Cancel</Button>}
+          slotProps={{
+            close: { asChild: true },
+          }}
+          footer={<Button>Save Changes</Button>}
+          classNames={{
+            body: 'space-y-3',
+          }}
+        >
+          <p className="text-sm text-muted-foreground">
+            This panel is a responsive shell primitive intended for forms and
+            review flows.
+          </p>
+          <InlineTextEditor
+            value={title}
+            onSave={async (nextValue) => {
+              await wait(250);
+              setTitle(nextValue);
+            }}
+            placeholders={{
+              idle: 'Set title',
+              editing: 'Update title',
+            }}
           />
-        </Spoiler>
-        <Spoiler variant="card">
-          <LargeDummyContent />
-        </Spoiler>
-        <div className="overflow-hidden rounded-2xl border border-border/70 bg-card/70 px-4 py-6">
-          <ContentMarquee
-            items={marqueeItems}
-            speed="slow"
-            className="max-w-full"
+        </AdaptiveDialogPanel>
+      </section>
+
+      <section className="space-y-4 rounded-2xl border border-border/70 bg-card/70 p-4">
+        <h2 className="text-lg font-semibold">Inline Edit Collection</h2>
+
+        <div className="space-y-2">
+          <p className="text-xs text-muted-foreground uppercase tracking-wide">
+            PR title style inline editing
+          </p>
+          <InlineTextEditor
+            value={title}
+            onSave={async (nextValue) => {
+              await wait(500);
+              setTitle(nextValue);
+            }}
+            placeholders={{
+              idle: 'Click to set title',
+              editing: 'Enter PR title',
+            }}
             classNames={{
-              track: 'gap-3',
+              trigger: 'text-base font-semibold',
+              input: 'text-base font-semibold',
             }}
           />
         </div>
 
-        <section className="space-y-3 rounded-2xl border border-border/70 bg-card/70 p-4">
-          <h2 className="text-lg font-semibold">Adaptive Tabs</h2>
-          <AdaptiveTabs
-            tabs={tabItems}
-            defaultValue="overview"
-            title="Select Tab"
-            description="Choose a tab to view its content"
-            onValueChange={(value) => console.log('Tab changed:', value)}
-            classNames={{
-              wrapper: 'w-full',
+        <div className="space-y-2">
+          <p className="text-xs text-muted-foreground uppercase tracking-wide">
+            Multiline summary editor
+          </p>
+          <InlineTextEditor
+            mode="multiline"
+            value={summary}
+            onSave={async (nextValue) => {
+              await wait(500);
+              setSummary(nextValue);
+            }}
+            placeholders={{
+              idle: 'Click to add summary',
+              editing: 'Write a concise summary (Ctrl/Cmd+Enter to save)',
             }}
           />
-        </section>
+        </div>
 
-        <section className="space-y-3 rounded-2xl border border-border/70 bg-card/70 p-4">
-          <h2 className="text-lg font-semibold">Adaptive Dialog Panel</h2>
-          <AdaptiveDialogPanel
-            trigger={<Button variant="outline">Open Adaptive Panel</Button>}
-            title="Edit Pull Request"
-            description="Desktop renders as Dialog, mobile renders as Drawer."
-            closeAction={<Button variant="outline">Cancel</Button>}
-            slotProps={{
-              close: { asChild: true },
-            }}
-            footer={<Button>Save Changes</Button>}
-            classNames={{
-              body: 'space-y-3',
-            }}
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="space-y-2">
+            <p className="text-xs text-muted-foreground uppercase tracking-wide">
+              Inline select editor
+            </p>
+            <InlineSelectEditor
+              value={status}
+              options={statusOptions}
+              onSave={async (nextValue) => {
+                await wait(450);
+                setStatus(nextValue);
+              }}
+              renderValue={(value) => (
+                <span className="capitalize">{value.replace('-', ' ')}</span>
+              )}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <p className="text-xs text-muted-foreground uppercase tracking-wide">
+              Read-only and disabled states
+            </p>
+            <InlineTextEditor
+              editable={false}
+              value="Read-only preview value"
+              onSave={() => {}}
+            />
+            <InlineTextEditor
+              disabled
+              value="Disabled editor trigger"
+              onSave={() => {}}
+            />
+          </div>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="space-y-2">
+            <p className="text-xs text-muted-foreground uppercase tracking-wide">
+              String list editor: chips
+            </p>
+            <InlineStringListEditor
+              value={labels}
+              onChange={setLabels}
+              mode="chips"
+              placeholder="Add label"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <p className="text-xs text-muted-foreground uppercase tracking-wide">
+              String list editor: list + multiline composer
+            </p>
+            <InlineStringListEditor
+              value={reviewChecklist}
+              onChange={setReviewChecklist}
+              mode="list"
+              composerMode="multiline"
+              placeholder="Add checklist item"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ── ConfirmationDialog ─────────────────────────────────── */}
+      <section>
+        <ConfirmationDialog />
+        <div className="flex flex-wrap gap-2">
+          <Button
+            variant="destructive"
+            onClick={() =>
+              openConfirmation({
+                title: 'Delete item',
+                description:
+                  'This action cannot be undone. The item will be permanently removed.',
+                cancelLabel: 'Cancel',
+                actionLabel: 'Delete',
+                actionProps: { variant: 'destructive' },
+                cancelProps: {},
+                onAction: () => console.log('Deleted'),
+                onCancel: () => console.log('Cancelled'),
+              })
+            }
           >
-            <p className="text-sm text-muted-foreground">
-              This panel is a responsive shell primitive intended for forms and
-              review flows.
-            </p>
-            <InlineTextEditor
-              value={title}
-              onSave={async (nextValue) => {
-                await wait(250);
-                setTitle(nextValue);
-              }}
-              placeholders={{
-                idle: 'Set title',
-                editing: 'Update title',
-              }}
-            />
-          </AdaptiveDialogPanel>
-        </section>
+            Open destructive confirmation
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() =>
+              openConfirmation({
+                title: 'Save changes',
+                description: 'Are you sure you want to save these changes?',
+                cancelLabel: 'Discard',
+                actionLabel: 'Save',
+                actionProps: {},
+                cancelProps: {},
+                onAction: () => console.log('Saved'),
+                onCancel: () => console.log('Discarded'),
+              })
+            }
+          >
+            Open save confirmation
+          </Button>
+        </div>
+      </section>
 
-        <section className="space-y-4 rounded-2xl border border-border/70 bg-card/70 p-4">
-          <h2 className="text-lg font-semibold">Inline Edit Collection</h2>
-
-          <div className="space-y-2">
-            <p className="text-xs text-muted-foreground uppercase tracking-wide">
-              PR title style inline editing
-            </p>
-            <InlineTextEditor
-              value={title}
-              onSave={async (nextValue) => {
-                await wait(500);
-                setTitle(nextValue);
-              }}
-              placeholders={{
-                idle: 'Click to set title',
-                editing: 'Enter PR title',
-              }}
-              classNames={{
-                trigger: 'text-base font-semibold',
-                input: 'text-base font-semibold',
-              }}
-            />
+      {/* ── DateRenderer ───────────────────────────────────────── */}
+      <section>
+        <div className="flex flex-col gap-2 text-sm">
+          <div className="flex items-center gap-2">
+            <span className="text-muted-foreground w-32 shrink-0">5s ago:</span>
+            <DateRenderer date={new Date(Date.now() - 5_000)} />
           </div>
-
-          <div className="space-y-2">
-            <p className="text-xs text-muted-foreground uppercase tracking-wide">
-              Multiline summary editor
-            </p>
-            <InlineTextEditor
-              mode="multiline"
-              value={summary}
-              onSave={async (nextValue) => {
-                await wait(500);
-                setSummary(nextValue);
-              }}
-              placeholders={{
-                idle: 'Click to add summary',
-                editing: 'Write a concise summary (Ctrl/Cmd+Enter to save)',
-              }}
+          <div className="flex items-center gap-2">
+            <span className="text-muted-foreground w-32 shrink-0">
+              3min ago:
+            </span>
+            <DateRenderer date={new Date(Date.now() - 3 * 60_000)} />
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-muted-foreground w-32 shrink-0">2h ago:</span>
+            <DateRenderer date={new Date(Date.now() - 2 * 3_600_000)} />
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-muted-foreground w-32 shrink-0">
+              In 10min:
+            </span>
+            <DateRenderer date={new Date(Date.now() + 10 * 60_000)} />
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-muted-foreground w-32 shrink-0">
+              Force relative:
+            </span>
+            <DateRenderer
+              date={new Date('2020-01-01')}
+              forceRelative
+              className="text-muted-foreground"
             />
           </div>
+        </div>
+      </section>
 
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="space-y-2">
-              <p className="text-xs text-muted-foreground uppercase tracking-wide">
-                Inline select editor
-              </p>
-              <InlineSelectEditor
-                value={status}
-                options={statusOptions}
-                onSave={async (nextValue) => {
-                  await wait(450);
-                  setStatus(nextValue);
-                }}
-                renderValue={(value) => (
-                  <span className="capitalize">{value.replace('-', ' ')}</span>
-                )}
-              />
-            </div>
+      {/* ── FullPageLoader ─────────────────────────────────────── */}
+      <section>
+        {showFullPageLoader && <FullPageLoader />}
+        <Button
+          onClick={() => {
+            setShowFullPageLoader(true);
+            setTimeout(() => setShowFullPageLoader(false), 2000);
+          }}
+        >
+          Show full-page loader (2s)
+        </Button>
+      </section>
 
-            <div className="space-y-2">
-              <p className="text-xs text-muted-foreground uppercase tracking-wide">
-                Read-only and disabled states
-              </p>
-              <InlineTextEditor
-                editable={false}
-                value="Read-only preview value"
-                onSave={() => {}}
-              />
-              <InlineTextEditor
-                disabled
-                value="Disabled editor trigger"
-                onSave={() => {}}
-              />
-            </div>
+      {/* ── LoadingOverlay + ProgressBar ───────────────────────── */}
+      <section>
+        <div className="flex flex-col gap-4">
+          <div className="relative h-32 rounded-lg border border-border overflow-hidden">
+            <p className="p-4 text-sm">Content underneath the overlay</p>
+            <LoadingOverlay isLoading={isLoadingOverlay} />
           </div>
-
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="space-y-2">
-              <p className="text-xs text-muted-foreground uppercase tracking-wide">
-                String list editor: chips
-              </p>
-              <InlineStringListEditor
-                value={labels}
-                onChange={setLabels}
-                mode="chips"
-                placeholder="Add label"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <p className="text-xs text-muted-foreground uppercase tracking-wide">
-                String list editor: list + multiline composer
-              </p>
-              <InlineStringListEditor
-                value={reviewChecklist}
-                onChange={setReviewChecklist}
-                mode="list"
-                composerMode="multiline"
-                placeholder="Add checklist item"
-              />
-            </div>
-          </div>
-        </section>
-
-        {/* ── ConfirmationDialog ─────────────────────────────────── */}
-        <section>
-          <ConfirmationDialog />
           <div className="flex flex-wrap gap-2">
             <Button
-              variant="destructive"
-              onClick={() =>
-                openConfirmation({
-                  title: 'Delete item',
-                  description:
-                    'This action cannot be undone. The item will be permanently removed.',
-                  cancelLabel: 'Cancel',
-                  actionLabel: 'Delete',
-                  actionProps: { variant: 'destructive' },
-                  cancelProps: {},
-                  onAction: () => console.log('Deleted'),
-                  onCancel: () => console.log('Cancelled'),
-                })
-              }
+              onClick={() => {
+                setIsLoadingOverlay(true);
+                setTimeout(() => setIsLoadingOverlay(false), 2000);
+              }}
             >
-              Open destructive confirmation
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() =>
-                openConfirmation({
-                  title: 'Save changes',
-                  description: 'Are you sure you want to save these changes?',
-                  cancelLabel: 'Discard',
-                  actionLabel: 'Save',
-                  actionProps: {},
-                  cancelProps: {},
-                  onAction: () => console.log('Saved'),
-                  onCancel: () => console.log('Discarded'),
-                })
-              }
-            >
-              Open save confirmation
+              Show loading overlay (2s)
             </Button>
           </div>
-        </section>
-
-        {/* ── DateRenderer ───────────────────────────────────────── */}
-        <section>
-          <div className="flex flex-col gap-2 text-sm">
-            <div className="flex items-center gap-2">
-              <span className="text-muted-foreground w-32 shrink-0">
-                5s ago:
-              </span>
-              <DateRenderer date={new Date(Date.now() - 5_000)} />
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-muted-foreground w-32 shrink-0">
-                3min ago:
-              </span>
-              <DateRenderer date={new Date(Date.now() - 3 * 60_000)} />
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-muted-foreground w-32 shrink-0">
-                2h ago:
-              </span>
-              <DateRenderer date={new Date(Date.now() - 2 * 3_600_000)} />
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-muted-foreground w-32 shrink-0">
-                In 10min:
-              </span>
-              <DateRenderer date={new Date(Date.now() + 10 * 60_000)} />
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-muted-foreground w-32 shrink-0">
-                Force relative:
-              </span>
-              <DateRenderer
-                date={new Date('2020-01-01')}
-                forceRelative
-                className="text-muted-foreground"
-              />
+          <div className="flex flex-col gap-2">
+            <p className="text-xs text-muted-foreground uppercase tracking-wide">
+              ProgressBar at {progress}%
+            </p>
+            <ProgressBar progress={progress} />
+            <div className="flex gap-2">
+              {[0, 25, 50, 75, 100].map((v) => (
+                <Button
+                  key={v}
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setProgress(v)}
+                >
+                  {v}%
+                </Button>
+              ))}
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ── FullPageLoader ─────────────────────────────────────── */}
-        <section>
-          {showFullPageLoader && <FullPageLoader />}
+      {/* ── StaggeredList ──────────────────────────────────────── */}
+      <section className="space-y-3 rounded-2xl border border-border/70 bg-card/70 p-4">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="space-y-1">
+            <h2 className="text-lg font-semibold">Staggered List</h2>
+            <p className="text-xs text-muted-foreground">
+              Items animate on mount. Use Replay to trigger the stagger sequence
+              again after scrolling into this section.
+            </p>
+          </div>
           <Button
-            onClick={() => {
-              setShowFullPageLoader(true);
-              setTimeout(() => setShowFullPageLoader(false), 2000);
-            }}
+            variant="outline"
+            size="sm"
+            onClick={() => setStaggeredReplayKey((prev) => prev + 1)}
           >
-            Show full-page loader (2s)
+            Replay animation
           </Button>
-        </section>
+        </div>
 
-        {/* ── LoadingOverlay + ProgressBar ───────────────────────── */}
-        <section>
-          <div className="flex flex-col gap-4">
-            <div className="relative h-32 rounded-lg border border-border overflow-hidden">
-              <p className="p-4 text-sm">Content underneath the overlay</p>
-              <LoadingOverlay isLoading={isLoadingOverlay} />
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <Button
-                onClick={() => {
-                  setIsLoadingOverlay(true);
-                  setTimeout(() => setIsLoadingOverlay(false), 2000);
-                }}
-              >
-                Show loading overlay (2s)
-              </Button>
-            </div>
-            <div className="flex flex-col gap-2">
-              <p className="text-xs text-muted-foreground uppercase tracking-wide">
-                ProgressBar at {progress}%
-              </p>
-              <ProgressBar progress={progress} />
-              <div className="flex gap-2">
-                {[0, 25, 50, 75, 100].map((v) => (
-                  <Button
-                    key={v}
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setProgress(v)}
-                  >
-                    {v}%
-                  </Button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── StaggeredList ──────────────────────────────────────── */}
-        <section className="space-y-3 rounded-2xl border border-border/70 bg-card/70 p-4">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <div className="space-y-1">
-              <h2 className="text-lg font-semibold">Staggered List</h2>
-              <p className="text-xs text-muted-foreground">
-                Items animate on mount. Use Replay to trigger the stagger
-                sequence again after scrolling into this section.
-              </p>
-            </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setStaggeredReplayKey((prev) => prev + 1)}
+        <StaggeredList key={staggeredReplayKey} className="flex flex-col gap-2">
+          {[
+            'First item',
+            'Second item',
+            'Third item',
+            'Fourth item',
+            'Fifth item',
+          ].map((item) => (
+            <div
+              key={item}
+              className="rounded-md border border-border bg-card px-4 py-2 text-sm"
             >
-              Replay animation
-            </Button>
-          </div>
-
-          <StaggeredList
-            key={staggeredReplayKey}
-            className="flex flex-col gap-2"
-          >
-            {[
-              'First item',
-              'Second item',
-              'Third item',
-              'Fourth item',
-              'Fifth item',
-            ].map((item) => (
-              <div
-                key={item}
-                className="rounded-md border border-border bg-card px-4 py-2 text-sm"
-              >
-                {item}
-              </div>
-            ))}
-          </StaggeredList>
-        </section>
-        <SchemaObjectFormTest />
-      </PageContainer>
-    </>
+              {item}
+            </div>
+          ))}
+        </StaggeredList>
+      </section>
+      <SchemaObjectFormTest />
+    </PageContainer>
   );
 }

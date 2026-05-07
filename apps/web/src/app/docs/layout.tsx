@@ -1,11 +1,35 @@
-import { DocsLayout } from 'fumadocs-ui/layouts/docs';
-
+import { DocsLayout } from 'fumadocs-ui/layouts/notebook';
+import { HomeIcon } from 'lucide-react';
 import { baseOptions } from '@/lib/layout.shared';
-import { source } from '@/lib/source';
+import { getMergedPageTree } from '@/lib/source';
 
-export default function Layout({ children }: LayoutProps<'/docs'>) {
+import 'katex/dist/katex.css';
+import 'remark-github-blockquote-alert/alert.css';
+
+export default async function Layout({ children }: LayoutProps<'/docs'>) {
+  const tree = await getMergedPageTree();
+  const { nav, ...base } = baseOptions();
   return (
-    <DocsLayout tree={source.getPageTree()} {...baseOptions()}>
+    <DocsLayout
+      tree={tree}
+      {...base}
+      nav={{ ...nav }}
+      links={[
+        {
+          icon: <HomeIcon />,
+          text: 'Home',
+          label: 'Go to homepage', // aria-label
+          url: '/',
+          on: 'all',
+          type: 'icon',
+          active: 'url',
+        },
+      ]}
+      // sidebar={{
+      //   banner: <div key="custom-sidebar-banner">Hello World</div>,
+      // }}
+      tabMode="sidebar"
+    >
       {children}
     </DocsLayout>
   );

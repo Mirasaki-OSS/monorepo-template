@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
+import { getErrorMessage } from '@md-oss/common/errors';
 import { runFindDependencyMismatchesCli } from './find-dependency-mismatches';
 
 try {
 	runFindDependencyMismatchesCli();
 } catch (error: unknown) {
-	const message = error instanceof Error ? error.message : String(error);
-	console.error(message);
+	console.error(getErrorMessage(error));
 	process.exitCode = 1;
 }

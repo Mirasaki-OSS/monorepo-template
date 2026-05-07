@@ -18,12 +18,12 @@ pnpm dev
 
 ## Docker Commands
 
-- `pnpm docker:build` - Build Docker images
-- `pnpm docker:up` - Start services
-- `pnpm docker:dev` - Development with hot reload
-- `pnpm docker:down` - Stop services
+- `ENV=production PROFILE=deploy make docker-build` - Build Docker images
+- `ENV=production PROFILE=deploy make docker-up` - Start services
+- `ENV=development PROFILE=dev make docker-up` - Development with hot reload
+- `ENV=production PROFILE=deploy make docker-down` - Stop services
 
-See [README.md](../README.md) for full documentation.
+See [docker.mdx](../apps/web/content/docs/guides/docker.mdx) for full documentation.
 
 ---
 

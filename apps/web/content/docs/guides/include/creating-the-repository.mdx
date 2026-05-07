@@ -1,0 +1,22 @@
+---
+title: Creating The Repository
+description: Learn how to create a new repository using @md-oss/monorepo-template.
+renderInlineTOC: false
+icon: PlusCircle
+full: false
+---
+
+## Creating The Repository
+
+To create a new repository using this template, click the "Use this template" button at the top of [the repository page](https://github.com/Mirasaki-OSS/monorepo-template), then follow the prompts to set up your new repository.
+
+When your repository is created, you must run the `Prepare Template` workflow from the Actions tab before working in the repo. This step removes template-only files, personalizes the repository (replacing the `@md-oss` scope with your own, etc.), and applies your selected package list:
+
+Open `Actions` -> `Prepare Template` -> `Run workflow`, then choose the apps, packages, and vendor libraries you want to preserve as local workspaces (packages). Anything not preserved will fall back to its current published package version when possible.
+
+Finally, clone your new repository and navigate to the project directory:
+
+```bash
+git clone <your-repository-url>
+cd <your-repository-name>
+```

@@ -1,19 +1,20 @@
 import { drizzle, type NodePgDatabase } from 'drizzle-orm/node-postgres';
 import type { Pool } from 'pg';
 import { serverEnv } from './env';
-import * as schema from './schema';
+import { relations } from './schema';
 
-type DatabaseSchema = typeof schema;
-type Database = NodePgDatabase<DatabaseSchema> & {
+type DatabaseRelations = typeof relations;
+type Database = NodePgDatabase<DatabaseRelations> & {
 	$client: Pool;
 };
 
 function createDb(): Database {
 	const env = serverEnv();
 
-	return drizzle(env.DATABASE_URL, { schema });
+	return drizzle(env.DATABASE_URL, { relations });
 }
 
 const db = createDb();
 
+export * from 'drizzle-orm';
 export { createDb, db };

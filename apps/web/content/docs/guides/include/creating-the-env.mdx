@@ -1,0 +1,33 @@
+---
+title: Creating The Env File
+description: Learn how to create the .env file for local development and deployment in @md-oss/monorepo-template.
+renderInlineTOC: false
+icon: PlusCircle
+full: false
+---
+
+## Creating The Env File
+
+The `.env` file is used to store environment variables for local development and deployment. It is based on the provided `.env.example` file, which contains all the necessary variables with example values. To create your own `.env` file, simply copy the example file:
+
+```bash tab="Linux"
+# Choose one of the following commands based on your environment
+cp .env.example .env.production
+cp .env.example .env.development
+```
+```bash tab="Windows"
+# Choose one of the following commands based on your environment
+copy .env.example .env.production
+copy .env.example .env.development
+```
+
+After it's created, open the `.env` file and replace the example values with your own configuration:
+
+```bash tab="Linux"
+nano .env
+```
+```bash tab="Windows"
+notepad .env
+```
+
+This includes things like database connection strings, API keys, and any other environment-specific settings required by your applications.

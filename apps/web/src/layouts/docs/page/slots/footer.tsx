@@ -4,7 +4,7 @@ import { usePathname } from 'fumadocs-core/framework';
 import Link from 'fumadocs-core/link';
 import type * as PageTree from 'fumadocs-core/page-tree';
 import { useI18n } from 'fumadocs-ui/contexts/i18n';
-import { PageLastUpdate } from 'fumadocs-ui/layouts/docs/page';
+import { PageLastUpdate } from 'fumadocs-ui/layouts/notebook/page';
 import { useFooterItems } from 'fumadocs-ui/utils/use-footer-items';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { type ComponentProps, useMemo } from 'react';

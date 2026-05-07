@@ -1,3 +1,4 @@
+import { getErrorMessage } from '@md-oss/common/errors';
 import { getGreeting } from '@md-oss/utils';
 
 const VERSION = '1.0.0';
@@ -73,10 +74,7 @@ async function main(): Promise<void> {
 		console.log(greeting);
 		process.exit(0);
 	} catch (error) {
-		console.error(
-			'Error:',
-			error instanceof Error ? error.message : 'Unknown error'
-		);
+		console.error('Error:', getErrorMessage(error));
 		process.exit(1);
 	}
 }

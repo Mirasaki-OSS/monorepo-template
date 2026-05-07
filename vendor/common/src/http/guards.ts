@@ -104,7 +104,7 @@ export const parseError = (
 	const { NODE_ENV } = process.env;
 
 	if (error instanceof Error) {
-		return new HTTPError(500, {
+		const httpError = new HTTPError(500, {
 			code,
 			message,
 			details:
@@ -115,9 +115,11 @@ export const parseError = (
 							stack: error.stack,
 						},
 		});
+		httpError.cause = error;
+		return httpError;
 	}
 
-	return new HTTPError(500, {
+	const httpError = new HTTPError(500, {
 		code,
 		message,
 		details:
@@ -127,4 +129,6 @@ export const parseError = (
 						value: JSON.stringify(error, null, 2),
 					},
 	});
+	httpError.cause = error;
+	return httpError;
 };

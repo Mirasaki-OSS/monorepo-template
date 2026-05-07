@@ -5,16 +5,15 @@ import { auth } from '@md-oss/auth/server';
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
-import { serverEnv } from './env';
+import { parsedEnv } from './env';
 
 const app = new Hono();
-const env = serverEnv();
 
 app.use(logger());
 app.use(
 	'/*',
 	cors({
-		origin: env.CORS_ORIGIN,
+		origin: parsedEnv.CORS_ORIGIN,
 		allowMethods: ['GET', 'POST', 'OPTIONS'],
 		allowHeaders: ['Content-Type', 'Authorization'],
 		credentials: true,

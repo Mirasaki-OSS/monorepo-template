@@ -48,7 +48,7 @@ Thumbs.db
 .gitignore
 
 # Docker
-docker/
+deploy/
 
 # CI/CD
 .github

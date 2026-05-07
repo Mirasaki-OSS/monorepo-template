@@ -58,8 +58,10 @@
 		"dev": "pkgroll --watch --sourcemap  --define.process.env.NODE_ENV='\"development\"' --define.DEBUG=true",
 		"typecheck": "tsc --noEmit"
 	},
+	"dependencies": {
+		"@md-oss/common": "workspace:^"
+	},
 	"devDependencies": {
-		"@md-oss/common": "workspace:^",
 		"@md-oss/config": "workspace:^",
 		"pkgroll": "^2.27.0",
 		"tsx": "^4.21.0",

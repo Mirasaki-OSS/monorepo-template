@@ -1,8 +1,8 @@
 #!/usr/bin/env -S pnpm tsx
 import { spawnSync } from 'node:child_process';
-// Example: ./scripts/node/replace-scope.ts --scopeOld="@md-oss" --scopeNew="@mirasaki-oss" --paths="./.changeset/*,./vendor,./apps,./packages"
 import { readFileSync, statSync, writeFileSync } from 'node:fs';
 import { parseArgs } from 'node:util';
+import { getErrorMessage } from '@md-oss/common/errors';
 import { glob } from 'glob';
 
 interface Args {
@@ -96,7 +96,9 @@ for (const filePath of files) {
 			console.log(`  ✓ Updated ${filePath}`);
 		}
 	} catch (error) {
-		console.error(`  ✗ Failed to process ${filePath}:`, error);
+		console.error(
+			`  ✗ Failed to process ${filePath}: ${getErrorMessage(error)}`
+		);
 	}
 }
 

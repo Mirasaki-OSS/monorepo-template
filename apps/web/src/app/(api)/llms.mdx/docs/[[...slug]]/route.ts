@@ -12,16 +12,17 @@ export async function GET(
   const page = source.getPage(slug?.slice(0, -1));
   if (!page) notFound();
 
-  return new Response(await getLLMText(page), {
+  const markdown = await getLLMText(page);
+
+  return new Response(markdown, {
     headers: {
       'Content-Type': 'text/markdown',
     },
   });
 }
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
   return source.getPages().map((page) => ({
-    lang: page.locale,
     slug: getPageMarkdownUrl(page).segments,
   }));
 }

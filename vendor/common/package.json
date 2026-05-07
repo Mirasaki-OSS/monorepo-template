@@ -40,6 +40,16 @@
 				"default": "./dist/index.mjs"
 			}
 		},
+		"./errors": {
+			"require": {
+				"types": "./dist/errors.d.cts",
+				"default": "./dist/errors.cjs"
+			},
+			"import": {
+				"types": "./dist/errors.d.mts",
+				"default": "./dist/errors.mjs"
+			}
+		},
 		"./constants": {
 			"require": {
 				"types": "./dist/constants/index.d.cts",
@@ -445,9 +455,9 @@
 	},
 	"dependencies": {
 		"@md-oss/serdes": "workspace:^",
-		"@types/qs": "^6.15.0",
+		"@types/qs": "^6.15.1",
 		"qs": "^6.15.1",
-		"zod": "^4.3.6"
+		"zod": "^4.4.3"
 	},
 	"devDependencies": {
 		"@md-oss/config": "workspace:^",
