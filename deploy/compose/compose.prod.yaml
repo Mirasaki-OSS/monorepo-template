@@ -31,10 +31,10 @@ services:
       - |
         set -e
         if [ -d /app/packages/db/drizzle ] && find /app/packages/db/drizzle -type f | grep -q .; then
-          pnpm --filter '@workshop-monitor/db' db:migrate
+          pnpm --filter '@md-oss/db' db:migrate
         else
           echo 'No generated Drizzle migrations found; applying schema with drizzle-kit push'
-          pnpm --filter '@workshop-monitor/db' db:push
+          pnpm --filter '@md-oss/db' db:push
         fi
     environment:
       - NODE_ENV=${NODE_ENV:-production}
