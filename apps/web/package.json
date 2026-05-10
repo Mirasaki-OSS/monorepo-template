@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@better-auth/api-key": "^1.6.10",
+    "@better-auth/passkey": "^1.6.10",
     "@hookform/resolvers": "^5.2.2",
     "@marsidev/react-turnstile": "^1.5.2",
     "@md-oss/api": "workspace:^",

@@ -216,6 +216,76 @@
 					"default": "./dist/components/auth/pages/view-paths.mjs"
 				}
 			},
+			"./components/auth/passkey/add-passkey-dialog": {
+				"require": {
+					"types": "./dist/components/auth/passkey/add-passkey-dialog.d.cts",
+					"default": "./dist/components/auth/passkey/add-passkey-dialog.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/passkey/add-passkey-dialog.d.mts",
+					"default": "./dist/components/auth/passkey/add-passkey-dialog.mjs"
+				}
+			},
+			"./components/auth/passkey/delete-passkey-dialog": {
+				"require": {
+					"types": "./dist/components/auth/passkey/delete-passkey-dialog.d.cts",
+					"default": "./dist/components/auth/passkey/delete-passkey-dialog.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/passkey/delete-passkey-dialog.d.mts",
+					"default": "./dist/components/auth/passkey/delete-passkey-dialog.mjs"
+				}
+			},
+			"./components/auth/passkey/passkey-button": {
+				"require": {
+					"types": "./dist/components/auth/passkey/passkey-button.d.cts",
+					"default": "./dist/components/auth/passkey/passkey-button.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/passkey/passkey-button.d.mts",
+					"default": "./dist/components/auth/passkey/passkey-button.mjs"
+				}
+			},
+			"./components/auth/passkey/passkey-skeleton": {
+				"require": {
+					"types": "./dist/components/auth/passkey/passkey-skeleton.d.cts",
+					"default": "./dist/components/auth/passkey/passkey-skeleton.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/passkey/passkey-skeleton.d.mts",
+					"default": "./dist/components/auth/passkey/passkey-skeleton.mjs"
+				}
+			},
+			"./components/auth/passkey/passkey": {
+				"require": {
+					"types": "./dist/components/auth/passkey/passkey.d.cts",
+					"default": "./dist/components/auth/passkey/passkey.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/passkey/passkey.d.mts",
+					"default": "./dist/components/auth/passkey/passkey.mjs"
+				}
+			},
+			"./components/auth/passkey/passkeys-empty": {
+				"require": {
+					"types": "./dist/components/auth/passkey/passkeys-empty.d.cts",
+					"default": "./dist/components/auth/passkey/passkeys-empty.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/passkey/passkeys-empty.d.mts",
+					"default": "./dist/components/auth/passkey/passkeys-empty.mjs"
+				}
+			},
+			"./components/auth/passkey/passkeys": {
+				"require": {
+					"types": "./dist/components/auth/passkey/passkeys.d.cts",
+					"default": "./dist/components/auth/passkey/passkeys.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/passkey/passkeys.d.mts",
+					"default": "./dist/components/auth/passkey/passkeys.mjs"
+				}
+			},
 			"./components/auth/settings/settings": {
 				"require": {
 					"types": "./dist/components/auth/settings/settings.d.cts",
@@ -1452,6 +1522,16 @@
 					"default": "./dist/lib/auth/magic-link-plugin.mjs"
 				}
 			},
+			"./lib/auth/passkey-plugin": {
+				"require": {
+					"types": "./dist/lib/auth/passkey-plugin.d.cts",
+					"default": "./dist/lib/auth/passkey-plugin.cjs"
+				},
+				"import": {
+					"types": "./dist/lib/auth/passkey-plugin.d.mts",
+					"default": "./dist/lib/auth/passkey-plugin.mjs"
+				}
+			},
 			"./lib/auth/theme-plugin": {
 				"require": {
 					"types": "./dist/lib/auth/theme-plugin.d.cts",
@@ -1591,6 +1671,13 @@
 		"./components/auth/pages/auth-page": "./src/components/auth/pages/auth-page.tsx",
 		"./components/auth/pages/settings-page": "./src/components/auth/pages/settings-page.tsx",
 		"./components/auth/pages/view-paths": "./src/components/auth/pages/view-paths.ts",
+		"./components/auth/passkey/add-passkey-dialog": "./src/components/auth/passkey/add-passkey-dialog.tsx",
+		"./components/auth/passkey/delete-passkey-dialog": "./src/components/auth/passkey/delete-passkey-dialog.tsx",
+		"./components/auth/passkey/passkey-button": "./src/components/auth/passkey/passkey-button.tsx",
+		"./components/auth/passkey/passkey-skeleton": "./src/components/auth/passkey/passkey-skeleton.tsx",
+		"./components/auth/passkey/passkey": "./src/components/auth/passkey/passkey.tsx",
+		"./components/auth/passkey/passkeys-empty": "./src/components/auth/passkey/passkeys-empty.tsx",
+		"./components/auth/passkey/passkeys": "./src/components/auth/passkey/passkeys.tsx",
 		"./components/auth/settings/settings": "./src/components/auth/settings/settings.tsx",
 		"./components/auth/settings/account/account-settings": "./src/components/auth/settings/account/account-settings.tsx",
 		"./components/auth/settings/account/change-avatar": "./src/components/auth/settings/account/change-avatar.tsx",
@@ -1715,6 +1802,7 @@
 		"./lib/auth/clear-user-sessions-plugin": "./src/lib/auth/clear-user-sessions-plugin.ts",
 		"./lib/auth/delete-user-plugin": "./src/lib/auth/delete-user-plugin.ts",
 		"./lib/auth/magic-link-plugin": "./src/lib/auth/magic-link-plugin.ts",
+		"./lib/auth/passkey-plugin": "./src/lib/auth/passkey-plugin.ts",
 		"./lib/auth/theme-plugin": "./src/lib/auth/theme-plugin.ts",
 		"./lib/auth/username-plugin": "./src/lib/auth/username-plugin.ts",
 		"./lib/context/touch": "./src/lib/context/touch.tsx",
@@ -1740,6 +1828,7 @@
 		"@better-auth-ui/core": "^1.6.8",
 		"@better-auth-ui/react": "^1.6.8",
 		"@better-auth/api-key": "^1.6.10",
+		"@better-auth/passkey": "^1.6.10",
 		"@dnd-kit/core": "^6.3.1",
 		"@dnd-kit/sortable": "^10.0.0",
 		"@dnd-kit/utilities": "^3.2.2",

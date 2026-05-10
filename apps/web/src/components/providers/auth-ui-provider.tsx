@@ -2,13 +2,13 @@ import { activeSocialProviders } from '@md-oss/api/auth/providers';
 import {
   AuthProvider,
   captchaPlugin,
-  // deleteUserPlugin,
 } from '@md-oss/design-system/components/auth/auth-provider';
 import type { SettingsLocalization } from '@md-oss/design-system/components/auth/localization';
 import { apiKeyPlugin } from '@md-oss/design-system/lib/auth/api-key-plugin';
 import { clearUserSessionsPlugin } from '@md-oss/design-system/lib/auth/clear-user-sessions-plugin';
 import { deleteUserPlugin } from '@md-oss/design-system/lib/auth/delete-user-plugin';
 import { magicLinkPlugin } from '@md-oss/design-system/lib/auth/magic-link-plugin';
+import { passkeyPlugin } from '@md-oss/design-system/lib/auth/passkey-plugin';
 import { themePlugin } from '@md-oss/design-system/lib/auth/theme-plugin';
 import { usernamePlugin } from '@md-oss/design-system/lib/auth/username-plugin';
 import Link from 'next/link';
@@ -60,6 +60,7 @@ export function AuthUIProvider({ children, queryClient }: AuthUIProviderProps) {
           minUsernameLength: 3,
           maxUsernameLength: 32,
         }),
+        passkeyPlugin(),
         themePlugin({ useTheme }),
         captchaPlugin({ render: TurnstileWidget }),
         apiKeyPlugin(),

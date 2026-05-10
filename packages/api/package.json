@@ -96,6 +96,7 @@
 	},
 	"dependencies": {
 		"@better-auth/api-key": "^1.6.10",
+		"@better-auth/passkey": "^1.6.10",
 		"@md-oss/auth": "workspace:^",
 		"@md-oss/db": "workspace:^",
 		"@t3-oss/env-core": "^0.13.11",

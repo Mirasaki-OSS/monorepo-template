@@ -29,6 +29,13 @@
 			"when": 1778432572035,
 			"tag": "0003_living_imperial_guard",
 			"breakpoints": true
+		},
+		{
+			"idx": 4,
+			"version": "7",
+			"when": 1778445339070,
+			"tag": "0004_third_longshot",
+			"breakpoints": true
 		}
 	]
 }

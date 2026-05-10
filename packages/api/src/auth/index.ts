@@ -1,9 +1,11 @@
 import { apiKey as apiKeyPlugin } from '@better-auth/api-key';
+import { passkey as passkeyPlugin } from '@better-auth/passkey';
 import { createAuth } from '@md-oss/auth/server';
 import { TimeMagic } from '@md-oss/common/constants/time';
 import { slugify } from '@md-oss/common/utils/strings';
 import { createDb } from '@md-oss/db';
 import * as schema from '@md-oss/db/schema/auth';
+import type { BetterAuthOptions } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import {
 	captcha as captchaPlugin,
@@ -36,6 +38,14 @@ const plugins = [
 		maxUsernameLength: 32,
 		usernameNormalization(username) {
 			return username.trim().toLowerCase();
+		},
+	}),
+	passkeyPlugin({
+		origin: appUrl.origin,
+		rpName: parsedEnv.NEXT_PUBLIC_APP_NAME,
+		rpID: apiUrl.hostname,
+		registration: {
+			requireSession: true,
 		},
 	}),
 	magicLinkPlugin({
@@ -92,7 +102,7 @@ const plugins = [
 		: []),
 ];
 
-export const auth = createAuth({
+const config = {
 	appName: parsedEnv.NEXT_PUBLIC_APP_NAME,
 	basePath: '/api/auth',
 	database: drizzleAdapter(createDb(), {
@@ -258,6 +268,20 @@ export const auth = createAuth({
 		},
 	},
 	plugins,
-});
+} as const satisfies BetterAuthOptions;
 
-export type Auth = typeof auth;
+export type Auth = ReturnType<typeof createAuth<typeof config>>;
+
+export const auth: Auth = createAuth(config);
+
+/**
+ * Re-exports symbols that appear in the inferred type of `createAuthClient` so declaration emit
+ * (TS2883 / “cannot be named without a reference …”) can serialize `.d.ts` output for this package.
+ *
+ * **Temporary:** remove when better-auth’s (plugins) published types no longer force consumers to
+ * anchor these names (see issues below).
+ *
+ * @see https://github.com/better-auth/better-auth/issues/4250
+ * @see https://github.com/better-auth/better-auth/issues/8623
+ */
+export type { PublicKeyCredentialCreationOptionsJSON } from '@better-auth/passkey/client';

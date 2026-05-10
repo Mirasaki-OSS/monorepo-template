@@ -33,11 +33,15 @@ export function SecuritySettings({ className }: SecuritySettingsProps) {
 		typeof viewPaths.settings.linkedAccounts === 'string';
 
 	const castPlugins = plugins as (AuthPluginBase & {
+		beforeSecurityDangerZone?: React.ComponentType[];
 		securityDangerZoneCards?: React.ComponentType[];
 		sessionsDangerZoneCards?: React.ComponentType[];
 		linkedAccountsDangerZoneCards?: React.ComponentType[];
 	})[];
 
+	const pluginsWithBeforeSecurityDangerZone = castPlugins.filter(
+		(plugin) => plugin.beforeSecurityDangerZone?.length
+	);
 	const pluginsWithSecurityDangerZoneCards = castPlugins.filter(
 		(plugin) => plugin.securityDangerZoneCards?.length
 	);
@@ -71,6 +75,14 @@ export function SecuritySettings({ className }: SecuritySettingsProps) {
 				<LinkedAccounts />
 			)}
 			{!usesStandaloneSessionsView && <ActiveSessions />}
+
+			{pluginsWithBeforeSecurityDangerZone.map((plugin, index) => (
+				<div key={`danger-zone-plugin-${index}`}>
+					{plugin.beforeSecurityDangerZone?.map((Component, idx) => (
+						<Component key={`danger-zone-${index}-${idx}`} />
+					))}
+				</div>
+			))}
 
 			{dangerZoneComponents.length > 0 && (
 				<DangerZone>
