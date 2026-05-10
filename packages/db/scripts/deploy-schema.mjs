@@ -2,13 +2,13 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import pg from 'pg';
+import { createTargetClient, getDatabaseTarget } from './shared-db.mjs';
 
-const { Client } = pg;
-
-const rawUrl = process.env.DATABASE_URL;
-if (!rawUrl) {
-	console.error('DATABASE_URL is required for schema deployment');
+try {
+	getDatabaseTarget();
+} catch (error) {
+	const message = error instanceof Error ? error.message : String(error);
+	console.error('DATABASE_URL is required for schema deployment:', message);
 	process.exit(1);
 }
 
@@ -40,7 +40,7 @@ if (hasGeneratedMigrations) {
 	runDrizzleKit('migrate');
 }
 
-const client = new Client({ connectionString: rawUrl });
+const client = createTargetClient();
 
 try {
 	await client.connect();

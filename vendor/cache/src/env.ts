@@ -9,7 +9,9 @@ export const env = (): Readonly<{
 			REDIS_URL: z.url().default('redis://localhost:6379'),
 		},
 		client: {},
-		runtimeEnv: process.env,
+		runtimeEnv: {
+			REDIS_URL: process.env.REDIS_URL,
+		},
 		clientPrefix: 'NEXT_PUBLIC_',
 		emptyStringAsUndefined: true,
 	});

@@ -9,8 +9,8 @@ import {
 import { createRelativeLink } from 'fumadocs-ui/mdx';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { InlineTOC } from '@/components/inline-toc';
 import { getMDXComponents } from '@/components/mdx';
+import { InlineTOC } from '@/components/mdx/inline-toc';
 import { Footer } from '@/layouts/docs/page/slots/footer';
 import { clientEnv } from '@/lib/client/env';
 import { gitConfig } from '@/lib/shared';
@@ -54,7 +54,7 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
           <Footer lastModified={page.data.lastModified}>
             <div className="flex flex-col items-center gap-4 mt-2">
               <p className="text-sm text-muted-foreground">
-                {`© ${new Date().getFullYear()} ${clientEnv.NEXT_PUBLIC_SITE_NAME}. All rights reserved.`}
+                {`© ${new Date().getFullYear()} ${clientEnv.NEXT_PUBLIC_APP_NAME}. All rights reserved.`}
               </p>
             </div>
           </Footer>
@@ -97,7 +97,7 @@ export async function generateMetadata(
   return {
     title: page.data.title,
     description: page.data.description,
-    metadataBase: new URL(clientEnv.NEXT_PUBLIC_SITE_URL),
+    metadataBase: new URL(clientEnv.NEXT_PUBLIC_APP_URL),
     openGraph: {
       images: image,
     },

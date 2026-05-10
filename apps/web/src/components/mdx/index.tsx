@@ -2,7 +2,7 @@ import defaultMdxComponents from 'fumadocs-ui/mdx';
 import type { MDXComponents } from 'mdx/types';
 import Image from 'next/image';
 import type { ImgHTMLAttributes } from 'react';
-import { Mermaid } from './mdx/mermaid';
+import { Mermaid } from './mermaid';
 
 const toDimension = (value: string | number | undefined, fallback: number) => {
   if (typeof value === 'number' && Number.isFinite(value) && value > 0) {

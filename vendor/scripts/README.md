@@ -6,6 +6,7 @@ Reusable package scripts for monorepo maintenance tasks.
 
 - ./find-dependency-mismatches
 - ./add-module-directives
+- ./sync-package-exports
 
 ## find-dependency-mismatches
 
@@ -66,5 +67,36 @@ await addModuleDirectivesToFiles({
 	directive: 'use client',
 	files: ['dist/next-client.mjs', 'dist/next-client.cjs'],
 });
+```
+
+## sync-package-exports
+
+Synchronizes `publishConfig.exports` from `exports` in a package.json.
+
+- Source code exports (for example, `./src/foo.tsx`) are converted to dist conditional exports with `require/import` and `types/default` fields.
+- Non-source targets (for example css files or config files) are preserved as-is.
+
+### CLI usage
+
+```bash
+pnpm exec md-oss-sync-package-exports --cwd vendor/design-system
+```
+
+Optional flags:
+
+- `--cwd <path>`: working directory containing package.json.
+- `--package-json <path>`: custom package.json relative to cwd.
+- `--dry-run`: report whether sync is needed without writing changes.
+
+### Programmatic usage
+
+```typescript
+import { syncPackageExports } from '@md-oss/scripts/sync-package-exports';
+
+const result = await syncPackageExports({
+	cwd: 'vendor/design-system',
+});
+
+console.debug(result.changed);
 ```
 

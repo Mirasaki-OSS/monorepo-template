@@ -8,7 +8,7 @@ const server = serve(
 		port: parsedEnv.SERVER_PORT,
 	},
 	(info) => {
-		console.log(
+		console.info(
 			`Server is running on address ${info.address}:${info.port} (family: ${info.family})`
 		);
 	}

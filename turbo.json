@@ -3,8 +3,23 @@
 	"ui": "tui",
 	"envMode": "strict",
 	"globalEnv": ["NODE_ENV"],
-	"globalPassThroughEnv": ["DATABASE_URL", "CORS_ORIGIN", "BETTER_AUTH_SECRET"],
-	"concurrency": "21",
+	"globalPassThroughEnv": [
+		"DATABASE_URL",
+		"CORS_ORIGIN",
+		"BETTER_AUTH_SECRET",
+		"NEXT_PUBLIC_API_URL",
+		"DISCORD_CLIENT_ID",
+		"DISCORD_CLIENT_SECRET",
+		"GOOGLE_CLIENT_ID",
+		"GOOGLE_CLIENT_SECRET",
+		"GITHUB_CLIENT_ID",
+		"GITHUB_CLIENT_SECRET",
+		"NEXT_PUBLIC_APP_NAME",
+		"NEXT_PUBLIC_APP_URL",
+		"CLOUDFLARE_TURNSTILE_SECRET_KEY",
+		"NEXT_PUBLIC_TURNSTILE_SITE_KEY"
+	],
+	"concurrency": "22",
 	"tasks": {
 		"build": {
 			"dependsOn": ["^build"],

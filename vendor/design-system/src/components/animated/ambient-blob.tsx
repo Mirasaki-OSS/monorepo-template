@@ -6,6 +6,7 @@ import {
 	resolveSlot,
 	type WithAsComponent,
 } from '@md-oss/design-system/lib/utils';
+import { m, useReducedMotion } from 'motion/react';
 import React from 'react';
 
 type AmbientBlobTone = 'rose' | 'cyan' | 'violet' | 'amber' | 'emerald';
@@ -77,7 +78,7 @@ const DEFAULT_BLOBS: AmbientBlobDefinition[] = [
 	},
 ];
 
-function createBlobKeyframes(
+function createBlobMotionKeyframes(
 	drift: AmbientBlobDrift,
 	intensity: AmbientBlobIntensity
 ) {
@@ -93,10 +94,13 @@ function createBlobKeyframes(
 			? [0, primaryDistance, -Math.round(primaryDistance * 0.55), 0]
 			: [0, -secondaryDistance, secondaryDistance, 0];
 
-	return [0, 1, 2, 3].map((index) => ({
-		transform: `translate3d(${xOffsets[index]}px, ${yOffsets[index]}px, 0) rotate(${index * 120}deg) scale(${[0.72, 1, 1.08, 0.84][index]})`,
-		opacity: [0.14, 0.28, 0.22, 0.1][index],
-	}));
+	return {
+		x: xOffsets,
+		y: yOffsets,
+		rotate: [0, 120, 240, 360],
+		scale: [0.72, 1, 1.08, 0.84],
+		opacity: [0.14, 0.28, 0.22, 0.1],
+	};
 }
 
 export type AmbientBlobProps = {
@@ -131,30 +135,52 @@ export function AmbientBlob({
 	style,
 	slotProps,
 }: AmbientBlobProps): React.JSX.Element {
-	const blobRef = React.useRef<HTMLDivElement | null>(null);
+	const prefersReducedMotion = useReducedMotion();
+	const keyframes = React.useMemo(
+		() => createBlobMotionKeyframes(drift, intensity),
+		[drift, intensity]
+	);
+	const firstX = keyframes.x[0] ?? 0;
+	const firstY = keyframes.y[0] ?? 0;
+	const firstRotate = keyframes.rotate[0] ?? 0;
+	const firstScale = keyframes.scale[0] ?? 0.72;
+	const firstOpacity = keyframes.opacity[0] ?? 0.14;
 
-	React.useEffect(() => {
-		const element = blobRef.current;
-		if (!element) {
-			return;
-		}
+	const motionInitial = prefersReducedMotion
+		? {
+				x: 0,
+				y: 0,
+				rotate: 0,
+				scale: 1,
+				opacity: 1,
+			}
+		: {
+				x: firstX,
+				y: firstY,
+				rotate: firstRotate,
+				scale: firstScale,
+				opacity: firstOpacity,
+			};
 
-		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-			return;
-		}
+	const motionAnimate = prefersReducedMotion
+		? undefined
+		: {
+				x: keyframes.x,
+				y: keyframes.y,
+				rotate: keyframes.rotate,
+				scale: keyframes.scale,
+				opacity: keyframes.opacity,
+			};
 
-		const animation = element.animate(createBlobKeyframes(drift, intensity), {
-			duration: durationMs,
-			delay: delayMs,
-			iterations: Number.POSITIVE_INFINITY,
-			easing: 'ease-in-out',
-			fill: 'both',
-		});
-
-		return () => {
-			animation.cancel();
-		};
-	}, [delayMs, drift, durationMs, intensity]);
+	const motionTransition = prefersReducedMotion
+		? undefined
+		: {
+				duration: durationMs / 1000,
+				delay: delayMs / 1000,
+				repeat: Number.POSITIVE_INFINITY,
+				ease: 'easeInOut' as const,
+				times: [0, 1 / 3, 2 / 3, 1],
+			};
 
 	const containerProps = mergePropsWithClassName<
 		React.HTMLAttributes<HTMLDivElement>
@@ -197,9 +223,16 @@ export function AmbientBlob({
 	);
 
 	return (
-		<div ref={blobRef} {...containerProps}>
-			<div {...glowProps} />
-			<div {...ringProps} />
+		<div {...containerProps}>
+			<m.div
+				className="absolute inset-0 rounded-full will-change-transform"
+				initial={motionInitial}
+				animate={motionAnimate}
+				transition={motionTransition}
+			>
+				<div {...glowProps} />
+				<div {...ringProps} />
+			</m.div>
 		</div>
 	);
 }

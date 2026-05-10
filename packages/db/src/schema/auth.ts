@@ -18,6 +18,7 @@ export const user = pgTable('user', {
 		.defaultNow()
 		.$onUpdate(() => /* @__PURE__ */ new Date())
 		.notNull(),
+	bio: text('bio'),
 	...metadataColumns<
 		UserClientMetadata,
 		UserClientReadOnlyMetadata,

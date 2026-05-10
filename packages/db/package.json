@@ -79,6 +79,8 @@
 		"typecheck": "tsc --noEmit",
 		"db:deploy": "node ./scripts/deploy-schema.mjs",
 		"db:ensure": "node ./scripts/ensure-database.mjs",
+		"db:reset": "node ./scripts/reset-database.mjs",
+		"postdb:reset": "node ./scripts/deploy-schema.mjs",
 		"db:push": "drizzle-kit push",
 		"db:generate": "drizzle-kit generate",
 		"db:studio": "drizzle-kit studio",

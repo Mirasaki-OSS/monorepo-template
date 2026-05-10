@@ -4,7 +4,6 @@ import type {
   AuthenticatedSessionResponse,
   SessionResponse,
 } from '@md-oss/api/types';
-import { authClient } from '@md-oss/auth/client';
 import {
   createHTTPError,
   isHTTPErrorResponse,
@@ -12,6 +11,7 @@ import {
 } from '@md-oss/common/http';
 import { withActionResult } from '@md-oss/design-system/lib/action-result';
 import { headers } from 'next/headers';
+import { authClient } from '@/lib/client/auth';
 
 type GetSessionOptions = Exclude<
   NonNullable<Parameters<typeof authClient.getSession>[0]>['query'],

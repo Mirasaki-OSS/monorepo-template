@@ -26,16 +26,6 @@
 					"default": "./dist/components/dev-utilities.mjs"
 				}
 			},
-			"./components/adaptive/tooltip": {
-				"require": {
-					"types": "./dist/components/adaptive/tooltip.d.cts",
-					"default": "./dist/components/adaptive/tooltip.cjs"
-				},
-				"import": {
-					"types": "./dist/components/adaptive/tooltip.d.mts",
-					"default": "./dist/components/adaptive/tooltip.mjs"
-				}
-			},
 			"./components/adaptive/dialog": {
 				"require": {
 					"types": "./dist/components/adaptive/dialog.d.cts",
@@ -44,6 +34,16 @@
 				"import": {
 					"types": "./dist/components/adaptive/dialog.d.mts",
 					"default": "./dist/components/adaptive/dialog.mjs"
+				}
+			},
+			"./components/adaptive/tooltip": {
+				"require": {
+					"types": "./dist/components/adaptive/tooltip.d.cts",
+					"default": "./dist/components/adaptive/tooltip.cjs"
+				},
+				"import": {
+					"types": "./dist/components/adaptive/tooltip.d.mts",
+					"default": "./dist/components/adaptive/tooltip.mjs"
 				}
 			},
 			"./components/adaptive/tabs": {
@@ -84,6 +84,306 @@
 				"import": {
 					"types": "./dist/components/animated/staggered-list.d.mts",
 					"default": "./dist/components/animated/staggered-list.mjs"
+				}
+			},
+			"./components/auth/delete-user/clear-user-sessions": {
+				"require": {
+					"types": "./dist/components/auth/delete-user/clear-user-sessions.d.cts",
+					"default": "./dist/components/auth/delete-user/clear-user-sessions.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/delete-user/clear-user-sessions.d.mts",
+					"default": "./dist/components/auth/delete-user/clear-user-sessions.mjs"
+				}
+			},
+			"./components/auth/delete-user/danger-zone": {
+				"require": {
+					"types": "./dist/components/auth/delete-user/danger-zone.d.cts",
+					"default": "./dist/components/auth/delete-user/danger-zone.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/delete-user/danger-zone.d.mts",
+					"default": "./dist/components/auth/delete-user/danger-zone.mjs"
+				}
+			},
+			"./components/auth/delete-user/delete-user": {
+				"require": {
+					"types": "./dist/components/auth/delete-user/delete-user.d.cts",
+					"default": "./dist/components/auth/delete-user/delete-user.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/delete-user/delete-user.d.mts",
+					"default": "./dist/components/auth/delete-user/delete-user.mjs"
+				}
+			},
+			"./components/auth/pages/auth-page": {
+				"require": {
+					"types": "./dist/components/auth/pages/auth-page.d.cts",
+					"default": "./dist/components/auth/pages/auth-page.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/pages/auth-page.d.mts",
+					"default": "./dist/components/auth/pages/auth-page.mjs"
+				}
+			},
+			"./components/auth/pages/settings-page": {
+				"require": {
+					"types": "./dist/components/auth/pages/settings-page.d.cts",
+					"default": "./dist/components/auth/pages/settings-page.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/pages/settings-page.d.mts",
+					"default": "./dist/components/auth/pages/settings-page.mjs"
+				}
+			},
+			"./components/auth/settings/settings": {
+				"require": {
+					"types": "./dist/components/auth/settings/settings.d.cts",
+					"default": "./dist/components/auth/settings/settings.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/settings/settings.d.mts",
+					"default": "./dist/components/auth/settings/settings.mjs"
+				}
+			},
+			"./components/auth/settings/account/account-settings": {
+				"require": {
+					"types": "./dist/components/auth/settings/account/account-settings.d.cts",
+					"default": "./dist/components/auth/settings/account/account-settings.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/settings/account/account-settings.d.mts",
+					"default": "./dist/components/auth/settings/account/account-settings.mjs"
+				}
+			},
+			"./components/auth/settings/account/change-avatar": {
+				"require": {
+					"types": "./dist/components/auth/settings/account/change-avatar.d.cts",
+					"default": "./dist/components/auth/settings/account/change-avatar.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/settings/account/change-avatar.d.mts",
+					"default": "./dist/components/auth/settings/account/change-avatar.mjs"
+				}
+			},
+			"./components/auth/settings/account/change-email": {
+				"require": {
+					"types": "./dist/components/auth/settings/account/change-email.d.cts",
+					"default": "./dist/components/auth/settings/account/change-email.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/settings/account/change-email.d.mts",
+					"default": "./dist/components/auth/settings/account/change-email.mjs"
+				}
+			},
+			"./components/auth/settings/account/user-profile": {
+				"require": {
+					"types": "./dist/components/auth/settings/account/user-profile.d.cts",
+					"default": "./dist/components/auth/settings/account/user-profile.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/settings/account/user-profile.d.mts",
+					"default": "./dist/components/auth/settings/account/user-profile.mjs"
+				}
+			},
+			"./components/auth/settings/security/active-session": {
+				"require": {
+					"types": "./dist/components/auth/settings/security/active-session.d.cts",
+					"default": "./dist/components/auth/settings/security/active-session.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/settings/security/active-session.d.mts",
+					"default": "./dist/components/auth/settings/security/active-session.mjs"
+				}
+			},
+			"./components/auth/settings/security/active-sessions": {
+				"require": {
+					"types": "./dist/components/auth/settings/security/active-sessions.d.cts",
+					"default": "./dist/components/auth/settings/security/active-sessions.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/settings/security/active-sessions.d.mts",
+					"default": "./dist/components/auth/settings/security/active-sessions.mjs"
+				}
+			},
+			"./components/auth/settings/security/change-password": {
+				"require": {
+					"types": "./dist/components/auth/settings/security/change-password.d.cts",
+					"default": "./dist/components/auth/settings/security/change-password.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/settings/security/change-password.d.mts",
+					"default": "./dist/components/auth/settings/security/change-password.mjs"
+				}
+			},
+			"./components/auth/settings/security/linked-account": {
+				"require": {
+					"types": "./dist/components/auth/settings/security/linked-account.d.cts",
+					"default": "./dist/components/auth/settings/security/linked-account.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/settings/security/linked-account.d.mts",
+					"default": "./dist/components/auth/settings/security/linked-account.mjs"
+				}
+			},
+			"./components/auth/settings/security/linked-accounts": {
+				"require": {
+					"types": "./dist/components/auth/settings/security/linked-accounts.d.cts",
+					"default": "./dist/components/auth/settings/security/linked-accounts.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/settings/security/linked-accounts.d.mts",
+					"default": "./dist/components/auth/settings/security/linked-accounts.mjs"
+				}
+			},
+			"./components/auth/settings/security/security-settings": {
+				"require": {
+					"types": "./dist/components/auth/settings/security/security-settings.d.cts",
+					"default": "./dist/components/auth/settings/security/security-settings.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/settings/security/security-settings.d.mts",
+					"default": "./dist/components/auth/settings/security/security-settings.mjs"
+				}
+			},
+			"./components/auth/user/user-avatar": {
+				"require": {
+					"types": "./dist/components/auth/user/user-avatar.d.cts",
+					"default": "./dist/components/auth/user/user-avatar.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/user/user-avatar.d.mts",
+					"default": "./dist/components/auth/user/user-avatar.mjs"
+				}
+			},
+			"./components/auth/user/user-button": {
+				"require": {
+					"types": "./dist/components/auth/user/user-button.d.cts",
+					"default": "./dist/components/auth/user/user-button.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/user/user-button.d.mts",
+					"default": "./dist/components/auth/user/user-button.mjs"
+				}
+			},
+			"./components/auth/user/user-view": {
+				"require": {
+					"types": "./dist/components/auth/user/user-view.d.cts",
+					"default": "./dist/components/auth/user/user-view.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/user/user-view.d.mts",
+					"default": "./dist/components/auth/user/user-view.mjs"
+				}
+			},
+			"./components/auth/additional-fields": {
+				"require": {
+					"types": "./dist/components/auth/additional-fields.d.cts",
+					"default": "./dist/components/auth/additional-fields.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/additional-fields.d.mts",
+					"default": "./dist/components/auth/additional-fields.mjs"
+				}
+			},
+			"./components/auth/auth-provider": {
+				"require": {
+					"types": "./dist/components/auth/auth-provider.d.cts",
+					"default": "./dist/components/auth/auth-provider.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/auth-provider.d.mts",
+					"default": "./dist/components/auth/auth-provider.mjs"
+				}
+			},
+			"./components/auth/auth": {
+				"require": {
+					"types": "./dist/components/auth/auth.d.cts",
+					"default": "./dist/components/auth/auth.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/auth.d.mts",
+					"default": "./dist/components/auth/auth.mjs"
+				}
+			},
+			"./components/auth/error-toaster": {
+				"require": {
+					"types": "./dist/components/auth/error-toaster.d.cts",
+					"default": "./dist/components/auth/error-toaster.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/error-toaster.d.mts",
+					"default": "./dist/components/auth/error-toaster.mjs"
+				}
+			},
+			"./components/auth/forgot-password": {
+				"require": {
+					"types": "./dist/components/auth/forgot-password.d.cts",
+					"default": "./dist/components/auth/forgot-password.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/forgot-password.d.mts",
+					"default": "./dist/components/auth/forgot-password.mjs"
+				}
+			},
+			"./components/auth/provider-button": {
+				"require": {
+					"types": "./dist/components/auth/provider-button.d.cts",
+					"default": "./dist/components/auth/provider-button.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/provider-button.d.mts",
+					"default": "./dist/components/auth/provider-button.mjs"
+				}
+			},
+			"./components/auth/provider-buttons": {
+				"require": {
+					"types": "./dist/components/auth/provider-buttons.d.cts",
+					"default": "./dist/components/auth/provider-buttons.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/provider-buttons.d.mts",
+					"default": "./dist/components/auth/provider-buttons.mjs"
+				}
+			},
+			"./components/auth/reset-password": {
+				"require": {
+					"types": "./dist/components/auth/reset-password.d.cts",
+					"default": "./dist/components/auth/reset-password.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/reset-password.d.mts",
+					"default": "./dist/components/auth/reset-password.mjs"
+				}
+			},
+			"./components/auth/sign-in": {
+				"require": {
+					"types": "./dist/components/auth/sign-in.d.cts",
+					"default": "./dist/components/auth/sign-in.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/sign-in.d.mts",
+					"default": "./dist/components/auth/sign-in.mjs"
+				}
+			},
+			"./components/auth/sign-out": {
+				"require": {
+					"types": "./dist/components/auth/sign-out.d.cts",
+					"default": "./dist/components/auth/sign-out.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/sign-out.d.mts",
+					"default": "./dist/components/auth/sign-out.mjs"
+				}
+			},
+			"./components/auth/sign-up": {
+				"require": {
+					"types": "./dist/components/auth/sign-up.d.cts",
+					"default": "./dist/components/auth/sign-up.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/sign-up.d.mts",
+					"default": "./dist/components/auth/sign-up.mjs"
 				}
 			},
 			"./components/forms/schema-object-form": {
@@ -906,6 +1206,16 @@
 					"default": "./dist/hooks/use-persistent-state.mjs"
 				}
 			},
+			"./hooks/use-touch": {
+				"require": {
+					"types": "./dist/hooks/use-touch.d.cts",
+					"default": "./dist/hooks/use-touch.cjs"
+				},
+				"import": {
+					"types": "./dist/hooks/use-touch.d.mts",
+					"default": "./dist/hooks/use-touch.mjs"
+				}
+			},
 			"./hooks/use-schema-object-form-controller": {
 				"require": {
 					"types": "./dist/hooks/use-schema-object-form-controller.d.cts",
@@ -916,14 +1226,44 @@
 					"default": "./dist/hooks/use-schema-object-form-controller.mjs"
 				}
 			},
-			"./hooks/use-touch": {
+			"./lib/auth/auth-plugin": {
 				"require": {
-					"types": "./dist/hooks/use-touch.d.cts",
-					"default": "./dist/hooks/use-touch.cjs"
+					"types": "./dist/lib/auth/auth-plugin.d.cts",
+					"default": "./dist/lib/auth/auth-plugin.cjs"
 				},
 				"import": {
-					"types": "./dist/hooks/use-touch.d.mts",
-					"default": "./dist/hooks/use-touch.mjs"
+					"types": "./dist/lib/auth/auth-plugin.d.mts",
+					"default": "./dist/lib/auth/auth-plugin.mjs"
+				}
+			},
+			"./lib/auth/mutations/clear-sessions-mutation": {
+				"require": {
+					"types": "./dist/lib/auth/mutations/clear-sessions-mutation.d.cts",
+					"default": "./dist/lib/auth/mutations/clear-sessions-mutation.cjs"
+				},
+				"import": {
+					"types": "./dist/lib/auth/mutations/clear-sessions-mutation.d.mts",
+					"default": "./dist/lib/auth/mutations/clear-sessions-mutation.mjs"
+				}
+			},
+			"./lib/auth/clear-user-sessions-plugin": {
+				"require": {
+					"types": "./dist/lib/auth/clear-user-sessions-plugin.d.cts",
+					"default": "./dist/lib/auth/clear-user-sessions-plugin.cjs"
+				},
+				"import": {
+					"types": "./dist/lib/auth/clear-user-sessions-plugin.d.mts",
+					"default": "./dist/lib/auth/clear-user-sessions-plugin.mjs"
+				}
+			},
+			"./lib/auth/delete-user-plugin": {
+				"require": {
+					"types": "./dist/lib/auth/delete-user-plugin.d.cts",
+					"default": "./dist/lib/auth/delete-user-plugin.cjs"
+				},
+				"import": {
+					"types": "./dist/lib/auth/delete-user-plugin.d.mts",
+					"default": "./dist/lib/auth/delete-user-plugin.mjs"
 				}
 			},
 			"./lib/context/touch": {
@@ -944,6 +1284,16 @@
 				"import": {
 					"types": "./dist/lib/action-result.d.mts",
 					"default": "./dist/lib/action-result.mjs"
+				}
+			},
+			"./lib/dnd": {
+				"require": {
+					"types": "./dist/lib/dnd.d.cts",
+					"default": "./dist/lib/dnd.cjs"
+				},
+				"import": {
+					"types": "./dist/lib/dnd.d.mts",
+					"default": "./dist/lib/dnd.mjs"
 				}
 			},
 			"./lib/focus-delegation": {
@@ -1022,6 +1372,36 @@
 		"./components/animated/ambient-blob": "./src/components/animated/ambient-blob.tsx",
 		"./components/animated/content-marquee": "./src/components/animated/content-marquee.tsx",
 		"./components/animated/staggered-list": "./src/components/animated/staggered-list.tsx",
+		"./components/auth/delete-user/clear-user-sessions": "./src/components/auth/delete-user/clear-user-sessions.tsx",
+		"./components/auth/delete-user/danger-zone": "./src/components/auth/delete-user/danger-zone.tsx",
+		"./components/auth/delete-user/delete-user": "./src/components/auth/delete-user/delete-user.tsx",
+		"./components/auth/pages/auth-page": "./src/components/auth/pages/auth-page.tsx",
+		"./components/auth/pages/settings-page": "./src/components/auth/pages/settings-page.tsx",
+		"./components/auth/settings/settings": "./src/components/auth/settings/settings.tsx",
+		"./components/auth/settings/account/account-settings": "./src/components/auth/settings/account/account-settings.tsx",
+		"./components/auth/settings/account/change-avatar": "./src/components/auth/settings/account/change-avatar.tsx",
+		"./components/auth/settings/account/change-email": "./src/components/auth/settings/account/change-email.tsx",
+		"./components/auth/settings/account/user-profile": "./src/components/auth/settings/account/user-profile.tsx",
+		"./components/auth/settings/security/active-session": "./src/components/auth/settings/security/active-session.tsx",
+		"./components/auth/settings/security/active-sessions": "./src/components/auth/settings/security/active-sessions.tsx",
+		"./components/auth/settings/security/change-password": "./src/components/auth/settings/security/change-password.tsx",
+		"./components/auth/settings/security/linked-account": "./src/components/auth/settings/security/linked-account.tsx",
+		"./components/auth/settings/security/linked-accounts": "./src/components/auth/settings/security/linked-accounts.tsx",
+		"./components/auth/settings/security/security-settings": "./src/components/auth/settings/security/security-settings.tsx",
+		"./components/auth/user/user-avatar": "./src/components/auth/user/user-avatar.tsx",
+		"./components/auth/user/user-button": "./src/components/auth/user/user-button.tsx",
+		"./components/auth/user/user-view": "./src/components/auth/user/user-view.tsx",
+		"./components/auth/additional-fields": "./src/components/auth/additional-fields.tsx",
+		"./components/auth/auth-provider": "./src/components/auth/auth-provider.tsx",
+		"./components/auth/auth": "./src/components/auth/auth.tsx",
+		"./components/auth/error-toaster": "./src/components/auth/error-toaster.tsx",
+		"./components/auth/forgot-password": "./src/components/auth/forgot-password.tsx",
+		"./components/auth/provider-button": "./src/components/auth/provider-button.tsx",
+		"./components/auth/provider-buttons": "./src/components/auth/provider-buttons.tsx",
+		"./components/auth/reset-password": "./src/components/auth/reset-password.tsx",
+		"./components/auth/sign-in": "./src/components/auth/sign-in.tsx",
+		"./components/auth/sign-out": "./src/components/auth/sign-out.tsx",
+		"./components/auth/sign-up": "./src/components/auth/sign-up.tsx",
 		"./components/forms/schema-object-form": "./src/components/forms/schema-object-form.tsx",
 		"./components/sections/access-denied": "./src/components/sections/access-denied.tsx",
 		"./components/sections/page-container": "./src/components/sections/page-container.tsx",
@@ -1106,8 +1486,13 @@
 		"./hooks/use-persistent-state": "./src/hooks/use-persistent-state.ts",
 		"./hooks/use-touch": "./src/hooks/use-touch.ts",
 		"./hooks/use-schema-object-form-controller": "./src/hooks/use-schema-object-form-controller.tsx",
+		"./lib/auth/auth-plugin": "./src/lib/auth/auth-plugin.ts",
+		"./lib/auth/mutations/clear-sessions-mutation": "./src/lib/auth/mutations/clear-sessions-mutation.ts",
+		"./lib/auth/clear-user-sessions-plugin": "./src/lib/auth/clear-user-sessions-plugin.ts",
+		"./lib/auth/delete-user-plugin": "./src/lib/auth/delete-user-plugin.ts",
 		"./lib/context/touch": "./src/lib/context/touch.tsx",
 		"./lib/action-result": "./src/lib/action-result.ts",
+		"./lib/dnd": "./src/lib/dnd.ts",
 		"./lib/focus-delegation": "./src/lib/focus-delegation.ts",
 		"./lib/typing": "./src/lib/typing.ts",
 		"./lib/utils": "./src/lib/utils.ts",
@@ -1118,16 +1503,23 @@
 	},
 	"scripts": {
 		"add:components": "shadcn add",
-		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false && pnpm exec md-oss-add-module-directives --from-package-exports --extensions=mjs,cjs",
+		"build": "pnpm exec md-oss-sync-package-exports && pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false && pnpm exec md-oss-add-module-directives --from-package-exports --extensions=mjs,cjs",
+		"dev": "pnpm exec md-oss-sync-package-exports",
 		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
 		"@base-ui/react": "^1.4.1",
+		"@better-auth-ui/core": "^1.6.8",
+		"@better-auth-ui/react": "^1.6.8",
 		"@dnd-kit/core": "^6.3.1",
 		"@dnd-kit/sortable": "^10.0.0",
 		"@dnd-kit/utilities": "^3.2.2",
 		"@md-oss/common": "workspace:^",
+		"@tanstack/react-pacer": "^0.22.0",
+		"@tanstack/react-query": "^5.100.9",
+		"better-auth": "^1.6.10",
+		"bowser": "^2.14.1",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
 		"cmdk": "^1.1.1",
@@ -1135,9 +1527,10 @@
 		"embla-carousel-react": "^8.6.0",
 		"input-otp": "^1.4.2",
 		"lucide-react": "catalog:",
+		"motion": "^12.38.0",
 		"next-themes": "catalog:",
 		"radix-ui": "^1.4.3",
-		"react-day-picker": "^9.14.0",
+		"react-day-picker": "^10.0.0",
 		"react-hook-form": "^7.75.0",
 		"react-resizable-panels": "^4.11.0",
 		"recharts": "3.8.1",
@@ -1152,7 +1545,7 @@
 	"devDependencies": {
 		"@md-oss/config": "workspace:^",
 		"@md-oss/scripts": "workspace:^",
-		"@types/node": "^25.6.0",
+		"@types/node": "^25.6.2",
 		"pkgroll": "^2.27.0",
 		"typescript": "^6.0.3"
 	},

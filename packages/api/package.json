@@ -23,6 +23,26 @@
 				"default": "./dist/index.mjs"
 			}
 		},
+		"./auth": {
+			"require": {
+				"types": "./dist/auth/index.d.cts",
+				"default": "./dist/auth/index.cjs"
+			},
+			"import": {
+				"types": "./dist/auth/index.d.mts",
+				"default": "./dist/auth/index.mjs"
+			}
+		},
+		"./auth/providers": {
+			"require": {
+				"types": "./dist/auth/providers.d.cts",
+				"default": "./dist/auth/providers.cjs"
+			},
+			"import": {
+				"types": "./dist/auth/providers.d.mts",
+				"default": "./dist/auth/providers.mjs"
+			}
+		},
 		"./context": {
 			"require": {
 				"types": "./dist/context.d.cts",
@@ -69,15 +89,21 @@
 		"typecheck": "tsc --noEmit"
 	},
 	"devDependencies": {
+		"@md-oss/common": "workspace:^",
 		"@md-oss/config": "workspace:^",
 		"pkgroll": "^2.27.0",
 		"typescript": "^6.0.3"
 	},
 	"dependencies": {
+		"@better-auth/api-key": "^1.6.10",
 		"@md-oss/auth": "workspace:^",
+		"@md-oss/db": "workspace:^",
 		"@t3-oss/env-core": "^0.13.11",
 		"@trpc/server": "^11.17.0",
+		"better-auth": "^1.6.10",
 		"hono": "^4.12.18",
+		"superjson": "^2.2.6",
+		"uuid": "^14.0.0",
 		"zod": "^4.4.3"
 	}
 }

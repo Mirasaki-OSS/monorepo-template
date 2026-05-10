@@ -18,7 +18,7 @@ This package centralizes the shared API layer used by the server and any consume
 
 The package currently exposes:
 
-- `router`, `publicProcedure`, and `protectedProcedure` from the root module
+- `createTRPCRouter`, `publicProcedure`, and `protectedProcedure` from the root module
 - `createContext` and `Context` from `@md-oss/api/context`
 - `appRouter` and `AppRouter` from `@md-oss/api/routers`
 - validated environment helpers from `@md-oss/api/env`
@@ -27,9 +27,9 @@ The package currently exposes:
 ## Usage
 
 ```typescript
-import { router, publicProcedure, protectedProcedure } from '@md-oss/api';
+import { createTRPCRouter, publicProcedure, protectedProcedure } from '@md-oss/api';
 
-export const exampleRouter = router({
+export const exampleRouter = createTRPCRouter({
 	ping: publicProcedure.query(() => 'pong'),
 	me: protectedProcedure.query(({ ctx }) => ctx.session.user),
 });

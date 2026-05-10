@@ -26,8 +26,8 @@ import { DateRenderer } from '@md-oss/design-system/components/state/date-render
 import { FullPageLoader } from '@md-oss/design-system/components/state/full-page-loader';
 import { HTTPErrorAlert } from '@md-oss/design-system/components/state/http-error-alert';
 import {
+  Loader,
   LoaderWithContainer,
-  Loader as MDLoader,
 } from '@md-oss/design-system/components/state/loader';
 import {
   LoadingOverlay,
@@ -53,7 +53,6 @@ import jsx from 'react-syntax-highlighter/dist/esm/languages/prism/jsx';
 import rust from 'react-syntax-highlighter/dist/esm/languages/prism/rust';
 import tsx from 'react-syntax-highlighter/dist/esm/languages/prism/tsx';
 import { toast } from 'sonner';
-import Loader from '@/components/loader';
 import { GithubIcon } from '@/lib/client/icons';
 import SchemaObjectFormTest from './schema-object-form';
 
@@ -180,7 +179,6 @@ export default function TestPage() {
       />
       <GithubIcon size={32} className="text-gray-500" />
       <Loader />
-      <MDLoader />
       <LoaderWithContainer
         slotProps={{
           loader: {

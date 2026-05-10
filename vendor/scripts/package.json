@@ -28,7 +28,8 @@
 	],
 	"bin": {
 		"md-oss-find-dependency-mismatches": "./bin/md-oss-find-dependency-mismatches.mjs",
-		"md-oss-add-module-directives": "./bin/md-oss-add-module-directives.mjs"
+		"md-oss-add-module-directives": "./bin/md-oss-add-module-directives.mjs",
+		"md-oss-sync-package-exports": "./bin/md-oss-sync-package-exports.mjs"
 	},
 	"exports": {
 		"./find-dependency-mismatches": {
@@ -49,6 +50,16 @@
 			"import": {
 				"types": "./dist/add-module-directives.d.mts",
 				"default": "./dist/add-module-directives.mjs"
+			}
+		},
+		"./sync-package-exports": {
+			"require": {
+				"types": "./dist/sync-package-exports.d.cts",
+				"default": "./dist/sync-package-exports.cjs"
+			},
+			"import": {
+				"types": "./dist/sync-package-exports.d.mts",
+				"default": "./dist/sync-package-exports.mjs"
 			}
 		}
 	},

@@ -239,12 +239,12 @@ markFailed: async (ctx, error) => {
 
 ```typescript
 // apps/api/src/v1/routes/migrations.ts
-import { router, protectedProcedure } from '@/lib/trpc';
+import { createTRPCRouter, protectedProcedure } from '@/lib/trpc';
 import { z } from 'zod';
 import { runner } from '@/migrations';
 import { prisma } from '@mirasaki/database/client';
 
-export const migrationsRouter = router({
+export const migrationsRouter = createTRPCRouter({
   list: protectedProcedure.query(async ({ ctx }) => {
     const status = await runner.getStatus({ 
       prisma,
