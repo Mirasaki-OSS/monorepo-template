@@ -10,28 +10,14 @@ export type DangerZoneProps = {
 };
 
 /**
- * Renders the danger zone heading and it's components, like DeleteUser and ClearAllUserSessions.
- * Rendered if any plugins with `dangerZone` cards are registered.
+ * Renders the danger zone heading layout
  */
 export function DangerZone({
 	className,
 	children,
 	...props
 }: DangerZoneProps & Omit<ComponentProps<'div'>, 'children' | 'className'>) {
-	const { localization, plugins } = useAuth();
-
-	const usesDeleteUserPlugin = Boolean(
-		plugins.find((plugin) => plugin.id === 'deleteUser')
-	);
-	const usesClearUserSessionsPlugin = Boolean(
-		plugins.find((plugin) => plugin.id === 'clearUserSessions')
-	);
-
-	if (!usesDeleteUserPlugin && !usesClearUserSessionsPlugin) {
-		console.warn(
-			'The DangerZone component is intended for use within the SecuritySettings component and relies on the presence of auth plugins that register danger zone cards (such as deleteUserPlugin). Ensure that you have registered the appropriate plugins and are using DangerZone within the correct context.'
-		);
-	}
+	const { localization } = useAuth();
 
 	return (
 		<div className={cn('flex w-full flex-col', className)} {...props}>

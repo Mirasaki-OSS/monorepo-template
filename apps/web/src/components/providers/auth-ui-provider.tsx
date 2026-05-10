@@ -4,12 +4,19 @@ import {
   captchaPlugin,
   // deleteUserPlugin,
 } from '@md-oss/design-system/components/auth/auth-provider';
+import type { SettingsLocalization } from '@md-oss/design-system/components/auth/localization';
+import { apiKeyPlugin } from '@md-oss/design-system/lib/auth/api-key-plugin';
 import { clearUserSessionsPlugin } from '@md-oss/design-system/lib/auth/clear-user-sessions-plugin';
 import { deleteUserPlugin } from '@md-oss/design-system/lib/auth/delete-user-plugin';
+import { magicLinkPlugin } from '@md-oss/design-system/lib/auth/magic-link-plugin';
+import { themePlugin } from '@md-oss/design-system/lib/auth/theme-plugin';
+import { usernamePlugin } from '@md-oss/design-system/lib/auth/username-plugin';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useTheme } from 'next-themes';
 import { authClient } from '@/lib/client/auth';
 import { clientEnv } from '@/lib/client/env';
+import { customExtendedViewPaths } from '@/lib/view-paths';
 import { TurnstileWidget } from '../turnstile-widget';
 
 export type AuthProviderProps = React.ComponentProps<typeof AuthProvider>;
@@ -31,10 +38,13 @@ export function AuthUIProvider({ children, queryClient }: AuthUIProviderProps) {
         settings: '/settings',
         organization: '/organization',
       }}
-      viewPaths={{
-        auth: {},
-        settings: {},
+      localization={{
+        settings: {
+          sessions: 'Sessions',
+          linkedAccounts: 'Connections',
+        } as Partial<SettingsLocalization>,
       }}
+      viewPaths={customExtendedViewPaths}
       queryClient={queryClient}
       redirectTo="/" // Default redirect to
       socialProviders={activeSocialProviders}
@@ -44,7 +54,16 @@ export function AuthUIProvider({ children, queryClient }: AuthUIProviderProps) {
       Link={Link}
       // Start opt-in functionality/components
       plugins={[
+        usernamePlugin({
+          displayUsername: true,
+          isUsernameAvailable: true,
+          minUsernameLength: 3,
+          maxUsernameLength: 32,
+        }),
+        themePlugin({ useTheme }),
         captchaPlugin({ render: TurnstileWidget }),
+        apiKeyPlugin(),
+        magicLinkPlugin(),
         // Note: The order matters for the DangerZone component:
         clearUserSessionsPlugin({ clearCurrentSession: false }),
         deleteUserPlugin({

@@ -86,6 +86,76 @@
 					"default": "./dist/components/animated/staggered-list.mjs"
 				}
 			},
+			"./components/auth/api-key/api-key-skeleton": {
+				"require": {
+					"types": "./dist/components/auth/api-key/api-key-skeleton.d.cts",
+					"default": "./dist/components/auth/api-key/api-key-skeleton.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/api-key/api-key-skeleton.d.mts",
+					"default": "./dist/components/auth/api-key/api-key-skeleton.mjs"
+				}
+			},
+			"./components/auth/api-key/api-key": {
+				"require": {
+					"types": "./dist/components/auth/api-key/api-key.d.cts",
+					"default": "./dist/components/auth/api-key/api-key.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/api-key/api-key.d.mts",
+					"default": "./dist/components/auth/api-key/api-key.mjs"
+				}
+			},
+			"./components/auth/api-key/api-keys-empty": {
+				"require": {
+					"types": "./dist/components/auth/api-key/api-keys-empty.d.cts",
+					"default": "./dist/components/auth/api-key/api-keys-empty.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/api-key/api-keys-empty.d.mts",
+					"default": "./dist/components/auth/api-key/api-keys-empty.mjs"
+				}
+			},
+			"./components/auth/api-key/api-keys": {
+				"require": {
+					"types": "./dist/components/auth/api-key/api-keys.d.cts",
+					"default": "./dist/components/auth/api-key/api-keys.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/api-key/api-keys.d.mts",
+					"default": "./dist/components/auth/api-key/api-keys.mjs"
+				}
+			},
+			"./components/auth/api-key/create-api-key-dialog": {
+				"require": {
+					"types": "./dist/components/auth/api-key/create-api-key-dialog.d.cts",
+					"default": "./dist/components/auth/api-key/create-api-key-dialog.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/api-key/create-api-key-dialog.d.mts",
+					"default": "./dist/components/auth/api-key/create-api-key-dialog.mjs"
+				}
+			},
+			"./components/auth/api-key/delete-api-key-dialog": {
+				"require": {
+					"types": "./dist/components/auth/api-key/delete-api-key-dialog.d.cts",
+					"default": "./dist/components/auth/api-key/delete-api-key-dialog.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/api-key/delete-api-key-dialog.d.mts",
+					"default": "./dist/components/auth/api-key/delete-api-key-dialog.mjs"
+				}
+			},
+			"./components/auth/api-key/new-api-key-dialog": {
+				"require": {
+					"types": "./dist/components/auth/api-key/new-api-key-dialog.d.cts",
+					"default": "./dist/components/auth/api-key/new-api-key-dialog.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/api-key/new-api-key-dialog.d.mts",
+					"default": "./dist/components/auth/api-key/new-api-key-dialog.mjs"
+				}
+			},
 			"./components/auth/delete-user/clear-user-sessions": {
 				"require": {
 					"types": "./dist/components/auth/delete-user/clear-user-sessions.d.cts",
@@ -136,6 +206,16 @@
 					"default": "./dist/components/auth/pages/settings-page.mjs"
 				}
 			},
+			"./components/auth/pages/view-paths": {
+				"require": {
+					"types": "./dist/components/auth/pages/view-paths.d.cts",
+					"default": "./dist/components/auth/pages/view-paths.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/pages/view-paths.d.mts",
+					"default": "./dist/components/auth/pages/view-paths.mjs"
+				}
+			},
 			"./components/auth/settings/settings": {
 				"require": {
 					"types": "./dist/components/auth/settings/settings.d.cts",
@@ -184,6 +264,16 @@
 				"import": {
 					"types": "./dist/components/auth/settings/account/user-profile.d.mts",
 					"default": "./dist/components/auth/settings/account/user-profile.mjs"
+				}
+			},
+			"./components/auth/settings/linked-accounts/linked-accounts-settings": {
+				"require": {
+					"types": "./dist/components/auth/settings/linked-accounts/linked-accounts-settings.d.cts",
+					"default": "./dist/components/auth/settings/linked-accounts/linked-accounts-settings.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/settings/linked-accounts/linked-accounts-settings.d.mts",
+					"default": "./dist/components/auth/settings/linked-accounts/linked-accounts-settings.mjs"
 				}
 			},
 			"./components/auth/settings/security/active-session": {
@@ -246,6 +336,36 @@
 					"default": "./dist/components/auth/settings/security/security-settings.mjs"
 				}
 			},
+			"./components/auth/settings/sessions/sessions-settings": {
+				"require": {
+					"types": "./dist/components/auth/settings/sessions/sessions-settings.d.cts",
+					"default": "./dist/components/auth/settings/sessions/sessions-settings.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/settings/sessions/sessions-settings.d.mts",
+					"default": "./dist/components/auth/settings/sessions/sessions-settings.mjs"
+				}
+			},
+			"./components/auth/theme/appearance": {
+				"require": {
+					"types": "./dist/components/auth/theme/appearance.d.cts",
+					"default": "./dist/components/auth/theme/appearance.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/theme/appearance.d.mts",
+					"default": "./dist/components/auth/theme/appearance.mjs"
+				}
+			},
+			"./components/auth/theme/theme-toggle-item": {
+				"require": {
+					"types": "./dist/components/auth/theme/theme-toggle-item.d.cts",
+					"default": "./dist/components/auth/theme/theme-toggle-item.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/theme/theme-toggle-item.d.mts",
+					"default": "./dist/components/auth/theme/theme-toggle-item.mjs"
+				}
+			},
 			"./components/auth/user/user-avatar": {
 				"require": {
 					"types": "./dist/components/auth/user/user-avatar.d.cts",
@@ -276,14 +396,34 @@
 					"default": "./dist/components/auth/user/user-view.mjs"
 				}
 			},
-			"./components/auth/additional-fields": {
+			"./components/auth/username/sign-in-username": {
 				"require": {
-					"types": "./dist/components/auth/additional-fields.d.cts",
-					"default": "./dist/components/auth/additional-fields.cjs"
+					"types": "./dist/components/auth/username/sign-in-username.d.cts",
+					"default": "./dist/components/auth/username/sign-in-username.cjs"
 				},
 				"import": {
-					"types": "./dist/components/auth/additional-fields.d.mts",
-					"default": "./dist/components/auth/additional-fields.mjs"
+					"types": "./dist/components/auth/username/sign-in-username.d.mts",
+					"default": "./dist/components/auth/username/sign-in-username.mjs"
+				}
+			},
+			"./components/auth/username/username-field": {
+				"require": {
+					"types": "./dist/components/auth/username/username-field.d.cts",
+					"default": "./dist/components/auth/username/username-field.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/username/username-field.d.mts",
+					"default": "./dist/components/auth/username/username-field.mjs"
+				}
+			},
+			"./components/auth/additional-field": {
+				"require": {
+					"types": "./dist/components/auth/additional-field.d.cts",
+					"default": "./dist/components/auth/additional-field.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/additional-field.d.mts",
+					"default": "./dist/components/auth/additional-field.mjs"
 				}
 			},
 			"./components/auth/auth-provider": {
@@ -324,6 +464,34 @@
 				"import": {
 					"types": "./dist/components/auth/forgot-password.d.mts",
 					"default": "./dist/components/auth/forgot-password.mjs"
+				}
+			},
+			"./components/auth/localization": {
+				"require": {
+					"types": "./dist/components/auth/localization.d.cts"
+				},
+				"import": {
+					"types": "./dist/components/auth/localization.d.mts"
+				}
+			},
+			"./components/auth/magic-link-button": {
+				"require": {
+					"types": "./dist/components/auth/magic-link-button.d.cts",
+					"default": "./dist/components/auth/magic-link-button.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/magic-link-button.d.mts",
+					"default": "./dist/components/auth/magic-link-button.mjs"
+				}
+			},
+			"./components/auth/magic-link": {
+				"require": {
+					"types": "./dist/components/auth/magic-link.d.cts",
+					"default": "./dist/components/auth/magic-link.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/magic-link.d.mts",
+					"default": "./dist/components/auth/magic-link.mjs"
 				}
 			},
 			"./components/auth/provider-button": {
@@ -1226,14 +1394,22 @@
 					"default": "./dist/hooks/use-schema-object-form-controller.mjs"
 				}
 			},
-			"./lib/auth/auth-plugin": {
+			"./lib/auth/api-key-plugin": {
 				"require": {
-					"types": "./dist/lib/auth/auth-plugin.d.cts",
-					"default": "./dist/lib/auth/auth-plugin.cjs"
+					"types": "./dist/lib/auth/api-key-plugin.d.cts",
+					"default": "./dist/lib/auth/api-key-plugin.cjs"
 				},
 				"import": {
-					"types": "./dist/lib/auth/auth-plugin.d.mts",
-					"default": "./dist/lib/auth/auth-plugin.mjs"
+					"types": "./dist/lib/auth/api-key-plugin.d.mts",
+					"default": "./dist/lib/auth/api-key-plugin.mjs"
+				}
+			},
+			"./lib/auth/auth-plugin": {
+				"require": {
+					"types": "./dist/lib/auth/auth-plugin.d.cts"
+				},
+				"import": {
+					"types": "./dist/lib/auth/auth-plugin.d.mts"
 				}
 			},
 			"./lib/auth/mutations/clear-sessions-mutation": {
@@ -1264,6 +1440,36 @@
 				"import": {
 					"types": "./dist/lib/auth/delete-user-plugin.d.mts",
 					"default": "./dist/lib/auth/delete-user-plugin.mjs"
+				}
+			},
+			"./lib/auth/magic-link-plugin": {
+				"require": {
+					"types": "./dist/lib/auth/magic-link-plugin.d.cts",
+					"default": "./dist/lib/auth/magic-link-plugin.cjs"
+				},
+				"import": {
+					"types": "./dist/lib/auth/magic-link-plugin.d.mts",
+					"default": "./dist/lib/auth/magic-link-plugin.mjs"
+				}
+			},
+			"./lib/auth/theme-plugin": {
+				"require": {
+					"types": "./dist/lib/auth/theme-plugin.d.cts",
+					"default": "./dist/lib/auth/theme-plugin.cjs"
+				},
+				"import": {
+					"types": "./dist/lib/auth/theme-plugin.d.mts",
+					"default": "./dist/lib/auth/theme-plugin.mjs"
+				}
+			},
+			"./lib/auth/username-plugin": {
+				"require": {
+					"types": "./dist/lib/auth/username-plugin.d.cts",
+					"default": "./dist/lib/auth/username-plugin.cjs"
+				},
+				"import": {
+					"types": "./dist/lib/auth/username-plugin.d.mts",
+					"default": "./dist/lib/auth/username-plugin.mjs"
 				}
 			},
 			"./lib/context/touch": {
@@ -1372,30 +1578,47 @@
 		"./components/animated/ambient-blob": "./src/components/animated/ambient-blob.tsx",
 		"./components/animated/content-marquee": "./src/components/animated/content-marquee.tsx",
 		"./components/animated/staggered-list": "./src/components/animated/staggered-list.tsx",
+		"./components/auth/api-key/api-key-skeleton": "./src/components/auth/api-key/api-key-skeleton.tsx",
+		"./components/auth/api-key/api-key": "./src/components/auth/api-key/api-key.tsx",
+		"./components/auth/api-key/api-keys-empty": "./src/components/auth/api-key/api-keys-empty.tsx",
+		"./components/auth/api-key/api-keys": "./src/components/auth/api-key/api-keys.tsx",
+		"./components/auth/api-key/create-api-key-dialog": "./src/components/auth/api-key/create-api-key-dialog.tsx",
+		"./components/auth/api-key/delete-api-key-dialog": "./src/components/auth/api-key/delete-api-key-dialog.tsx",
+		"./components/auth/api-key/new-api-key-dialog": "./src/components/auth/api-key/new-api-key-dialog.tsx",
 		"./components/auth/delete-user/clear-user-sessions": "./src/components/auth/delete-user/clear-user-sessions.tsx",
 		"./components/auth/delete-user/danger-zone": "./src/components/auth/delete-user/danger-zone.tsx",
 		"./components/auth/delete-user/delete-user": "./src/components/auth/delete-user/delete-user.tsx",
 		"./components/auth/pages/auth-page": "./src/components/auth/pages/auth-page.tsx",
 		"./components/auth/pages/settings-page": "./src/components/auth/pages/settings-page.tsx",
+		"./components/auth/pages/view-paths": "./src/components/auth/pages/view-paths.ts",
 		"./components/auth/settings/settings": "./src/components/auth/settings/settings.tsx",
 		"./components/auth/settings/account/account-settings": "./src/components/auth/settings/account/account-settings.tsx",
 		"./components/auth/settings/account/change-avatar": "./src/components/auth/settings/account/change-avatar.tsx",
 		"./components/auth/settings/account/change-email": "./src/components/auth/settings/account/change-email.tsx",
 		"./components/auth/settings/account/user-profile": "./src/components/auth/settings/account/user-profile.tsx",
+		"./components/auth/settings/linked-accounts/linked-accounts-settings": "./src/components/auth/settings/linked-accounts/linked-accounts-settings.tsx",
 		"./components/auth/settings/security/active-session": "./src/components/auth/settings/security/active-session.tsx",
 		"./components/auth/settings/security/active-sessions": "./src/components/auth/settings/security/active-sessions.tsx",
 		"./components/auth/settings/security/change-password": "./src/components/auth/settings/security/change-password.tsx",
 		"./components/auth/settings/security/linked-account": "./src/components/auth/settings/security/linked-account.tsx",
 		"./components/auth/settings/security/linked-accounts": "./src/components/auth/settings/security/linked-accounts.tsx",
 		"./components/auth/settings/security/security-settings": "./src/components/auth/settings/security/security-settings.tsx",
+		"./components/auth/settings/sessions/sessions-settings": "./src/components/auth/settings/sessions/sessions-settings.tsx",
+		"./components/auth/theme/appearance": "./src/components/auth/theme/appearance.tsx",
+		"./components/auth/theme/theme-toggle-item": "./src/components/auth/theme/theme-toggle-item.tsx",
 		"./components/auth/user/user-avatar": "./src/components/auth/user/user-avatar.tsx",
 		"./components/auth/user/user-button": "./src/components/auth/user/user-button.tsx",
 		"./components/auth/user/user-view": "./src/components/auth/user/user-view.tsx",
-		"./components/auth/additional-fields": "./src/components/auth/additional-fields.tsx",
+		"./components/auth/username/sign-in-username": "./src/components/auth/username/sign-in-username.tsx",
+		"./components/auth/username/username-field": "./src/components/auth/username/username-field.tsx",
+		"./components/auth/additional-field": "./src/components/auth/additional-field.tsx",
 		"./components/auth/auth-provider": "./src/components/auth/auth-provider.tsx",
 		"./components/auth/auth": "./src/components/auth/auth.tsx",
 		"./components/auth/error-toaster": "./src/components/auth/error-toaster.tsx",
 		"./components/auth/forgot-password": "./src/components/auth/forgot-password.tsx",
+		"./components/auth/localization": "./src/components/auth/localization.ts",
+		"./components/auth/magic-link-button": "./src/components/auth/magic-link-button.tsx",
+		"./components/auth/magic-link": "./src/components/auth/magic-link.tsx",
 		"./components/auth/provider-button": "./src/components/auth/provider-button.tsx",
 		"./components/auth/provider-buttons": "./src/components/auth/provider-buttons.tsx",
 		"./components/auth/reset-password": "./src/components/auth/reset-password.tsx",
@@ -1486,10 +1709,14 @@
 		"./hooks/use-persistent-state": "./src/hooks/use-persistent-state.ts",
 		"./hooks/use-touch": "./src/hooks/use-touch.ts",
 		"./hooks/use-schema-object-form-controller": "./src/hooks/use-schema-object-form-controller.tsx",
+		"./lib/auth/api-key-plugin": "./src/lib/auth/api-key-plugin.ts",
 		"./lib/auth/auth-plugin": "./src/lib/auth/auth-plugin.ts",
 		"./lib/auth/mutations/clear-sessions-mutation": "./src/lib/auth/mutations/clear-sessions-mutation.ts",
 		"./lib/auth/clear-user-sessions-plugin": "./src/lib/auth/clear-user-sessions-plugin.ts",
 		"./lib/auth/delete-user-plugin": "./src/lib/auth/delete-user-plugin.ts",
+		"./lib/auth/magic-link-plugin": "./src/lib/auth/magic-link-plugin.ts",
+		"./lib/auth/theme-plugin": "./src/lib/auth/theme-plugin.ts",
+		"./lib/auth/username-plugin": "./src/lib/auth/username-plugin.ts",
 		"./lib/context/touch": "./src/lib/context/touch.tsx",
 		"./lib/action-result": "./src/lib/action-result.ts",
 		"./lib/dnd": "./src/lib/dnd.ts",
@@ -1512,6 +1739,7 @@
 		"@base-ui/react": "^1.4.1",
 		"@better-auth-ui/core": "^1.6.8",
 		"@better-auth-ui/react": "^1.6.8",
+		"@better-auth/api-key": "^1.6.10",
 		"@dnd-kit/core": "^6.3.1",
 		"@dnd-kit/sortable": "^10.0.0",
 		"@dnd-kit/utilities": "^3.2.2",
@@ -1536,7 +1764,7 @@
 		"recharts": "3.8.1",
 		"shadcn": "^4.7.0",
 		"sonner": "^2.0.7",
-		"tailwind-merge": "^3.5.0",
+		"tailwind-merge": "^3.6.0",
 		"tw-animate-css": "^1.4.0",
 		"vaul": "^1.1.2",
 		"zod": "^4.4.3",

@@ -136,7 +136,7 @@ class Client<Ready extends boolean = boolean> extends DiscordClient<Ready> {
 					body: commandData,
 				});
 			}
-			console.log('Commands registered successfully via REST API');
+			console.info('Commands registered successfully via REST API');
 			return;
 		}
 
@@ -146,7 +146,7 @@ class Client<Ready extends boolean = boolean> extends DiscordClient<Ready> {
 			await this.application.commands.set(commandData);
 		}
 
-		console.log('Commands registered successfully');
+		console.info('Commands registered successfully');
 	};
 
 	readonly getComponentById = (id: string): ClientComponent | undefined => {

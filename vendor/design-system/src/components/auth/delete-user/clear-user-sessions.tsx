@@ -24,14 +24,14 @@ import { TriangleAlert } from 'lucide-react';
 import { type SyntheticEvent, useState } from 'react';
 import { toast } from 'sonner';
 
-export type DeleteUserProps = {
+export type ClearUserSessionProps = {
 	className?: string;
 };
 
 /**
  * Danger-zone card to clear all user sessions, with a confirmation dialog and toasts.
  */
-export function ClearAllUserSessions({ className }: DeleteUserProps) {
+export function ClearUserSessions({ className }: ClearUserSessionProps) {
 	const { authClient, basePaths, localization, viewPaths, navigate } =
 		useAuth();
 

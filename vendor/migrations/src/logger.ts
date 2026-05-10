@@ -69,7 +69,18 @@ export class ConsoleLogger implements MigrationLogger {
 
 		const metaStr = formatMeta(meta);
 
-		console.log(`${timestamp} ${levelStr} ${formattedMessage}${metaStr}`);
+		const consoleFn =
+			level === 'ERROR'
+				? 'error'
+				: level === 'WARN'
+					? 'warn'
+					: level === 'INFO'
+						? 'info'
+						: 'debug';
+
+		console[consoleFn](
+			`${timestamp} ${levelStr} ${formattedMessage}${metaStr}`
+		);
 	}
 
 	info(message: string, meta?: Record<string, unknown>): void {

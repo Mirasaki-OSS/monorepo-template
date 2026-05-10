@@ -15,6 +15,20 @@
 			"when": 1778342274399,
 			"tag": "0001_graceful_bloodscream",
 			"breakpoints": true
+		},
+		{
+			"idx": 2,
+			"version": "7",
+			"when": 1778414108226,
+			"tag": "0002_mute_blue_marvel",
+			"breakpoints": true
+		},
+		{
+			"idx": 3,
+			"version": "7",
+			"when": 1778432572035,
+			"tag": "0003_living_imperial_guard",
+			"breakpoints": true
 		}
 	]
 }

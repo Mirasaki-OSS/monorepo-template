@@ -1,10 +1,10 @@
 import {
 	AuthProvider as AuthProviderPrimitive,
-	type AuthProviderProps,
+	type AuthProviderProps as AuthProviderPropsPrimitive,
 } from '@better-auth-ui/react';
 import type { ComponentType, PropsWithChildren, ReactNode } from 'react';
-
 import { ErrorToaster } from './error-toaster';
+import type { PartialExtendedViewPaths } from './pages/view-paths';
 
 export * from '@better-auth-ui/react';
 export * from '@better-auth-ui/react/email';
@@ -27,6 +27,13 @@ declare module '@better-auth-ui/core' {
 	}
 }
 
+export type AuthProviderProps = Omit<
+	AuthProviderPropsPrimitive,
+	'viewPaths'
+> & {
+	viewPaths?: PartialExtendedViewPaths;
+};
+
 /**
  * Provides an authentication context by rendering an auth provider with the sonner toast handler injected, forwarding remaining configuration and rendering `children` inside it.
  *
@@ -34,8 +41,19 @@ declare module '@better-auth-ui/core' {
  * @returns A React element that renders an authentication provider configured with the provided props and toast handler
  */
 export function AuthProvider({ children, ...config }: AuthProviderProps) {
+	const resolvedViewPaths: PartialExtendedViewPaths = {
+		auth: {
+			...config.viewPaths?.auth,
+			...(config.plugins?.find((p) => p.name === 'magic-link')?.viewPaths
+				?.auth || {}),
+		},
+		settings: {
+			...config.viewPaths?.settings,
+		},
+	};
+
 	return (
-		<AuthProviderPrimitive {...config}>
+		<AuthProviderPrimitive {...config} viewPaths={resolvedViewPaths}>
 			{children}
 
 			<ErrorToaster />

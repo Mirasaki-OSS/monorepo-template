@@ -217,8 +217,8 @@ export default function TestPage() {
   return 'Hello, ' + name + '!';
 }
 
-console.log(greet('World'));
-console.log(greet('This is a veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeery long string with little-to-no word break'));`}
+console.debug(greet('World'));
+console.debug(greet('This is a veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeery long string with little-to-no word break'));`}
         />
       </Spoiler>
       <Spoiler variant="card">
@@ -242,7 +242,7 @@ console.log(greet('This is a veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
           defaultValue="overview"
           title="Select Tab"
           description="Choose a tab to view its content"
-          onValueChange={(value) => console.log('Tab changed:', value)}
+          onValueChange={(value) => console.debug('Tab changed:', value)}
           classNames={{
             wrapper: 'w-full',
           }}
@@ -402,8 +402,8 @@ console.log(greet('This is a veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
                 actionLabel: 'Delete',
                 actionProps: { variant: 'destructive' },
                 cancelProps: {},
-                onAction: () => console.log('Deleted'),
-                onCancel: () => console.log('Cancelled'),
+                onAction: () => console.debug('Deleted'),
+                onCancel: () => console.debug('Cancelled'),
               })
             }
           >
@@ -419,8 +419,8 @@ console.log(greet('This is a veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
                 actionLabel: 'Save',
                 actionProps: {},
                 cancelProps: {},
-                onAction: () => console.log('Saved'),
-                onCancel: () => console.log('Discarded'),
+                onAction: () => console.debug('Saved'),
+                onCancel: () => console.debug('Discarded'),
               })
             }
           >

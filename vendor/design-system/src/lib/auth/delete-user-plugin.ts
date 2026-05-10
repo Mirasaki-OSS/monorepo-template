@@ -10,7 +10,6 @@ export const deleteUserPlugin = createAuthPlugin(
 	coreDeleteUserPlugin.id,
 	(options: DeleteUserPluginOptions = {}) => ({
 		...coreDeleteUserPlugin(options),
-		// securityCards: [DangerZone],
-		dangerZone: [DeleteUser],
+		securityDangerZoneCards: [DeleteUser],
 	})
 );

@@ -13,12 +13,14 @@
 		".git/{index,*refs,*HEAD}",
 		".vscode",
 		".vscode-insiders",
+		"packages/db/drizzle/meta/_journal.json",
 		"apps/web/src/app/\\(home\\)/test"
 	],
 	"cSpell.words": [
 		"aceternity",
 		"addgroup",
 		"adduser",
+		"apikey",
 		"appuser",
 		"biomejs",
 		"bowser",
@@ -32,6 +34,7 @@
 		"cooldowns",
 		"CREATEDB",
 		"datname",
+		"Debouncer",
 		"direnv",
 		"discordapp",
 		"dockerfiles",

@@ -1,4 +1,3 @@
-import { viewPaths } from '@better-auth-ui/core';
 import {
 	mergePropsWithClassName,
 	resolveSlot,
@@ -10,11 +9,17 @@ import {
 	type QueryClient,
 } from '@tanstack/react-query';
 import { Settings } from '../settings/settings';
+import {
+	extendedViewPaths,
+	mergeViewPaths,
+	type PartialExtendedViewPaths,
+} from './view-paths';
 
 type SettingsPageProps = {
 	path: string;
 	queryClient: QueryClient;
 	notFound: () => never;
+	viewPaths?: PartialExtendedViewPaths;
 	className?: string;
 	classNames?: {
 		settings?: string;
@@ -35,9 +40,13 @@ export default async function SettingsPage({
 	className,
 	classNames,
 	slotProps,
+	viewPaths: customViewPaths,
 }: SettingsPageProps) {
-	if (!Object.values(viewPaths.settings).includes(path)) {
+	const mergedViewPaths = mergeViewPaths(extendedViewPaths, customViewPaths);
+
+	if (!Object.values(mergedViewPaths.settings).includes(path)) {
 		notFound();
+		return null;
 	}
 
 	const [HydrationBoundaryEl, hydrationBoundarySlotProps] = resolveSlot(

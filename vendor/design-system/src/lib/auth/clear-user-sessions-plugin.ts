@@ -1,5 +1,6 @@
 import { createAuthPlugin } from '@better-auth-ui/core';
-import { ClearAllUserSessions } from '@md-oss/design-system/components/auth/delete-user/clear-user-sessions';
+import { ClearUserSessions } from '@md-oss/design-system/components/auth/delete-user/clear-user-sessions';
+import { SessionsSettings } from '@md-oss/design-system/components/auth/settings/sessions/sessions-settings';
 
 export declare const clearUserSessionsLocalization: {
 	/** @remarks `"Clear sessions"` */
@@ -90,7 +91,9 @@ export const clearUserSessionsPlugin = createAuthPlugin(
 	'clearUserSessions',
 	(options: ClearUserSessionsPluginOptions = {}) => ({
 		...coreClearUserSessionsPlugin(options),
-		// securityCards: [DangerZone],
-		dangerZone: [ClearAllUserSessions],
+		sessionsDangerZoneCards: [ClearUserSessions],
+		views: {
+			settings: { sessions: SessionsSettings },
+		},
 	})
 );

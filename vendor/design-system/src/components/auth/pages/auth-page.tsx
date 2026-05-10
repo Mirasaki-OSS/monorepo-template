@@ -1,4 +1,3 @@
-import { viewPaths } from '@better-auth-ui/core';
 import {
 	mergePropsWithClassName,
 	resolveSlot,
@@ -6,11 +5,17 @@ import {
 } from '@md-oss/design-system/lib/utils';
 import type React from 'react';
 import { Auth } from '../auth';
+import {
+	extendedViewPaths,
+	mergeViewPaths,
+	type PartialExtendedViewPaths,
+} from './view-paths';
 
 type AuthPageProps = {
 	path: string;
 	className?: string;
 	notFound: () => never;
+	viewPaths?: PartialExtendedViewPaths;
 	classNames?: {
 		auth?: string;
 	};
@@ -26,8 +31,11 @@ export default async function AuthPage({
 	notFound,
 	slotProps,
 	classNames,
+	viewPaths: customViewPaths,
 }: AuthPageProps) {
-	if (!Object.values(viewPaths.auth).includes(path)) {
+	const mergedViewPaths = mergeViewPaths(extendedViewPaths, customViewPaths);
+
+	if (!Object.values(mergedViewPaths.auth).includes(path)) {
 		notFound();
 		return null;
 	}

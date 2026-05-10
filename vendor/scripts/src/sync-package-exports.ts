@@ -24,12 +24,43 @@ const hasSourceCodeExtension = (value: string): boolean =>
 const stripCodeExtension = (value: string): string =>
 	value.replace(/\.(ts|tsx|mts|cts|js|jsx)$/u, '');
 
-const srcTargetToPublishExport = (target: string): unknown => {
+const isTypeOnlyPublishExport = (value: unknown): boolean => {
+	if (!isRecord(value)) {
+		return false;
+	}
+
+	const requireValue = value.require;
+	const importValue = value.import;
+
+	return (
+		isRecord(requireValue) &&
+		isRecord(importValue) &&
+		'require' in value &&
+		'import' in value &&
+		!('default' in requireValue) &&
+		!('default' in importValue)
+	);
+};
+
+const srcTargetToPublishExport = (
+	target: string,
+	previousValue: unknown
+): unknown => {
 	if (!target.startsWith('./src/') || !hasSourceCodeExtension(target)) {
 		return target;
 	}
 
 	const distBase = `./dist/${stripCodeExtension(target.slice('./src/'.length))}`;
+	if (isTypeOnlyPublishExport(previousValue)) {
+		return {
+			require: {
+				types: `${distBase}.d.cts`,
+			},
+			import: {
+				types: `${distBase}.d.mts`,
+			},
+		};
+	}
 
 	return {
 		require: {
@@ -43,19 +74,30 @@ const srcTargetToPublishExport = (target: string): unknown => {
 	};
 };
 
-const transformExportValue = (value: unknown): unknown => {
+const transformExportValue = (
+	value: unknown,
+	previousValue: unknown
+): unknown => {
 	if (typeof value === 'string') {
-		return srcTargetToPublishExport(value);
+		return srcTargetToPublishExport(value, previousValue);
 	}
 
 	if (Array.isArray(value)) {
-		return value.map((item) => transformExportValue(item));
+		return value.map((item, index) =>
+			transformExportValue(
+				item,
+				Array.isArray(previousValue) ? previousValue[index] : undefined
+			)
+		);
 	}
 
 	if (isRecord(value)) {
 		const nextValue: JsonRecord = {};
 		for (const [key, nestedValue] of Object.entries(value)) {
-			nextValue[key] = transformExportValue(nestedValue);
+			nextValue[key] = transformExportValue(
+				nestedValue,
+				isRecord(previousValue) ? previousValue[key] : undefined
+			);
 		}
 		return nextValue;
 	}
@@ -64,7 +106,8 @@ const transformExportValue = (value: unknown): unknown => {
 };
 
 const buildPublishConfigExports = (
-	exportsField: unknown
+	exportsField: unknown,
+	previousPublishExports: Record<string, unknown>
 ): Record<string, unknown> => {
 	if (!isRecord(exportsField)) {
 		throw new Error('package.json exports must be an object.');
@@ -72,7 +115,10 @@ const buildPublishConfigExports = (
 
 	const nextPublishExports: Record<string, unknown> = {};
 	for (const [exportKey, exportValue] of Object.entries(exportsField)) {
-		nextPublishExports[exportKey] = transformExportValue(exportValue);
+		nextPublishExports[exportKey] = transformExportValue(
+			exportValue,
+			previousPublishExports[exportKey]
+		);
 	}
 
 	return nextPublishExports;
@@ -168,8 +214,11 @@ export const syncPackageExports = async ({
 		throw new Error('package.json is missing exports.');
 	}
 
-	const nextPublishExports = buildPublishConfigExports(packageJson.exports);
 	const previousPublishExports = packageJson.publishConfig?.exports ?? {};
+	const nextPublishExports = buildPublishConfigExports(
+		packageJson.exports,
+		previousPublishExports
+	);
 
 	const changed =
 		JSON.stringify(previousPublishExports) !==
