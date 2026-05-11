@@ -1,9 +1,8 @@
 import { clientEnv as apiClientEnv } from '@md-oss/api/env';
-import { clientEnv as authClientEnv } from '@md-oss/auth/client/env';
 import { createEnv } from '@t3-oss/env-core';
 
 export const clientEnv = createEnv({
-  extends: [apiClientEnv(), authClientEnv()],
+  extends: [apiClientEnv()],
   client: {},
   server: {},
   clientPrefix: 'NEXT_PUBLIC_',
