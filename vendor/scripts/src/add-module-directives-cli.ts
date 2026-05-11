@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import { getErrorMessage } from '@md-oss/common/errors';
 import { runAddModuleDirectivesCli } from './add-module-directives';
+import { getErrorMessage } from './helpers';
 
 runAddModuleDirectivesCli().catch((error: unknown) => {
 	console.error(getErrorMessage(error));

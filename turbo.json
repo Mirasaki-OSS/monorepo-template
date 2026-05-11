@@ -37,40 +37,8 @@
 		},
 		"dev": {
 			"cache": false,
-			"persistent": true,
-			"dependsOn": ["^build"]
-		},
-		"@md-oss/web#dev": {
-			"cache": false,
-			"persistent": true,
-			"dependsOn": [
-				"@md-oss/api#build",
-				"@md-oss/auth#build",
-				"@md-oss/common#build"
-			],
-			"with": ["@md-oss/api#dev", "@md-oss/auth#dev", "@md-oss/common#dev"]
-		},
-		"@md-oss/server#dev": {
-			"cache": false,
-			"persistent": true,
-			"dependsOn": [
-				"@md-oss/api#build",
-				"@md-oss/auth#build",
-				"@md-oss/db#build",
-				"@md-oss/utils#build"
-			],
-			"with": [
-				"@md-oss/api#dev",
-				"@md-oss/auth#dev",
-				"@md-oss/db#dev",
-				"@md-oss/utils#dev"
-			]
-		},
-		"@md-oss/cli#dev": {
-			"cache": false,
-			"persistent": true,
-			"dependsOn": ["@md-oss/utils#build"],
-			"with": ["@md-oss/utils#dev"]
+			"persistent": false,
+			"dependsOn": ["^dev"]
 		},
 		"format": {
 			"cache": false
@@ -90,7 +58,7 @@
 			"cache": true
 		},
 		"typecheck": {
-			"dependsOn": ["^build", "^typecheck"],
+			"dependsOn": ["^typecheck"],
 			"outputs": [],
 			"cache": true
 		}

@@ -432,7 +432,7 @@ export function SignUp({
 									{plugins.flatMap((plugin) =>
 										(
 											(plugin.authButtons ?? []) as React.ComponentType<{
-												view: 'signIn' | 'signUp';
+												view: 'signUp';
 											}>[]
 										).map((AuthButton, index) => (
 											<AuthButton

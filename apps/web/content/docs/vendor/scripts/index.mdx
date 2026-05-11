@@ -8,6 +8,7 @@ renderInlineTOC: false
 - ./find-dependency-mismatches
 - ./add-module-directives
 - ./sync-package-exports
+- ./apply-package-publish-config
 
 ## find-dependency-mismatches
 
@@ -95,6 +96,39 @@ Optional flags:
 import { syncPackageExports } from '@md-oss/scripts/sync-package-exports';
 
 const result = await syncPackageExports({
+	cwd: 'vendor/design-system',
+});
+
+console.debug(result.changed);
+```
+
+## apply-package-publish-config
+
+Applies `publishConfig` fields to the root level of a package.json, preparing it for publishing.
+
+- Non-registry fields from `publishConfig` are promoted to the root level (overwriting any existing root fields).
+- Registry metadata fields (`registry`, `access`, `tag`, `directory`, `provenance`, `@npmjs:bypass-log-bin`) are retained in `publishConfig`.
+- The `publishConfig` field is removed only if all fields were applied; otherwise it contains only the retained npm metadata.
+- Useful as the final step before publishing to npm or other registries.
+
+### CLI usage
+
+```bash
+pnpm exec md-oss-apply-package-publish-config --cwd vendor/design-system
+```
+
+Optional flags:
+
+- `--cwd <path>`: working directory containing package.json.
+- `--package-json <path>`: custom package.json relative to cwd.
+- `--dry-run`: report what would be applied without writing changes.
+
+### Programmatic usage
+
+```typescript
+import { applyPackagePublishConfigToFile } from '@md-oss/scripts/apply-package-publish-config';
+
+const result = await applyPackagePublishConfigToFile({
 	cwd: 'vendor/design-system',
 });
 

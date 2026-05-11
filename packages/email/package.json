@@ -5,48 +5,55 @@
 	"type": "module",
 	"sideEffects": false,
 	"description": "Email utilities",
-	"main": "./dist/index.cjs",
-	"module": "./dist/index.mjs",
-	"types": "./dist/index.d.cts",
+	"main": "./src/index.ts",
 	"files": [
 		"dist/**/*",
 		"README.md"
 	],
 	"exports": {
-		".": {
-			"require": {
-				"types": "./dist/index.d.cts",
-				"default": "./dist/index.cjs"
+		".": "./src/index.ts",
+		"./env": "./src/env.ts"
+	},
+	"publishConfig": {
+		"main": "./dist/index.cjs",
+		"module": "./dist/index.mjs",
+		"types": "./dist/index.d.cts",
+		"exports": {
+			".": {
+				"require": {
+					"types": "./dist/index.d.cts",
+					"default": "./dist/index.cjs"
+				},
+				"import": {
+					"types": "./dist/index.d.mts",
+					"default": "./dist/index.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/index.d.mts",
-				"default": "./dist/index.mjs"
-			}
-		},
-		"./env": {
-			"require": {
-				"types": "./dist/env.d.cts",
-				"default": "./dist/env.cjs"
-			},
-			"import": {
-				"types": "./dist/env.d.mts",
-				"default": "./dist/env.mjs"
+			"./env": {
+				"require": {
+					"types": "./dist/env.d.cts",
+					"default": "./dist/env.cjs"
+				},
+				"import": {
+					"types": "./dist/env.d.mts",
+					"default": "./dist/env.mjs"
+				}
 			}
 		}
 	},
 	"scripts": {
-		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
+		"build": "pnpm exec md-oss-sync-package-exports && pnpm exec md-oss-apply-package-publish-config && pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
 		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
-		"dev": "pkgroll --watch --sourcemap  --define.process.env.NODE_ENV='\"development\"' --define.DEBUG=true",
 		"typecheck": "tsc --noEmit"
 	},
 	"devDependencies": {
 		"@md-oss/config": "workspace:^",
-		"@md-oss/design-system": "workspace:^",
+		"@md-oss/scripts": "workspace:^",
 		"pkgroll": "^2.27.0",
 		"typescript": "^6.0.3"
 	},
 	"dependencies": {
+		"@md-oss/design-system": "workspace:^",
 		"@react-email/components": "^1.0.12",
 		"@t3-oss/env-core": "^0.13.11",
 		"resend": "^6.12.3",

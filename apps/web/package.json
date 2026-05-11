@@ -8,7 +8,7 @@
     "clean": "git clean -xdf .turbo .next .source node_modules tsconfig.tsbuildinfo",
     "dev": "pnpm docs:sync && NODE_ENV=development next dev --port=3000",
     "start": "node .next/standalone/apps/web/server.js",
-    "types:check": "pnpm docs:sync && fumadocs-mdx && next typegen && tsc --noEmit",
+    "typecheck": "pnpm docs:sync && fumadocs-mdx && next typegen && tsc --noEmit",
     "docs:sync": "node ./scripts/materialize-external-docs.mjs",
     "docs:invariants": "node ./scripts/docs-invariants.mjs",
     "postinstall": "fumadocs-mdx",
@@ -43,6 +43,8 @@
     "react-syntax-highlighter": "catalog:",
     "rehype-katex": "^7.0.1",
     "remark-directive": "^4.0.0",
+    "remark-gfm": "^4.0.1",
+    "remark-github-blockquote-alert": "^2.1.0",
     "remark-math": "^6.0.0",
     "sonner": "^2.0.7",
     "superjson": "^2.2.6",
@@ -60,8 +62,6 @@
     "@types/react-dom": "catalog:",
     "@types/react-syntax-highlighter": "catalog:",
     "postcss": "^8.5.14",
-    "remark-gfm": "^4.0.1",
-    "remark-github-blockquote-alert": "^2.1.0",
     "tailwindcss": "catalog:",
     "typescript": "^6.0.3"
   }

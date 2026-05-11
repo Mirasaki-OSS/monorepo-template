@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import { getErrorMessage } from '@md-oss/common/errors';
 import { runFindDependencyMismatchesCli } from './find-dependency-mismatches';
+import { getErrorMessage } from './helpers';
 
 try {
 	runFindDependencyMismatchesCli();

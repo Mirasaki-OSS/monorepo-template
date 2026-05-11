@@ -1,5 +1,5 @@
 import { parseArgs } from 'node:util';
-import { getErrorMessage } from '@md-oss/common/errors';
+import { getErrorMessage } from './helpers';
 import {
 	type JsonRecord,
 	type PackageJsonWithExports,

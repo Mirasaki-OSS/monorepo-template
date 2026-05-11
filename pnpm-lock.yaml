@@ -232,6 +232,12 @@ importers:
       remark-directive:
         specifier: ^4.0.0
         version: 4.0.0
+      remark-gfm:
+        specifier: ^4.0.1
+        version: 4.0.1
+      remark-github-blockquote-alert:
+        specifier: ^2.1.0
+        version: 2.1.0
       remark-math:
         specifier: ^6.0.0
         version: 6.0.0
@@ -278,12 +284,6 @@ importers:
       postcss:
         specifier: ^8.5.14
         version: 8.5.14
-      remark-gfm:
-        specifier: ^4.0.1
-        version: 4.0.1
-      remark-github-blockquote-alert:
-        specifier: ^2.1.0
-        version: 2.1.0
       tailwindcss:
         specifier: 'catalog:'
         version: 4.3.0
@@ -302,6 +302,9 @@ importers:
       '@md-oss/auth':
         specifier: workspace:^
         version: link:../auth
+      '@md-oss/common':
+        specifier: workspace:^
+        version: link:../../vendor/common
       '@md-oss/db':
         specifier: workspace:^
         version: link:../db
@@ -330,12 +333,12 @@ importers:
         specifier: ^4.4.3
         version: 4.4.3
     devDependencies:
-      '@md-oss/common':
-        specifier: workspace:^
-        version: link:../../vendor/common
       '@md-oss/config':
         specifier: workspace:^
         version: link:../../vendor/config
+      '@md-oss/scripts':
+        specifier: workspace:^
+        version: link:../../vendor/scripts
       pkgroll:
         specifier: ^2.27.0
         version: 2.27.0(typescript@6.0.3)(vite@8.0.8(@types/node@25.6.2)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.8.4))
@@ -361,6 +364,9 @@ importers:
       '@md-oss/config':
         specifier: workspace:^
         version: link:../../vendor/config
+      '@md-oss/scripts':
+        specifier: workspace:^
+        version: link:../../vendor/scripts
       pkgroll:
         specifier: ^2.27.0
         version: 2.27.0(typescript@6.0.3)(vite@8.0.8(@types/node@25.6.2)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.8.4))
@@ -376,6 +382,9 @@ importers:
       '@t3-oss/env-core':
         specifier: ^0.13.11
         version: 0.13.11(typescript@6.0.3)(zod@4.4.3)
+      '@types/pg':
+        specifier: ^8.20.0
+        version: 8.20.0
       drizzle-orm:
         specifier: 1.0.0-rc.2-e38a2ba
         version: 1.0.0-rc.2-e38a2ba(@opentelemetry/api@1.9.1)(@types/pg@8.20.0)(pg@8.20.0)(zod@4.4.3)
@@ -389,9 +398,9 @@ importers:
       '@md-oss/config':
         specifier: workspace:^
         version: link:../../vendor/config
-      '@types/pg':
-        specifier: ^8.20.0
-        version: 8.20.0
+      '@md-oss/scripts':
+        specifier: workspace:^
+        version: link:../../vendor/scripts
       drizzle-kit:
         specifier: ^0.31.10
         version: 0.31.10
@@ -404,6 +413,9 @@ importers:
 
   packages/email:
     dependencies:
+      '@md-oss/design-system':
+        specifier: workspace:^
+        version: link:../../vendor/design-system
       '@react-email/components':
         specifier: ^1.0.12
         version: 1.0.12(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -426,9 +438,9 @@ importers:
       '@md-oss/config':
         specifier: workspace:^
         version: link:../../vendor/config
-      '@md-oss/design-system':
+      '@md-oss/scripts':
         specifier: workspace:^
-        version: link:../../vendor/design-system
+        version: link:../../vendor/scripts
       pkgroll:
         specifier: ^2.27.0
         version: 2.27.0(typescript@6.0.3)(vite@8.0.8(@types/node@25.6.2)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.8.4))
@@ -441,6 +453,9 @@ importers:
       '@md-oss/config':
         specifier: workspace:^
         version: link:../../vendor/config
+      '@md-oss/scripts':
+        specifier: workspace:^
+        version: link:../../vendor/scripts
       pkgroll:
         specifier: ^2.27.0
         version: 2.27.0(typescript@6.0.3)(vite@8.0.8(@types/node@25.6.2)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.8.4))
@@ -472,6 +487,9 @@ importers:
       '@md-oss/config':
         specifier: workspace:^
         version: link:../config
+      '@md-oss/scripts':
+        specifier: workspace:^
+        version: link:../scripts
       '@types/node':
         specifier: ^25.6.2
         version: 25.6.2
@@ -506,6 +524,12 @@ importers:
       '@md-oss/config':
         specifier: workspace:^
         version: link:../config
+      '@md-oss/scripts':
+        specifier: workspace:^
+        version: link:../scripts
+      '@types/node':
+        specifier: ^25.6.2
+        version: 25.6.2
       pkgroll:
         specifier: ^2.27.0
         version: 2.27.0(typescript@6.0.3)(vite@8.0.8(@types/node@25.6.2)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.8.4))
@@ -549,6 +573,9 @@ importers:
       '@md-oss/config':
         specifier: workspace:^
         version: link:../config
+      '@md-oss/scripts':
+        specifier: workspace:^
+        version: link:../scripts
       '@types/node':
         specifier: ^25.6.2
         version: 25.6.2
@@ -580,6 +607,9 @@ importers:
       '@md-oss/config':
         specifier: workspace:^
         version: link:../config
+      '@md-oss/scripts':
+        specifier: workspace:^
+        version: link:../scripts
       '@types/node':
         specifier: ^25.6.2
         version: 25.6.2
@@ -605,6 +635,9 @@ importers:
       '@md-oss/config':
         specifier: workspace:^
         version: link:../config
+      '@md-oss/scripts':
+        specifier: workspace:^
+        version: link:../scripts
       pkgroll:
         specifier: ^2.27.0
         version: 2.27.0(typescript@6.0.3)(vite@8.0.8(@types/node@25.6.2)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.8.4))
@@ -778,6 +811,9 @@ importers:
       '@md-oss/config':
         specifier: workspace:^
         version: link:../config
+      '@md-oss/scripts':
+        specifier: workspace:^
+        version: link:../scripts
       '@types/node':
         specifier: ^25.6.2
         version: 25.6.2
@@ -800,6 +836,12 @@ importers:
       '@md-oss/config':
         specifier: workspace:^
         version: link:../config
+      '@md-oss/scripts':
+        specifier: workspace:^
+        version: link:../scripts
+      '@types/node':
+        specifier: ^25.6.2
+        version: 25.6.2
       pkgroll:
         specifier: ^2.27.0
         version: 2.27.0(typescript@6.0.3)(vite@8.0.8(@types/node@25.6.2)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.8.4))
@@ -812,6 +854,9 @@ importers:
       '@md-oss/config':
         specifier: workspace:^
         version: link:../config
+      '@md-oss/scripts':
+        specifier: workspace:^
+        version: link:../scripts
       '@types/node':
         specifier: ^25.6.2
         version: 25.6.2
@@ -831,6 +876,9 @@ importers:
       '@md-oss/config':
         specifier: workspace:^
         version: link:../config
+      '@md-oss/scripts':
+        specifier: workspace:^
+        version: link:../scripts
       '@types/node':
         specifier: ^25.6.2
         version: 25.6.2
@@ -882,10 +930,6 @@ importers:
         version: 6.0.3
 
   vendor/scripts:
-    dependencies:
-      '@md-oss/common':
-        specifier: workspace:^
-        version: link:../common
     devDependencies:
       '@md-oss/config':
         specifier: workspace:^
@@ -912,6 +956,9 @@ importers:
       '@md-oss/config':
         specifier: workspace:^
         version: link:../config
+      '@md-oss/scripts':
+        specifier: workspace:^
+        version: link:../scripts
       '@types/node':
         specifier: ^25.6.2
         version: 25.6.2
@@ -940,6 +987,9 @@ importers:
       '@md-oss/config':
         specifier: workspace:^
         version: link:../config
+      '@md-oss/scripts':
+        specifier: workspace:^
+        version: link:../scripts
       pkgroll:
         specifier: ^2.27.0
         version: 2.27.0(typescript@6.0.3)(vite@8.0.8(@types/node@25.6.2)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.8.4))

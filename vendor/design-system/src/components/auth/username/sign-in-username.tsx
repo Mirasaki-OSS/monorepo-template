@@ -130,9 +130,8 @@ export function SignInUsername({
 	const isPending = signInMutating + signUpMutating > 0;
 	const isSignInPending = isSignInEmailPending || isSignInUsernamePending;
 
-	const Captcha = plugins.find(
-		(plugin) => plugin.captchaComponent
-	)?.captchaComponent;
+	const Captcha = plugins.find((plugin) => plugin.captchaComponent)
+		?.captchaComponent as React.ReactNode;
 
 	const [fieldErrors, setFieldErrors] = useState<{
 		email?: string;
@@ -294,7 +293,11 @@ export function SignInUsername({
 									</Button>
 
 									{plugins.flatMap((plugin) =>
-										(plugin.authButtons ?? []).map((AuthButton, index) => (
+										(
+											(plugin.authButtons ?? []) as React.ComponentType<{
+												view: 'signIn';
+											}>[]
+										).map((AuthButton, index) => (
 											<AuthButton
 												key={`${plugin.id}-${index.toString()}`}
 												view="signIn"

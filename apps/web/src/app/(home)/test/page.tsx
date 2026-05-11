@@ -1,5 +1,7 @@
 'use client';
 
+// [DEV] Admin ui for users, sessions, etc. (stack-auth inspired)
+
 // [DEV] After auth-ui, etc. - serve API spec: https://www.fumadocs.dev/docs/integrations/openapi/api-page
 // [DEV] Consider Story for ui-components: https://www.fumadocs.dev/docs/integrations/story
 

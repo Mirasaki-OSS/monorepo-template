@@ -19,7 +19,7 @@ This app combines a standard Next.js frontend with a Fumadocs-powered documentat
 pnpm --filter @md-oss/web dev
 pnpm --filter @md-oss/web build
 pnpm --filter @md-oss/web start
-pnpm --filter @md-oss/web types:check
+pnpm --filter @md-oss/web typecheck
 pnpm --filter @md-oss/web lint
 ```
 

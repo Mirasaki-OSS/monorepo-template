@@ -41,6 +41,8 @@ services:
     restart: "no"
     profiles:
       - deploy
+      - migrate
+      - server
 
   cli:
     <<: *service-app-common
@@ -55,6 +57,7 @@ services:
         condition: service_healthy
     profiles:
       - tools
+      - cli
 
   server:
     <<: *service-app-common
@@ -75,6 +78,7 @@ services:
     profiles:
       - deploy
       - apps
+      - server
 
   web:
     <<: *service-app-common
@@ -100,3 +104,4 @@ services:
     profiles:
       - deploy
       - apps
+      - web

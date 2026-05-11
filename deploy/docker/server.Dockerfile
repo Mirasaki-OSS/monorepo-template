@@ -34,6 +34,7 @@ RUN --mount=type=bind,source=.,target=/mnt/workspace,ro \
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm --filter "@md-oss/server..." install --frozen-lockfile --prefer-offline
 RUN pnpm --filter "@md-oss/server..." build
+RUN pnpm config set --location=project injectWorkspacePackages true
 RUN pnpm --filter "@md-oss/server" --prod deploy /prod
 
 # =====================================================

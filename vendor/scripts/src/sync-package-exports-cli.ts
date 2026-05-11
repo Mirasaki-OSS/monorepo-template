@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { getErrorMessage } from '@md-oss/common/errors';
+import { getErrorMessage } from './helpers';
 import { runSyncPackageExportsCli } from './sync-package-exports';
 
 runSyncPackageExportsCli(process.argv.slice(2)).catch((error: unknown) => {

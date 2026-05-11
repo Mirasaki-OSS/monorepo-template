@@ -160,7 +160,11 @@ export function MagicLink({
 								</Button>
 
 								{plugins.flatMap((plugin) =>
-									(plugin.authButtons ?? []).map((AuthButton, index) => (
+									(
+										(plugin.authButtons ?? []) as React.ComponentType<{
+											view: 'magicLink';
+										}>[]
+									).map((AuthButton, index) => (
 										<AuthButton
 											key={`${plugin.id}-${index.toString()}`}
 											view="magicLink"

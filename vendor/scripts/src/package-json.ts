@@ -1,6 +1,6 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { RecordUtils } from '@md-oss/common/utils';
+import { isRecord } from './helpers';
 
 export type JsonRecord = Record<string, unknown>;
 
@@ -46,7 +46,7 @@ export const collectExportTargets = (value: unknown): string[] => {
 		return value.flatMap((item) => collectExportTargets(item));
 	}
 
-	if (RecordUtils.isRecord(value)) {
+	if (isRecord(value)) {
 		return Object.values(value).flatMap((item) => collectExportTargets(item));
 	}
 

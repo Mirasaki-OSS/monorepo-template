@@ -2,10 +2,6 @@
 	"name": "@md-oss/cache",
 	"version": "0.7.1",
 	"private": false,
-	"publishConfig": {
-		"access": "public",
-		"registry": "https://registry.npmjs.org/"
-	},
 	"repository": {
 		"type": "git",
 		"url": "git+ssh://git@github.com/Mirasaki-OSS/monorepo-template.git",
@@ -21,128 +17,145 @@
 	"sideEffects": false,
 	"description": "Multi-layer caching with LRU, Redis, and async data fetching support",
 	"license": "ISC",
-	"main": "./dist/index.cjs",
-	"module": "./dist/index.mjs",
-	"types": "./dist/index.d.cts",
+	"main": "./src/index.ts",
 	"files": [
 		"dist/**/*",
 		"README.md",
 		"LICENSE"
 	],
 	"exports": {
-		".": {
-			"require": {
-				"types": "./dist/index.d.cts",
-				"default": "./dist/index.cjs"
+		".": "./src/index.ts",
+		"./async": "./src/async.ts",
+		"./env": "./src/env.ts",
+		"./keyed-promise-cache": "./src/keyed-promise-cache.ts",
+		"./lru": "./src/lru.ts",
+		"./manager": "./src/manager.ts",
+		"./redis-client": "./src/redis-client.ts",
+		"./single-promise-cache": "./src/single-promise-cache.ts",
+		"./sliding-async-cache": "./src/sliding-async-cache.ts",
+		"./types": "./src/types.ts",
+		"./utils": "./src/utils.ts"
+	},
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org/",
+		"main": "./dist/index.cjs",
+		"module": "./dist/index.mjs",
+		"types": "./dist/index.d.cts",
+		"exports": {
+			".": {
+				"require": {
+					"types": "./dist/index.d.cts",
+					"default": "./dist/index.cjs"
+				},
+				"import": {
+					"types": "./dist/index.d.mts",
+					"default": "./dist/index.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/index.d.mts",
-				"default": "./dist/index.mjs"
-			}
-		},
-		"./async": {
-			"require": {
-				"types": "./dist/async.d.cts",
-				"default": "./dist/async.cjs"
+			"./async": {
+				"require": {
+					"types": "./dist/async.d.cts",
+					"default": "./dist/async.cjs"
+				},
+				"import": {
+					"types": "./dist/async.d.mts",
+					"default": "./dist/async.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/async.d.mts",
-				"default": "./dist/async.mjs"
-			}
-		},
-		"./env": {
-			"require": {
-				"types": "./dist/env.d.cts",
-				"default": "./dist/env.cjs"
+			"./env": {
+				"require": {
+					"types": "./dist/env.d.cts",
+					"default": "./dist/env.cjs"
+				},
+				"import": {
+					"types": "./dist/env.d.mts",
+					"default": "./dist/env.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/env.d.mts",
-				"default": "./dist/env.mjs"
-			}
-		},
-		"./keyed-promise-cache": {
-			"require": {
-				"types": "./dist/keyed-promise-cache.d.cts",
-				"default": "./dist/keyed-promise-cache.cjs"
+			"./keyed-promise-cache": {
+				"require": {
+					"types": "./dist/keyed-promise-cache.d.cts",
+					"default": "./dist/keyed-promise-cache.cjs"
+				},
+				"import": {
+					"types": "./dist/keyed-promise-cache.d.mts",
+					"default": "./dist/keyed-promise-cache.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/keyed-promise-cache.d.mts",
-				"default": "./dist/keyed-promise-cache.mjs"
-			}
-		},
-		"./lru": {
-			"require": {
-				"types": "./dist/lru.d.cts",
-				"default": "./dist/lru.cjs"
+			"./lru": {
+				"require": {
+					"types": "./dist/lru.d.cts",
+					"default": "./dist/lru.cjs"
+				},
+				"import": {
+					"types": "./dist/lru.d.mts",
+					"default": "./dist/lru.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/lru.d.mts",
-				"default": "./dist/lru.mjs"
-			}
-		},
-		"./manager": {
-			"require": {
-				"types": "./dist/manager.d.cts",
-				"default": "./dist/manager.cjs"
+			"./manager": {
+				"require": {
+					"types": "./dist/manager.d.cts",
+					"default": "./dist/manager.cjs"
+				},
+				"import": {
+					"types": "./dist/manager.d.mts",
+					"default": "./dist/manager.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/manager.d.mts",
-				"default": "./dist/manager.mjs"
-			}
-		},
-		"./redis-client": {
-			"require": {
-				"types": "./dist/redis-client.d.cts",
-				"default": "./dist/redis-client.cjs"
+			"./redis-client": {
+				"require": {
+					"types": "./dist/redis-client.d.cts",
+					"default": "./dist/redis-client.cjs"
+				},
+				"import": {
+					"types": "./dist/redis-client.d.mts",
+					"default": "./dist/redis-client.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/redis-client.d.mts",
-				"default": "./dist/redis-client.mjs"
-			}
-		},
-		"./single-promise-cache": {
-			"require": {
-				"types": "./dist/single-promise-cache.d.cts",
-				"default": "./dist/single-promise-cache.cjs"
+			"./single-promise-cache": {
+				"require": {
+					"types": "./dist/single-promise-cache.d.cts",
+					"default": "./dist/single-promise-cache.cjs"
+				},
+				"import": {
+					"types": "./dist/single-promise-cache.d.mts",
+					"default": "./dist/single-promise-cache.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/single-promise-cache.d.mts",
-				"default": "./dist/single-promise-cache.mjs"
-			}
-		},
-		"./sliding-async-cache": {
-			"require": {
-				"types": "./dist/sliding-async-cache.d.cts",
-				"default": "./dist/sliding-async-cache.cjs"
+			"./sliding-async-cache": {
+				"require": {
+					"types": "./dist/sliding-async-cache.d.cts",
+					"default": "./dist/sliding-async-cache.cjs"
+				},
+				"import": {
+					"types": "./dist/sliding-async-cache.d.mts",
+					"default": "./dist/sliding-async-cache.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/sliding-async-cache.d.mts",
-				"default": "./dist/sliding-async-cache.mjs"
-			}
-		},
-		"./types": {
-			"require": {
-				"types": "./dist/types.d.cts"
+			"./types": {
+				"require": {
+					"types": "./dist/types.d.cts"
+				},
+				"import": {
+					"types": "./dist/types.d.mts"
+				}
 			},
-			"import": {
-				"types": "./dist/types.d.mts"
-			}
-		},
-		"./utils": {
-			"require": {
-				"types": "./dist/utils.d.cts",
-				"default": "./dist/utils.cjs"
-			},
-			"import": {
-				"types": "./dist/utils.d.mts",
-				"default": "./dist/utils.mjs"
+			"./utils": {
+				"require": {
+					"types": "./dist/utils.d.cts",
+					"default": "./dist/utils.cjs"
+				},
+				"import": {
+					"types": "./dist/utils.d.mts",
+					"default": "./dist/utils.mjs"
+				}
 			}
 		}
 	},
 	"scripts": {
-		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
+		"build": "pnpm exec md-oss-sync-package-exports && pnpm exec md-oss-apply-package-publish-config && pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
 		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
-		"dev": "pkgroll --watch --sourcemap  --define.process.env.NODE_ENV='\"development\"' --define.DEBUG=true",
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
@@ -159,6 +172,7 @@
 	},
 	"devDependencies": {
 		"@md-oss/config": "workspace:^",
+		"@md-oss/scripts": "workspace:^",
 		"@types/node": "^25.6.2",
 		"pkgroll": "^2.27.0",
 		"typescript": "^6.0.3"

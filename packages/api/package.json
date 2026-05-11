@@ -5,92 +5,103 @@
 	"type": "module",
 	"sideEffects": false,
 	"description": "API routers and context",
-	"main": "./dist/index.cjs",
-	"module": "./dist/index.mjs",
-	"types": "./dist/index.d.cts",
+	"main": "./src/index.ts",
 	"files": [
 		"dist/**/*",
 		"README.md"
 	],
 	"exports": {
-		".": {
-			"require": {
-				"types": "./dist/index.d.cts",
-				"default": "./dist/index.cjs"
+		".": "./src/index.ts",
+		"./auth": "./src/auth/index.ts",
+		"./auth/providers": "./src/auth/providers.ts",
+		"./context": "./src/context.ts",
+		"./env": "./src/env.ts",
+		"./types": "./src/types.ts",
+		"./routers": "./src/routers/index.ts"
+	},
+	"publishConfig": {
+		"main": "./dist/index.cjs",
+		"module": "./dist/index.mjs",
+		"types": "./dist/index.d.cts",
+		"exports": {
+			".": {
+				"require": {
+					"types": "./dist/index.d.cts",
+					"default": "./dist/index.cjs"
+				},
+				"import": {
+					"types": "./dist/index.d.mts",
+					"default": "./dist/index.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/index.d.mts",
-				"default": "./dist/index.mjs"
-			}
-		},
-		"./auth": {
-			"require": {
-				"types": "./dist/auth/index.d.cts",
-				"default": "./dist/auth/index.cjs"
+			"./auth": {
+				"require": {
+					"types": "./dist/auth/index.d.cts",
+					"default": "./dist/auth/index.cjs"
+				},
+				"import": {
+					"types": "./dist/auth/index.d.mts",
+					"default": "./dist/auth/index.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/auth/index.d.mts",
-				"default": "./dist/auth/index.mjs"
-			}
-		},
-		"./auth/providers": {
-			"require": {
-				"types": "./dist/auth/providers.d.cts",
-				"default": "./dist/auth/providers.cjs"
+			"./auth/providers": {
+				"require": {
+					"types": "./dist/auth/providers.d.cts",
+					"default": "./dist/auth/providers.cjs"
+				},
+				"import": {
+					"types": "./dist/auth/providers.d.mts",
+					"default": "./dist/auth/providers.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/auth/providers.d.mts",
-				"default": "./dist/auth/providers.mjs"
-			}
-		},
-		"./context": {
-			"require": {
-				"types": "./dist/context.d.cts",
-				"default": "./dist/context.cjs"
+			"./context": {
+				"require": {
+					"types": "./dist/context.d.cts",
+					"default": "./dist/context.cjs"
+				},
+				"import": {
+					"types": "./dist/context.d.mts",
+					"default": "./dist/context.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/context.d.mts",
-				"default": "./dist/context.mjs"
-			}
-		},
-		"./env": {
-			"require": {
-				"types": "./dist/env.d.cts",
-				"default": "./dist/env.cjs"
+			"./env": {
+				"require": {
+					"types": "./dist/env.d.cts",
+					"default": "./dist/env.cjs"
+				},
+				"import": {
+					"types": "./dist/env.d.mts",
+					"default": "./dist/env.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/env.d.mts",
-				"default": "./dist/env.mjs"
-			}
-		},
-		"./types": {
-			"require": {
-				"types": "./dist/types.d.cts"
+			"./types": {
+				"require": {
+					"types": "./dist/types.d.cts"
+				},
+				"import": {
+					"types": "./dist/types.d.mts"
+				}
 			},
-			"import": {
-				"types": "./dist/types.d.mts"
-			}
-		},
-		"./routers": {
-			"require": {
-				"types": "./dist/routers/index.d.cts",
-				"default": "./dist/routers/index.cjs"
-			},
-			"import": {
-				"types": "./dist/routers/index.d.mts",
-				"default": "./dist/routers/index.mjs"
+			"./routers": {
+				"require": {
+					"types": "./dist/routers/index.d.cts",
+					"default": "./dist/routers/index.cjs"
+				},
+				"import": {
+					"types": "./dist/routers/index.d.mts",
+					"default": "./dist/routers/index.mjs"
+				}
 			}
 		}
 	},
 	"scripts": {
-		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
+		"build": "pnpm exec md-oss-sync-package-exports && pnpm exec md-oss-apply-package-publish-config && pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
 		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
-		"dev": "pkgroll --watch --sourcemap  --define.process.env.NODE_ENV='\"development\"' --define.DEBUG=true",
 		"typecheck": "tsc --noEmit"
 	},
 	"devDependencies": {
-		"@md-oss/common": "workspace:^",
 		"@md-oss/config": "workspace:^",
+		"@md-oss/scripts": "workspace:^",
 		"pkgroll": "^2.27.0",
 		"typescript": "^6.0.3"
 	},
@@ -98,6 +109,7 @@
 		"@better-auth/api-key": "^1.6.10",
 		"@better-auth/passkey": "^1.6.10",
 		"@md-oss/auth": "workspace:^",
+		"@md-oss/common": "workspace:^",
 		"@md-oss/db": "workspace:^",
 		"@md-oss/email": "workspace:^",
 		"@t3-oss/env-core": "^0.13.11",
