@@ -1,5 +1,11 @@
 # @md-oss/serdes
 
+## 0.10.0
+
+### Minor Changes
+
+- 9fb2e14: auth-ui v1 (indev)
+
 ## 0.7.1
 
 ### Patch Changes
