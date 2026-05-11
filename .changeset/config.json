@@ -14,6 +14,7 @@
 		"@md-oss/api",
 		"@md-oss/auth",
 		"@md-oss/db",
+		"@md-oss/email",
 		"@md-oss/utils"
 	]
 }
