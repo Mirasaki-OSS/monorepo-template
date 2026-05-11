@@ -1,7 +1,7 @@
 #!/usr/bin/env -S pnpm tsx
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
-import { getErrorMessage } from '@md-oss/common/errors';
+import { getErrorMessage } from './helpers';
 
 async function main() {
 	const root = path.resolve(__dirname, '..', '..');
