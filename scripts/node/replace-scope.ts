@@ -2,8 +2,8 @@
 import { spawnSync } from 'node:child_process';
 import { readFileSync, statSync, writeFileSync } from 'node:fs';
 import { parseArgs } from 'node:util';
-import { getErrorMessage } from '@md-oss/common/errors';
 import { glob } from 'glob';
+import { getErrorMessage } from './helpers';
 
 interface Args {
 	scopeOld: string;
