@@ -1,5 +1,17 @@
 # @md-oss/cache
 
+## 0.10.0
+
+### Minor Changes
+
+- 9fb2e14: auth-ui v1 (indev)
+
+### Patch Changes
+
+- Updated dependencies [9fb2e14]
+  - @md-oss/common@0.10.0
+  - @md-oss/serdes@0.10.0
+
 ## 0.7.1
 
 ### Patch Changes
