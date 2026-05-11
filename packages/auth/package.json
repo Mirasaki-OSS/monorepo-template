@@ -68,13 +68,13 @@
 	"devDependencies": {
 		"@md-oss/config": "workspace:^",
 		"@md-oss/scripts": "workspace:^",
-		"pkgroll": "^2.27.0",
-		"typescript": "^6.0.3"
+		"pkgroll": "catalog:",
+		"typescript": "catalog:"
 	},
 	"dependencies": {
 		"@md-oss/db": "workspace:^",
-		"@t3-oss/env-core": "^0.13.11",
-		"better-auth": "^1.6.10",
-		"zod": "^4.4.3"
+		"@t3-oss/env-core": "catalog:",
+		"better-auth": "catalog:",
+		"zod": "catalog:"
 	}
 }

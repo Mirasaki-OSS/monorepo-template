@@ -16,6 +16,7 @@
 		"checks:ci": "pnpm exec biome ci && pnpm script:fdm && pnpm check:circular",
 		"check:circular": "node scripts/node/madge-monorepo.mjs --check=circular",
 		"check:orphans": "node scripts/node/madge-monorepo.mjs --check=orphans",
+		"check:outdated": "pnpm outdated -r",
 		"clean": "turbo run clean && git clean -xdf node_modules .turbo .tmp pnpm-lock.yaml deploy/docker/context-report deploy/compose/.buildx-cache",
 		"dev": "turbo run dev",
 		"lint": "pnpm exec biome lint --write --unsafe",
@@ -31,8 +32,8 @@
 		"start": "turbo run start",
 		"test": "turbo run test",
 		"typecheck": "turbo run typecheck",
-		"up:minor": "pnpm up -r && pnpm script:fdm",
-		"up:major": "pnpm up -r --latest && pnpm script:fdm",
+		"up:minor": "pnpm-update-catalogs && pnpm up -r && pnpm script:fdm",
+		"up:major": "pnpm-update-catalogs --latest && pnpm up -r --latest && pnpm script:fdm",
 		"publish:ci": "pnpm run checks:ci && pnpm run build --filter={./vendor/*} && turbo run typecheck --filter={./vendor/*} && changeset version && changeset publish",
 		"publish:dryrun": "pnpm -r publish --access public --report-summary --dry-run --no-git-checks",
 		"script:fdm": "pnpm dedupe && pnpm exec md-oss-find-dependency-mismatches",
@@ -40,14 +41,15 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.4.15",
-		"@changesets/cli": "^2.31.0",
+		"@changesets/cli": "catalog:",
 		"@md-oss/scripts": "workspace:^",
-		"@turbo/gen": "^2.9.12",
-		"@types/node": "^25.6.2",
-		"glob": "^13.0.6",
-		"lefthook": "^2.1.6",
-		"madge": "^8.0.0",
-		"tsx": "^4.21.0",
-		"turbo": "^2.9.12"
+		"@turbo/gen": "catalog:",
+		"@types/node": "catalog:",
+		"glob": "catalog:",
+		"lefthook": "catalog:",
+		"madge": "catalog:",
+		"pnpm-update-catalogs": "^1.0.4",
+		"tsx": "catalog:",
+		"turbo": "catalog:"
 	}
 }

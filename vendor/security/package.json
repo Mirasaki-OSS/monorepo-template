@@ -101,8 +101,8 @@
 	"devDependencies": {
 		"@md-oss/config": "workspace:^",
 		"@md-oss/scripts": "workspace:^",
-		"@types/node": "^25.6.2",
-		"pkgroll": "^2.27.0",
-		"typescript": "^6.0.3"
+		"@types/node": "catalog:",
+		"pkgroll": "catalog:",
+		"typescript": "catalog:"
 	}
 }

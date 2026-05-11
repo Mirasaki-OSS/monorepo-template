@@ -80,18 +80,18 @@
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
-		"@next/third-parties": "^16.2.6",
-		"@t3-oss/env-nextjs": "^0.13.11",
-		"@vercel/analytics": "^2.0.1",
+		"@next/third-parties": "catalog:",
+		"@t3-oss/env-nextjs": "catalog:",
+		"@vercel/analytics": "catalog:",
 		"react": "catalog:",
-		"zod": "^4.4.3"
+		"zod": "catalog:"
 	},
 	"devDependencies": {
 		"@md-oss/config": "workspace:^",
 		"@md-oss/scripts": "workspace:^",
-		"@types/node": "^25.6.2",
-		"pkgroll": "^2.27.0",
-		"typescript": "^6.0.3"
+		"@types/node": "catalog:",
+		"pkgroll": "catalog:",
+		"typescript": "catalog:"
 	},
 	"peerDependencies": {
 		"@types/react": "catalog:"

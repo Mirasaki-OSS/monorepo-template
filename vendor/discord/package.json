@@ -52,16 +52,16 @@
 	},
 	"dependencies": {
 		"@md-oss/common": "workspace:^",
-		"@types/debug": "^4.1.13",
-		"debug": "^4.4.3",
-		"discord.js": "^14.26.4",
-		"zod": "^4.4.3"
+		"@types/debug": "catalog:",
+		"debug": "catalog:",
+		"discord.js": "catalog:",
+		"zod": "catalog:"
 	},
 	"devDependencies": {
 		"@md-oss/config": "workspace:^",
 		"@md-oss/scripts": "workspace:^",
-		"@types/node": "^25.6.2",
-		"pkgroll": "^2.27.0",
-		"typescript": "^6.0.3"
+		"@types/node": "catalog:",
+		"pkgroll": "catalog:",
+		"typescript": "catalog:"
 	}
 }

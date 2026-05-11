@@ -99,16 +99,16 @@
 	"devDependencies": {
 		"@md-oss/config": "workspace:^",
 		"@md-oss/scripts": "workspace:^",
-		"drizzle-kit": "^0.31.10",
-		"pkgroll": "^2.27.0",
-		"typescript": "^6.0.3"
+		"drizzle-kit": "catalog:",
+		"pkgroll": "catalog:",
+		"typescript": "catalog:"
 	},
 	"dependencies": {
 		"@md-oss/serdes": "workspace:^",
-		"@t3-oss/env-core": "^0.13.11",
-		"@types/pg": "^8.20.0",
-		"drizzle-orm": "1.0.0-rc.2-e38a2ba",
-		"pg": "^8.20.0",
-		"zod": "^4.4.3"
+		"@t3-oss/env-core": "catalog:",
+		"@types/pg": "catalog:",
+		"drizzle-orm": "catalog:",
+		"pg": "catalog:",
+		"zod": "catalog:"
 	}
 }
