@@ -27,7 +27,6 @@ RUN --mount=type=bind,source=.,target=/mnt/workspace,ro \
 # Builder: Install dependencies, build, and deploy app
 # =====================================================
 FROM base AS builder
-# COPY --chown=appuser:nodejs packages/db/drizzle /app/packages/db/drizzle
 COPY pnpm-workspace.yaml package.json pnpm-lock.yaml* turbo.json tsconfig.json ./
 RUN --mount=type=bind,source=.,target=/mnt/workspace,ro \
     node /mnt/workspace/scripts/bash/deploy/copy-app-sources.js /mnt/workspace /app @md-oss/server

@@ -41,6 +41,10 @@ on:
         description: "packages/db (@md-oss/db — Database access layer using drizzle-orm (PostgreSQL))"
         type: boolean
         default: false
+      packages-email:
+        description: "packages/email (@md-oss/email — Transactional auth/account emails with React Email templates and Resend)"
+        type: boolean
+        default: false
       packages-utils:
         description: "packages/utils (@md-oss/utils — Shared utilities)"
         type: boolean
@@ -170,6 +174,7 @@ jobs:
           [[ "${{ inputs.packages-api }}" == "true" ]] && list+=(packages/api)
           [[ "${{ inputs.packages-auth }}" == "true" ]] && list+=(packages/auth)
           [[ "${{ inputs.packages-db }}" == "true" ]] && list+=(packages/db)
+          [[ "${{ inputs.packages-email }}" == "true" ]] && list+=(packages/email)
           [[ "${{ inputs.packages-utils }}" == "true" ]] && list+=(packages/utils)
           [[ "${{ inputs.vendor-analytics }}" == "true" ]] && list+=(vendor/analytics)
           [[ "${{ inputs.vendor-api-types }}" == "true" ]] && list+=(vendor/api-types)

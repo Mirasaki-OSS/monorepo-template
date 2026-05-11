@@ -4,7 +4,7 @@
 	"private": true,
 	"type": "module",
 	"sideEffects": false,
-	"description": "Email utilities",
+	"description": "Transactional auth and account emails powered by React Email templates and Resend",
 	"main": "./src/index.ts",
 	"files": [
 		"dist/**/*",
