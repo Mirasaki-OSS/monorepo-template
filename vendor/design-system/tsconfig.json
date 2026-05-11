@@ -5,7 +5,8 @@
 		"rootDir": "./src",
 		"paths": {
 			"@md-oss/design-system/*": ["./src/*"]
-		}
+		},
+		"types": ["node", "react", "react-dom", "react-syntax-highlighter"]
 	},
 	"include": ["src"],
 	"exclude": ["node_modules", "dist"]

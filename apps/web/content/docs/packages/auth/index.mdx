@@ -1,12 +1,51 @@
 ---
 title: "@md-oss/auth"
-description: "Authentication using better-auth."
+description: "Shared Better Auth configuration for browser and server consumers."
 renderInlineTOC: false
 ---
+## Table of Contents
+
+- [Overview](#overview)
+- [Exports](#exports)
+- [Usage](#usage)
+- [Development](#development)
+
+## Overview
+
+This package encapsulates the monorepo's authentication setup around Better Auth. It provides a browser client, a server-side auth factory, and environment modules for each runtime.
+
+## Exports
+
+The package is split into client and server entrypoints:
+
+- `@md-oss/auth/client` exports `authClient` and `createAuthClient`
+- `@md-oss/auth/client/env` exports browser-side environment parsing
+- `@md-oss/auth/server` exports `auth` and `createAuth`
+- `@md-oss/auth/server/env` exports server-side environment parsing
+
 ## Usage
 
 ```typescript
-import * as pkg from "@md-oss/auth";
+import { authClient } from '@md-oss/auth/client';
 
-// Do something...
+const session = await authClient.getSession();
 ```
+
+```typescript
+import { auth } from '@md-oss/auth/server';
+
+const session = await auth.api.getSession({ headers: request.headers });
+```
+
+The server implementation uses the Drizzle adapter with `@md-oss/db/schema/auth` and enables email/password auth by default.
+
+## Development
+
+```bash
+pnpm --filter @md-oss/auth dev
+pnpm --filter @md-oss/auth build
+pnpm --filter @md-oss/auth typecheck
+pnpm --filter @md-oss/auth gen:schema
+```
+
+`gen:schema` regenerates the Better Auth schema into `packages/db/src/schema/auth.ts`.

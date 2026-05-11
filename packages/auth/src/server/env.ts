@@ -9,6 +9,9 @@ export const serverEnv = () =>
 			BETTER_AUTH_SECRET: z.string().min(32),
 			CORS_ORIGIN: z.url(),
 		},
-		runtimeEnv: process.env,
+		runtimeEnv: {
+			BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
+			CORS_ORIGIN: process.env.CORS_ORIGIN,
+		},
 		emptyStringAsUndefined: true,
 	});

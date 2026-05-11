@@ -1,5 +1,8 @@
+'use client';
+
 import { mergePropsWithClassName } from '@md-oss/design-system/lib/utils';
-import type React from 'react';
+import { useAnimate, useReducedMotion } from 'motion/react';
+import React from 'react';
 
 export type StaggeredListProps = {
 	children: React.ReactNode[];
@@ -28,37 +31,90 @@ export function StaggeredList({
 	maxDelay = 500,
 	slotProps,
 }: StaggeredListProps): React.JSX.Element {
+	const prefersReducedMotion = useReducedMotion();
+	const [listScope, animate] = useAnimate();
+	const childItems = React.useMemo(
+		() => React.Children.toArray(children),
+		[children]
+	);
+	const itemRefs = React.useRef<Array<HTMLLIElement | null>>([]);
+
+	itemRefs.current = childItems.map(
+		(_, index) => itemRefs.current[index] ?? null
+	);
+
+	React.useEffect(() => {
+		if (!listScope.current || prefersReducedMotion || childItems.length === 0) {
+			return;
+		}
+
+		const itemElements = itemRefs.current.filter(
+			(itemElement): itemElement is HTMLLIElement => itemElement !== null
+		);
+
+		const controls = itemElements.map((itemElement, index) =>
+			animate(
+				itemElement,
+				{ opacity: 1, y: 0 },
+				{
+					duration: 0.3,
+					delay: Math.min(index * staggerDelay, maxDelay) / 1000,
+					ease: 'easeOut',
+				}
+			)
+		);
+
+		return () => {
+			controls.forEach((control) => {
+				control.stop();
+			});
+		};
+	}, [
+		animate,
+		childItems.length,
+		listScope,
+		maxDelay,
+		prefersReducedMotion,
+		staggerDelay,
+	]);
+
 	const listProps = mergePropsWithClassName<
 		React.HTMLAttributes<HTMLUListElement>
 	>(
 		{
 			className:
-				'w-full list-none flex flex-col md:flex-row flex-wrap gap-2 items-center md:justify-center animate-in fade-in-0 slide-in-from-bottom-4 duration-500',
+				'w-full list-none flex flex-col md:flex-row flex-wrap gap-2 items-center md:justify-center',
 		},
 		slotProps?.list,
 		className
 	);
 
 	return (
-		<ul {...listProps}>
-			{children.map((child, index) => {
+		<ul {...listProps} ref={listScope}>
+			{childItems.map((child, index) => {
 				const itemProps = mergePropsWithClassName<
 					React.HTMLAttributes<HTMLLIElement>
 				>(
 					{
-						className:
-							'animate-in fade-in-0 slide-in-from-bottom-2 duration-300',
+						className: classNames?.item,
 						style: {
-							animationDelay: `${Math.min(index * staggerDelay, maxDelay)}ms`,
-							animationFillMode: 'backwards',
+							opacity: prefersReducedMotion ? 1 : 0,
+							transform: prefersReducedMotion
+								? undefined
+								: 'translateY(0.5rem)',
 						},
 					},
-					slotProps?.item,
-					classNames?.item
+					slotProps?.item
 				);
 
 				return (
-					<li key={index} {...itemProps}>
+					<li
+						key={index}
+						{...itemProps}
+						ref={(element) => {
+							itemRefs.current[index] = element;
+						}}
+					>
 						{child}
 					</li>
 				);

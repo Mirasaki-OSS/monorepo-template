@@ -2,10 +2,6 @@
 	"name": "@md-oss/api-types",
 	"version": "0.9.1",
 	"private": false,
-	"publishConfig": {
-		"access": "public",
-		"registry": "https://registry.npmjs.org/"
-	},
 	"repository": {
 		"type": "git",
 		"url": "git+ssh://git@github.com/Mirasaki-OSS/monorepo-template.git",
@@ -21,96 +17,110 @@
 	"sideEffects": false,
 	"description": "Type-safe API contracts, client factory, and handler helpers built on Zod",
 	"license": "ISC",
-	"main": "./dist/index.cjs",
-	"module": "./dist/index.mjs",
-	"types": "./dist/index.d.cts",
+	"main": "./src/index.ts",
 	"files": [
 		"dist/**/*",
 		"README.md",
 		"LICENSE"
 	],
 	"exports": {
-		".": {
-			"require": {
-				"types": "./dist/index.d.cts",
-				"default": "./dist/index.cjs"
+		".": "./src/index.ts",
+		"./client": "./src/client.ts",
+		"./debugger": "./src/debugger.ts",
+		"./params": "./src/params.ts",
+		"./request": "./src/request.ts",
+		"./response": "./src/response.ts",
+		"./route-handler": "./src/route-handler.ts",
+		"./types": "./src/types.ts"
+	},
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org/",
+		"main": "./dist/index.cjs",
+		"module": "./dist/index.mjs",
+		"types": "./dist/index.d.cts",
+		"exports": {
+			".": {
+				"require": {
+					"types": "./dist/index.d.cts",
+					"default": "./dist/index.cjs"
+				},
+				"import": {
+					"types": "./dist/index.d.mts",
+					"default": "./dist/index.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/index.d.mts",
-				"default": "./dist/index.mjs"
-			}
-		},
-		"./client": {
-			"require": {
-				"types": "./dist/client.d.cts",
-				"default": "./dist/client.cjs"
+			"./client": {
+				"require": {
+					"types": "./dist/client.d.cts",
+					"default": "./dist/client.cjs"
+				},
+				"import": {
+					"types": "./dist/client.d.mts",
+					"default": "./dist/client.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/client.d.mts",
-				"default": "./dist/client.mjs"
-			}
-		},
-		"./debugger": {
-			"require": {
-				"types": "./dist/debugger.d.cts",
-				"default": "./dist/debugger.cjs"
+			"./debugger": {
+				"require": {
+					"types": "./dist/debugger.d.cts",
+					"default": "./dist/debugger.cjs"
+				},
+				"import": {
+					"types": "./dist/debugger.d.mts",
+					"default": "./dist/debugger.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/debugger.d.mts",
-				"default": "./dist/debugger.mjs"
-			}
-		},
-		"./params": {
-			"require": {
-				"types": "./dist/params.d.cts",
-				"default": "./dist/params.cjs"
+			"./params": {
+				"require": {
+					"types": "./dist/params.d.cts",
+					"default": "./dist/params.cjs"
+				},
+				"import": {
+					"types": "./dist/params.d.mts",
+					"default": "./dist/params.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/params.d.mts",
-				"default": "./dist/params.mjs"
-			}
-		},
-		"./request": {
-			"require": {
-				"types": "./dist/request.d.cts"
+			"./request": {
+				"require": {
+					"types": "./dist/request.d.cts"
+				},
+				"import": {
+					"types": "./dist/request.d.mts"
+				}
 			},
-			"import": {
-				"types": "./dist/request.d.mts"
-			}
-		},
-		"./response": {
-			"require": {
-				"types": "./dist/response.d.cts",
-				"default": "./dist/response.cjs"
+			"./response": {
+				"require": {
+					"types": "./dist/response.d.cts",
+					"default": "./dist/response.cjs"
+				},
+				"import": {
+					"types": "./dist/response.d.mts",
+					"default": "./dist/response.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/response.d.mts",
-				"default": "./dist/response.mjs"
-			}
-		},
-		"./route-handler": {
-			"require": {
-				"types": "./dist/route-handler.d.cts",
-				"default": "./dist/route-handler.cjs"
+			"./route-handler": {
+				"require": {
+					"types": "./dist/route-handler.d.cts",
+					"default": "./dist/route-handler.cjs"
+				},
+				"import": {
+					"types": "./dist/route-handler.d.mts",
+					"default": "./dist/route-handler.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/route-handler.d.mts",
-				"default": "./dist/route-handler.mjs"
-			}
-		},
-		"./types": {
-			"require": {
-				"types": "./dist/types.d.cts"
-			},
-			"import": {
-				"types": "./dist/types.d.mts"
+			"./types": {
+				"require": {
+					"types": "./dist/types.d.cts"
+				},
+				"import": {
+					"types": "./dist/types.d.mts"
+				}
 			}
 		}
 	},
 	"scripts": {
-		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
+		"build": "pnpm exec md-oss-sync-package-exports && pnpm exec md-oss-apply-package-publish-config && pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
 		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
-		"dev": "pkgroll --watch --sourcemap  --define.process.env.NODE_ENV='\"development\"' --define.DEBUG=true",
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
@@ -123,6 +133,8 @@
 	},
 	"devDependencies": {
 		"@md-oss/config": "workspace:^",
+		"@md-oss/scripts": "workspace:^",
+		"@types/node": "^25.6.2",
 		"pkgroll": "^2.27.0",
 		"typescript": "^6.0.3"
 	}

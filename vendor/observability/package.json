@@ -2,10 +2,6 @@
 	"name": "@md-oss/observability",
 	"version": "0.9.0",
 	"private": false,
-	"publishConfig": {
-		"access": "public",
-		"registry": "https://registry.npmjs.org/"
-	},
 	"repository": {
 		"type": "git",
 		"url": "git+ssh://git@github.com/Mirasaki-OSS/monorepo-template.git",
@@ -21,88 +17,101 @@
 	"sideEffects": false,
 	"description": "Structured logging with Pino",
 	"license": "ISC",
-	"main": "./dist/index.cjs",
-	"module": "./dist/index.mjs",
-	"types": "./dist/index.d.cts",
+	"main": "./src/index.ts",
 	"files": [
 		"dist/**/*",
 		"README.md",
 		"LICENSE"
 	],
 	"exports": {
-		".": {
-			"require": {
-				"types": "./dist/index.d.cts",
-				"default": "./dist/index.cjs"
+		".": "./src/index.ts",
+		"./debugger": "./src/debugger.ts",
+		"./env": "./src/env.ts",
+		"./express": "./src/express.ts",
+		"./next-client": "./src/next-client.ts",
+		"./next-server": "./src/next-server.ts",
+		"./types": "./src/types.ts"
+	},
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org/",
+		"main": "./dist/index.cjs",
+		"module": "./dist/index.mjs",
+		"types": "./dist/index.d.cts",
+		"exports": {
+			".": {
+				"require": {
+					"types": "./dist/index.d.cts",
+					"default": "./dist/index.cjs"
+				},
+				"import": {
+					"types": "./dist/index.d.mts",
+					"default": "./dist/index.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/index.d.mts",
-				"default": "./dist/index.mjs"
-			}
-		},
-		"./debugger": {
-			"require": {
-				"types": "./dist/debugger.d.cts",
-				"default": "./dist/debugger.cjs"
+			"./debugger": {
+				"require": {
+					"types": "./dist/debugger.d.cts",
+					"default": "./dist/debugger.cjs"
+				},
+				"import": {
+					"types": "./dist/debugger.d.mts",
+					"default": "./dist/debugger.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/debugger.d.mts",
-				"default": "./dist/debugger.mjs"
-			}
-		},
-		"./env": {
-			"require": {
-				"types": "./dist/env.d.cts",
-				"default": "./dist/env.cjs"
+			"./env": {
+				"require": {
+					"types": "./dist/env.d.cts",
+					"default": "./dist/env.cjs"
+				},
+				"import": {
+					"types": "./dist/env.d.mts",
+					"default": "./dist/env.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/env.d.mts",
-				"default": "./dist/env.mjs"
-			}
-		},
-		"./express": {
-			"require": {
-				"types": "./dist/express.d.cts",
-				"default": "./dist/express.cjs"
+			"./express": {
+				"require": {
+					"types": "./dist/express.d.cts",
+					"default": "./dist/express.cjs"
+				},
+				"import": {
+					"types": "./dist/express.d.mts",
+					"default": "./dist/express.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/express.d.mts",
-				"default": "./dist/express.mjs"
-			}
-		},
-		"./next-client": {
-			"require": {
-				"types": "./dist/next-client.d.cts",
-				"default": "./dist/next-client.cjs"
+			"./next-client": {
+				"require": {
+					"types": "./dist/next-client.d.cts",
+					"default": "./dist/next-client.cjs"
+				},
+				"import": {
+					"types": "./dist/next-client.d.mts",
+					"default": "./dist/next-client.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/next-client.d.mts",
-				"default": "./dist/next-client.mjs"
-			}
-		},
-		"./next-server": {
-			"require": {
-				"types": "./dist/next-server.d.cts",
-				"default": "./dist/next-server.cjs"
+			"./next-server": {
+				"require": {
+					"types": "./dist/next-server.d.cts",
+					"default": "./dist/next-server.cjs"
+				},
+				"import": {
+					"types": "./dist/next-server.d.mts",
+					"default": "./dist/next-server.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/next-server.d.mts",
-				"default": "./dist/next-server.mjs"
-			}
-		},
-		"./types": {
-			"require": {
-				"types": "./dist/types.d.cts"
-			},
-			"import": {
-				"types": "./dist/types.d.mts"
+			"./types": {
+				"require": {
+					"types": "./dist/types.d.cts"
+				},
+				"import": {
+					"types": "./dist/types.d.mts"
+				}
 			}
 		}
 	},
 	"scripts": {
-		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false && pnpm exec md-oss-add-module-directives --directive='use client' --extensions=mjs,cjs dist/next-client",
+		"build": "pnpm exec md-oss-sync-package-exports && pnpm exec md-oss-apply-package-publish-config && pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false && pnpm exec md-oss-add-module-directives --directive='use client' --extensions=mjs,cjs dist/next-client",
 		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
-		"dev": "pkgroll --watch --sourcemap  --define.process.env.NODE_ENV='\"development\"' --define.DEBUG=true",
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
@@ -116,7 +125,7 @@
 	"devDependencies": {
 		"@md-oss/config": "workspace:^",
 		"@md-oss/scripts": "workspace:^",
-		"@types/node": "^25.6.0",
+		"@types/node": "^25.6.2",
 		"pkgroll": "^2.27.0",
 		"typescript": "^6.0.3"
 	},

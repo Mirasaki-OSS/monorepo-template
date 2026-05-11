@@ -3,7 +3,6 @@ import { z } from 'zod/v4';
 
 export const env = (): Readonly<{
 	LOG_DIR?: string | undefined;
-	NODE_ENV: 'development' | 'production' | 'test';
 	LOG_LEVEL: 'error' | 'warn' | 'info' | 'verbose' | 'debug' | 'silly';
 	LOG_TO_CONSOLE: boolean;
 }> =>
@@ -18,14 +17,8 @@ export const env = (): Readonly<{
 		client: {},
 		runtimeEnv: {
 			LOG_DIR: process.env.LOG_DIR,
-			NODE_ENV: process.env.NODE_ENV || 'development',
 			LOG_LEVEL: process.env.LOG_LEVEL || 'info',
 			LOG_TO_CONSOLE: process.env.LOG_TO_CONSOLE !== 'false',
-		},
-		shared: {
-			NODE_ENV: z
-				.enum(['development', 'production', 'test'])
-				.default('development'),
 		},
 		emptyStringAsUndefined: true,
 	});

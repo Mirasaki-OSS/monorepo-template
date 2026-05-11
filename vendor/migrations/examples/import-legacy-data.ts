@@ -91,7 +91,7 @@ export const exampleMigration: Migration<ApiMigrationContext> = {
 			if (data.length === 0) {
 				throw new Error('Unzipped data is empty');
 			}
-			console.log(`Unzipped data size: ${data.length} bytes`);
+			logger.debug(`Unzipped data size: ${data.length} bytes`);
 		} catch (error) {
 			throw new Error(`Failed to unzip data file: ${error}`);
 		}
@@ -120,7 +120,7 @@ export const exampleMigration: Migration<ApiMigrationContext> = {
 			// Example processing logic
 			// await processUser(user);
 
-			console.log(`Processing user ${user.id}`);
+			logger.debug(`Processing user ${user.id}`);
 
 			progress.increment();
 		}

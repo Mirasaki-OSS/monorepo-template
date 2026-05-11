@@ -1,5 +1,7 @@
 'use client';
 
+// [DEV] Admin ui for users, sessions, etc. (stack-auth inspired)
+
 // [DEV] After auth-ui, etc. - serve API spec: https://www.fumadocs.dev/docs/integrations/openapi/api-page
 // [DEV] Consider Story for ui-components: https://www.fumadocs.dev/docs/integrations/story
 
@@ -26,8 +28,8 @@ import { DateRenderer } from '@md-oss/design-system/components/state/date-render
 import { FullPageLoader } from '@md-oss/design-system/components/state/full-page-loader';
 import { HTTPErrorAlert } from '@md-oss/design-system/components/state/http-error-alert';
 import {
+  Loader,
   LoaderWithContainer,
-  Loader as MDLoader,
 } from '@md-oss/design-system/components/state/loader';
 import {
   LoadingOverlay,
@@ -53,7 +55,6 @@ import jsx from 'react-syntax-highlighter/dist/esm/languages/prism/jsx';
 import rust from 'react-syntax-highlighter/dist/esm/languages/prism/rust';
 import tsx from 'react-syntax-highlighter/dist/esm/languages/prism/tsx';
 import { toast } from 'sonner';
-import Loader from '@/components/loader';
 import { GithubIcon } from '@/lib/client/icons';
 import SchemaObjectFormTest from './schema-object-form';
 
@@ -180,7 +181,6 @@ export default function TestPage() {
       />
       <GithubIcon size={32} className="text-gray-500" />
       <Loader />
-      <MDLoader />
       <LoaderWithContainer
         slotProps={{
           loader: {
@@ -219,8 +219,8 @@ export default function TestPage() {
   return 'Hello, ' + name + '!';
 }
 
-console.log(greet('World'));
-console.log(greet('This is a veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeery long string with little-to-no word break'));`}
+console.debug(greet('World'));
+console.debug(greet('This is a veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeery long string with little-to-no word break'));`}
         />
       </Spoiler>
       <Spoiler variant="card">
@@ -244,7 +244,7 @@ console.log(greet('This is a veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
           defaultValue="overview"
           title="Select Tab"
           description="Choose a tab to view its content"
-          onValueChange={(value) => console.log('Tab changed:', value)}
+          onValueChange={(value) => console.debug('Tab changed:', value)}
           classNames={{
             wrapper: 'w-full',
           }}
@@ -404,8 +404,8 @@ console.log(greet('This is a veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
                 actionLabel: 'Delete',
                 actionProps: { variant: 'destructive' },
                 cancelProps: {},
-                onAction: () => console.log('Deleted'),
-                onCancel: () => console.log('Cancelled'),
+                onAction: () => console.debug('Deleted'),
+                onCancel: () => console.debug('Cancelled'),
               })
             }
           >
@@ -421,8 +421,8 @@ console.log(greet('This is a veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
                 actionLabel: 'Save',
                 actionProps: {},
                 cancelProps: {},
-                onAction: () => console.log('Saved'),
-                onCancel: () => console.log('Discarded'),
+                onAction: () => console.debug('Saved'),
+                onCancel: () => console.debug('Discarded'),
               })
             }
           >

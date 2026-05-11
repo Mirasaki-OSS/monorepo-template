@@ -2,10 +2,6 @@
 	"name": "@md-oss/scripts",
 	"version": "0.7.1",
 	"private": false,
-	"publishConfig": {
-		"access": "public",
-		"registry": "https://registry.npmjs.org/"
-	},
 	"repository": {
 		"type": "git",
 		"url": "git+ssh://git@github.com/Mirasaki-OSS/monorepo-template.git",
@@ -28,38 +24,66 @@
 	],
 	"bin": {
 		"md-oss-find-dependency-mismatches": "./bin/md-oss-find-dependency-mismatches.mjs",
-		"md-oss-add-module-directives": "./bin/md-oss-add-module-directives.mjs"
+		"md-oss-add-module-directives": "./bin/md-oss-add-module-directives.mjs",
+		"md-oss-sync-package-exports": "./bin/md-oss-sync-package-exports.mjs",
+		"md-oss-apply-package-publish-config": "./bin/md-oss-apply-package-publish-config.mjs"
 	},
 	"exports": {
-		"./find-dependency-mismatches": {
-			"require": {
-				"types": "./dist/find-dependency-mismatches.d.cts",
-				"default": "./dist/find-dependency-mismatches.cjs"
+		"./find-dependency-mismatches": "./src/find-dependency-mismatches.ts",
+		"./add-module-directives": "./src/add-module-directives.ts",
+		"./sync-package-exports": "./src/sync-package-exports.ts",
+		"./apply-package-publish-config": "./src/apply-package-publish-config.ts"
+	},
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org/",
+		"exports": {
+			"./find-dependency-mismatches": {
+				"require": {
+					"types": "./dist/find-dependency-mismatches.d.cts",
+					"default": "./dist/find-dependency-mismatches.cjs"
+				},
+				"import": {
+					"types": "./dist/find-dependency-mismatches.d.mts",
+					"default": "./dist/find-dependency-mismatches.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/find-dependency-mismatches.d.mts",
-				"default": "./dist/find-dependency-mismatches.mjs"
-			}
-		},
-		"./add-module-directives": {
-			"require": {
-				"types": "./dist/add-module-directives.d.cts",
-				"default": "./dist/add-module-directives.cjs"
+			"./add-module-directives": {
+				"require": {
+					"types": "./dist/add-module-directives.d.cts",
+					"default": "./dist/add-module-directives.cjs"
+				},
+				"import": {
+					"types": "./dist/add-module-directives.d.mts",
+					"default": "./dist/add-module-directives.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/add-module-directives.d.mts",
-				"default": "./dist/add-module-directives.mjs"
+			"./sync-package-exports": {
+				"require": {
+					"types": "./dist/sync-package-exports.d.cts",
+					"default": "./dist/sync-package-exports.cjs"
+				},
+				"import": {
+					"types": "./dist/sync-package-exports.d.mts",
+					"default": "./dist/sync-package-exports.mjs"
+				}
+			},
+			"./apply-package-publish-config": {
+				"require": {
+					"types": "./dist/apply-package-publish-config.d.cts",
+					"default": "./dist/apply-package-publish-config.cjs"
+				},
+				"import": {
+					"types": "./dist/apply-package-publish-config.d.mts",
+					"default": "./dist/apply-package-publish-config.mjs"
+				}
 			}
 		}
 	},
 	"scripts": {
-		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
+		"build": "pnpm exec md-oss-sync-package-exports && pnpm exec md-oss-apply-package-publish-config && pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
 		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
-		"dev": "pkgroll --watch --sourcemap  --define.process.env.NODE_ENV='\"development\"' --define.DEBUG=true",
 		"typecheck": "tsc --noEmit"
-	},
-	"dependencies": {
-		"@md-oss/common": "workspace:^"
 	},
 	"devDependencies": {
 		"@md-oss/config": "workspace:^",

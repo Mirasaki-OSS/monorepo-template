@@ -1,4 +1,5 @@
 import {
+	cn,
 	mergePropsWithClassName,
 	resolveSlot,
 	type WithAsComponent,
@@ -11,12 +12,14 @@ export type PageContainerProps = {
 	slotProps?: {
 		container?: WithAsComponent<React.HTMLAttributes<HTMLDivElement>>;
 	};
+	omitContainerPadding?: boolean;
 };
 
 export function PageContainer({
 	children,
 	className,
 	slotProps,
+	omitContainerPadding,
 }: PageContainerProps): React.JSX.Element {
 	const [ContainerEl, containerSlotProps] = resolveSlot(
 		'div',
@@ -27,7 +30,11 @@ export function PageContainer({
 		React.HTMLAttributes<HTMLDivElement>
 	>(
 		{
-			className: 'container mx-auto w-full px-4 sm:px-6 lg:px-8',
+			className: cn(
+				'container mx-auto w-full',
+				!omitContainerPadding && 'px-2 sm:px-4 md:px-6 lg:px-8',
+				!omitContainerPadding && 'py-2 sm:py-4 md:py-6 lg:py-8'
+			),
 		},
 		containerSlotProps,
 		className
@@ -50,9 +57,14 @@ export function WithPageContainer<P>(
 	Component: React.ComponentType<P>
 ): React.FC<P & PageContainerProps> {
 	return function WrappedWithPageContainer(props) {
-		const { children, className, slotProps, ...rest } = props;
+		const { children, className, slotProps, omitContainerPadding, ...rest } =
+			props;
 		return (
-			<PageContainer className={className} slotProps={slotProps}>
+			<PageContainer
+				className={className}
+				slotProps={slotProps}
+				omitContainerPadding={omitContainerPadding}
+			>
 				<Component {...(rest as P)}>{children}</Component>
 			</PageContainer>
 		);

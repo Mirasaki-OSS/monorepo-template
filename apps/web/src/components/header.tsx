@@ -1,5 +1,5 @@
+import { UserButton } from '@md-oss/design-system/components/auth/user/user-button';
 import Link from 'next/link';
-import UserMenu from './user-menu';
 
 export default function Header() {
   const links = [
@@ -20,7 +20,7 @@ export default function Header() {
           })}
         </nav>
         <div className="flex items-center gap-2">
-          <UserMenu />
+          <UserButton />
         </div>
       </div>
       <hr />

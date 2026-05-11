@@ -12,32 +12,28 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@md-oss/design-system/components/ui/drawer';
+import { useQuery } from '@tanstack/react-query';
 import { DynamicCodeBlock } from 'fumadocs-ui/components/dynamic-codeblock';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React from 'react';
+import { useTRPC } from '@/lib/client/trpc';
 
 export default function HomePageClient() {
   const router = useRouter();
   const [refetchCount, setRefetchCount] = React.useState(0);
 
-  // const trpc = useTRPC();
-  // const healthCheck = useQuery(trpc.healthCheck.queryOptions());
+  const trpc = useTRPC();
+  const healthCheck = useQuery(trpc.healthCheck.queryOptions());
+  const greeting = useQuery(
+    trpc.hello.queryOptions({ text: 'from the client!' })
+  );
 
-  // 	const [showSignIn, setShowSignIn] = useState(false);
-
-  // return showSignIn ? (
-  // 	<SignInForm onSwitchToSignUp={() => setShowSignIn(false)} />
-  // ) : (
-  // 	<SignUpForm onSwitchToSignIn={() => setShowSignIn(true)} />
-  // );
-
-  const healthCheck = {
-    data: { status: 'ok', timestamp: new Date().toISOString() },
-    refetch: () => {
-      router.refresh();
-      setRefetchCount((prev) => prev + 1);
-    },
+  const handleRefresh = async () => {
+    await healthCheck.refetch();
+    await greeting.refetch();
+    router.refresh();
+    setRefetchCount((prev) => prev + 1);
   };
 
   return (
@@ -78,7 +74,7 @@ export default function HomePageClient() {
               />
             </div>
             <DrawerFooter>
-              <Button variant="outline" onClick={() => healthCheck.refetch()}>
+              <Button variant="outline" onClick={handleRefresh}>
                 Refresh
               </Button>
             </DrawerFooter>

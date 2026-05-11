@@ -1,7 +1,7 @@
 import { access, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { parseArgs } from 'node:util';
-import { RecordUtils } from '@md-oss/common/utils';
+import { collectExportTargets, readPackageJson } from './package-json';
 
 export type AddModuleDirectivesOptions = {
 	cwd?: string;
@@ -14,10 +14,6 @@ export type AddModuleDirectivesFromPackageExportsOptions = {
 	cwd?: string;
 	packageJsonPath?: string;
 	extensions?: string[];
-};
-
-type PackageJsonWithExports = {
-	exports?: Record<string, unknown>;
 };
 
 const DEFAULT_EXTENSIONS = ['mjs', 'cjs'];
@@ -181,22 +177,6 @@ export const addModuleDirectivesToFiles = async ({
 	});
 };
 
-const collectExportTargets = (value: unknown): string[] => {
-	if (typeof value === 'string') {
-		return [value];
-	}
-
-	if (Array.isArray(value)) {
-		return value.flatMap((item) => collectExportTargets(item));
-	}
-
-	if (RecordUtils.isRecord(value)) {
-		return Object.values(value).flatMap((item) => collectExportTargets(item));
-	}
-
-	return [];
-};
-
 const fileExists = async (filePath: string): Promise<boolean> => {
 	try {
 		await access(filePath);
@@ -253,10 +233,7 @@ export const addModuleDirectivesFromPackageExports = async ({
 	packageJsonPath = 'package.json',
 	extensions = DEFAULT_EXTENSIONS,
 }: AddModuleDirectivesFromPackageExportsOptions = {}): Promise<void> => {
-	const resolvedPackageJsonPath = path.resolve(cwd, packageJsonPath);
-	const packageJson = JSON.parse(
-		await readFile(resolvedPackageJsonPath, 'utf8')
-	) as PackageJsonWithExports;
+	const { packageJson } = await readPackageJson(cwd, packageJsonPath);
 
 	const exportTargets = [
 		...new Set(collectExportTargets(packageJson.exports)),

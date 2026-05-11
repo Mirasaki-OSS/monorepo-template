@@ -1,5 +1,12 @@
 import { defineRelations } from 'drizzle-orm';
-import { boolean, index, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import {
+	boolean,
+	index,
+	integer,
+	pgTable,
+	text,
+	timestamp,
+} from 'drizzle-orm/pg-core';
 import type {
 	UserClientMetadata,
 	UserClientReadOnlyMetadata,
@@ -18,6 +25,9 @@ export const user = pgTable('user', {
 		.defaultNow()
 		.$onUpdate(() => /* @__PURE__ */ new Date())
 		.notNull(),
+	username: text('username').unique('user_username_unique'),
+	displayUsername: text('display_username'),
+	bio: text('bio'),
 	...metadataColumns<
 		UserClientMetadata,
 		UserClientReadOnlyMetadata,
@@ -84,8 +94,64 @@ export const verification = pgTable(
 	(table) => [index('verification_identifier_idx').on(table.identifier)]
 );
 
+export const passkey = pgTable(
+	'passkey',
+	{
+		id: text('id').primaryKey(),
+		name: text('name'),
+		publicKey: text('public_key').notNull(),
+		userId: text('user_id')
+			.notNull()
+			.references(() => user.id, { onDelete: 'cascade' }),
+		credentialID: text('credential_id').notNull(),
+		counter: integer('counter').notNull(),
+		deviceType: text('device_type').notNull(),
+		backedUp: boolean('backed_up').notNull(),
+		transports: text('transports'),
+		createdAt: timestamp('created_at'),
+		aaguid: text('aaguid'),
+	},
+	(table) => [
+		index('passkey_userId_idx').on(table.userId),
+		index('passkey_credentialID_idx').on(table.credentialID),
+	]
+);
+
+export const apikey = pgTable(
+	'apikey',
+	{
+		id: text('id').primaryKey(),
+		configId: text('config_id').default('default').notNull(),
+		name: text('name'),
+		start: text('start'),
+		referenceId: text('reference_id').notNull(),
+		prefix: text('prefix'),
+		key: text('key').notNull(),
+		refillInterval: integer('refill_interval'),
+		refillAmount: integer('refill_amount'),
+		lastRefillAt: timestamp('last_refill_at'),
+		enabled: boolean('enabled').default(true),
+		rateLimitEnabled: boolean('rate_limit_enabled').default(true),
+		rateLimitTimeWindow: integer('rate_limit_time_window').default(60000),
+		rateLimitMax: integer('rate_limit_max').default(100),
+		requestCount: integer('request_count').default(0),
+		remaining: integer('remaining'),
+		lastRequest: timestamp('last_request'),
+		expiresAt: timestamp('expires_at'),
+		createdAt: timestamp('created_at').notNull(),
+		updatedAt: timestamp('updated_at').notNull(),
+		permissions: text('permissions'),
+		metadata: text('metadata'),
+	},
+	(table) => [
+		index('apikey_configId_idx').on(table.configId),
+		index('apikey_referenceId_idx').on(table.referenceId),
+		index('apikey_key_idx').on(table.key),
+	]
+);
+
 export const authRelations = defineRelations(
-	{ user, session, account, verification },
+	{ user, session, account, verification, passkey },
 	(r) => ({
 		user: {
 			sessions: r.many.session({
@@ -95,6 +161,10 @@ export const authRelations = defineRelations(
 			accounts: r.many.account({
 				from: r.user.id,
 				to: r.account.userId,
+			}),
+			passkeys: r.many.passkey({
+				from: r.user.id,
+				to: r.passkey.userId,
 			}),
 		},
 		session: {
@@ -113,6 +183,8 @@ export const authRelations = defineRelations(
 );
 
 export const {
+	passkey: passkeyRelations,
+	verification: verificationRelations,
 	user: userRelations,
 	session: sessionRelations,
 	account: accountRelations,

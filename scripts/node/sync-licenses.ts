@@ -57,7 +57,7 @@ async function main() {
 		}
 	}
 
-	console.log(`Copied LICENSE to ${copied} package(s) in vendor/`);
+	console.info(`Copied LICENSE to ${copied} package(s) in vendor/`);
 }
 
 void main();

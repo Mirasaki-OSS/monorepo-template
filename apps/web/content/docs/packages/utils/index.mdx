@@ -1,12 +1,38 @@
 ---
 title: "@md-oss/utils"
-description: "Shared utility functions for the monorepo."
+description: "Minimal package (lib) example for the monorepo-template."
 renderInlineTOC: false
 ---
+## Table of Contents
+
+- [Overview](#overview)
+- [API](#api)
+- [Usage](#usage)
+- [Development](#development)
+
+## Overview
+
+This package is the lightweight home for reusable helpers that do not belong to a more specific domain package. The current surface area is intentionally small and can grow as common utilities are extracted from apps and feature packages.
+
+## API
+
+### `getGreeting(name)`
+
+Returns a greeting string for the provided name.
+
 ## Usage
 
 ```typescript
-import { getGreeting } from "@md-oss/utils";
+import { getGreeting } from '@md-oss/utils';
 
-console.log(getGreeting("World"));
+console.log(getGreeting('World'));
+// Hello, World!
+```
+
+## Development
+
+```bash
+pnpm --filter @md-oss/utils dev
+pnpm --filter @md-oss/utils build
+pnpm --filter @md-oss/utils typecheck
 ```

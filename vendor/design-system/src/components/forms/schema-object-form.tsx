@@ -10,7 +10,6 @@ import {
 	useSensors,
 } from '@dnd-kit/core';
 import {
-	arrayMove,
 	SortableContext,
 	sortableKeyboardCoordinates,
 	useSortable,
@@ -36,6 +35,12 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@md-oss/design-system/components/ui/select';
+import {
+	appendStableOrderId,
+	ensureStableOrderIds,
+	removeStableOrderIdAt,
+	reorderByStableIds,
+} from '@md-oss/design-system/lib/dnd';
 import { cn, mergePropsWithClassName } from '@md-oss/design-system/lib/utils';
 import {
 	ChevronDownIcon,
@@ -47,7 +52,7 @@ import {
 	XIcon,
 } from 'lucide-react';
 import type React from 'react';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useId, useMemo, useRef, useState } from 'react';
 import z from 'zod/v4';
 
 type SchemaObjectFormClassNames = {
@@ -115,7 +120,7 @@ const ObjectTileAction = ({
 			variant="outline"
 			disabled={disabled}
 			onClick={onClick}
-			className={cn(objectInlineActionClass(type), className)}
+			className={cn(objectInlineActionClass(type), 'py-1.5', className)}
 		>
 			<ObjectTileActionIcon type={type} />
 			{type === 'add' && <span>Add</span>}
@@ -232,12 +237,10 @@ const SortableCollectionField = <TItem,>({
 	renderItem,
 	classNames,
 }: SortableCollectionFieldProps<TItem>) => {
+	const dndContextId = useId();
 	const stableIdsRef = useRef<string[]>([]);
-
-	while (stableIdsRef.current.length < items.length) {
-		stableIdsRef.current.push(`arr-${Math.random().toString(36).slice(2)}`);
-	}
-	const stableIds = stableIdsRef.current.slice(0, items.length);
+	const stableIds = ensureStableOrderIds(stableIdsRef.current, items.length);
+	stableIdsRef.current = stableIds;
 
 	const sensors = useSensors(
 		useSensor(PointerSensor),
@@ -252,17 +255,14 @@ const SortableCollectionField = <TItem,>({
 	const handleAddItem = () => {
 		const nextItem = createItem();
 		const nextIndex = items.length;
-		stableIdsRef.current = [
-			...stableIds,
-			`arr-${Math.random().toString(36).slice(2)}`,
-		];
+		stableIdsRef.current = appendStableOrderId(stableIds);
 		setObjectExpanded(path, true);
 		setObjectExpanded([...path, String(nextIndex)], true);
 		onChangeValue([...items, nextItem]);
 	};
 
 	const handleRemoveItem = (index: number) => {
-		stableIdsRef.current = stableIds.filter((_, i) => i !== index);
+		stableIdsRef.current = removeStableOrderIdAt(stableIds, index);
 		const nextItems = items.filter((_, i) => i !== index);
 		onChangeValue(
 			nextItems.length === 0
@@ -276,12 +276,16 @@ const SortableCollectionField = <TItem,>({
 	};
 
 	const handleDragEnd = ({ active, over }: DragEndEvent) => {
-		if (!over || active.id === over.id) return;
-		const oldIndex = stableIds.indexOf(String(active.id));
-		const newIndex = stableIds.indexOf(String(over.id));
-		if (oldIndex === -1 || newIndex === -1) return;
-		stableIdsRef.current = arrayMove(stableIds, oldIndex, newIndex);
-		onChangeValue(arrayMove(items, oldIndex, newIndex));
+		if (!over) return;
+		const nextOrder = reorderByStableIds({
+			ids: stableIds,
+			items,
+			activeId: String(active.id),
+			overId: String(over.id),
+		});
+		if (!nextOrder) return;
+		stableIdsRef.current = nextOrder.nextIds;
+		onChangeValue(nextOrder.nextItems);
 	};
 
 	if (isRemovableArray && items.length === 0) {
@@ -334,6 +338,7 @@ const SortableCollectionField = <TItem,>({
 			</div>
 			{isExpanded ? (
 				<DndContext
+					id={dndContextId}
 					sensors={sensors}
 					collisionDetection={closestCenter}
 					onDragEnd={handleDragEnd}

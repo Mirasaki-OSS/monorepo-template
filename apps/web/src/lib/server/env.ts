@@ -8,6 +8,6 @@ export const serverEnv = createEnv({
   client: {},
   server: {},
   clientPrefix: 'NEXT_PUBLIC_',
-  runtimeEnv: process.env,
+  runtimeEnv: {},
   emptyStringAsUndefined: true,
 });

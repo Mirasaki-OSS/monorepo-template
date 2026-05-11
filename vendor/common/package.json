@@ -2,10 +2,6 @@
 	"name": "@md-oss/common",
 	"version": "0.9.0",
 	"private": false,
-	"publishConfig": {
-		"access": "public",
-		"registry": "https://registry.npmjs.org/"
-	},
 	"repository": {
 		"type": "git",
 		"url": "git+ssh://git@github.com/Mirasaki-OSS/monorepo-template.git",
@@ -21,447 +17,508 @@
 	"sideEffects": false,
 	"description": "Constants, magic numbers, and utilities",
 	"license": "ISC",
-	"main": "./dist/index.cjs",
-	"module": "./dist/index.mjs",
-	"types": "./dist/index.d.cts",
+	"main": "./src/index.ts",
 	"files": [
 		"dist/**/*",
 		"README.md",
 		"LICENSE"
 	],
 	"exports": {
-		".": {
-			"require": {
-				"types": "./dist/index.d.cts",
-				"default": "./dist/index.cjs"
+		".": "./src/index.ts",
+		"./env": "./src/env.ts",
+		"./errors": "./src/errors.ts",
+		"./constants": "./src/constants/index.ts",
+		"./constants/bytes": "./src/constants/bytes.ts",
+		"./constants/discord": "./src/constants/discord.ts",
+		"./constants/time": "./src/constants/time.ts",
+		"./http": "./src/http/index.ts",
+		"./http/errors": "./src/http/errors.ts",
+		"./http/guards": "./src/http/guards.ts",
+		"./http/headers": "./src/http/headers.ts",
+		"./http/requests": "./src/http/requests.ts",
+		"./http/schemas": "./src/http/schemas.ts",
+		"./http/status-codes": "./src/http/status-codes.ts",
+		"./http/types": "./src/http/types.ts",
+		"./schemas": "./src/schemas/index.ts",
+		"./schemas/best-effort": "./src/schemas/best-effort.ts",
+		"./schemas/colors": "./src/schemas/colors.ts",
+		"./schemas/discord": "./src/schemas/discord.ts",
+		"./schemas/ids": "./src/schemas/ids.ts",
+		"./schemas/logging": "./src/schemas/logging.ts",
+		"./schemas/pagination": "./src/schemas/pagination.ts",
+		"./schemas/records": "./src/schemas/records.ts",
+		"./schemas/schema-object-form": "./src/schemas/schema-object-form.ts",
+		"./schemas/slugs": "./src/schemas/slugs.ts",
+		"./schemas/strings": "./src/schemas/strings.ts",
+		"./schemas/urls": "./src/schemas/urls.ts",
+		"./utils": "./src/utils/index.ts",
+		"./utils/arrays": "./src/utils/arrays.ts",
+		"./utils/bytes": "./src/utils/bytes.ts",
+		"./utils/mime-types": "./src/utils/mime-types.ts",
+		"./utils/numbers": "./src/utils/numbers.ts",
+		"./utils/objects": "./src/utils/objects.ts",
+		"./utils/payments": "./src/utils/payments.ts",
+		"./utils/performance": "./src/utils/performance.ts",
+		"./utils/random": "./src/utils/random.ts",
+		"./utils/records": "./src/utils/records.ts",
+		"./utils/runtime": "./src/utils/runtime.ts",
+		"./utils/strings": "./src/utils/strings.ts",
+		"./utils/time": "./src/utils/time.ts",
+		"./utils/urls": "./src/utils/urls.ts",
+		"./utils/node": "./src/utils/node/index.ts",
+		"./utils/node/files": "./src/utils/node/files.ts"
+	},
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org/",
+		"main": "./dist/index.cjs",
+		"module": "./dist/index.mjs",
+		"types": "./dist/index.d.cts",
+		"exports": {
+			".": {
+				"require": {
+					"types": "./dist/index.d.cts",
+					"default": "./dist/index.cjs"
+				},
+				"import": {
+					"types": "./dist/index.d.mts",
+					"default": "./dist/index.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/index.d.mts",
-				"default": "./dist/index.mjs"
-			}
-		},
-		"./errors": {
-			"require": {
-				"types": "./dist/errors.d.cts",
-				"default": "./dist/errors.cjs"
+			"./env": {
+				"require": {
+					"types": "./dist/env.d.cts",
+					"default": "./dist/env.cjs"
+				},
+				"import": {
+					"types": "./dist/env.d.mts",
+					"default": "./dist/env.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/errors.d.mts",
-				"default": "./dist/errors.mjs"
-			}
-		},
-		"./constants": {
-			"require": {
-				"types": "./dist/constants/index.d.cts",
-				"default": "./dist/constants/index.cjs"
+			"./errors": {
+				"require": {
+					"types": "./dist/errors.d.cts",
+					"default": "./dist/errors.cjs"
+				},
+				"import": {
+					"types": "./dist/errors.d.mts",
+					"default": "./dist/errors.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/constants/index.d.mts",
-				"default": "./dist/constants/index.mjs"
-			}
-		},
-		"./constants/bytes": {
-			"require": {
-				"types": "./dist/constants/bytes.d.cts",
-				"default": "./dist/constants/bytes.cjs"
+			"./constants": {
+				"require": {
+					"types": "./dist/constants/index.d.cts",
+					"default": "./dist/constants/index.cjs"
+				},
+				"import": {
+					"types": "./dist/constants/index.d.mts",
+					"default": "./dist/constants/index.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/constants/bytes.d.mts",
-				"default": "./dist/constants/bytes.mjs"
-			}
-		},
-		"./constants/discord": {
-			"require": {
-				"types": "./dist/constants/discord.d.cts",
-				"default": "./dist/constants/discord.cjs"
+			"./constants/bytes": {
+				"require": {
+					"types": "./dist/constants/bytes.d.cts",
+					"default": "./dist/constants/bytes.cjs"
+				},
+				"import": {
+					"types": "./dist/constants/bytes.d.mts",
+					"default": "./dist/constants/bytes.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/constants/discord.d.mts",
-				"default": "./dist/constants/discord.mjs"
-			}
-		},
-		"./constants/time": {
-			"require": {
-				"types": "./dist/constants/time.d.cts",
-				"default": "./dist/constants/time.cjs"
+			"./constants/discord": {
+				"require": {
+					"types": "./dist/constants/discord.d.cts",
+					"default": "./dist/constants/discord.cjs"
+				},
+				"import": {
+					"types": "./dist/constants/discord.d.mts",
+					"default": "./dist/constants/discord.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/constants/time.d.mts",
-				"default": "./dist/constants/time.mjs"
-			}
-		},
-		"./http": {
-			"require": {
-				"types": "./dist/http/index.d.cts",
-				"default": "./dist/http/index.cjs"
+			"./constants/time": {
+				"require": {
+					"types": "./dist/constants/time.d.cts",
+					"default": "./dist/constants/time.cjs"
+				},
+				"import": {
+					"types": "./dist/constants/time.d.mts",
+					"default": "./dist/constants/time.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/http/index.d.mts",
-				"default": "./dist/http/index.mjs"
-			}
-		},
-		"./http/errors": {
-			"require": {
-				"types": "./dist/http/errors.d.cts",
-				"default": "./dist/http/errors.cjs"
+			"./http": {
+				"require": {
+					"types": "./dist/http/index.d.cts",
+					"default": "./dist/http/index.cjs"
+				},
+				"import": {
+					"types": "./dist/http/index.d.mts",
+					"default": "./dist/http/index.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/http/errors.d.mts",
-				"default": "./dist/http/errors.mjs"
-			}
-		},
-		"./http/guards": {
-			"require": {
-				"types": "./dist/http/guards.d.cts",
-				"default": "./dist/http/guards.cjs"
+			"./http/errors": {
+				"require": {
+					"types": "./dist/http/errors.d.cts",
+					"default": "./dist/http/errors.cjs"
+				},
+				"import": {
+					"types": "./dist/http/errors.d.mts",
+					"default": "./dist/http/errors.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/http/guards.d.mts",
-				"default": "./dist/http/guards.mjs"
-			}
-		},
-		"./http/headers": {
-			"require": {
-				"types": "./dist/http/headers.d.cts",
-				"default": "./dist/http/headers.cjs"
+			"./http/guards": {
+				"require": {
+					"types": "./dist/http/guards.d.cts",
+					"default": "./dist/http/guards.cjs"
+				},
+				"import": {
+					"types": "./dist/http/guards.d.mts",
+					"default": "./dist/http/guards.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/http/headers.d.mts",
-				"default": "./dist/http/headers.mjs"
-			}
-		},
-		"./http/requests": {
-			"require": {
-				"types": "./dist/http/requests.d.cts"
+			"./http/headers": {
+				"require": {
+					"types": "./dist/http/headers.d.cts",
+					"default": "./dist/http/headers.cjs"
+				},
+				"import": {
+					"types": "./dist/http/headers.d.mts",
+					"default": "./dist/http/headers.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/http/requests.d.mts"
-			}
-		},
-		"./http/schemas": {
-			"require": {
-				"types": "./dist/http/schemas.d.cts",
-				"default": "./dist/http/schemas.cjs"
+			"./http/requests": {
+				"require": {
+					"types": "./dist/http/requests.d.cts"
+				},
+				"import": {
+					"types": "./dist/http/requests.d.mts"
+				}
 			},
-			"import": {
-				"types": "./dist/http/schemas.d.mts",
-				"default": "./dist/http/schemas.mjs"
-			}
-		},
-		"./http/status-codes": {
-			"require": {
-				"types": "./dist/http/status-codes.d.cts",
-				"default": "./dist/http/status-codes.cjs"
+			"./http/schemas": {
+				"require": {
+					"types": "./dist/http/schemas.d.cts",
+					"default": "./dist/http/schemas.cjs"
+				},
+				"import": {
+					"types": "./dist/http/schemas.d.mts",
+					"default": "./dist/http/schemas.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/http/status-codes.d.mts",
-				"default": "./dist/http/status-codes.mjs"
-			}
-		},
-		"./http/types": {
-			"require": {
-				"types": "./dist/http/types.d.cts"
+			"./http/status-codes": {
+				"require": {
+					"types": "./dist/http/status-codes.d.cts",
+					"default": "./dist/http/status-codes.cjs"
+				},
+				"import": {
+					"types": "./dist/http/status-codes.d.mts",
+					"default": "./dist/http/status-codes.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/http/types.d.mts"
-			}
-		},
-		"./schemas": {
-			"require": {
-				"types": "./dist/schemas/index.d.cts",
-				"default": "./dist/schemas/index.cjs"
+			"./http/types": {
+				"require": {
+					"types": "./dist/http/types.d.cts"
+				},
+				"import": {
+					"types": "./dist/http/types.d.mts"
+				}
 			},
-			"import": {
-				"types": "./dist/schemas/index.d.mts",
-				"default": "./dist/schemas/index.mjs"
-			}
-		},
-		"./schemas/best-effort": {
-			"require": {
-				"types": "./dist/schemas/best-effort.d.cts",
-				"default": "./dist/schemas/best-effort.cjs"
+			"./schemas": {
+				"require": {
+					"types": "./dist/schemas/index.d.cts",
+					"default": "./dist/schemas/index.cjs"
+				},
+				"import": {
+					"types": "./dist/schemas/index.d.mts",
+					"default": "./dist/schemas/index.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/schemas/best-effort.d.mts",
-				"default": "./dist/schemas/best-effort.mjs"
-			}
-		},
-		"./schemas/colors": {
-			"require": {
-				"types": "./dist/schemas/colors.d.cts",
-				"default": "./dist/schemas/colors.cjs"
+			"./schemas/best-effort": {
+				"require": {
+					"types": "./dist/schemas/best-effort.d.cts",
+					"default": "./dist/schemas/best-effort.cjs"
+				},
+				"import": {
+					"types": "./dist/schemas/best-effort.d.mts",
+					"default": "./dist/schemas/best-effort.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/schemas/colors.d.mts",
-				"default": "./dist/schemas/colors.mjs"
-			}
-		},
-		"./schemas/discord": {
-			"require": {
-				"types": "./dist/schemas/discord.d.cts",
-				"default": "./dist/schemas/discord.cjs"
+			"./schemas/colors": {
+				"require": {
+					"types": "./dist/schemas/colors.d.cts",
+					"default": "./dist/schemas/colors.cjs"
+				},
+				"import": {
+					"types": "./dist/schemas/colors.d.mts",
+					"default": "./dist/schemas/colors.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/schemas/discord.d.mts",
-				"default": "./dist/schemas/discord.mjs"
-			}
-		},
-		"./schemas/ids": {
-			"require": {
-				"types": "./dist/schemas/ids.d.cts",
-				"default": "./dist/schemas/ids.cjs"
+			"./schemas/discord": {
+				"require": {
+					"types": "./dist/schemas/discord.d.cts",
+					"default": "./dist/schemas/discord.cjs"
+				},
+				"import": {
+					"types": "./dist/schemas/discord.d.mts",
+					"default": "./dist/schemas/discord.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/schemas/ids.d.mts",
-				"default": "./dist/schemas/ids.mjs"
-			}
-		},
-		"./schemas/logging": {
-			"require": {
-				"types": "./dist/schemas/logging.d.cts",
-				"default": "./dist/schemas/logging.cjs"
+			"./schemas/ids": {
+				"require": {
+					"types": "./dist/schemas/ids.d.cts",
+					"default": "./dist/schemas/ids.cjs"
+				},
+				"import": {
+					"types": "./dist/schemas/ids.d.mts",
+					"default": "./dist/schemas/ids.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/schemas/logging.d.mts",
-				"default": "./dist/schemas/logging.mjs"
-			}
-		},
-		"./schemas/pagination": {
-			"require": {
-				"types": "./dist/schemas/pagination.d.cts",
-				"default": "./dist/schemas/pagination.cjs"
+			"./schemas/logging": {
+				"require": {
+					"types": "./dist/schemas/logging.d.cts",
+					"default": "./dist/schemas/logging.cjs"
+				},
+				"import": {
+					"types": "./dist/schemas/logging.d.mts",
+					"default": "./dist/schemas/logging.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/schemas/pagination.d.mts",
-				"default": "./dist/schemas/pagination.mjs"
-			}
-		},
-		"./schemas/records": {
-			"require": {
-				"types": "./dist/schemas/records.d.cts",
-				"default": "./dist/schemas/records.cjs"
+			"./schemas/pagination": {
+				"require": {
+					"types": "./dist/schemas/pagination.d.cts",
+					"default": "./dist/schemas/pagination.cjs"
+				},
+				"import": {
+					"types": "./dist/schemas/pagination.d.mts",
+					"default": "./dist/schemas/pagination.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/schemas/records.d.mts",
-				"default": "./dist/schemas/records.mjs"
-			}
-		},
-		"./schemas/schema-object-form": {
-			"require": {
-				"types": "./dist/schemas/schema-object-form.d.cts",
-				"default": "./dist/schemas/schema-object-form.cjs"
+			"./schemas/records": {
+				"require": {
+					"types": "./dist/schemas/records.d.cts",
+					"default": "./dist/schemas/records.cjs"
+				},
+				"import": {
+					"types": "./dist/schemas/records.d.mts",
+					"default": "./dist/schemas/records.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/schemas/schema-object-form.d.mts",
-				"default": "./dist/schemas/schema-object-form.mjs"
-			}
-		},
-		"./schemas/slugs": {
-			"require": {
-				"types": "./dist/schemas/slugs.d.cts",
-				"default": "./dist/schemas/slugs.cjs"
+			"./schemas/schema-object-form": {
+				"require": {
+					"types": "./dist/schemas/schema-object-form.d.cts",
+					"default": "./dist/schemas/schema-object-form.cjs"
+				},
+				"import": {
+					"types": "./dist/schemas/schema-object-form.d.mts",
+					"default": "./dist/schemas/schema-object-form.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/schemas/slugs.d.mts",
-				"default": "./dist/schemas/slugs.mjs"
-			}
-		},
-		"./schemas/strings": {
-			"require": {
-				"types": "./dist/schemas/strings.d.cts",
-				"default": "./dist/schemas/strings.cjs"
+			"./schemas/slugs": {
+				"require": {
+					"types": "./dist/schemas/slugs.d.cts",
+					"default": "./dist/schemas/slugs.cjs"
+				},
+				"import": {
+					"types": "./dist/schemas/slugs.d.mts",
+					"default": "./dist/schemas/slugs.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/schemas/strings.d.mts",
-				"default": "./dist/schemas/strings.mjs"
-			}
-		},
-		"./schemas/urls": {
-			"require": {
-				"types": "./dist/schemas/urls.d.cts",
-				"default": "./dist/schemas/urls.cjs"
+			"./schemas/strings": {
+				"require": {
+					"types": "./dist/schemas/strings.d.cts",
+					"default": "./dist/schemas/strings.cjs"
+				},
+				"import": {
+					"types": "./dist/schemas/strings.d.mts",
+					"default": "./dist/schemas/strings.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/schemas/urls.d.mts",
-				"default": "./dist/schemas/urls.mjs"
-			}
-		},
-		"./utils": {
-			"require": {
-				"types": "./dist/utils/index.d.cts",
-				"default": "./dist/utils/index.cjs"
+			"./schemas/urls": {
+				"require": {
+					"types": "./dist/schemas/urls.d.cts",
+					"default": "./dist/schemas/urls.cjs"
+				},
+				"import": {
+					"types": "./dist/schemas/urls.d.mts",
+					"default": "./dist/schemas/urls.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/utils/index.d.mts",
-				"default": "./dist/utils/index.mjs"
-			}
-		},
-		"./utils/arrays": {
-			"require": {
-				"types": "./dist/utils/arrays.d.cts",
-				"default": "./dist/utils/arrays.cjs"
+			"./utils": {
+				"require": {
+					"types": "./dist/utils/index.d.cts",
+					"default": "./dist/utils/index.cjs"
+				},
+				"import": {
+					"types": "./dist/utils/index.d.mts",
+					"default": "./dist/utils/index.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/utils/arrays.d.mts",
-				"default": "./dist/utils/arrays.mjs"
-			}
-		},
-		"./utils/bytes": {
-			"require": {
-				"types": "./dist/utils/bytes.d.cts",
-				"default": "./dist/utils/bytes.cjs"
+			"./utils/arrays": {
+				"require": {
+					"types": "./dist/utils/arrays.d.cts",
+					"default": "./dist/utils/arrays.cjs"
+				},
+				"import": {
+					"types": "./dist/utils/arrays.d.mts",
+					"default": "./dist/utils/arrays.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/utils/bytes.d.mts",
-				"default": "./dist/utils/bytes.mjs"
-			}
-		},
-		"./utils/mime-types": {
-			"require": {
-				"types": "./dist/utils/mime-types.d.cts",
-				"default": "./dist/utils/mime-types.cjs"
+			"./utils/bytes": {
+				"require": {
+					"types": "./dist/utils/bytes.d.cts",
+					"default": "./dist/utils/bytes.cjs"
+				},
+				"import": {
+					"types": "./dist/utils/bytes.d.mts",
+					"default": "./dist/utils/bytes.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/utils/mime-types.d.mts",
-				"default": "./dist/utils/mime-types.mjs"
-			}
-		},
-		"./utils/numbers": {
-			"require": {
-				"types": "./dist/utils/numbers.d.cts",
-				"default": "./dist/utils/numbers.cjs"
+			"./utils/mime-types": {
+				"require": {
+					"types": "./dist/utils/mime-types.d.cts",
+					"default": "./dist/utils/mime-types.cjs"
+				},
+				"import": {
+					"types": "./dist/utils/mime-types.d.mts",
+					"default": "./dist/utils/mime-types.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/utils/numbers.d.mts",
-				"default": "./dist/utils/numbers.mjs"
-			}
-		},
-		"./utils/objects": {
-			"require": {
-				"types": "./dist/utils/objects.d.cts",
-				"default": "./dist/utils/objects.cjs"
+			"./utils/numbers": {
+				"require": {
+					"types": "./dist/utils/numbers.d.cts",
+					"default": "./dist/utils/numbers.cjs"
+				},
+				"import": {
+					"types": "./dist/utils/numbers.d.mts",
+					"default": "./dist/utils/numbers.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/utils/objects.d.mts",
-				"default": "./dist/utils/objects.mjs"
-			}
-		},
-		"./utils/payments": {
-			"require": {
-				"types": "./dist/utils/payments.d.cts",
-				"default": "./dist/utils/payments.cjs"
+			"./utils/objects": {
+				"require": {
+					"types": "./dist/utils/objects.d.cts",
+					"default": "./dist/utils/objects.cjs"
+				},
+				"import": {
+					"types": "./dist/utils/objects.d.mts",
+					"default": "./dist/utils/objects.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/utils/payments.d.mts",
-				"default": "./dist/utils/payments.mjs"
-			}
-		},
-		"./utils/performance": {
-			"require": {
-				"types": "./dist/utils/performance.d.cts",
-				"default": "./dist/utils/performance.cjs"
+			"./utils/payments": {
+				"require": {
+					"types": "./dist/utils/payments.d.cts",
+					"default": "./dist/utils/payments.cjs"
+				},
+				"import": {
+					"types": "./dist/utils/payments.d.mts",
+					"default": "./dist/utils/payments.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/utils/performance.d.mts",
-				"default": "./dist/utils/performance.mjs"
-			}
-		},
-		"./utils/random": {
-			"require": {
-				"types": "./dist/utils/random.d.cts",
-				"default": "./dist/utils/random.cjs"
+			"./utils/performance": {
+				"require": {
+					"types": "./dist/utils/performance.d.cts",
+					"default": "./dist/utils/performance.cjs"
+				},
+				"import": {
+					"types": "./dist/utils/performance.d.mts",
+					"default": "./dist/utils/performance.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/utils/random.d.mts",
-				"default": "./dist/utils/random.mjs"
-			}
-		},
-		"./utils/records": {
-			"require": {
-				"types": "./dist/utils/records.d.cts",
-				"default": "./dist/utils/records.cjs"
+			"./utils/random": {
+				"require": {
+					"types": "./dist/utils/random.d.cts",
+					"default": "./dist/utils/random.cjs"
+				},
+				"import": {
+					"types": "./dist/utils/random.d.mts",
+					"default": "./dist/utils/random.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/utils/records.d.mts",
-				"default": "./dist/utils/records.mjs"
-			}
-		},
-		"./utils/runtime": {
-			"require": {
-				"types": "./dist/utils/runtime.d.cts",
-				"default": "./dist/utils/runtime.cjs"
+			"./utils/records": {
+				"require": {
+					"types": "./dist/utils/records.d.cts",
+					"default": "./dist/utils/records.cjs"
+				},
+				"import": {
+					"types": "./dist/utils/records.d.mts",
+					"default": "./dist/utils/records.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/utils/runtime.d.mts",
-				"default": "./dist/utils/runtime.mjs"
-			}
-		},
-		"./utils/strings": {
-			"require": {
-				"types": "./dist/utils/strings.d.cts",
-				"default": "./dist/utils/strings.cjs"
+			"./utils/runtime": {
+				"require": {
+					"types": "./dist/utils/runtime.d.cts",
+					"default": "./dist/utils/runtime.cjs"
+				},
+				"import": {
+					"types": "./dist/utils/runtime.d.mts",
+					"default": "./dist/utils/runtime.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/utils/strings.d.mts",
-				"default": "./dist/utils/strings.mjs"
-			}
-		},
-		"./utils/time": {
-			"require": {
-				"types": "./dist/utils/time.d.cts",
-				"default": "./dist/utils/time.cjs"
+			"./utils/strings": {
+				"require": {
+					"types": "./dist/utils/strings.d.cts",
+					"default": "./dist/utils/strings.cjs"
+				},
+				"import": {
+					"types": "./dist/utils/strings.d.mts",
+					"default": "./dist/utils/strings.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/utils/time.d.mts",
-				"default": "./dist/utils/time.mjs"
-			}
-		},
-		"./utils/urls": {
-			"require": {
-				"types": "./dist/utils/urls.d.cts",
-				"default": "./dist/utils/urls.cjs"
+			"./utils/time": {
+				"require": {
+					"types": "./dist/utils/time.d.cts",
+					"default": "./dist/utils/time.cjs"
+				},
+				"import": {
+					"types": "./dist/utils/time.d.mts",
+					"default": "./dist/utils/time.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/utils/urls.d.mts",
-				"default": "./dist/utils/urls.mjs"
-			}
-		},
-		"./utils/node": {
-			"require": {
-				"types": "./dist/utils/node/index.d.cts",
-				"default": "./dist/utils/node/index.cjs"
+			"./utils/urls": {
+				"require": {
+					"types": "./dist/utils/urls.d.cts",
+					"default": "./dist/utils/urls.cjs"
+				},
+				"import": {
+					"types": "./dist/utils/urls.d.mts",
+					"default": "./dist/utils/urls.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/utils/node/index.d.mts",
-				"default": "./dist/utils/node/index.mjs"
-			}
-		},
-		"./utils/node/files": {
-			"require": {
-				"types": "./dist/utils/node/files.d.cts",
-				"default": "./dist/utils/node/files.cjs"
+			"./utils/node": {
+				"require": {
+					"types": "./dist/utils/node/index.d.cts",
+					"default": "./dist/utils/node/index.cjs"
+				},
+				"import": {
+					"types": "./dist/utils/node/index.d.mts",
+					"default": "./dist/utils/node/index.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/utils/node/files.d.mts",
-				"default": "./dist/utils/node/files.mjs"
+			"./utils/node/files": {
+				"require": {
+					"types": "./dist/utils/node/files.d.cts",
+					"default": "./dist/utils/node/files.cjs"
+				},
+				"import": {
+					"types": "./dist/utils/node/files.d.mts",
+					"default": "./dist/utils/node/files.mjs"
+				}
 			}
 		}
 	},
 	"scripts": {
-		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
+		"build": "pnpm exec md-oss-sync-package-exports && pnpm exec md-oss-apply-package-publish-config && pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
 		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
-		"dev": "pkgroll --watch --sourcemap  --define.process.env.NODE_ENV='\"development\"' --define.DEBUG=true",
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
 		"@md-oss/serdes": "workspace:^",
+		"@t3-oss/env-core": "^0.13.11",
 		"@types/qs": "^6.15.1",
 		"qs": "^6.15.1",
 		"zod": "^4.4.3"
 	},
 	"devDependencies": {
 		"@md-oss/config": "workspace:^",
-		"@types/node": "^25.6.0",
+		"@md-oss/scripts": "workspace:^",
+		"@types/node": "^25.6.2",
 		"pkgroll": "^2.27.0",
 		"typescript": "^6.0.3"
 	}

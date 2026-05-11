@@ -22,7 +22,8 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "types": ["mdx", "node", "react", "react-dom", "react-syntax-highlighter"]
   },
   "include": [
     "next-env.d.ts",

@@ -78,7 +78,7 @@ const awaitOrTimeout = <T>(
  * @param fn - Function to execute
  * @param onNewTimeout - Callback when a new timeout is scheduled
  * @returns Timeout handle
- * @example safeSetTimeout(2147483648, true, () => console.log('Done'))
+ * @example safeSetTimeout(2147483648, true, () => console.debug('Done'))
  */
 const safeSetTimeout = (
 	timeoutMs: number,
@@ -133,7 +133,7 @@ const safeSetTimeout = (
  * @param fn - Function to execute
  * @param onNewTimeout - Callback when a new timeout is scheduled
  * @returns Timeout handle
- * @example safeSetInterval(2147483648, () => console.log('Tick'))
+ * @example safeSetInterval(2147483648, () => console.debug('Tick'))
  */
 const safeSetInterval = (
 	intervalMs: number,
@@ -277,7 +277,7 @@ async function executeWithConcurrency<T>(
  *   {
  *     concurrency: 3,
  *     stopOnError: false,
- *     onProgress: (done, total) => console.log(`${done}/${total}`)
+ *     onProgress: (done, total) => console.debug(`${done}/${total}`)
  *   }
  * );
  */
@@ -567,7 +567,7 @@ function printProgress(options: PrintProgressOptions): void {
 		parts.push(`- Est. remaining time: ${humanReadableMs(remainingTime)}`);
 	}
 
-	(outputFn ?? console.log)(parts.join(' '));
+	(outputFn ?? console.info)(parts.join(' '));
 }
 
 export {

@@ -56,5 +56,6 @@ deploy/
 # Misc
 *.md
 **/*.md
+!apps/web/content/docs/**/*.md
 *.example
 **/*.example

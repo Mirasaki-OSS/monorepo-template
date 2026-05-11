@@ -34,7 +34,7 @@ const { scopeOld, scopeNew, paths } = args as Args;
 // Split paths by comma
 const pathList = paths.split(',').map((p) => p.trim());
 
-console.log(
+console.info(
 	`Replacing ${scopeOld} with ${scopeNew} in ${pathList.length} path(s)`
 );
 
@@ -72,7 +72,7 @@ for (const targetPath of pathList) {
 }
 
 const files = Array.from(allFiles);
-console.log(`Found ${files.length} files to process`);
+console.info(`Found ${files.length} files to process`);
 
 let totalReplacements = 0;
 const modifiedFiles: string[] = [];
@@ -93,7 +93,7 @@ for (const filePath of files) {
 			writeFileSync(filePath, newContent, 'utf-8');
 			modifiedFiles.push(filePath);
 			totalReplacements++;
-			console.log(`  ✓ Updated ${filePath}`);
+			console.info(`  ✓ Updated ${filePath}`);
 		}
 	} catch (error) {
 		console.error(
@@ -102,11 +102,11 @@ for (const filePath of files) {
 	}
 }
 
-console.log(`\n✓ Replaced scope in ${totalReplacements} file(s)`);
+console.info(`\n✓ Replaced scope in ${totalReplacements} file(s)`);
 
 // Format modified files
 if (modifiedFiles.length > 0) {
-	console.log('Formatting modified files...');
+	console.info('Formatting modified files...');
 	try {
 		spawnSync(
 			'pnpm',
@@ -117,8 +117,8 @@ if (modifiedFiles.length > 0) {
 		);
 	} catch {
 		// Biome might fail on some file types, ignore
-		console.log('Note: Some files could not be formatted');
+		console.info('Note: Some files could not be formatted');
 	}
 }
 
-console.log('Done.');
+console.info('Done.');

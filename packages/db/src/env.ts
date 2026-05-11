@@ -7,7 +7,9 @@ export const serverEnv = () =>
 		server: {
 			DATABASE_URL: z.string().min(1),
 		},
-		runtimeEnv: process.env,
+		runtimeEnv: {
+			DATABASE_URL: process.env.DATABASE_URL,
+		},
 		clientPrefix: 'NEXT_PUBLIC_',
 		emptyStringAsUndefined: true,
 	});

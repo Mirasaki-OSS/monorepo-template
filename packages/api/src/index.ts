@@ -1,15 +1,20 @@
 import { initTRPC, TRPCError } from '@trpc/server';
-
+import superjson from 'superjson';
 import type { Context } from './context';
 
-export const t = initTRPC.context<Context>().create();
+const t = initTRPC.context<Context>().create({
+	/**
+	 * @see https://trpc.io/docs/server/data-transformers
+	 */
+	transformer: superjson,
+});
 
-export const router = t.router;
+export const createTRPCRouter = t.router;
+export const createCallerFactory = t.createCallerFactory;
 
 export const publicProcedure = t.procedure;
-
 export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
-	if (!ctx.session) {
+	if (!ctx.auth) {
 		throw new TRPCError({
 			code: 'UNAUTHORIZED',
 			message: 'Authentication required',
@@ -19,7 +24,7 @@ export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
 	return next({
 		ctx: {
 			...ctx,
-			session: ctx.session,
+			auth: ctx.auth,
 		},
 	});
 });

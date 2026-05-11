@@ -24,7 +24,7 @@ function parseArgs(args: string[]): CliOptions {
  * Display help message
  */
 function showHelp(): void {
-	console.log(`
+	console.info(`
 CLI Tool v${VERSION}
 
 Usage:
@@ -49,7 +49,7 @@ Examples:
  * Display version
  */
 function showVersion(): void {
-	console.log(`v${VERSION}`);
+	console.info(`v${VERSION}`);
 }
 
 /**
@@ -71,7 +71,7 @@ async function main(): Promise<void> {
 		}
 
 		const greeting = getGreeting(options.name);
-		console.log(greeting);
+		console.info(greeting);
 		process.exit(0);
 	} catch (error) {
 		console.error('Error:', getErrorMessage(error));

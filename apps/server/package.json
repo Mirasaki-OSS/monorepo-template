@@ -6,8 +6,6 @@
 	"description": "API server application",
 	"license": "ISC",
 	"main": "./dist/index.cjs",
-	"module": "./dist/index.mjs",
-	"types": "./dist/index.d.cts",
 	"scripts": {
 		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
 		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
@@ -16,7 +14,7 @@
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
-		"@hono/node-server": "^2.0.1",
+		"@hono/node-server": "^2.0.2",
 		"@hono/trpc-server": "^0.4.2",
 		"@md-oss/api": "workspace:^",
 		"@md-oss/auth": "workspace:^",
@@ -28,7 +26,7 @@
 	},
 	"devDependencies": {
 		"@md-oss/config": "workspace:^",
-		"@types/node": "^25.6.0",
+		"@types/node": "^25.6.2",
 		"pkgroll": "^2.27.0",
 		"tsx": "^4.21.0",
 		"typescript": "^6.0.3"

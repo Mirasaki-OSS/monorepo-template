@@ -5,78 +5,92 @@
 	"type": "module",
 	"sideEffects": false,
 	"description": "Database access layer using drizzle-orm (PostgreSQL)",
-	"main": "./dist/index.cjs",
-	"module": "./dist/index.mjs",
-	"types": "./dist/index.d.cts",
+	"main": "./src/index.ts",
 	"files": [
 		"dist/**/*",
 		"README.md"
 	],
 	"exports": {
-		".": {
-			"require": {
-				"types": "./dist/index.d.cts",
-				"default": "./dist/index.cjs"
+		".": "./src/index.ts",
+		"./env": "./src/env.ts",
+		"./types": "./src/types.ts",
+		"./zod": "./src/zod/index.ts",
+		"./schema": "./src/schema/index.ts",
+		"./schema/auth": "./src/schema/auth.ts"
+	},
+	"publishConfig": {
+		"main": "./dist/index.cjs",
+		"module": "./dist/index.mjs",
+		"types": "./dist/index.d.cts",
+		"exports": {
+			".": {
+				"require": {
+					"types": "./dist/index.d.cts",
+					"default": "./dist/index.cjs"
+				},
+				"import": {
+					"types": "./dist/index.d.mts",
+					"default": "./dist/index.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/index.d.mts",
-				"default": "./dist/index.mjs"
-			}
-		},
-		"./env": {
-			"require": {
-				"types": "./dist/env.d.cts",
-				"default": "./dist/env.cjs"
+			"./env": {
+				"require": {
+					"types": "./dist/env.d.cts",
+					"default": "./dist/env.cjs"
+				},
+				"import": {
+					"types": "./dist/env.d.mts",
+					"default": "./dist/env.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/env.d.mts",
-				"default": "./dist/env.mjs"
-			}
-		},
-		"./types": {
-			"require": {
-				"types": "./dist/types.d.cts"
+			"./types": {
+				"require": {
+					"types": "./dist/types.d.cts"
+				},
+				"import": {
+					"types": "./dist/types.d.mts"
+				}
 			},
-			"import": {
-				"types": "./dist/types.d.mts"
-			}
-		},
-		"./zod": {
-			"require": {
-				"types": "./dist/zod/index.d.cts",
-				"default": "./dist/zod/index.cjs"
+			"./zod": {
+				"require": {
+					"types": "./dist/zod/index.d.cts",
+					"default": "./dist/zod/index.cjs"
+				},
+				"import": {
+					"types": "./dist/zod/index.d.mts",
+					"default": "./dist/zod/index.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/zod/index.d.mts",
-				"default": "./dist/zod/index.mjs"
-			}
-		},
-		"./schema": {
-			"require": {
-				"types": "./dist/schema/index.d.cts",
-				"default": "./dist/schema/index.cjs"
+			"./schema": {
+				"require": {
+					"types": "./dist/schema/index.d.cts",
+					"default": "./dist/schema/index.cjs"
+				},
+				"import": {
+					"types": "./dist/schema/index.d.mts",
+					"default": "./dist/schema/index.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/schema/index.d.mts",
-				"default": "./dist/schema/index.mjs"
-			}
-		},
-		"./schema/auth": {
-			"require": {
-				"types": "./dist/schema/auth.d.cts",
-				"default": "./dist/schema/auth.cjs"
-			},
-			"import": {
-				"types": "./dist/schema/auth.d.mts",
-				"default": "./dist/schema/auth.mjs"
+			"./schema/auth": {
+				"require": {
+					"types": "./dist/schema/auth.d.cts",
+					"default": "./dist/schema/auth.cjs"
+				},
+				"import": {
+					"types": "./dist/schema/auth.d.mts",
+					"default": "./dist/schema/auth.mjs"
+				}
 			}
 		}
 	},
 	"scripts": {
-		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
+		"build": "pnpm exec md-oss-sync-package-exports && pnpm exec md-oss-apply-package-publish-config && pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
 		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
-		"dev": "pkgroll --watch --sourcemap  --define.process.env.NODE_ENV='\"development\"' --define.DEBUG=true",
 		"typecheck": "tsc --noEmit",
+		"db:deploy": "node ./scripts/deploy-schema.mjs",
+		"db:ensure": "node ./scripts/ensure-database.mjs",
+		"db:reset": "node ./scripts/reset-database.mjs",
+		"postdb:reset": "node ./scripts/deploy-schema.mjs",
 		"db:push": "drizzle-kit push",
 		"db:generate": "drizzle-kit generate",
 		"db:studio": "drizzle-kit studio",
@@ -84,7 +98,7 @@
 	},
 	"devDependencies": {
 		"@md-oss/config": "workspace:^",
-		"@types/pg": "^8.20.0",
+		"@md-oss/scripts": "workspace:^",
 		"drizzle-kit": "^0.31.10",
 		"pkgroll": "^2.27.0",
 		"typescript": "^6.0.3"
@@ -92,6 +106,7 @@
 	"dependencies": {
 		"@md-oss/serdes": "workspace:^",
 		"@t3-oss/env-core": "^0.13.11",
+		"@types/pg": "^8.20.0",
 		"drizzle-orm": "1.0.0-rc.2-e38a2ba",
 		"pg": "^8.20.0",
 		"zod": "^4.4.3"

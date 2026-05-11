@@ -1,0 +1,36 @@
+---
+title: Dependency Graphs
+description: Visualize the internal dependencies between packages and applications in this monorepo template, to better understand the architecture and relationships.
+icon: Diagram
+renderInlineTOC: false
+full: false
+---
+
+This section contains auto-generated workspace dependency graphs grouped by scope. Each node is a workspace package (app, package, or vendor package), and each edge represents a direct dependency between workspace packages.
+
+Regenerate these graphs with:
+
+```bash
+pnpm gen:dependency-graphs
+```
+
+{/*
+  Note: Use local imports to support placeholder/blur. Not relevant for
+  SVG assets, but good practice regardless
+*/}
+
+## Apps
+
+![Workspace dependency graph for apps](../../../public/dependency-graphs/workspace/apps.svg)
+
+## Packages
+
+![Workspace dependency graph for packages](../../../public/dependency-graphs/workspace/packages.svg)
+
+## Vendor
+
+![Workspace dependency graph for vendor packages](../../../public/dependency-graphs/workspace/vendor.svg)
+
+## Complete Overview
+
+![Complete workspace dependency graph](../../../public/dependency-graphs/workspace/complete.svg)

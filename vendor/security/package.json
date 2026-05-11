@@ -2,10 +2,6 @@
 	"name": "@md-oss/security",
 	"version": "0.9.0",
 	"private": false,
-	"publishConfig": {
-		"access": "public",
-		"registry": "https://registry.npmjs.org/"
-	},
 	"repository": {
 		"type": "git",
 		"url": "git+ssh://git@github.com/Mirasaki-OSS/monorepo-template.git",
@@ -21,70 +17,81 @@
 	"sideEffects": false,
 	"description": "Cryptographic utilities for encryption, signed URLs, and secure streaming",
 	"license": "ISC",
-	"main": "./dist/index.cjs",
-	"module": "./dist/index.mjs",
-	"types": "./dist/index.d.cts",
+	"main": "./src/index.ts",
 	"files": [
 		"dist/**/*",
 		"README.md",
 		"LICENSE"
 	],
 	"exports": {
-		".": {
-			"require": {
-				"types": "./dist/index.d.cts",
-				"default": "./dist/index.cjs"
+		".": "./src/index.ts",
+		"./decryption-stream": "./src/decryption-stream.ts",
+		"./encryption": "./src/encryption.ts",
+		"./envelope-crypto": "./src/envelope-crypto.ts",
+		"./signed-urls": "./src/signed-urls.ts"
+	},
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org/",
+		"main": "./dist/index.cjs",
+		"module": "./dist/index.mjs",
+		"types": "./dist/index.d.cts",
+		"exports": {
+			".": {
+				"require": {
+					"types": "./dist/index.d.cts",
+					"default": "./dist/index.cjs"
+				},
+				"import": {
+					"types": "./dist/index.d.mts",
+					"default": "./dist/index.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/index.d.mts",
-				"default": "./dist/index.mjs"
-			}
-		},
-		"./decryption-stream": {
-			"require": {
-				"types": "./dist/decryption-stream.d.cts",
-				"default": "./dist/decryption-stream.cjs"
+			"./decryption-stream": {
+				"require": {
+					"types": "./dist/decryption-stream.d.cts",
+					"default": "./dist/decryption-stream.cjs"
+				},
+				"import": {
+					"types": "./dist/decryption-stream.d.mts",
+					"default": "./dist/decryption-stream.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/decryption-stream.d.mts",
-				"default": "./dist/decryption-stream.mjs"
-			}
-		},
-		"./encryption": {
-			"require": {
-				"types": "./dist/encryption.d.cts",
-				"default": "./dist/encryption.cjs"
+			"./encryption": {
+				"require": {
+					"types": "./dist/encryption.d.cts",
+					"default": "./dist/encryption.cjs"
+				},
+				"import": {
+					"types": "./dist/encryption.d.mts",
+					"default": "./dist/encryption.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/encryption.d.mts",
-				"default": "./dist/encryption.mjs"
-			}
-		},
-		"./envelope-crypto": {
-			"require": {
-				"types": "./dist/envelope-crypto.d.cts",
-				"default": "./dist/envelope-crypto.cjs"
+			"./envelope-crypto": {
+				"require": {
+					"types": "./dist/envelope-crypto.d.cts",
+					"default": "./dist/envelope-crypto.cjs"
+				},
+				"import": {
+					"types": "./dist/envelope-crypto.d.mts",
+					"default": "./dist/envelope-crypto.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/envelope-crypto.d.mts",
-				"default": "./dist/envelope-crypto.mjs"
-			}
-		},
-		"./signed-urls": {
-			"require": {
-				"types": "./dist/signed-urls.d.cts",
-				"default": "./dist/signed-urls.cjs"
-			},
-			"import": {
-				"types": "./dist/signed-urls.d.mts",
-				"default": "./dist/signed-urls.mjs"
+			"./signed-urls": {
+				"require": {
+					"types": "./dist/signed-urls.d.cts",
+					"default": "./dist/signed-urls.cjs"
+				},
+				"import": {
+					"types": "./dist/signed-urls.d.mts",
+					"default": "./dist/signed-urls.mjs"
+				}
 			}
 		}
 	},
 	"scripts": {
-		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
+		"build": "pnpm exec md-oss-sync-package-exports && pnpm exec md-oss-apply-package-publish-config && pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
 		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
-		"dev": "pkgroll --watch --sourcemap  --define.process.env.NODE_ENV='\"development\"' --define.DEBUG=true",
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
@@ -93,7 +100,8 @@
 	},
 	"devDependencies": {
 		"@md-oss/config": "workspace:^",
-		"@types/node": "^25.6.0",
+		"@md-oss/scripts": "workspace:^",
+		"@types/node": "^25.6.2",
 		"pkgroll": "^2.27.0",
 		"typescript": "^6.0.3"
 	}

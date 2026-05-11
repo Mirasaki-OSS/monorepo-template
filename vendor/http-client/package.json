@@ -2,10 +2,6 @@
 	"name": "@md-oss/http-client",
 	"version": "0.9.0",
 	"private": false,
-	"publishConfig": {
-		"access": "public",
-		"registry": "https://registry.npmjs.org/"
-	},
 	"repository": {
 		"type": "git",
 		"url": "git+ssh://git@github.com/Mirasaki-OSS/monorepo-template.git",
@@ -21,58 +17,68 @@
 	"sideEffects": false,
 	"description": "Fetch-based HTTP client with retries, timeouts, and typed results",
 	"license": "ISC",
+	"main": "./src/index.ts",
 	"files": [
 		"dist/**/*",
 		"README.md",
 		"LICENSE"
 	],
-	"main": "./dist/index.cjs",
-	"module": "./dist/index.mjs",
-	"types": "./dist/index.d.cts",
 	"exports": {
-		".": {
-			"require": {
-				"types": "./dist/index.d.cts",
-				"default": "./dist/index.cjs"
+		".": "./src/index.ts",
+		"./resolvers": "./src/resolvers.ts",
+		"./retry": "./src/retry.ts",
+		"./types": "./src/types.ts"
+	},
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org/",
+		"main": "./dist/index.cjs",
+		"module": "./dist/index.mjs",
+		"types": "./dist/index.d.cts",
+		"exports": {
+			".": {
+				"require": {
+					"types": "./dist/index.d.cts",
+					"default": "./dist/index.cjs"
+				},
+				"import": {
+					"types": "./dist/index.d.mts",
+					"default": "./dist/index.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/index.d.mts",
-				"default": "./dist/index.mjs"
-			}
-		},
-		"./resolvers": {
-			"require": {
-				"types": "./dist/resolvers.d.cts",
-				"default": "./dist/resolvers.cjs"
+			"./resolvers": {
+				"require": {
+					"types": "./dist/resolvers.d.cts",
+					"default": "./dist/resolvers.cjs"
+				},
+				"import": {
+					"types": "./dist/resolvers.d.mts",
+					"default": "./dist/resolvers.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/resolvers.d.mts",
-				"default": "./dist/resolvers.mjs"
-			}
-		},
-		"./retry": {
-			"require": {
-				"types": "./dist/retry.d.cts",
-				"default": "./dist/retry.cjs"
+			"./retry": {
+				"require": {
+					"types": "./dist/retry.d.cts",
+					"default": "./dist/retry.cjs"
+				},
+				"import": {
+					"types": "./dist/retry.d.mts",
+					"default": "./dist/retry.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/retry.d.mts",
-				"default": "./dist/retry.mjs"
-			}
-		},
-		"./types": {
-			"require": {
-				"types": "./dist/types.d.cts"
-			},
-			"import": {
-				"types": "./dist/types.d.mts"
+			"./types": {
+				"require": {
+					"types": "./dist/types.d.cts"
+				},
+				"import": {
+					"types": "./dist/types.d.mts"
+				}
 			}
 		}
 	},
 	"scripts": {
-		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
+		"build": "pnpm exec md-oss-sync-package-exports && pnpm exec md-oss-apply-package-publish-config && pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
 		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
-		"dev": "pkgroll --watch --sourcemap  --define.process.env.NODE_ENV='\"development\"' --define.DEBUG=true",
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
@@ -81,6 +87,8 @@
 	},
 	"devDependencies": {
 		"@md-oss/config": "workspace:^",
+		"@md-oss/scripts": "workspace:^",
+		"@types/node": "^25.6.2",
 		"pkgroll": "^2.27.0",
 		"typescript": "^6.0.3"
 	}

@@ -1,4 +1,5 @@
 import { AmbientBlobField } from '@md-oss/design-system/components/animated/ambient-blob';
+import { UserButton } from '@md-oss/design-system/components/auth/user/user-button';
 import { DevUtilities } from '@md-oss/design-system/components/dev-utilities';
 import { WithPageContainer } from '@md-oss/design-system/components/sections/page-container';
 import { InlineCode } from '@md-oss/design-system/components/ui/inline-code';
@@ -82,6 +83,12 @@ export default function Layout({ children }: LayoutProps<'/'>) {
               </NavbarMenuContent>
             </NavbarMenu>
           ),
+        },
+        {
+          type: 'custom',
+          children: <UserButton size="icon" />,
+          secondary: true,
+          on: 'all',
         },
       ]}
     >

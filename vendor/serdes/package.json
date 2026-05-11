@@ -2,10 +2,6 @@
 	"name": "@md-oss/serdes",
 	"version": "0.7.1",
 	"private": false,
-	"publishConfig": {
-		"access": "public",
-		"registry": "https://registry.npmjs.org/"
-	},
 	"repository": {
 		"type": "git",
 		"url": "git+ssh://git@github.com/Mirasaki-OSS/monorepo-template.git",
@@ -21,80 +17,92 @@
 	"sideEffects": false,
 	"description": "Serializer/Deserializer for JSON, YAML, TOML, MessagePack, and CBOR",
 	"license": "ISC",
+	"main": "./src/index.ts",
 	"files": [
 		"dist/**/*",
 		"README.md",
 		"LICENSE"
 	],
-	"main": "./dist/index.cjs",
-	"module": "./dist/index.mjs",
-	"types": "./dist/index.d.cts",
 	"exports": {
-		".": {
-			"require": {
-				"types": "./dist/index.d.cts",
-				"default": "./dist/index.cjs"
+		".": "./src/index.ts",
+		"./cbor": "./src/cbor.ts",
+		"./json": "./src/json.ts",
+		"./messagepack": "./src/messagepack.ts",
+		"./toml": "./src/toml.ts",
+		"./yaml": "./src/yaml.ts"
+	},
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org/",
+		"main": "./dist/index.cjs",
+		"module": "./dist/index.mjs",
+		"types": "./dist/index.d.cts",
+		"exports": {
+			".": {
+				"require": {
+					"types": "./dist/index.d.cts",
+					"default": "./dist/index.cjs"
+				},
+				"import": {
+					"types": "./dist/index.d.mts",
+					"default": "./dist/index.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/index.d.mts",
-				"default": "./dist/index.mjs"
-			}
-		},
-		"./cbor": {
-			"require": {
-				"types": "./dist/cbor.d.cts",
-				"default": "./dist/cbor.cjs"
+			"./cbor": {
+				"require": {
+					"types": "./dist/cbor.d.cts",
+					"default": "./dist/cbor.cjs"
+				},
+				"import": {
+					"types": "./dist/cbor.d.mts",
+					"default": "./dist/cbor.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/cbor.d.mts",
-				"default": "./dist/cbor.mjs"
-			}
-		},
-		"./json": {
-			"require": {
-				"types": "./dist/json.d.cts",
-				"default": "./dist/json.cjs"
+			"./json": {
+				"require": {
+					"types": "./dist/json.d.cts",
+					"default": "./dist/json.cjs"
+				},
+				"import": {
+					"types": "./dist/json.d.mts",
+					"default": "./dist/json.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/json.d.mts",
-				"default": "./dist/json.mjs"
-			}
-		},
-		"./messagepack": {
-			"require": {
-				"types": "./dist/messagepack.d.cts",
-				"default": "./dist/messagepack.cjs"
+			"./messagepack": {
+				"require": {
+					"types": "./dist/messagepack.d.cts",
+					"default": "./dist/messagepack.cjs"
+				},
+				"import": {
+					"types": "./dist/messagepack.d.mts",
+					"default": "./dist/messagepack.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/messagepack.d.mts",
-				"default": "./dist/messagepack.mjs"
-			}
-		},
-		"./toml": {
-			"require": {
-				"types": "./dist/toml.d.cts",
-				"default": "./dist/toml.cjs"
+			"./toml": {
+				"require": {
+					"types": "./dist/toml.d.cts",
+					"default": "./dist/toml.cjs"
+				},
+				"import": {
+					"types": "./dist/toml.d.mts",
+					"default": "./dist/toml.mjs"
+				}
 			},
-			"import": {
-				"types": "./dist/toml.d.mts",
-				"default": "./dist/toml.mjs"
-			}
-		},
-		"./yaml": {
-			"require": {
-				"types": "./dist/yaml.d.cts",
-				"default": "./dist/yaml.cjs"
-			},
-			"import": {
-				"types": "./dist/yaml.d.mts",
-				"default": "./dist/yaml.mjs"
+			"./yaml": {
+				"require": {
+					"types": "./dist/yaml.d.cts",
+					"default": "./dist/yaml.cjs"
+				},
+				"import": {
+					"types": "./dist/yaml.d.mts",
+					"default": "./dist/yaml.mjs"
+				}
 			}
 		}
 	},
 	"scripts": {
-		"build": "pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
+		"build": "pnpm exec md-oss-sync-package-exports && pnpm exec md-oss-apply-package-publish-config && pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false",
 		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
-		"dev": "pkgroll --watch --sourcemap  --define.process.env.NODE_ENV='\"development\"' --define.DEBUG=true",
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
@@ -105,6 +113,7 @@
 	},
 	"devDependencies": {
 		"@md-oss/config": "workspace:^",
+		"@md-oss/scripts": "workspace:^",
 		"pkgroll": "^2.27.0",
 		"typescript": "^6.0.3"
 	}

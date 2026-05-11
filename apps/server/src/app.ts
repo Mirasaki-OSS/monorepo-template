@@ -1,7 +1,7 @@
 import { trpcServer } from '@hono/trpc-server';
+import { auth } from '@md-oss/api/auth';
 import { createContext } from '@md-oss/api/context';
 import { appRouter } from '@md-oss/api/routers';
-import { auth } from '@md-oss/auth/server';
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
@@ -15,7 +15,7 @@ app.use(
 	cors({
 		origin: parsedEnv.CORS_ORIGIN,
 		allowMethods: ['GET', 'POST', 'OPTIONS'],
-		allowHeaders: ['Content-Type', 'Authorization'],
+		allowHeaders: ['Content-Type', 'Authorization', 'X-Captcha-Response'],
 		credentials: true,
 	})
 );
