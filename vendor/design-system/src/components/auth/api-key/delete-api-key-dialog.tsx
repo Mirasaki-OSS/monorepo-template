@@ -22,7 +22,7 @@ import { Field } from '@md-oss/design-system/components/ui/field';
 import { Input } from '@md-oss/design-system/components/ui/input';
 import { Label } from '@md-oss/design-system/components/ui/label';
 import { Spinner } from '@md-oss/design-system/components/ui/spinner';
-import { apiKeyPlugin } from '@md-oss/design-system/lib/auth/api-key-plugin';
+import { apiKeyPluginRef } from '@md-oss/design-system/lib/auth/plugin-refs';
 import { Key } from 'lucide-react';
 
 export type DeleteApiKeyDialogProps = {
@@ -37,7 +37,7 @@ export function DeleteApiKeyDialog({
 	apiKey,
 }: DeleteApiKeyDialogProps) {
 	const { authClient, localization } = useAuth();
-	const { localization: apiKeyLocalization } = useAuthPlugin(apiKeyPlugin);
+	const { localization: apiKeyLocalization } = useAuthPlugin(apiKeyPluginRef);
 	const preview = `${apiKey.start}${'*'.repeat(16)}`;
 	const previewId = `delete-api-key-preview-${apiKey.id}`;
 	const { mutate: deleteApiKey, isPending: isDeleting } = useDeleteApiKey(

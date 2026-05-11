@@ -9,7 +9,7 @@ import {
 import { Button } from '@md-oss/design-system/components/ui/button';
 import { Card, CardContent } from '@md-oss/design-system/components/ui/card';
 import { Separator } from '@md-oss/design-system/components/ui/separator';
-import { apiKeyPlugin } from '@md-oss/design-system/lib/auth/api-key-plugin';
+import { apiKeyPluginRef } from '@md-oss/design-system/lib/auth/plugin-refs';
 import { cn } from '@md-oss/design-system/lib/utils';
 import { useState } from 'react';
 import { ApiKey } from './api-key';
@@ -23,7 +23,7 @@ export type ApiKeysProps = {
 
 export function ApiKeys({ className }: ApiKeysProps) {
 	const { authClient } = useAuth();
-	const { localization: apiKeyLocalization } = useAuthPlugin(apiKeyPlugin);
+	const { localization: apiKeyLocalization } = useAuthPlugin(apiKeyPluginRef);
 
 	const { data: listData, isPending } = useListApiKeys(
 		authClient as ApiKeyAuthClient

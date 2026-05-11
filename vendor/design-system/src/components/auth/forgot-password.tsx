@@ -19,11 +19,11 @@ import {
 	FieldGroup,
 } from '@md-oss/design-system/components/ui/field';
 import { Input } from '@md-oss/design-system/components/ui/input';
+import { Label } from '@md-oss/design-system/components/ui/label';
 import { Spinner } from '@md-oss/design-system/components/ui/spinner';
 import { cn } from '@md-oss/design-system/lib/utils';
 import { type SyntheticEvent, useState } from 'react';
 import { toast } from 'sonner';
-import { Label } from '../ui/label';
 
 export type ForgotPasswordProps = {
 	className?: string;

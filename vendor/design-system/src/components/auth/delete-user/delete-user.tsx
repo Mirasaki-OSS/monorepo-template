@@ -24,7 +24,7 @@ import { Field, FieldError } from '@md-oss/design-system/components/ui/field';
 import { Input } from '@md-oss/design-system/components/ui/input';
 import { Label } from '@md-oss/design-system/components/ui/label';
 import { Spinner } from '@md-oss/design-system/components/ui/spinner';
-import { deleteUserPlugin } from '@md-oss/design-system/lib/auth/delete-user-plugin';
+import { deleteUserPluginRef } from '@md-oss/design-system/lib/auth/plugin-refs';
 import { cn } from '@md-oss/design-system/lib/utils';
 import { useQueryClient } from '@tanstack/react-query';
 import { TriangleAlert } from 'lucide-react';
@@ -45,7 +45,7 @@ export function DeleteUser({ className }: DeleteUserProps) {
 	const {
 		localization: deleteUserLocalization,
 		sendDeleteAccountVerification,
-	} = useAuthPlugin(deleteUserPlugin);
+	} = useAuthPlugin(deleteUserPluginRef);
 
 	const { data: accounts } = useListAccounts(authClient);
 

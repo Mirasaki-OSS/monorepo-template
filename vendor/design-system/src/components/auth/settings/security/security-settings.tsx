@@ -2,8 +2,8 @@
 
 import type { AuthPluginBase } from '@better-auth-ui/core';
 import { useAuth } from '@better-auth-ui/react';
+import { DangerZone } from '@md-oss/design-system/components/auth/delete-user/danger-zone';
 import { cn } from '@md-oss/design-system/lib/utils';
-import { DangerZone } from '../../delete-user/danger-zone';
 import { ActiveSessions } from './active-sessions';
 import { ChangePassword } from './change-password';
 import { LinkedAccounts } from './linked-accounts';

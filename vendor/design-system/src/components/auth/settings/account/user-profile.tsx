@@ -10,6 +10,7 @@ import {
 	useSession,
 	useUpdateUser,
 } from '@better-auth-ui/react';
+import { AdditionalField } from '@md-oss/design-system/components/auth/additional-field';
 import { Button } from '@md-oss/design-system/components/ui/button';
 import {
 	Card,
@@ -24,7 +25,6 @@ import { Spinner } from '@md-oss/design-system/components/ui/spinner';
 import { cn } from '@md-oss/design-system/lib/utils';
 import { type SyntheticEvent, useState } from 'react';
 import { toast } from 'sonner';
-import { AdditionalField } from '../../additional-field';
 import { ChangeAvatar } from './change-avatar';
 
 export type UserProfileProps = {

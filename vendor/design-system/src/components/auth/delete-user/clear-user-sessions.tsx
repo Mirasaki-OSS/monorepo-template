@@ -16,8 +16,8 @@ import {
 import { Button } from '@md-oss/design-system/components/ui/button';
 import { Card, CardContent } from '@md-oss/design-system/components/ui/card';
 import { Spinner } from '@md-oss/design-system/components/ui/spinner';
-import { clearUserSessionsPlugin } from '@md-oss/design-system/lib/auth/clear-user-sessions-plugin';
 import { useClearUserSessions } from '@md-oss/design-system/lib/auth/mutations/clear-sessions-mutation';
+import { clearUserSessionsPluginRef } from '@md-oss/design-system/lib/auth/plugin-refs';
 import { cn } from '@md-oss/design-system/lib/utils';
 import { useQueryClient } from '@tanstack/react-query';
 import { TriangleAlert } from 'lucide-react';
@@ -36,7 +36,7 @@ export function ClearUserSessions({ className }: ClearUserSessionProps) {
 		useAuth();
 
 	const { localization: clearUserSessionsLocalization, clearCurrentSession } =
-		useAuthPlugin(clearUserSessionsPlugin);
+		useAuthPlugin(clearUserSessionsPluginRef);
 
 	const { data: accounts } = useListAccounts(authClient);
 

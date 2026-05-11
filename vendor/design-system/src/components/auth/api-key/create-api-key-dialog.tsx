@@ -21,7 +21,7 @@ import { Field, FieldError } from '@md-oss/design-system/components/ui/field';
 import { Input } from '@md-oss/design-system/components/ui/input';
 import { Label } from '@md-oss/design-system/components/ui/label';
 import { Spinner } from '@md-oss/design-system/components/ui/spinner';
-import { apiKeyPlugin } from '@md-oss/design-system/lib/auth/api-key-plugin';
+import { apiKeyPluginRef } from '@md-oss/design-system/lib/auth/plugin-refs';
 import { Key } from 'lucide-react';
 import { type SyntheticEvent, useState } from 'react';
 import { NewApiKeyDialog } from './new-api-key-dialog';
@@ -36,7 +36,7 @@ export function CreateApiKeyDialog({
 	onOpenChange,
 }: CreateApiKeyDialogProps) {
 	const { authClient, localization } = useAuth();
-	const { localization: apiKeyLocalization } = useAuthPlugin(apiKeyPlugin);
+	const { localization: apiKeyLocalization } = useAuthPlugin(apiKeyPluginRef);
 
 	const { mutate: createApiKey, isPending: isCreating } = useCreateApiKey(
 		authClient as ApiKeyAuthClient

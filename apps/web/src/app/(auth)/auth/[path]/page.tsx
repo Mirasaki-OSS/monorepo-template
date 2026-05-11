@@ -1,4 +1,4 @@
-import AuthPageComponent from '@md-oss/design-system/components/auth/pages/auth-page';
+import { AuthPage as AuthPageComponent } from '@md-oss/design-system/components/auth/pages/auth-page';
 import { notFound } from 'next/navigation';
 import { customExtendedViewPaths } from '@/lib/view-paths';
 

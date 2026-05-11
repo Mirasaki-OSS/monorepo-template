@@ -2,9 +2,9 @@
 
 import type { AuthPluginBase } from '@better-auth-ui/core';
 import { useAuth } from '@better-auth-ui/react';
+import { DangerZone } from '@md-oss/design-system/components/auth/delete-user/danger-zone';
+import { ActiveSessions } from '@md-oss/design-system/components/auth/settings/security/active-sessions';
 import { cn } from '@md-oss/design-system/lib/utils';
-import { DangerZone } from '../../delete-user/danger-zone';
-import { ActiveSessions } from '../security/active-sessions';
 
 export type SessionsSettingsProps = {
 	className?: string;

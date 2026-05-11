@@ -12,7 +12,9 @@
 		"build": "turbo run build",
 		"build:dry": "turbo run build --dry",
 		"checks": "pnpm exec biome check --write --unsafe && turbo run typecheck && pnpm script:fdm",
-		"checks:ci": "pnpm exec biome ci && pnpm script:fdm",
+		"checks:ci": "pnpm exec biome ci && pnpm script:fdm && pnpm check:circular",
+		"check:circular": "node scripts/node/madge-monorepo.mjs --check=circular",
+		"check:orphans": "node scripts/node/madge-monorepo.mjs --check=orphans",
 		"clean": "turbo run clean && git clean -xdf node_modules .turbo pnpm-lock.yaml deploy/docker/context-report deploy/compose/.buildx-cache",
 		"dev": "turbo run dev",
 		"lint": "pnpm exec biome lint --write --unsafe",
@@ -20,6 +22,9 @@
 		"gen:app": "turbo gen workspace --type app",
 		"gen:auth": "pnpm --filter @md-oss/auth gen:schema",
 		"gen:migrations": "pnpm --filter @md-oss/db db:generate",
+		"gen:dependency-graphs": "node scripts/node/madge-monorepo.mjs --use-graph=workspace --output-dir-base=apps/web/public/dependency-graphs",
+		"gen:dependency-graphs:files": "node scripts/node/madge-monorepo.mjs --use-graph=image --output-dir-base=apps/web/public/dependency-graphs/files",
+		"gen:dependency-graphs:circular": "node scripts/node/madge-monorepo.mjs --use-graph=circular --output-dir-base=apps/web/public/dependency-graphs/circular",
 		"gen:package": "turbo gen package",
 		"start": "turbo run start",
 		"test": "turbo run test",
@@ -40,6 +45,7 @@
 		"@types/node": "^25.6.2",
 		"glob": "^13.0.6",
 		"lefthook": "^2.1.6",
+		"madge": "^8.0.0",
 		"tsx": "^4.21.0",
 		"turbo": "^2.9.12"
 	}

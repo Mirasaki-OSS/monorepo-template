@@ -1,3 +1,4 @@
+import { Settings } from '@md-oss/design-system/components/auth/settings/settings';
 import {
 	mergePropsWithClassName,
 	resolveSlot,
@@ -8,7 +9,6 @@ import {
 	HydrationBoundary,
 	type QueryClient,
 } from '@tanstack/react-query';
-import { Settings } from '../settings/settings';
 import {
 	extendedViewPaths,
 	mergeViewPaths,
@@ -33,7 +33,7 @@ type SettingsPageProps = {
 	};
 };
 
-export default async function SettingsPage({
+export async function SettingsPage({
 	path,
 	notFound,
 	queryClient,

@@ -7,7 +7,7 @@ import {
 } from '@better-auth-ui/react';
 import { Button } from '@md-oss/design-system/components/ui/button';
 import { Card, CardContent } from '@md-oss/design-system/components/ui/card';
-import { apiKeyPlugin } from '@md-oss/design-system/lib/auth/api-key-plugin';
+import { apiKeyPluginRef } from '@md-oss/design-system/lib/auth/plugin-refs';
 import { Key, X } from 'lucide-react';
 import { useState } from 'react';
 import { DeleteApiKeyDialog } from './delete-api-key-dialog';
@@ -18,7 +18,7 @@ export type ApiKeyProps = {
 
 export function ApiKey({ apiKey }: ApiKeyProps) {
 	const { localization } = useAuth();
-	const { localization: apiKeyLocalization } = useAuthPlugin(apiKeyPlugin);
+	const { localization: apiKeyLocalization } = useAuthPlugin(apiKeyPluginRef);
 	const [deleteOpen, setDeleteOpen] = useState(false);
 
 	const preview = `${apiKey.start}${'*'.repeat(16)}`;

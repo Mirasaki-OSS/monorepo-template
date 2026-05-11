@@ -18,7 +18,7 @@ import {
 	RadioGroup,
 	RadioGroupItem,
 } from '@md-oss/design-system/components/ui/radio-group';
-import { themePlugin } from '@md-oss/design-system/lib/auth/theme-plugin';
+import { themePluginRef } from '@md-oss/design-system/lib/auth/plugin-refs';
 import { cn } from '@md-oss/design-system/lib/utils';
 import { Monitor, Moon, Sun } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -37,7 +37,7 @@ export type AppearanceProps = {
  * @returns A JSX element containing the theme selector card.
  */
 export function Appearance({ className }: AppearanceProps) {
-	const { useTheme, localization } = useAuthPlugin(themePlugin);
+	const { useTheme, localization } = useAuthPlugin(themePluginRef);
 	const { theme, setTheme, themes = [] } = useTheme();
 
 	const [isMounted, setIsMounted] = useState(false);

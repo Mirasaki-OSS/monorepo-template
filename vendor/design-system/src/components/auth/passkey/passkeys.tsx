@@ -9,7 +9,7 @@ import {
 import { Button } from '@md-oss/design-system/components/ui/button';
 import { Card, CardContent } from '@md-oss/design-system/components/ui/card';
 import { Separator } from '@md-oss/design-system/components/ui/separator';
-import { passkeyPlugin } from '@md-oss/design-system/lib/auth/passkey-plugin';
+import { passkeyPluginRef } from '@md-oss/design-system/lib/auth/plugin-refs';
 import { cn } from '@md-oss/design-system/lib/utils';
 import { useState } from 'react';
 
@@ -24,7 +24,7 @@ export type PasskeysProps = {
 
 export function Passkeys({ className }: PasskeysProps) {
 	const { authClient } = useAuth();
-	const { localization: passkeyLocalization } = useAuthPlugin(passkeyPlugin);
+	const { localization: passkeyLocalization } = useAuthPlugin(passkeyPluginRef);
 
 	const { data: passkeys, isPending } = useListPasskeys(
 		authClient as PasskeyAuthClient

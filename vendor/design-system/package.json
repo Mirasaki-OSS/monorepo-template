@@ -156,6 +156,116 @@
 					"default": "./dist/components/auth/api-key/new-api-key-dialog.mjs"
 				}
 			},
+			"./components/auth/email/delete-account-verification": {
+				"require": {
+					"types": "./dist/components/auth/email/delete-account-verification.d.cts",
+					"default": "./dist/components/auth/email/delete-account-verification.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/email/delete-account-verification.d.mts",
+					"default": "./dist/components/auth/email/delete-account-verification.mjs"
+				}
+			},
+			"./components/auth/email/email-changed": {
+				"require": {
+					"types": "./dist/components/auth/email/email-changed.d.cts",
+					"default": "./dist/components/auth/email/email-changed.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/email/email-changed.d.mts",
+					"default": "./dist/components/auth/email/email-changed.mjs"
+				}
+			},
+			"./components/auth/email/email-changed-verification": {
+				"require": {
+					"types": "./dist/components/auth/email/email-changed-verification.d.cts",
+					"default": "./dist/components/auth/email/email-changed-verification.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/email/email-changed-verification.d.mts",
+					"default": "./dist/components/auth/email/email-changed-verification.mjs"
+				}
+			},
+			"./components/auth/email/email-styles": {
+				"require": {
+					"types": "./dist/components/auth/email/email-styles.d.cts",
+					"default": "./dist/components/auth/email/email-styles.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/email/email-styles.d.mts",
+					"default": "./dist/components/auth/email/email-styles.mjs"
+				}
+			},
+			"./components/auth/email/email-verification": {
+				"require": {
+					"types": "./dist/components/auth/email/email-verification.d.cts",
+					"default": "./dist/components/auth/email/email-verification.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/email/email-verification.d.mts",
+					"default": "./dist/components/auth/email/email-verification.mjs"
+				}
+			},
+			"./components/auth/email/verification-email-base": {
+				"require": {
+					"types": "./dist/components/auth/email/verification-email-base.d.cts",
+					"default": "./dist/components/auth/email/verification-email-base.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/email/verification-email-base.d.mts",
+					"default": "./dist/components/auth/email/verification-email-base.mjs"
+				}
+			},
+			"./components/auth/email/magic-link": {
+				"require": {
+					"types": "./dist/components/auth/email/magic-link.d.cts",
+					"default": "./dist/components/auth/email/magic-link.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/email/magic-link.d.mts",
+					"default": "./dist/components/auth/email/magic-link.mjs"
+				}
+			},
+			"./components/auth/email/new-device": {
+				"require": {
+					"types": "./dist/components/auth/email/new-device.d.cts",
+					"default": "./dist/components/auth/email/new-device.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/email/new-device.d.mts",
+					"default": "./dist/components/auth/email/new-device.mjs"
+				}
+			},
+			"./components/auth/email/otp-email": {
+				"require": {
+					"types": "./dist/components/auth/email/otp-email.d.cts",
+					"default": "./dist/components/auth/email/otp-email.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/email/otp-email.d.mts",
+					"default": "./dist/components/auth/email/otp-email.mjs"
+				}
+			},
+			"./components/auth/email/password-changed": {
+				"require": {
+					"types": "./dist/components/auth/email/password-changed.d.cts",
+					"default": "./dist/components/auth/email/password-changed.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/email/password-changed.d.mts",
+					"default": "./dist/components/auth/email/password-changed.mjs"
+				}
+			},
+			"./components/auth/email/reset-password": {
+				"require": {
+					"types": "./dist/components/auth/email/reset-password.d.cts",
+					"default": "./dist/components/auth/email/reset-password.cjs"
+				},
+				"import": {
+					"types": "./dist/components/auth/email/reset-password.d.mts",
+					"default": "./dist/components/auth/email/reset-password.mjs"
+				}
+			},
 			"./components/auth/delete-user/clear-user-sessions": {
 				"require": {
 					"types": "./dist/components/auth/delete-user/clear-user-sessions.d.cts",
@@ -1532,6 +1642,16 @@
 					"default": "./dist/lib/auth/passkey-plugin.mjs"
 				}
 			},
+			"./lib/auth/plugin-refs": {
+				"require": {
+					"types": "./dist/lib/auth/plugin-refs.d.cts",
+					"default": "./dist/lib/auth/plugin-refs.cjs"
+				},
+				"import": {
+					"types": "./dist/lib/auth/plugin-refs.d.mts",
+					"default": "./dist/lib/auth/plugin-refs.mjs"
+				}
+			},
 			"./lib/auth/theme-plugin": {
 				"require": {
 					"types": "./dist/lib/auth/theme-plugin.d.cts",
@@ -1665,6 +1785,17 @@
 		"./components/auth/api-key/create-api-key-dialog": "./src/components/auth/api-key/create-api-key-dialog.tsx",
 		"./components/auth/api-key/delete-api-key-dialog": "./src/components/auth/api-key/delete-api-key-dialog.tsx",
 		"./components/auth/api-key/new-api-key-dialog": "./src/components/auth/api-key/new-api-key-dialog.tsx",
+		"./components/auth/email/delete-account-verification": "./src/components/auth/email/delete-account-verification.tsx",
+		"./components/auth/email/email-changed": "./src/components/auth/email/email-changed.tsx",
+		"./components/auth/email/email-changed-verification": "./src/components/auth/email/email-changed-verification.tsx",
+		"./components/auth/email/email-styles": "./src/components/auth/email/email-styles.tsx",
+		"./components/auth/email/email-verification": "./src/components/auth/email/email-verification.tsx",
+		"./components/auth/email/verification-email-base": "./src/components/auth/email/verification-email-base.tsx",
+		"./components/auth/email/magic-link": "./src/components/auth/email/magic-link.tsx",
+		"./components/auth/email/new-device": "./src/components/auth/email/new-device.tsx",
+		"./components/auth/email/otp-email": "./src/components/auth/email/otp-email.tsx",
+		"./components/auth/email/password-changed": "./src/components/auth/email/password-changed.tsx",
+		"./components/auth/email/reset-password": "./src/components/auth/email/reset-password.tsx",
 		"./components/auth/delete-user/clear-user-sessions": "./src/components/auth/delete-user/clear-user-sessions.tsx",
 		"./components/auth/delete-user/danger-zone": "./src/components/auth/delete-user/danger-zone.tsx",
 		"./components/auth/delete-user/delete-user": "./src/components/auth/delete-user/delete-user.tsx",
@@ -1803,6 +1934,7 @@
 		"./lib/auth/delete-user-plugin": "./src/lib/auth/delete-user-plugin.ts",
 		"./lib/auth/magic-link-plugin": "./src/lib/auth/magic-link-plugin.ts",
 		"./lib/auth/passkey-plugin": "./src/lib/auth/passkey-plugin.ts",
+		"./lib/auth/plugin-refs": "./src/lib/auth/plugin-refs.ts",
 		"./lib/auth/theme-plugin": "./src/lib/auth/theme-plugin.ts",
 		"./lib/auth/username-plugin": "./src/lib/auth/username-plugin.ts",
 		"./lib/context/touch": "./src/lib/context/touch.tsx",
@@ -1818,7 +1950,7 @@
 	},
 	"scripts": {
 		"add:components": "shadcn add",
-		"build": "pnpm exec md-oss-sync-package-exports && pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false && pnpm exec md-oss-add-module-directives --from-package-exports --extensions=mjs,cjs",
+		"build": "pnpm exec md-oss-sync-package-exports && NODE_OPTIONS=\"--max-old-space-size=8192\" pkgroll --minify --clean-dist --sourcemap  --define.process.env.NODE_ENV='\"production\"' --define.DEBUG=false && pnpm exec md-oss-add-module-directives --from-package-exports --extensions=mjs,cjs",
 		"dev": "pnpm exec md-oss-sync-package-exports",
 		"clean": "git clean -xdf .turbo dist node_modules tsconfig.tsbuildinfo",
 		"typecheck": "tsc --noEmit"
@@ -1833,6 +1965,7 @@
 		"@dnd-kit/sortable": "^10.0.0",
 		"@dnd-kit/utilities": "^3.2.2",
 		"@md-oss/common": "workspace:^",
+		"@react-email/components": "^1.0.12",
 		"@tanstack/react-pacer": "^0.22.0",
 		"@tanstack/react-query": "^5.100.9",
 		"better-auth": "^1.6.10",

@@ -21,7 +21,7 @@ import { Field, FieldError } from '@md-oss/design-system/components/ui/field';
 import { Input } from '@md-oss/design-system/components/ui/input';
 import { Label } from '@md-oss/design-system/components/ui/label';
 import { Spinner } from '@md-oss/design-system/components/ui/spinner';
-import { passkeyPlugin } from '@md-oss/design-system/lib/auth/passkey-plugin';
+import { passkeyPluginRef } from '@md-oss/design-system/lib/auth/plugin-refs';
 import { Fingerprint } from 'lucide-react';
 import type { SyntheticEvent } from 'react';
 
@@ -35,7 +35,7 @@ export function AddPasskeyDialog({
 	onOpenChange,
 }: AddPasskeyDialogProps) {
 	const { authClient, localization } = useAuth();
-	const { localization: passkeyLocalization } = useAuthPlugin(passkeyPlugin);
+	const { localization: passkeyLocalization } = useAuthPlugin(passkeyPluginRef);
 
 	const { mutate: addPasskey, isPending: isAdding } = useAddPasskey(
 		authClient as PasskeyAuthClient

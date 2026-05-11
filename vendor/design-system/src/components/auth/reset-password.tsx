@@ -20,12 +20,12 @@ import {
 	InputGroupButton,
 	InputGroupInput,
 } from '@md-oss/design-system/components/ui/input-group';
+import { Label } from '@md-oss/design-system/components/ui/label';
 import { Spinner } from '@md-oss/design-system/components/ui/spinner';
 import { cn } from '@md-oss/design-system/lib/utils';
 import { Eye, EyeOff } from 'lucide-react';
 import { type SyntheticEvent, useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { Label } from '../ui/label';
 
 export type ResetPasswordProps = {
 	className?: string;

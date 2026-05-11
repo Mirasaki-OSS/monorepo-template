@@ -3,7 +3,7 @@
 import { type AuthView, authMutationKeys } from '@better-auth-ui/core';
 import { useAuth, useAuthPlugin } from '@better-auth-ui/react';
 import { Button } from '@md-oss/design-system/components/ui/button';
-import { magicLinkPlugin } from '@md-oss/design-system/lib/auth/magic-link-plugin';
+import { magicLinkPluginRef } from '@md-oss/design-system/lib/auth/plugin-refs';
 import { cn } from '@md-oss/design-system/lib/utils';
 import { useIsMutating } from '@tanstack/react-query';
 import { Lock, Mail } from 'lucide-react';
@@ -31,7 +31,7 @@ export function MagicLinkButton({ view }: MagicLinkButtonProps) {
 	const isPending = signInMutating + signUpMutating > 0;
 
 	const { localization: magicLinkLocalization, viewPaths: magicLinkViewPaths } =
-		useAuthPlugin(magicLinkPlugin);
+		useAuthPlugin(magicLinkPluginRef);
 
 	const isMagicLinkView = view === 'magicLink';
 

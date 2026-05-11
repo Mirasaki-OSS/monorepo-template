@@ -1,10 +1,10 @@
+import { Auth } from '@md-oss/design-system/components/auth/auth';
 import {
 	mergePropsWithClassName,
 	resolveSlot,
 	type WithAsComponent,
 } from '@md-oss/design-system/lib/utils';
 import type React from 'react';
-import { Auth } from '../auth';
 import {
 	extendedViewPaths,
 	mergeViewPaths,
@@ -25,7 +25,7 @@ type AuthPageProps = {
 	};
 };
 
-export default async function AuthPage({
+export async function AuthPage({
 	path,
 	className,
 	notFound,

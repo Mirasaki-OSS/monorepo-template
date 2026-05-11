@@ -5,6 +5,7 @@ import { TimeMagic } from '@md-oss/common/constants/time';
 import { slugify } from '@md-oss/common/utils/strings';
 import { createDb } from '@md-oss/db';
 import * as schema from '@md-oss/db/schema/auth';
+import { emailService } from '@md-oss/email';
 import type { BetterAuthOptions } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import {
@@ -49,8 +50,16 @@ const plugins = [
 		},
 	}),
 	magicLinkPlugin({
-		async sendMagicLink(data, ctx) {
-			console.debug('Send magic link to:', data, ctx);
+		async sendMagicLink(data) {
+			await emailService.sendMagicLinkEmail(
+				{
+					to: {
+						email: data.email,
+						name: null,
+					},
+				},
+				data
+			);
 		},
 		allowedAttempts: 1,
 		disableSignUp: false,
@@ -174,6 +183,7 @@ const config = {
 		user: {
 			create: {
 				async before(user, context) {
+					// [DEV] Init admin, transform role
 					console.debug('Before creating user:', user, context);
 				},
 			},
@@ -205,20 +215,30 @@ const config = {
 		changeEmail: {
 			enabled: true,
 			updateEmailWithoutVerification: false,
-			async sendChangeEmailConfirmation(data, request) {
-				console.debug('Send change email confirmation to:', data);
+			async sendChangeEmailConfirmation(data) {
+				await emailService.sendEmailChangeVerificationEmail(
+					{
+						to: {
+							email: data.user.email,
+							name: data.user.name || data.user.email,
+						},
+					},
+					data
+				);
 			},
 		},
 		deleteUser: {
 			enabled: true,
-			async beforeDelete(user, request) {
-				console.debug('Before deleting user:', user);
-			},
-			async afterDelete(user, request) {
-				console.debug('After deleting user:', user);
-			},
-			async sendDeleteAccountVerification(data, request) {
-				console.debug('Send delete account verification to:', data);
+			async sendDeleteAccountVerification(data) {
+				await emailService.sendDeleteAccountVerificationEmail(
+					{
+						to: {
+							email: data.user.email,
+							name: data.user.name || data.user.email,
+						},
+					},
+					data
+				);
 			},
 		},
 		additionalFields: {
@@ -242,29 +262,32 @@ const config = {
 		requireEmailVerification: false,
 		disableSignUp: false,
 		revokeSessionsOnPasswordReset: true,
-		// Start Emails
-		async onExistingUserSignUp(data, request) {
-			console.debug('Existing user attempted to sign up:', data);
-		},
-		async onPasswordReset(data, request) {
-			console.debug('Password reset requested for user:', data);
-		},
-		async sendResetPassword(data, request) {
-			console.debug('Send reset password email to:', data);
+		async sendResetPassword(data) {
+			await emailService.sendResetPasswordEmail(
+				{
+					to: {
+						email: data.user.email,
+						name: data.user.name || data.user.email,
+					},
+				},
+				data
+			);
 		},
 	},
 	emailVerification: {
 		sendOnSignIn: false,
 		sendOnSignUp: true,
 		autoSignInAfterVerification: true,
-		async beforeEmailVerification(user, request) {
-			console.debug('Before email verification for user:', user);
-		},
-		async afterEmailVerification(user, request) {
-			console.debug('After email verification for user:', user);
-		},
-		async sendVerificationEmail(data, request) {
-			console.debug('Send verification email to:', data);
+		async sendVerificationEmail(data) {
+			await emailService.sendEmailVerificationEmail(
+				{
+					to: {
+						email: data.user.email,
+						name: data.user.name || data.user.email,
+					},
+				},
+				data
+			);
 		},
 	},
 	plugins,
@@ -275,7 +298,7 @@ export type Auth = ReturnType<typeof createAuth<typeof config>>;
 export const auth: Auth = createAuth(config);
 
 /**
- * Re-exports symbols that appear in the inferred type of `createAuthClient` so declaration emit
+ * Re-exports symbols that appear in the inferred type of `createAuth` (`betterAuth`) so declaration emit
  * (TS2883 / “cannot be named without a reference …”) can serialize `.d.ts` output for this package.
  *
  * **Temporary:** remove when better-auth’s (plugins) published types no longer force consumers to

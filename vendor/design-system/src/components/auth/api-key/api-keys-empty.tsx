@@ -3,7 +3,7 @@
 import { useAuthPlugin } from '@better-auth-ui/react';
 import { Button } from '@md-oss/design-system/components/ui/button';
 import { Card, CardContent } from '@md-oss/design-system/components/ui/card';
-import { apiKeyPlugin } from '@md-oss/design-system/lib/auth/api-key-plugin';
+import { apiKeyPluginRef } from '@md-oss/design-system/lib/auth/plugin-refs';
 import { Key } from 'lucide-react';
 
 export type ApiKeysEmptyProps = {
@@ -11,7 +11,7 @@ export type ApiKeysEmptyProps = {
 };
 
 export function ApiKeysEmpty({ onCreatePress }: ApiKeysEmptyProps) {
-	const { localization: apiKeyLocalization } = useAuthPlugin(apiKeyPlugin);
+	const { localization: apiKeyLocalization } = useAuthPlugin(apiKeyPluginRef);
 
 	return (
 		<Card className="bg-transparent border-0 ring-0 shadow-none">

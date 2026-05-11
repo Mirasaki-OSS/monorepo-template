@@ -3,10 +3,9 @@
 import { useAuth, useAuthPlugin } from '@better-auth-ui/react';
 import { Button } from '@md-oss/design-system/components/ui/button';
 import { Card, CardContent } from '@md-oss/design-system/components/ui/card';
-import { passkeyPlugin } from '@md-oss/design-system/lib/auth/passkey-plugin';
+import { passkeyPluginRef } from '@md-oss/design-system/lib/auth/plugin-refs';
 import { Fingerprint, X } from 'lucide-react';
 import { useState } from 'react';
-
 import {
 	DeletePasskeyDialog,
 	type ListedPasskey,
@@ -18,7 +17,7 @@ export type PasskeyProps = {
 
 export function Passkey({ passkey }: PasskeyProps) {
 	const { localization } = useAuth();
-	const { localization: passkeyLocalization } = useAuthPlugin(passkeyPlugin);
+	const { localization: passkeyLocalization } = useAuthPlugin(passkeyPluginRef);
 	const [deleteOpen, setDeleteOpen] = useState(false);
 
 	const passkeyName = passkey.name || passkeyLocalization.passkey;

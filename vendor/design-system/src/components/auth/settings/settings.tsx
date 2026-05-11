@@ -2,6 +2,7 @@
 
 import type { AuthPluginBase, SettingsView } from '@better-auth-ui/core';
 import { useAuth, useAuthenticate } from '@better-auth-ui/react';
+import type { ExtendedViewPaths } from '@md-oss/design-system/components/auth/pages/view-paths';
 import {
 	Tabs,
 	TabsContent,
@@ -18,7 +19,6 @@ import {
 	UserRoundKeyIcon,
 } from 'lucide-react';
 import { useMemo } from 'react';
-import type { ExtendedViewPaths } from '../pages/view-paths';
 import { AccountSettings } from './account/account-settings';
 import { LinkedAccountSettings } from './linked-accounts/linked-accounts-settings';
 import { SecuritySettings } from './security/security-settings';

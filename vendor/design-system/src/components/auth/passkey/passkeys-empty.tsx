@@ -3,7 +3,7 @@
 import { useAuthPlugin } from '@better-auth-ui/react';
 import { Button } from '@md-oss/design-system/components/ui/button';
 import { Card, CardContent } from '@md-oss/design-system/components/ui/card';
-import { passkeyPlugin } from '@md-oss/design-system/lib/auth/passkey-plugin';
+import { passkeyPluginRef } from '@md-oss/design-system/lib/auth/plugin-refs';
 import { Fingerprint } from 'lucide-react';
 
 export type PasskeysEmptyProps = {
@@ -11,7 +11,7 @@ export type PasskeysEmptyProps = {
 };
 
 export function PasskeysEmpty({ onAddPress }: PasskeysEmptyProps) {
-	const { localization: passkeyLocalization } = useAuthPlugin(passkeyPlugin);
+	const { localization: passkeyLocalization } = useAuthPlugin(passkeyPluginRef);
 
 	return (
 		<Card className="border-0 bg-transparent shadow-none ring-0">

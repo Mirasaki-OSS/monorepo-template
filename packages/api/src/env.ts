@@ -1,6 +1,7 @@
 import { clientEnv as authClientEnv } from '@md-oss/auth/client/env';
 import { serverEnv as authServerEnv } from '@md-oss/auth/server/env';
 import { commonEnv } from '@md-oss/common/env';
+import { serverEnv as emailServerEnv } from '@md-oss/email/env';
 import { createEnv } from '@t3-oss/env-core';
 import { z } from 'zod';
 
@@ -27,7 +28,7 @@ export type ClientEnv = ReturnType<typeof clientEnv>;
 
 export const serverEnv = () =>
 	createEnv({
-		extends: [authServerEnv(), commonEnv(), clientEnv()],
+		extends: [authServerEnv(), commonEnv(), clientEnv(), emailServerEnv()],
 		client: {},
 		server: {
 			BETTER_AUTH_SECRET: z.string().min(32),

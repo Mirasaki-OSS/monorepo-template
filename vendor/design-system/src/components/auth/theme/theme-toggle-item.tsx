@@ -7,7 +7,7 @@ import {
 	TabsList,
 	TabsTrigger,
 } from '@md-oss/design-system/components/ui/tabs';
-import { themePlugin } from '@md-oss/design-system/lib/auth/theme-plugin';
+import { themePluginRef } from '@md-oss/design-system/lib/auth/plugin-refs';
 import { Monitor, Moon, PaletteIcon, Sun } from 'lucide-react';
 import { useRef } from 'react';
 
@@ -16,7 +16,7 @@ import { useRef } from 'react';
  * for ensuring theming is configured before rendering this component.
  */
 export function ThemeToggleItem() {
-	const { useTheme, localization } = useAuthPlugin(themePlugin);
+	const { useTheme, localization } = useAuthPlugin(themePluginRef);
 	const { theme, setTheme, themes = [] } = useTheme();
 	const tabsListRef = useRef<HTMLDivElement>(null);
 

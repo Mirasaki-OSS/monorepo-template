@@ -30,13 +30,13 @@ import {
 	InputGroupButton,
 	InputGroupInput,
 } from '@md-oss/design-system/components/ui/input-group';
+import { Label } from '@md-oss/design-system/components/ui/label';
 import { Spinner } from '@md-oss/design-system/components/ui/spinner';
 import { cn } from '@md-oss/design-system/lib/utils';
 import { useIsMutating } from '@tanstack/react-query';
 import { Eye, EyeOff } from 'lucide-react';
 import { type SyntheticEvent, useState } from 'react';
 import { toast } from 'sonner';
-import { Label } from '../ui/label';
 import { AdditionalField } from './additional-field';
 import { ProviderButtons, type SocialLayout } from './provider-buttons';
 

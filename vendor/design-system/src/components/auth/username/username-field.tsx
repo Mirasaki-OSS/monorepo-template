@@ -15,7 +15,7 @@ import {
 } from '@md-oss/design-system/components/ui/input-group';
 import { Label } from '@md-oss/design-system/components/ui/label';
 import { Spinner } from '@md-oss/design-system/components/ui/spinner';
-import { usernamePlugin } from '@md-oss/design-system/lib/auth/username-plugin';
+import { usernamePluginRef } from '@md-oss/design-system/lib/auth/plugin-refs';
 import { useDebouncer } from '@tanstack/react-pacer';
 import { Check, X } from 'lucide-react';
 import { useState } from 'react';
@@ -37,7 +37,7 @@ export function UsernameField({
 		minUsernameLength,
 		maxUsernameLength,
 		isUsernameAvailable: checkAvailability,
-	} = useAuthPlugin(usernamePlugin);
+	} = useAuthPlugin(usernamePluginRef);
 
 	const currentUsername = String(field.defaultValue ?? '');
 	const [value, setValue] = useState(currentUsername);

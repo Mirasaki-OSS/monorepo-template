@@ -17,9 +17,11 @@
 		"NEXT_PUBLIC_APP_NAME",
 		"NEXT_PUBLIC_APP_URL",
 		"CLOUDFLARE_TURNSTILE_SECRET_KEY",
-		"NEXT_PUBLIC_TURNSTILE_SITE_KEY"
+		"NEXT_PUBLIC_TURNSTILE_SITE_KEY",
+		"RESEND_API_KEY",
+		"RESEND_FROM_EMAIL"
 	],
-	"concurrency": "22",
+	"concurrency": "23",
 	"tasks": {
 		"build": {
 			"dependsOn": ["^build"],

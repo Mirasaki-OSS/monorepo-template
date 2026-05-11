@@ -2,9 +2,9 @@
 
 import type { AuthPluginBase } from '@better-auth-ui/core';
 import { useAuth } from '@better-auth-ui/react';
+import { DangerZone } from '@md-oss/design-system/components/auth/delete-user/danger-zone';
+import { LinkedAccounts } from '@md-oss/design-system/components/auth/settings/security/linked-accounts';
 import { cn } from '@md-oss/design-system/lib/utils';
-import { DangerZone } from '../../delete-user/danger-zone';
-import { LinkedAccounts } from '../security/linked-accounts';
 
 export type LinkedAccountSettingsProps = {
 	className?: string;

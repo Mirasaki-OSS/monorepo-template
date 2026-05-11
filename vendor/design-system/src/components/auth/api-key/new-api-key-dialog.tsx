@@ -17,7 +17,7 @@ import {
 	InputGroupInput,
 } from '@md-oss/design-system/components/ui/input-group';
 import { Label } from '@md-oss/design-system/components/ui/label';
-import { apiKeyPlugin } from '@md-oss/design-system/lib/auth/api-key-plugin';
+import { apiKeyPluginRef } from '@md-oss/design-system/lib/auth/plugin-refs';
 import { Check, Copy, Key } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -36,7 +36,7 @@ export function NewApiKeyDialog({
 	secretKey,
 }: NewApiKeyDialogProps) {
 	const { localization } = useAuth();
-	const { localization: apiKeyLocalization } = useAuthPlugin(apiKeyPlugin);
+	const { localization: apiKeyLocalization } = useAuthPlugin(apiKeyPluginRef);
 
 	const [copied, setCopied] = useState(false);
 

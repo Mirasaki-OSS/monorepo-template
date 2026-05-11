@@ -2,7 +2,7 @@ import { authMutationKeys } from '@better-auth-ui/core';
 import { type AuthClient, useAuthPlugin } from '@better-auth-ui/react';
 import { mutationOptions, useMutation } from '@tanstack/react-query';
 import type { BetterFetchError } from 'better-auth/react';
-import { clearUserSessionsPlugin } from '../clear-user-sessions-plugin';
+import { clearUserSessionsPluginRef } from '../plugin-refs';
 
 export type ClearUserSessionsParams<TAuthClient extends AuthClient> =
 	Parameters<
@@ -54,7 +54,7 @@ export function useClearUserSessions<TAuthClient extends AuthClient>(
 	authClient: TAuthClient,
 	options?: ClearUserSessionsOptions<TAuthClient>
 ) {
-	const { clearCurrentSession } = useAuthPlugin(clearUserSessionsPlugin);
+	const { clearCurrentSession } = useAuthPlugin(clearUserSessionsPluginRef);
 
 	return useMutation({
 		...clearUserSessionsOptions(authClient, clearCurrentSession),

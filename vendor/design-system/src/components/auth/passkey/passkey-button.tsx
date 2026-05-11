@@ -9,7 +9,7 @@ import {
 } from '@better-auth-ui/react';
 import { Button } from '@md-oss/design-system/components/ui/button';
 import { Spinner } from '@md-oss/design-system/components/ui/spinner';
-import { passkeyPlugin } from '@md-oss/design-system/lib/auth/passkey-plugin';
+import { passkeyPluginRef } from '@md-oss/design-system/lib/auth/plugin-refs';
 import { cn } from '@md-oss/design-system/lib/utils';
 import { useIsMutating } from '@tanstack/react-query';
 import { Fingerprint } from 'lucide-react';
@@ -28,7 +28,7 @@ export type PasskeyButtonProps = {
  */
 export function PasskeyButton({ view }: PasskeyButtonProps) {
 	const { authClient, localization, redirectTo, navigate } = useAuth();
-	const { localization: passkeyLocalization } = useAuthPlugin(passkeyPlugin);
+	const { localization: passkeyLocalization } = useAuthPlugin(passkeyPluginRef);
 
 	const { mutate: signInPasskey, isPending: passkeyPending } = useSignInPasskey(
 		authClient as PasskeyAuthClient,

@@ -32,7 +32,7 @@ import {
 import { Input } from '@md-oss/design-system/components/ui/input';
 import { Label } from '@md-oss/design-system/components/ui/label';
 import { Spinner } from '@md-oss/design-system/components/ui/spinner';
-import { usernamePlugin } from '@md-oss/design-system/lib/auth/username-plugin';
+import { usernamePluginRef } from '@md-oss/design-system/lib/auth/plugin-refs';
 import { cn } from '@md-oss/design-system/lib/utils';
 import { useIsMutating } from '@tanstack/react-query';
 import { type SyntheticEvent, useState } from 'react';
@@ -74,7 +74,8 @@ export function SignInUsername({
 
 	const { fetchOptions, resetFetchOptions } = useFetchOptions();
 
-	const { localization: usernameLocalization } = useAuthPlugin(usernamePlugin);
+	const { localization: usernameLocalization } =
+		useAuthPlugin(usernamePluginRef);
 
 	const [password, setPassword] = useState('');
 

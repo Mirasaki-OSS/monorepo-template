@@ -22,13 +22,13 @@ import {
 	FieldSeparator,
 } from '@md-oss/design-system/components/ui/field';
 import { Input } from '@md-oss/design-system/components/ui/input';
+import { Label } from '@md-oss/design-system/components/ui/label';
 import { Spinner } from '@md-oss/design-system/components/ui/spinner';
-import { magicLinkPlugin } from '@md-oss/design-system/lib/auth/magic-link-plugin';
+import { magicLinkPluginRef } from '@md-oss/design-system/lib/auth/plugin-refs';
 import { cn } from '@md-oss/design-system/lib/utils';
 import { useIsMutating } from '@tanstack/react-query';
 import { type SyntheticEvent, useState } from 'react';
 import { toast } from 'sonner';
-import { Label } from '../ui/label';
 import { ProviderButtons, type SocialLayout } from './provider-buttons';
 
 export type MagicLinkProps = {
@@ -63,7 +63,7 @@ export function MagicLink({
 		Link,
 	} = useAuth();
 	const { localization: magicLinkLocalization } =
-		useAuthPlugin(magicLinkPlugin);
+		useAuthPlugin(magicLinkPluginRef);
 
 	const [email, setEmail] = useState('');
 

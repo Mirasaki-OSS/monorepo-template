@@ -21,7 +21,7 @@ import { Field } from '@md-oss/design-system/components/ui/field';
 import { Input } from '@md-oss/design-system/components/ui/input';
 import { Label } from '@md-oss/design-system/components/ui/label';
 import { Spinner } from '@md-oss/design-system/components/ui/spinner';
-import { passkeyPlugin } from '@md-oss/design-system/lib/auth/passkey-plugin';
+import { passkeyPluginRef } from '@md-oss/design-system/lib/auth/plugin-refs';
 import { Fingerprint } from 'lucide-react';
 
 export type ListedPasskey = {
@@ -42,7 +42,7 @@ export function DeletePasskeyDialog({
 	passkey,
 }: DeletePasskeyDialogProps) {
 	const { authClient, localization } = useAuth();
-	const { localization: passkeyLocalization } = useAuthPlugin(passkeyPlugin);
+	const { localization: passkeyLocalization } = useAuthPlugin(passkeyPluginRef);
 
 	const passkeyName = passkey.name || passkeyLocalization.passkey;
 	const previewId = `delete-passkey-preview-${passkey.id}`;
