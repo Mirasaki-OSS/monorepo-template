@@ -7,6 +7,7 @@ import type {
 import {
   createHTTPError,
   isHTTPErrorResponse,
+  pickAllowedRequestHeaders,
   statusCodes,
 } from '@md-oss/common/http';
 import { withActionResult } from '@md-oss/design-system/lib/action-result';
@@ -22,7 +23,6 @@ export const getSession = async (options: GetSessionOptions = {}) =>
   await withActionResult<SessionResponse>(
     async () => {
       const requestHeaders = await headers();
-      const cookieHeader = requestHeaders.get('cookie');
 
       const { data, error } = await authClient.getSession({
         query: {
@@ -32,7 +32,7 @@ export const getSession = async (options: GetSessionOptions = {}) =>
         },
         fetchOptions: {
           throw: false,
-          headers: cookieHeader ? { cookie: cookieHeader } : undefined,
+          headers: pickAllowedRequestHeaders(requestHeaders, ['cookie']),
           timeout: 2500,
         },
       });
