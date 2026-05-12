@@ -21,6 +21,9 @@ type GetSessionOptions = Exclude<
 export const getSession = async (options: GetSessionOptions = {}) =>
   await withActionResult<SessionResponse>(
     async () => {
+      const requestHeaders = await headers();
+      const cookieHeader = requestHeaders.get('cookie');
+
       const { data, error } = await authClient.getSession({
         query: {
           disableCookieCache: false,
@@ -29,7 +32,7 @@ export const getSession = async (options: GetSessionOptions = {}) =>
         },
         fetchOptions: {
           throw: false,
-          headers: await headers(),
+          headers: cookieHeader ? { cookie: cookieHeader } : undefined,
           timeout: 2500,
         },
       });
