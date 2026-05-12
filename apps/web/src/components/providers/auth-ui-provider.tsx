@@ -99,9 +99,9 @@ export function AuthUIProvider({ children, queryClient }: AuthUIProviderProps) {
         minPasswordLength: 8,
         confirmPassword: true,
         maxPasswordLength: 128,
-        forgotPassword: false,
+        forgotPassword: true,
         name: true,
-        rememberMe: true,
+        rememberMe: false,
         requireEmailVerification: false,
       }}
     >

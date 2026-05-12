@@ -33,13 +33,6 @@ export const serverEnv = () =>
 		server: {
 			BETTER_AUTH_SECRET: z.string().min(32),
 			CORS_ORIGIN: z.url(),
-			COOKIE_DOMAIN: z
-				.string()
-				.regex(
-					/^(?:\.?[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*)$/,
-					'COOKIE_DOMAIN must be a host/domain only (no protocol, path, or port)'
-				)
-				.optional(),
 			CLOUDFLARE_TURNSTILE_SECRET_KEY: z.string().optional(),
 			// Start Social Providers
 			DISCORD_CLIENT_ID: z.string().optional(),
@@ -52,7 +45,6 @@ export const serverEnv = () =>
 		runtimeEnv: {
 			BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
 			CORS_ORIGIN: process.env.CORS_ORIGIN,
-			COOKIE_DOMAIN: process.env.COOKIE_DOMAIN,
 			CLOUDFLARE_TURNSTILE_SECRET_KEY:
 				process.env.CLOUDFLARE_TURNSTILE_SECRET_KEY,
 			// Start Social Providers
