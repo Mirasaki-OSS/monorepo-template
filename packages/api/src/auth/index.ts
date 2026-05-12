@@ -123,7 +123,7 @@ const config = {
 	baseURL: parsedEnv.NEXT_PUBLIC_API_URL,
 	advanced: {
 		cookiePrefix: `${appPrefix}-auth`,
-		useSecureCookies: true,
+		useSecureCookies: parsedEnv.NODE_ENV === 'production',
 		crossSubDomainCookies: {
 			enabled: useCrossSubDomainCookies,
 			domain: parsedEnv.NEXT_PUBLIC_APP_URL,
@@ -140,8 +140,8 @@ const config = {
 			ipv6Subnet: 64,
 		},
 		defaultCookieAttributes: {
-			sameSite: useCrossSubDomainCookies ? 'none' : 'lax',
-			secure: true,
+			sameSite: useCrossSubDomainCookies ? 'lax' : 'none',
+			secure: parsedEnv.NODE_ENV === 'production',
 			httpOnly: true,
 			domain: useCrossSubDomainCookies
 				? parsedEnv.NEXT_PUBLIC_APP_URL
