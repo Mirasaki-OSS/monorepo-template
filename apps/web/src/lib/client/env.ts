@@ -8,4 +8,5 @@ export const clientEnv = createEnv({
   clientPrefix: 'NEXT_PUBLIC_',
   runtimeEnv: {},
   emptyStringAsUndefined: true,
+  isServer: typeof window === 'undefined',
 });

@@ -16,6 +16,7 @@
 		"pnpm-workspace.yaml",
 		"scripts/node/madge-monorepo.mjs",
 		"packages/db/drizzle/meta/_journal.json",
+		"apps/web/src/app/\\(assets\\)/robots.ts",
 		"apps/web/src/app/\\(home\\)/test"
 	],
 	"cSpell.words": [

@@ -13,7 +13,7 @@ import { getMDXComponents } from '@/components/mdx';
 import { InlineTOC } from '@/components/mdx/inline-toc';
 import { Footer } from '@/layouts/docs/page/slots/footer';
 import { clientEnv } from '@/lib/client/env';
-import { gitConfig } from '@/lib/shared';
+import { gitConfig, githubUrl } from '@/lib/github';
 import {
   generateDocsStaticParams,
   getPageImage,
@@ -54,7 +54,7 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
           <Footer lastModified={page.data.lastModified}>
             <div className="flex flex-col items-center gap-4 mt-2">
               <p className="text-sm text-muted-foreground">
-                {`© ${new Date().getFullYear()} ${clientEnv.NEXT_PUBLIC_APP_NAME}. All rights reserved.`}
+                {`© ${new Date().getFullYear()} ${clientEnv.NEXT_PUBLIC_COPYRIGHT_HOLDER}. All rights reserved.`}
               </p>
             </div>
           </Footer>
@@ -69,7 +69,7 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
         <MarkdownCopyButton markdownUrl={markdownUrl} />
         <ViewOptionsPopover
           markdownUrl={markdownUrl}
-          githubUrl={`https://github.com/${gitConfig.user}/${gitConfig.repo}/blob/${gitConfig.branch}/${githubPath}`}
+          githubUrl={githubUrl(`/blob/${gitConfig.branch}/${githubPath}`)}
         />
       </div>
       {page.data.renderInlineTOC ? (

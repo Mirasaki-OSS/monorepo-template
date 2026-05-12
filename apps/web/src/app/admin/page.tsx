@@ -1,9 +1,9 @@
 import { HTTPErrorAlert } from '@md-oss/design-system/components/state/http-error-alert';
 import { unauthorized } from 'next/navigation';
 import { getSession } from '@/actions/get-session';
-import TestPageClient from './client';
+import AdminPageClient from './client';
 
-export default async function TestPage() {
+export default async function AdminPage() {
   const session = await getSession();
 
   if (!session.ok) {
@@ -14,5 +14,9 @@ export default async function TestPage() {
     unauthorized();
   }
 
-  return <TestPageClient />;
+  // if (session.data?.user.role !== 'admin') {
+  //   forbidden();
+  // }
+
+  return <AdminPageClient />;
 }

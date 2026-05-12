@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "build": "NODE_ENV=production next build",
+    "postbuild": "next-sitemap --config=next-sitemap.config.js",
     "clean": "git clean -xdf .turbo .next .source node_modules tsconfig.tsbuildinfo",
     "dev": "pnpm docs:sync && NODE_ENV=development next dev --port=3000",
     "start": "node .next/standalone/apps/web/server.js",
@@ -36,6 +37,7 @@
     "lucide-react": "catalog:",
     "mermaid": "catalog:",
     "next": "catalog:",
+    "next-sitemap": "catalog:",
     "next-themes": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",

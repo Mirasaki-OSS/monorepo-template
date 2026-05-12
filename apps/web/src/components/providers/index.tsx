@@ -1,9 +1,11 @@
 'use client';
 
 import type { AppRouter } from '@md-oss/api/routers';
+import { RouteHistoryTracker } from '@md-oss/design-system/components/route-history-tracker';
 import { DesignSystemProvider } from '@md-oss/design-system/provider';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { createTRPCClient, httpBatchLink } from '@trpc/client';
+import { usePathname } from 'next/navigation';
 import { type ReactNode, useState } from 'react';
 import superjson from 'superjson';
 import { clientEnv } from '@/lib/client/env';
@@ -12,12 +14,13 @@ import { getQueryClient } from '@/lib/query-client';
 import { AuthUIProvider } from './auth-ui-provider';
 
 export function Providers({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
   const queryClient = getQueryClient();
   const [trpcClient] = useState(() =>
     createTRPCClient<AppRouter>({
       links: [
         httpBatchLink({
-          url: `${clientEnv.NEXT_PUBLIC_API_URL}/trpc`,
+          url: `${clientEnv.NEXT_PUBLIC_API_URL}/api/v1/trpc`,
           transformer: superjson,
         }),
       ],
@@ -34,6 +37,7 @@ export function Providers({ children }: { children: ReactNode }) {
             keyPrefix="api"
           >
             {children}
+            <RouteHistoryTracker pathname={pathname} />
           </TRPCProvider>
         </AuthUIProvider>
       </QueryClientProvider>

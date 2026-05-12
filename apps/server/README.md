@@ -35,7 +35,7 @@ The current application surface is intentionally small:
 
 - `GET /` returns a plain `OK` response for a basic health probe.
 - `GET|POST /api/auth/*` delegates to the Better Auth handler.
-- `/trpc/*` exposes the tRPC API defined in `@md-oss/api`.
+- `/api/v1/trpc/*` exposes the tRPC API defined in `@md-oss/api`.
 
 ## Structure
 

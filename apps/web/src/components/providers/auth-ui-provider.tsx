@@ -42,6 +42,7 @@ export function AuthUIProvider({ children, queryClient }: AuthUIProviderProps) {
         settings: {
           sessions: 'Sessions',
           linkedAccounts: 'Connections',
+          goBack: 'Go Back',
         } as Partial<SettingsLocalization>,
       }}
       viewPaths={customExtendedViewPaths}

@@ -6,10 +6,12 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 import { parsedEnv } from './env';
+import { dynamicRateLimitMiddleware } from './lib/rate-limit';
 
 const app = new Hono();
 
 app.use(logger());
+app.use('/*', dynamicRateLimitMiddleware);
 app.use(
 	'/*',
 	cors({
@@ -23,7 +25,7 @@ app.use(
 app.on(['POST', 'GET'], '/api/auth/*', (c) => auth.handler(c.req.raw));
 
 app.use(
-	'/trpc/*',
+	'/api/v1/trpc/*',
 	trpcServer({
 		router: appRouter,
 		createContext: (_opts, context) => {

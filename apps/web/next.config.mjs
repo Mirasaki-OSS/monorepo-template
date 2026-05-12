@@ -7,6 +7,9 @@ const config = {
   reactStrictMode: true,
   output: 'standalone',
   transpilePackages: ['@md-oss/design-system'],
+  experimental: {
+    authInterrupts: true,
+  },
   images: {
     remotePatterns: [
       // Dashboard Icons: Homarr Labs CDN

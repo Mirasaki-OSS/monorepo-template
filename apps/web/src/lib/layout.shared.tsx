@@ -1,6 +1,7 @@
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
 import { BookIcon } from 'lucide-react';
-import { appName, gitConfig } from './shared';
+import { githubUrl } from './github';
+import { appName } from './shared';
 
 export function baseOptions(): BaseLayoutProps {
   return {
@@ -9,7 +10,7 @@ export function baseOptions(): BaseLayoutProps {
       title: appName,
       transparentMode: 'top',
     },
-    githubUrl: `https://github.com/${gitConfig.user}/${gitConfig.repo}`,
+    githubUrl: githubUrl(),
     links: [
       {
         icon: <BookIcon />,

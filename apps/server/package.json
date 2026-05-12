@@ -18,6 +18,8 @@
 		"@hono/trpc-server": "catalog:",
 		"@md-oss/api": "workspace:^",
 		"@md-oss/auth": "workspace:^",
+		"@md-oss/cache": "workspace:^",
+		"@md-oss/common": "workspace:^",
 		"@md-oss/db": "workspace:^",
 		"@md-oss/utils": "workspace:^",
 		"@t3-oss/env-core": "catalog:",

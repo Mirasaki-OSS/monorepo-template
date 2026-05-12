@@ -5,9 +5,10 @@ import { getMergedPageTree } from '@/lib/source';
 
 import 'katex/dist/katex.css';
 import 'remark-github-blockquote-alert/alert.css';
-import { UserButton } from '@md-oss/design-system/components/auth/user/user-button';
+import { Header } from '@/layouts/notebook/slots/header';
 
 export default async function Layout({ children }: LayoutProps<'/docs'>) {
+  'use server';
   const tree = await getMergedPageTree();
   const { nav, ...base } = baseOptions();
   return (
@@ -15,13 +16,10 @@ export default async function Layout({ children }: LayoutProps<'/docs'>) {
       tree={tree}
       {...base}
       nav={{ ...nav }}
+      slots={{
+        header: Header,
+      }}
       links={[
-        {
-          type: 'custom',
-          children: <UserButton size="icon" />,
-          secondary: true,
-          on: 'all',
-        },
         {
           icon: <HomeIcon />,
           text: 'Home',
@@ -31,6 +29,13 @@ export default async function Layout({ children }: LayoutProps<'/docs'>) {
           type: 'icon',
           active: 'url',
         },
+        // Note: Included in customized Header slot - Desktop Only
+        // {
+        //   type: 'custom',
+        //   children: <UserButton size="icon" className="md:hidden" />,
+        //   secondary: true,
+        //   on: 'menu',
+        // },
       ]}
       // sidebar={{
       //   banner: <div key="custom-sidebar-banner">Hello World</div>,

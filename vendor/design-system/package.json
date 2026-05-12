@@ -27,6 +27,7 @@
 	"exports": {
 		"./components/client-only": "./src/components/client-only.tsx",
 		"./components/dev-utilities": "./src/components/dev-utilities.tsx",
+		"./components/route-history-tracker": "./src/components/route-history-tracker.tsx",
 		"./components/adaptive/dialog": "./src/components/adaptive/dialog.tsx",
 		"./components/adaptive/tooltip": "./src/components/adaptive/tooltip.tsx",
 		"./components/adaptive/tabs": "./src/components/adaptive/tabs.tsx",
@@ -196,6 +197,7 @@
 		"./lib/action-result": "./src/lib/action-result.ts",
 		"./lib/dnd": "./src/lib/dnd.ts",
 		"./lib/focus-delegation": "./src/lib/focus-delegation.ts",
+		"./lib/route-history": "./src/lib/route-history.ts",
 		"./lib/typing": "./src/lib/typing.ts",
 		"./lib/utils": "./src/lib/utils.ts",
 		"./styles/globals.css": "./src/styles/globals.css",
