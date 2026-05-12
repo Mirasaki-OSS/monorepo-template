@@ -28,10 +28,7 @@ const appInitials = appPrefix
 const apiUrl = new URL(parsedEnv.NEXT_PUBLIC_API_URL);
 const appUrl = new URL(parsedEnv.NEXT_PUBLIC_APP_URL);
 
-const useCrossSubDomainCookies =
-	parsedEnv.NODE_ENV === 'production'
-		? apiUrl.origin !== appUrl.origin
-		: apiUrl.hostname !== appUrl.hostname;
+const useCrossSubDomainCookies = apiUrl.hostname !== appUrl.hostname;
 
 const plugins = [
 	usernamePlugin({
@@ -126,7 +123,6 @@ const config = {
 		useSecureCookies: parsedEnv.NODE_ENV === 'production',
 		crossSubDomainCookies: {
 			enabled: useCrossSubDomainCookies,
-			domain: parsedEnv.NEXT_PUBLIC_APP_URL,
 		},
 		database: {
 			generateId: () => uuidv7(),
@@ -140,12 +136,9 @@ const config = {
 			ipv6Subnet: 64,
 		},
 		defaultCookieAttributes: {
-			sameSite: useCrossSubDomainCookies ? 'lax' : 'none',
+			sameSite: 'lax',
 			secure: parsedEnv.NODE_ENV === 'production',
 			httpOnly: true,
-			domain: useCrossSubDomainCookies
-				? parsedEnv.NEXT_PUBLIC_APP_URL
-				: undefined,
 			maxAge: TimeMagic.SECONDS_PER_DAY * 7,
 		},
 	},
