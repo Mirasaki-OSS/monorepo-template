@@ -5,26 +5,104 @@ const defaultPaginationOptions = {
 	pageSize: 10,
 } as const;
 
-const paginationOptionsSchema = z.union([
+const paginationOptionsSchema = z.object({
+	page: z.coerce.number().int().min(1).default(defaultPaginationOptions.page),
+	pageSize: z.coerce
+		.number()
+		.int()
+		.min(1)
+		.max(100)
+		.default(defaultPaginationOptions.pageSize),
+});
+
+const paginationInputSchema = z.union([
 	z.undefined(),
-	z
-		.object({
-			page: z.coerce
-				.number()
-				.int()
-				.min(1)
-				.default(defaultPaginationOptions.page),
-			pageSize: z.coerce
-				.number()
-				.int()
-				.min(1)
-				.max(100)
-				.default(defaultPaginationOptions.pageSize),
-		})
-		.partial(),
+	paginationOptionsSchema.partial(),
 ]);
 
+const paginationOutputObjectSchema = z.object({
+	totalCount: z.number().int().nonnegative(),
+	pageCount: z.number().int().nonnegative(),
+	page: z.number().int().min(1),
+	pageSize: z.number().int().min(1).max(100),
+});
+
+const paginationOutputSchema = <T extends z.ZodTypeAny>(itemsSchema: T) =>
+	z.object({
+		items: z.array(itemsSchema),
+		pagination: paginationOutputObjectSchema,
+	});
+
 type PaginationOptionsSchema = z.infer<typeof paginationOptionsSchema>;
+
+type PaginationInputSchema = z.infer<typeof paginationInputSchema>;
+
+type PaginationOutputObjectSchema = z.infer<
+	typeof paginationOutputObjectSchema
+>;
+
+type PaginationOutputSchema<T extends z.ZodTypeAny> = z.infer<
+	ReturnType<typeof paginationOutputSchema<T>>
+>;
+
+/**
+ * Collects an authorization-filtered page from an offset-paginated source while
+ * preserving accurate page metadata for the filtered result set.
+ *
+ * Useful when the backing query cannot express per-row access rules directly in
+ * SQL and the caller needs a dense page plus accurate `totalCount` / `pageCount`.
+ */
+async function collectFilteredPaginationPage<T>(
+	fetchPage: (page: number, pageSize: number) => Promise<{ items: T[] }>,
+	filter: (item: T) => boolean,
+	options: {
+		page: number;
+		pageSize: number;
+		batchPageSize?: number;
+	}
+): Promise<{ items: T[]; pagination: PaginationOutputObjectSchema }> {
+	const {
+		page,
+		pageSize,
+		batchPageSize = Math.max(pageSize * 2, 50),
+	} = options;
+	const filteredOffset = (page - 1) * pageSize;
+	const items: T[] = [];
+	let totalCount = 0;
+	let batchPage = 1;
+
+	while (true) {
+		const batch = await fetchPage(batchPage, batchPageSize);
+
+		for (const item of batch.items) {
+			if (!filter(item)) {
+				continue;
+			}
+
+			if (totalCount >= filteredOffset && items.length < pageSize) {
+				items.push(item);
+			}
+
+			totalCount += 1;
+		}
+
+		if (batch.items.length < batchPageSize) {
+			break;
+		}
+
+		batchPage += 1;
+	}
+
+	return {
+		items,
+		pagination: {
+			totalCount,
+			pageCount: Math.max(1, Math.ceil(totalCount / pageSize)),
+			page,
+			pageSize,
+		},
+	};
+}
 
 type LimitOffsetCapable<TReturn> = {
 	limit: (limit: number) => {
@@ -63,15 +141,25 @@ function withPagination<TReturn, T extends LimitOffsetCapable<TReturn>>(
 	{
 		page = defaultPaginationOptions.page,
 		pageSize = defaultPaginationOptions.pageSize,
-	}: PaginationOptionsSchema = {}
+	}: PaginationOptionsSchema = {
+		page: defaultPaginationOptions.page,
+		pageSize: defaultPaginationOptions.pageSize,
+	}
 ): TReturn {
 	return qb.limit(pageSize).offset((page - 1) * pageSize);
 }
 
 export {
+	collectFilteredPaginationPage,
 	defaultPaginationOptions,
 	type LimitOffsetCapable,
+	type PaginationInputSchema,
 	type PaginationOptionsSchema,
+	type PaginationOutputObjectSchema,
+	type PaginationOutputSchema,
+	paginationInputSchema,
 	paginationOptionsSchema,
+	paginationOutputObjectSchema,
+	paginationOutputSchema,
 	withPagination,
 };

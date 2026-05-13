@@ -1,25 +1,19 @@
 import type {
-	account,
 	accountRelations,
 	authRelations,
-	session,
 	sessionRelations,
-	user,
 	userRelations,
-	verification,
 } from './schema';
-
-// === Select Types ===
-type AccountSelect = typeof account.$inferSelect;
-type SessionSelect = typeof session.$inferSelect;
-type UserSelect = typeof user.$inferSelect;
-type VerificationSelect = typeof verification.$inferSelect;
-
-// === Insert Types ===
-type AccountInsert = typeof account.$inferInsert;
-type SessionInsert = typeof session.$inferInsert;
-type UserInsert = typeof user.$inferInsert;
-type VerificationInsert = typeof verification.$inferInsert;
+import type {
+	AccountInsert,
+	AccountSelect,
+	SessionInsert,
+	SessionSelect,
+	UserInsert,
+	UserSelect,
+	VerificationInsert,
+	VerificationSelect,
+} from './zod';
 
 // === Relation Types ===
 type AuthRelations = typeof authRelations;

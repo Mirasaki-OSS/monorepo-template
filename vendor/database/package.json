@@ -25,6 +25,7 @@
 	],
 	"exports": {
 		".": "./src/index.ts",
+		"./cursor-pagination": "./src/cursor-pagination.ts",
 		"./pagination": "./src/pagination.ts"
 	},
 	"publishConfig": {
@@ -42,6 +43,16 @@
 				"import": {
 					"types": "./dist/index.d.mts",
 					"default": "./dist/index.mjs"
+				}
+			},
+			"./cursor-pagination": {
+				"require": {
+					"types": "./dist/cursor-pagination.d.cts",
+					"default": "./dist/cursor-pagination.cjs"
+				},
+				"import": {
+					"types": "./dist/cursor-pagination.d.mts",
+					"default": "./dist/cursor-pagination.mjs"
 				}
 			},
 			"./pagination": {

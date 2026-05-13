@@ -1,3 +1,4 @@
+import { type AuthzAction, type AuthzSubject, can } from '@md-oss/authz';
 import { initTRPC, TRPCError } from '@trpc/server';
 import superjson from 'superjson';
 import type { Context } from './context';
@@ -28,3 +29,19 @@ export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
 		},
 	});
 });
+
+export function authorizationProcedure(
+	action: AuthzAction,
+	subject: AuthzSubject
+) {
+	return protectedProcedure.use(({ ctx, next }) => {
+		if (!can(ctx.auth.ability, action, subject)) {
+			throw new TRPCError({
+				code: 'FORBIDDEN',
+				message: `Insufficient permission: ${action} ${subject}`,
+			});
+		}
+
+		return next();
+	});
+}

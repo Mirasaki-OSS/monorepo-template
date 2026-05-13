@@ -6,6 +6,7 @@ import { DesignSystemProvider } from '@md-oss/design-system/provider';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { createTRPCClient, httpBatchLink } from '@trpc/client';
 import { usePathname } from 'next/navigation';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { type ReactNode, useState } from 'react';
 import superjson from 'superjson';
 import { clientEnv } from '@/lib/client/env';
@@ -22,6 +23,8 @@ export function Providers({ children }: { children: ReactNode }) {
         httpBatchLink({
           url: `${clientEnv.NEXT_PUBLIC_API_URL}/api/v1/trpc`,
           transformer: superjson,
+          fetch: (url, options) =>
+            fetch(url, { ...options, credentials: 'include' }),
         }),
       ],
     })
@@ -36,7 +39,7 @@ export function Providers({ children }: { children: ReactNode }) {
             trpcClient={trpcClient}
             keyPrefix="api"
           >
-            {children}
+            <NuqsAdapter>{children}</NuqsAdapter>
             <RouteHistoryTracker pathname={pathname} />
           </TRPCProvider>
         </AuthUIProvider>

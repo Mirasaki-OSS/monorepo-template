@@ -1,5 +1,5 @@
 import { HTTPErrorAlert } from '@md-oss/design-system/components/state/http-error-alert';
-import { unauthorized } from 'next/navigation';
+import { forbidden, unauthorized } from 'next/navigation';
 import { getSession } from '@/actions/get-session';
 import AdminPageClient from './client';
 
@@ -14,9 +14,9 @@ export default async function AdminPage() {
     unauthorized();
   }
 
-  // if (session.data?.user.role !== 'admin') {
-  //   forbidden();
-  // }
+  if (!session.data.actor.roles.includes('admin')) {
+    forbidden();
+  }
 
   return <AdminPageClient />;
 }

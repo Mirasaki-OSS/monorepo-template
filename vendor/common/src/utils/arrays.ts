@@ -201,35 +201,38 @@ const join = <T extends unknown[]>(
 
 /**
  * Type guard to check if all items in array are strings
- * @param arr - The array to check
+ * @param raw - The raw value to check
  * @returns True if all items are strings
  */
-const isStringArray = (arr: unknown[]): arr is string[] =>
-	arr.every((item) => typeof item === 'string');
+const isStringArray = (raw: unknown): raw is string[] =>
+	Array.isArray(raw) && raw.every((item) => typeof item === 'string');
 
 /**
  * Type guard to check if all items in array are numbers
- * @param arr - The array to check
+ * @param raw - The raw value to check
  * @returns True if all items are numbers
  */
-const isNumberArray = (arr: unknown[]): arr is number[] =>
-	arr.every((item) => typeof item === 'number');
+const isNumberArray = (raw: unknown): raw is number[] =>
+	Array.isArray(raw) && raw.every((item) => typeof item === 'number');
 
 /**
  * Type guard to check if all items in array are booleans
- * @param arr - The array to check
+ * @param raw - The raw value to check
  * @returns True if all items are booleans
  */
-const isBooleanArray = (arr: unknown[]): arr is boolean[] =>
-	arr.every((item) => typeof item === 'boolean');
+const isBooleanArray = (raw: unknown): raw is boolean[] =>
+	Array.isArray(raw) && raw.every((item) => typeof item === 'boolean');
 
 /**
  * Type guard to check if all items in array are objects
- * @param arr - The array to check
+ * @param raw - The raw value to check
  * @returns True if all items are objects
  */
-const isObjectArray = (arr: unknown[]): arr is Record<string, unknown>[] =>
-	arr.every((item) => typeof item === 'object' && item !== null);
+const isObjectArray = (raw: unknown): raw is Record<string, unknown>[] =>
+	Array.isArray(raw) &&
+	raw.every(
+		(item) => typeof item === 'object' && item !== null && !Array.isArray(item)
+	);
 
 type JoinOptions = {
 	/**

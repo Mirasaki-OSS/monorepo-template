@@ -4,7 +4,7 @@ import { serverEnv } from './src/env';
 const env = serverEnv();
 
 export default defineConfig({
-	schema: './src/schema',
+	schema: './src/schema/index.ts',
 	out: './drizzle',
 	dialect: 'postgresql',
 	dbCredentials: {

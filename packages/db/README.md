@@ -49,6 +49,7 @@ pnpm --filter @md-oss/db db:migrate
 pnpm --filter @md-oss/db db:push
 pnpm --filter @md-oss/db db:deploy
 pnpm --filter @md-oss/db db:studio
+pnpm --filter @md-oss/db db:seed:dev -- --count 10000 --batch-size 1000 --truncate
 ```
 
 - `db:ensure` creates the target database when it does not already exist.
@@ -57,6 +58,7 @@ pnpm --filter @md-oss/db db:studio
 - `db:push` applies the current schema directly.
 - `db:deploy` is the idempotent deployment entrypoint used by containerized production deploys.
 - `db:studio` opens Drizzle Studio against the configured database.
+- `db:seed:dev` generates large fake datasets with faker for development only.
 
 ## Development
 

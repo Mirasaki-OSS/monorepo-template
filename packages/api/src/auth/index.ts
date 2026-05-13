@@ -1,6 +1,11 @@
 import { apiKey as apiKeyPlugin } from '@better-auth/api-key';
 import { passkey as passkeyPlugin } from '@better-auth/passkey';
 import { createAuth } from '@md-oss/auth/server';
+import {
+	buildAbilityForActor,
+	createActorFromUser,
+	getPrimaryRole,
+} from '@md-oss/authz';
 import { TimeMagic } from '@md-oss/common/constants/time';
 import { slugify } from '@md-oss/common/utils/strings';
 import { createDb } from '@md-oss/db';
@@ -10,12 +15,15 @@ import type { BetterAuthOptions } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import {
 	captcha as captchaPlugin,
+	customSession as customSessionPlugin,
 	magicLink as magicLinkPlugin,
 	username as usernamePlugin,
 } from 'better-auth/plugins';
 import { v7 as uuidv7 } from 'uuid';
 import { z } from 'zod/v4';
 import { serverEnv } from '../env';
+import { findTargetUser } from '../modules/users/repo';
+import { handleInitialUserRoles } from './init-user-roles';
 import { activeSocialProviders, buildSocialProviders } from './providers';
 
 const parsedEnv = serverEnv();
@@ -175,9 +183,8 @@ const config = {
 	databaseHooks: {
 		user: {
 			create: {
-				async before(user, context) {
-					// [DEV] Init admin, transform role
-					console.debug('Before creating user:', user, context);
+				async after() {
+					await handleInitialUserRoles();
 				},
 			},
 		},
@@ -286,9 +293,35 @@ const config = {
 	plugins,
 } as const satisfies BetterAuthOptions;
 
-export type Auth = ReturnType<typeof createAuth<typeof config>>;
+const configWithCustomSession = {
+	...config,
+	plugins: [
+		...config.plugins,
+		customSessionPlugin(async ({ user, session }) => {
+			const target = await findTargetUser(user.id);
 
-export const auth: Auth = createAuth(config);
+			if (!target) {
+				throw new Error('User not found for custom session');
+			}
+
+			const actor = createActorFromUser(target.auth);
+
+			return {
+				actor,
+				user: target.view,
+				session,
+				ability: buildAbilityForActor(actor),
+				primaryRole: getPrimaryRole(actor.roles),
+			};
+		}, config),
+	],
+} as const satisfies BetterAuthOptions;
+
+export type Auth = ReturnType<
+	typeof createAuth<typeof configWithCustomSession>
+>;
+
+export const auth: Auth = createAuth(configWithCustomSession);
 
 /**
  * Re-exports symbols that appear in the inferred type of `createAuth` (`betterAuth`) so declaration emit

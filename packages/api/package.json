@@ -76,10 +76,12 @@
 			},
 			"./types": {
 				"require": {
-					"types": "./dist/types.d.cts"
+					"types": "./dist/types.d.cts",
+					"default": "./dist/types.cjs"
 				},
 				"import": {
-					"types": "./dist/types.d.mts"
+					"types": "./dist/types.d.mts",
+					"default": "./dist/types.mjs"
 				}
 			},
 			"./routers": {
@@ -109,8 +111,11 @@
 		"@better-auth/api-key": "catalog:",
 		"@better-auth/passkey": "catalog:",
 		"@md-oss/auth": "workspace:^",
+		"@md-oss/authz": "workspace:^",
+		"@md-oss/cache": "workspace:^",
 		"@md-oss/common": "workspace:^",
 		"@md-oss/db": "workspace:^",
+		"@md-oss/database": "workspace:^",
 		"@md-oss/email": "workspace:^",
 		"@t3-oss/env-core": "catalog:",
 		"@trpc/server": "catalog:",

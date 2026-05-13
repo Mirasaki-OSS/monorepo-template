@@ -24,7 +24,7 @@
 		"RESEND_API_KEY",
 		"RESEND_FROM_EMAIL"
 	],
-	"concurrency": "23",
+	"concurrency": "25",
 	"tasks": {
 		"build": {
 			"dependsOn": ["^build"],
