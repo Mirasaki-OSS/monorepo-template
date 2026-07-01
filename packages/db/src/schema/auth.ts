@@ -1,3 +1,4 @@
+import type { AuthzRole } from '@md-oss/authz';
 import { defineRelations } from 'drizzle-orm';
 import {
 	boolean,
@@ -34,7 +35,7 @@ export const user = pgTable('user', {
 		UserServerMetadata
 	>(),
 	// Start @md-oss/admin fields
-	roles: text('roles').default('user').notNull(),
+	roles: text('roles').$type<AuthzRole>().default('user').notNull(),
 	banned: boolean('banned').default(false).notNull(),
 	banReason: text('ban_reason'),
 	banExpiresAt: timestamp('ban_expires_at'),

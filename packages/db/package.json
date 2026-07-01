@@ -105,6 +105,8 @@
 	},
 	"dependencies": {
 		"@faker-js/faker": "catalog:",
+		"@md-oss/authz": "workspace:^",
+		"@md-oss/common": "workspace:^",
 		"@md-oss/serdes": "workspace:^",
 		"@t3-oss/env-core": "catalog:",
 		"@types/pg": "catalog:",

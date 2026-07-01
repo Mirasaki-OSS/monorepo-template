@@ -3,14 +3,16 @@ import {
 	collectFilteredCursorPage,
 	collectFilteredPaginationPage,
 } from '@md-oss/database';
-import type { AuthContext } from '../../context';
+import type { ServerAuthContext } from '../../context';
 import { userNotFoundError } from './errors';
 import {
+	assertCanCountUsers,
 	assertCanDeleteUser,
 	assertCanReadUser,
 	assertCanUpdateUser,
 } from './policy';
 import {
+	countUsers,
 	deleteUserById,
 	findTargetUser,
 	listPublicUsersView,
@@ -23,9 +25,14 @@ import type {
 	ListUsersInput,
 	UpdateUserByIdInput,
 } from './schema';
+import { listUsersDefinitions } from './schema';
+
+export function listUsersDefinitionsService() {
+	return listUsersDefinitions;
+}
 
 export async function getUserByIdService(
-	auth: AuthContext,
+	auth: ServerAuthContext,
 	targetUserId: string
 ) {
 	const target = await findTargetUser(targetUserId);
@@ -38,7 +45,7 @@ export async function getUserByIdService(
 }
 
 export async function listPublicUsersViewService(
-	auth: AuthContext,
+	auth: ServerAuthContext,
 	input: ListPublicUsersViewInput
 ) {
 	const result = await collectFilteredCursorPage(
@@ -59,8 +66,20 @@ export async function listPublicUsersViewService(
 	};
 }
 
+export async function countUsersService(
+	auth: ServerAuthContext,
+	input: ListUsersInput
+) {
+	assertCanCountUsers(auth);
+
+	const result = await countUsers(input);
+	return {
+		count: result,
+	};
+}
+
 export async function listUsersService(
-	auth: AuthContext,
+	auth: ServerAuthContext,
 	input: ListUsersInput
 ) {
 	const result = await collectFilteredPaginationPage(
@@ -79,11 +98,12 @@ export async function listUsersService(
 	return {
 		items: result.items.map((item) => item.view),
 		pagination: result.pagination,
+		definitions: listUsersDefinitions,
 	};
 }
 
 export async function updateUserByIdService(
-	auth: AuthContext,
+	auth: ServerAuthContext,
 	input: UpdateUserByIdInput
 ) {
 	const target = await findTargetUser(input.id);
@@ -102,7 +122,7 @@ export async function updateUserByIdService(
 }
 
 export async function deleteUserByIdService(
-	auth: AuthContext,
+	auth: ServerAuthContext,
 	input: DeleteUserByIdInput
 ) {
 	const target = await findTargetUser(input.id);

@@ -1,14 +1,14 @@
 import { canUser } from '@md-oss/authz';
-import type { AuthContext } from '../../../context';
+import type { ServerAuthContext } from '../../../context';
 import { forbidden } from '../errors';
 
-export function assertCanUpdateOwnUser(auth: AuthContext) {
+export function assertCanUpdateOwnUser(auth: ServerAuthContext) {
 	if (!canUser(auth.ability, 'update', auth.actor)) {
 		forbidden('You do not have permission to update this user');
 	}
 }
 
-export function assertCanDeleteOwnUser(auth: AuthContext) {
+export function assertCanDeleteOwnUser(auth: ServerAuthContext) {
 	if (!canUser(auth.ability, 'delete', auth.actor)) {
 		forbidden('You do not have permission to delete this user');
 	}

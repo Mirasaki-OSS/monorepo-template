@@ -15,19 +15,21 @@ import {
 
 export const userListStatusSchema = z.enum(['verified', 'unverified']);
 
+export const userListSortIds = [
+	'createdAt',
+	'updatedAt',
+	'id',
+	'name',
+	'email',
+	'username',
+	'displayUsername',
+	'status',
+	'authMethods',
+	'query',
+] as const;
+
 export const userListSortItemSchema = z.object({
-	id: z.enum([
-		'createdAt',
-		'updatedAt',
-		'id',
-		'name',
-		'email',
-		'username',
-		'displayUsername',
-		'status',
-		'authMethods',
-		'query',
-	]),
+	id: z.enum(userListSortIds),
 	desc: z.boolean(),
 });
 
@@ -37,16 +39,18 @@ export const userListFiltersSchema = z.object({
 	authMethods: z.array(z.string()).default([]),
 });
 
+export const userAdvancedFilterIds = [
+	'query',
+	'email',
+	'id',
+	'authMethods',
+	'lastSeenAt',
+	'createdAt',
+	'status',
+] as const;
+
 const userAdvancedFilterSchemas = createAdvancedFilterSchemas({
-	ids: [
-		'query',
-		'email',
-		'id',
-		'authMethods',
-		'lastSeenAt',
-		'createdAt',
-		'status',
-	] as const,
+	ids: userAdvancedFilterIds,
 });
 
 export const userAdvancedFilterIdSchema = userAdvancedFilterSchemas.idSchema;
@@ -87,7 +91,33 @@ export const listUsersInputSchema = z.object({
 	joinOperator: userAdvancedFilterJoinOperatorSchema,
 });
 
-export const listUsersOutputSchema = paginationOutputSchema(userViewSchema);
+export const listUsersDefinitionsSchema = z.object({
+	sorting: z.object({
+		sortableColumns: z.array(z.enum(userListSortIds)),
+		defaultSorting: z.array(userListSortItemSchema),
+	}),
+	filtering: z.object({
+		filterableColumns: z.array(userAdvancedFilterIdSchema),
+		joinOperators: z.array(userAdvancedFilterJoinOperatorSchema),
+	}),
+});
+
+export const listUsersDefinitions = {
+	sorting: {
+		sortableColumns: [...userListSortIds],
+		defaultSorting: [{ id: 'createdAt', desc: true }] as const,
+	},
+	filtering: {
+		filterableColumns: [...userAdvancedFilterIds],
+		joinOperators: ['and', 'or'] as const,
+	},
+} satisfies z.infer<typeof listUsersDefinitionsSchema>;
+
+export const listUsersOutputSchema = paginationOutputSchema(
+	userViewSchema
+).extend({
+	definitions: listUsersDefinitionsSchema,
+});
 
 export const updateUserByIdInputSchema = z.object({
 	id: z.string().min(1),
@@ -99,6 +129,10 @@ export const deleteUserByIdInputSchema = deleteUserInputSchema.extend({
 });
 
 export const deleteUserByIdOutputSchema = deleteUserOutputSchema.extend({});
+
+export const countUsersOutputSchema = z.object({
+	count: z.number().int().nonnegative(),
+});
 
 export type UserListStatus = z.infer<typeof userListStatusSchema>;
 export type UserListSortItem = z.infer<typeof userListSortItemSchema>;
@@ -112,7 +146,10 @@ export type ListPublicUsersViewOutput = z.infer<
 	typeof listPublicUsersViewOutputSchema
 >;
 export type ListUsersInput = z.infer<typeof listUsersInputSchema>;
+export type ListUsersDefinitions = z.infer<typeof listUsersDefinitionsSchema>;
 export type ListUsersOutput = z.infer<typeof listUsersOutputSchema>;
 export type UpdateUserByIdInput = z.infer<typeof updateUserByIdInputSchema>;
 export type DeleteUserByIdInput = z.infer<typeof deleteUserByIdInputSchema>;
 export type DeleteUserByIdOutput = z.infer<typeof deleteUserByIdOutputSchema>;
+
+export type CountUsersOutput = z.infer<typeof countUsersOutputSchema>;

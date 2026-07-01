@@ -89,7 +89,7 @@ export interface UseSchemaObjectFormControllerReturn<
 		omitModifiedBadge?: boolean;
 		omitRequiredIndicator?: boolean;
 	}>;
-	FormControls: React.FC;
+	FormControls: React.FC<{ className?: string; children?: React.ReactNode }>;
 	FormError: React.FC;
 	wasFieldModified: (path: FieldPath | FieldPath[]) => boolean;
 	commonInputProps: (
@@ -282,16 +282,23 @@ export const useSchemaObjectFormController = <Schema extends z.ZodObject>(
 		);
 	};
 
-	const FormControls: LocalReturn['FormControls'] = () => {
+	const FormControls: LocalReturn['FormControls'] = ({
+		className,
+		children,
+	}) => {
 		if (!usesControls) return null;
 		return (
-			<div className={cn('grid grid-cols-1 sm:grid-cols-2 gap-4')}>
+			<div className={cn('grid grid-cols-1 sm:grid-cols-2 gap-4', className)}>
 				{!omitSubmit && (
 					<Button
 						type="submit"
 						disabled={disabled || !isDirty || isSubmitting}
 						aria-label="Submit form"
 						aria-busy={isSubmitting}
+						className={cn(
+							'flex items-center gap-2 grow',
+							isSubmitting ? 'cursor-not-allowed' : ''
+						)}
 					>
 						{isSubmitting ? (
 							<Loader />
@@ -313,6 +320,7 @@ export const useSchemaObjectFormController = <Schema extends z.ZodObject>(
 						<Undo2Icon /> Reset
 					</Button>
 				)}
+				{children}
 			</div>
 		);
 	};

@@ -1,10 +1,10 @@
-import type { AuthContext } from '../../../context';
+import type { ServerAuthContext } from '../../../context';
 import { userNotFoundError } from '../errors';
 import { deleteUserById, findUserById, updateUserById } from '../repo';
 import { assertCanDeleteOwnUser, assertCanUpdateOwnUser } from './policy';
 import type { DeleteUserInput, UpdateUserInput } from './schema';
 
-export async function getMyUserService(auth: AuthContext) {
+export async function getMyUserService(auth: ServerAuthContext) {
 	const user = await findUserById(auth.actor.id);
 	if (!user) {
 		throw userNotFoundError();
@@ -14,7 +14,7 @@ export async function getMyUserService(auth: AuthContext) {
 }
 
 export async function updateMyUserService(
-	auth: AuthContext,
+	auth: ServerAuthContext,
 	input: UpdateUserInput
 ) {
 	assertCanUpdateOwnUser(auth);
@@ -28,7 +28,7 @@ export async function updateMyUserService(
 }
 
 export async function deleteMyUserService(
-	auth: AuthContext,
+	auth: ServerAuthContext,
 	_input: DeleteUserInput
 ) {
 	assertCanDeleteOwnUser(auth);

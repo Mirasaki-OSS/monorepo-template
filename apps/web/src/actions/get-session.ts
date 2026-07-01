@@ -1,7 +1,6 @@
 'use server';
 
-import type { AuthContext } from '@md-oss/api/context';
-import { buildAbilityForActor } from '@md-oss/authz';
+import type { ServerAuthContext } from '@md-oss/api/context';
 import {
   createHTTPError,
   isHTTPErrorResponse,
@@ -18,7 +17,7 @@ type GetSessionOptions = Exclude<
 >;
 
 export const getSession = async (options: GetSessionOptions = {}) =>
-  await withActionResult<AuthContext | null>(
+  await withActionResult<ServerAuthContext | null>(
     async () => {
       const requestHeaders = await headers();
 
@@ -43,10 +42,7 @@ export const getSession = async (options: GetSessionOptions = {}) =>
         return null;
       }
 
-      return {
-        ...data,
-        ability: buildAbilityForActor(data.actor),
-      };
+      return data;
     },
     {
       code: 'GET_SESSION_ERROR',
@@ -55,7 +51,7 @@ export const getSession = async (options: GetSessionOptions = {}) =>
   );
 
 export const getRequiredSession = async (options: GetSessionOptions = {}) =>
-  await withActionResult<AuthContext>(
+  await withActionResult<ServerAuthContext>(
     async () => {
       const sessionResponse = await getSession(options);
 

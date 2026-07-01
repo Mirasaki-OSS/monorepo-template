@@ -324,7 +324,12 @@ const discordEmbedsSchema = z
   .describe('Array of Discord embed objects.');
 
 const discordEmbedSchemaWithChildren = discordEmbedSchema.extend({
-  children: z.array(discordEmbedsSchema).optional(),
+  children: z
+    .array(discordEmbedsSchema)
+    .optional()
+    .describe(
+      'Optional child embeds to include within this embed. Child embeds are rendered as separate embeds following the parent embed in the same message.'
+    ),
 });
 
 const cftoolsLeaderboardSortSchema = z.enum([
@@ -613,6 +618,7 @@ export default function SchemaObjectFormTest() {
       <SchemaObjectForm
         schema={discordIntegrationSchema}
         value={discordIntegrationValue}
+        descriptionType="hover-icon"
         onChange={(data) =>
           setDiscordIntegrationValue(
             data as z.infer<typeof discordIntegrationSchema>
@@ -624,6 +630,7 @@ export default function SchemaObjectFormTest() {
       <SchemaObjectForm
         schema={discordEmbedSchemaWithChildren}
         value={value}
+        descriptionType="hover-icon"
         onChange={(data) =>
           setValue(data as z.infer<typeof discordEmbedSchemaWithChildren>)
         }

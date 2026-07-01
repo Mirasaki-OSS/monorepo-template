@@ -5,9 +5,15 @@ import type { AppRouter } from './routers';
 
 export type SessionResponse = Awaited<ReturnType<typeof auth.api.getSession>>;
 export type AuthenticatedSessionResponse = Exclude<SessionResponse, null>;
-export type AuthContext = Omit<AuthenticatedSessionResponse, 'ability'> & {
-	ability: AppAbilityLike;
+export type AuthContext<IsClient extends boolean> = Omit<
+	AuthenticatedSessionResponse,
+	'ability'
+> & {
+	ability: IsClient extends true ? never : AppAbilityLike;
 };
+
+export type ClientAuthContext = AuthContext<true>;
+export type ServerAuthContext = AuthContext<false>;
 
 export type Inputs = inferRouterInputs<AppRouter>;
 export type Outputs = inferRouterOutputs<AppRouter>;

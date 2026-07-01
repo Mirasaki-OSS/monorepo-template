@@ -5,14 +5,14 @@ import { user } from '@md-oss/db/schema';
 const initUserRolesCache = new SinglePromiseCache<void>(null);
 
 const handleInitialUserRolesFn = async () => {
-	const adminUser = await db
+	const ownerUser = await db
 		.select()
 		.from(user)
-		.where(sql`${user.roles} ~ '(^|,)[[:space:]]*admin[[:space:]]*(,|$)'`)
+		.where(sql`${user.roles} ~ '(^|,)[[:space:]]*owner[[:space:]]*(,|$)'`)
 		.limit(1)
 		.then((rows) => rows[0]);
 
-	if (!adminUser) {
+	if (!ownerUser) {
 		const firstCreatedUser = await db
 			.select()
 			.from(user)
@@ -29,7 +29,7 @@ const handleInitialUserRolesFn = async () => {
 		await db
 			.update(user)
 			.set({
-				roles: 'admin',
+				roles: 'owner',
 				updatedAt: new Date(),
 			})
 			.where(eq(user.id, firstCreatedUser.id));

@@ -725,6 +725,12 @@ importers:
       '@faker-js/faker':
         specifier: 'catalog:'
         version: 9.9.0
+      '@md-oss/authz':
+        specifier: workspace:^
+        version: link:../authz
+      '@md-oss/common':
+        specifier: workspace:^
+        version: link:../../vendor/common
       '@md-oss/serdes':
         specifier: workspace:^
         version: link:../../vendor/serdes

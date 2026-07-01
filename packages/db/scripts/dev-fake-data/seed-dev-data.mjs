@@ -48,6 +48,9 @@ function buildInsertStatement(rows, offset = 1) {
 		'banned',
 		'ban_reason',
 		'ban_expires_at',
+		'client_metadata',
+		'client_readonly_metadata',
+		'server_metadata',
 	];
 
 	const values = [];
@@ -67,10 +70,18 @@ function buildInsertStatement(rows, offset = 1) {
 			row.roles,
 			row.banned,
 			row.banReason,
-			row.banExpiresAt
+			row.banExpiresAt,
+			JSON.stringify(row.clientMetadata),
+			JSON.stringify(row.clientReadonlyMetadata),
+			JSON.stringify(row.serverMetadata)
 		);
 
-		return `(${columns.map((_, idx) => `$${base + idx}`).join(', ')})`;
+		const jsonbColumns = new Set([
+			'client_metadata',
+			'client_readonly_metadata',
+			'server_metadata',
+		]);
+		return `(${columns.map((col, idx) => (jsonbColumns.has(col) ? `$${base + idx}::jsonb` : `$${base + idx}`)).join(', ')})`;
 	});
 
 	const query = `

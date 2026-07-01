@@ -240,7 +240,11 @@ function RelativeTimeCard(props: RelativeTimeCardProps) {
 							timezone={timezone}
 						/>
 					))}
-					<TimezoneCard role="listitem" date={date} />
+					<TimezoneCard
+						role="listitem"
+						date={date}
+						aria-label="Time in your timezone"
+					/>
 				</div>
 			</HoverCardContent>
 		</HoverCard>

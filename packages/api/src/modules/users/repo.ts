@@ -1,7 +1,13 @@
 import { type AuthzActor, createActorFromUser } from '@md-oss/authz';
 import { and, asc, db, desc, eq, gt, inArray, sql } from '@md-oss/db';
 import { account, passkey, session, user } from '@md-oss/db/schema';
-import type { PublicUserView, UserSelect, UserView } from '@md-oss/db/zod';
+import {
+	mapUserToPublicView,
+	mapUserToView,
+	type PublicUserView,
+	type UserSelect,
+	type UserView,
+} from '@md-oss/db/zod';
 import type { UpdateUserInput } from './@me/schema';
 import {
 	getAuthMethodsSortRankExpression,
@@ -126,38 +132,6 @@ async function getUserEnrichments(userIds: string[]) {
 	return {
 		lastSeenAtByUserId,
 		authMethodsByUserId,
-	};
-}
-
-function mapUserToView(
-	record: UserSelect,
-	lastSeenAt: Date | null,
-	authMethods: string[]
-): UserView {
-	return {
-		id: record.id,
-		name: record.name,
-		email: record.email,
-		emailVerified: record.emailVerified,
-		image: record.image,
-		username: record.username,
-		displayUsername: record.displayUsername,
-		bio: record.bio,
-		createdAt: record.createdAt,
-		updatedAt: record.updatedAt,
-		lastSeenAt,
-		authMethods,
-	};
-}
-
-function mapUserToPublicView(record: UserSelect): PublicUserView {
-	return {
-		id: record.id,
-		name: record.name,
-		image: record.image,
-		username: record.username,
-		displayUsername: record.displayUsername,
-		bio: record.bio,
 	};
 }
 
@@ -335,6 +309,18 @@ export async function listUsers(input: ListUsersInput) {
 			pageSize: pagination.pageSize,
 		},
 	};
+}
+
+export async function countUsers(input: ListUsersInput) {
+	const whereClause = getListUserFilters(input.filters, input.joinOperator);
+
+	const countRows = await db
+		.select({
+			totalCount: sql<number>`count(*)::int`,
+		})
+		.from(user)
+		.where(whereClause);
+	return countRows[0]?.totalCount ?? 0;
 }
 
 export async function updateUserById(userId: string, input: UpdateUserInput) {
