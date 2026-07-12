@@ -20,14 +20,30 @@ import {
 	getEnumOptions,
 	getFieldError,
 	getSchemaDescription,
+	getSchemaJSONFieldOptions,
+	getSchemaTemporalFieldOptions,
+	getSchemaTextFieldOptions,
 	isStringLikeSchema,
 	unwrapSchema,
 } from '@md-oss/common/schemas/schema-object-form';
 import { ObjectUtils } from '@md-oss/common/utils';
+import {
+	AdaptiveTooltip,
+	AdaptiveTooltipContent,
+	AdaptiveTooltipTrigger,
+} from '@md-oss/design-system/components/adaptive/tooltip';
 import { Badge } from '@md-oss/design-system/components/ui/badge';
 import { Button } from '@md-oss/design-system/components/ui/button';
+import { Calendar } from '@md-oss/design-system/components/ui/calendar';
 import { InlineStringListEditor } from '@md-oss/design-system/components/ui/extended/inline-edit';
 import { Input } from '@md-oss/design-system/components/ui/input';
+import { JSONEditor } from '@md-oss/design-system/components/ui/json-editor';
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from '@md-oss/design-system/components/ui/popover';
+import { RelativeTimeCard } from '@md-oss/design-system/components/ui/relative-time-card';
 import {
 	Select,
 	SelectContent,
@@ -35,14 +51,34 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@md-oss/design-system/components/ui/select';
+import { Textarea } from '@md-oss/design-system/components/ui/textarea';
+import {
+	TimePickerContent,
+	TimePickerHour,
+	TimePickerInput,
+	TimePickerInputGroup,
+	TimePickerMinute,
+	TimePickerPeriod,
+	TimePicker as TimePickerRoot,
+	TimePickerSecond,
+	TimePickerSeparator,
+	TimePickerTrigger,
+} from '@md-oss/design-system/components/ui/time-picker';
+import type { UseSchemaObjectFormControllerReturn } from '@md-oss/design-system/hooks/use-schema-object-form-controller';
 import {
 	appendStableOrderId,
 	ensureStableOrderIds,
 	removeStableOrderIdAt,
 	reorderByStableIds,
 } from '@md-oss/design-system/lib/dnd';
-import { cn, mergePropsWithClassName } from '@md-oss/design-system/lib/utils';
 import {
+	cn,
+	mergePropsWithClassName,
+	resolveSlot,
+	type WithAsComponent,
+} from '@md-oss/design-system/lib/utils';
+import {
+	CalendarIcon,
 	ChevronDownIcon,
 	ChevronUpIcon,
 	EyeIcon,
@@ -55,6 +91,8 @@ import type React from 'react';
 import { useCallback, useId, useMemo, useRef, useState } from 'react';
 import z from 'zod/v4';
 
+type SchemaObjectFormDescriptionType = 'hover-icon' | 'static-block';
+
 type SchemaObjectFormClassNames = {
 	container?: string;
 	rootError?: string;
@@ -62,12 +100,15 @@ type SchemaObjectFormClassNames = {
 	fieldError?: string;
 };
 
-export type SchemaObjectFormProps = {
-	schema: z.ZodTypeAny;
-	value: Record<string, unknown>;
-	onChange: (next: Record<string, unknown>) => void;
+export type SchemaObjectFormProps<
+	TData extends Record<string, unknown> = Record<string, unknown>,
+> = {
+	schema: z.ZodType<TData>;
+	value: TData;
+	onChange: (next: TData) => void;
 	disabled?: boolean;
 	errors?: Record<string, string>;
+	descriptionType?: SchemaObjectFormDescriptionType;
 	formatKeys?: boolean;
 	keyFormatter?: (key: string) => string;
 	sensitiveFieldPaths?: readonly string[];
@@ -78,6 +119,21 @@ export type SchemaObjectFormProps = {
 		rootError?: React.HTMLAttributes<HTMLParagraphElement>;
 		unsupportedSchema?: React.HTMLAttributes<HTMLParagraphElement>;
 	};
+};
+
+export type SchemaObjectFormControllerIntegration<
+	TData extends Record<string, unknown> = Record<string, unknown>,
+> = UseSchemaObjectFormControllerReturn<TData>;
+
+export type SchemaObjectFormWithControllerProps<
+	TData extends Record<string, unknown> = Record<string, unknown>,
+> = SchemaObjectFormProps<TData> & {
+	controller?: SchemaObjectFormControllerIntegration<TData>;
+	htmlFormProps?: Omit<
+		React.HTMLAttributes<HTMLFormElement>,
+		'onSubmit' | 'children'
+	>;
+	children?: React.ReactNode;
 };
 
 const objectInlineActionClass = (type: 'add' | 'remove') =>
@@ -203,6 +259,7 @@ type SortableCollectionFieldProps<TItem> = {
 	label: string;
 	singleLabel: string;
 	description?: string | null;
+	descriptionType: SchemaObjectFormDescriptionType;
 	items: TItem[];
 	isOptional: boolean;
 	isNullable: boolean;
@@ -216,6 +273,91 @@ type SortableCollectionFieldProps<TItem> = {
 	setObjectExpanded: (path: string[], expanded: boolean) => void;
 	renderItem: (index: number) => React.ReactNode;
 	classNames?: SchemaObjectFormClassNames;
+};
+
+type RenderFieldDescriptionProps = {
+	type?: SchemaObjectFormDescriptionType;
+	description?: string | null;
+	className?: string;
+	slotProps?: {
+		span?: WithAsComponent<React.HTMLAttributes<HTMLSpanElement>>;
+		tooltip?: {
+			content?: WithAsComponent<
+				React.ComponentPropsWithoutRef<typeof AdaptiveTooltipContent>
+			>;
+			trigger?: WithAsComponent<
+				React.ComponentPropsWithoutRef<typeof AdaptiveTooltipTrigger>
+			>;
+		};
+	};
+};
+
+const RenderFieldDescription = ({
+	type = 'static-block',
+	description,
+	className,
+	slotProps,
+}: RenderFieldDescriptionProps) => {
+	if (!description) {
+		return null;
+	}
+
+	const [Element, elementSlotProps] = resolveSlot('span', slotProps?.span);
+
+	const elementProps = mergePropsWithClassName<
+		React.HTMLAttributes<HTMLSpanElement>
+	>(
+		{
+			className: cn(
+				'text-xs',
+				type !== 'hover-icon' && 'text-muted-foreground'
+			),
+		},
+		elementSlotProps,
+		className
+	);
+
+	if (type === 'hover-icon') {
+		const [AdaptiveTooltipTriggerComponent, adaptiveTooltipTriggerSlotProps] =
+			resolveSlot(AdaptiveTooltipTrigger, slotProps?.tooltip?.trigger);
+		const [AdaptiveTooltipContentComponent, adaptiveTooltipContentSlotProps] =
+			resolveSlot(AdaptiveTooltipContent, slotProps?.tooltip?.content);
+
+		const safeElementId =
+			elementProps.id ?? `schema-field-description-${useId()}`;
+
+		const adaptiveTooltipTriggerProps = mergePropsWithClassName(
+			{
+				asChild: true,
+				'aria-label': 'Field description',
+				'aria-describedby': `${safeElementId}-helper`,
+			},
+			adaptiveTooltipTriggerSlotProps
+		);
+		const adaptiveTooltipContentProps = mergePropsWithClassName(
+			{},
+			adaptiveTooltipContentSlotProps
+		);
+
+		return (
+			<AdaptiveTooltip>
+				<span
+					id={adaptiveTooltipTriggerProps['aria-describedby']}
+					className="sr-only"
+				>
+					{description}
+				</span>
+				<AdaptiveTooltipTriggerComponent {...adaptiveTooltipTriggerProps}>
+					<EyeIcon className="h-3 w-3 text-primary" />
+				</AdaptiveTooltipTriggerComponent>
+				<AdaptiveTooltipContentComponent {...adaptiveTooltipContentProps}>
+					<Element {...elementProps}>{description}</Element>
+				</AdaptiveTooltipContentComponent>
+			</AdaptiveTooltip>
+		);
+	}
+
+	return <Element {...elementProps}>{description}</Element>;
 };
 
 const SortableCollectionField = <TItem,>({
@@ -233,6 +375,7 @@ const SortableCollectionField = <TItem,>({
 	createItem,
 	isObjectExpanded,
 	toggleObjectExpanded,
+	descriptionType,
 	setObjectExpanded,
 	renderItem,
 	classNames,
@@ -297,12 +440,28 @@ const SortableCollectionField = <TItem,>({
 						disabled={disabled}
 						onClick={handleAddItem}
 					/>
-					<div className="min-w-0">
-						<span className={getGroupTitleClass(depth)}>{label}</span>
-						{description ? (
-							<p className="text-xs text-muted-foreground">{description}</p>
-						) : null}
-					</div>
+					{descriptionType === 'hover-icon' ? (
+						<span className="min-w-0 flex items-center gap-1">
+							<span className={getGroupTitleClass(depth)}>{label}</span>
+							<RenderFieldDescription
+								type={descriptionType}
+								description={
+									descriptionType === 'hover-icon' ? description : null
+								}
+							/>
+						</span>
+					) : (
+						<div className="min-w-0">
+							<span className={getGroupTitleClass(depth)}>{label}</span>
+							<RenderFieldDescription
+								type={descriptionType}
+								description={description}
+								slotProps={{
+									span: { asComponent: 'p' },
+								}}
+							/>
+						</div>
+					)}
 				</div>
 				{renderFieldError(fieldError ?? undefined, classNames)}
 			</div>
@@ -323,12 +482,28 @@ const SortableCollectionField = <TItem,>({
 					) : (
 						<ChevronDownIcon className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
 					)}
-					<span className="min-w-0">
-						<span className={getGroupTitleClass(depth)}>{label}</span>
-						{description ? (
-							<p className="text-xs text-muted-foreground">{description}</p>
-						) : null}
-					</span>
+					{descriptionType === 'hover-icon' ? (
+						<span className="min-w-0 flex items-center gap-1">
+							<span className={getGroupTitleClass(depth)}>{label}</span>
+							<RenderFieldDescription
+								type={descriptionType}
+								description={
+									descriptionType === 'hover-icon' ? description : null
+								}
+							/>
+						</span>
+					) : (
+						<span className="min-w-0">
+							<span className={getGroupTitleClass(depth)}>{label}</span>
+							<RenderFieldDescription
+								type={descriptionType}
+								description={description}
+								slotProps={{
+									span: { asComponent: 'p' },
+								}}
+							/>
+						</span>
+					)}
 				</button>
 				<ObjectTileAction
 					type="add"
@@ -495,7 +670,46 @@ const deepSet = (node: unknown, path: string[], value: unknown): unknown => {
 	return { ...record, [head]: deepSet(record[head], tail, value) };
 };
 
-const renderField = ({
+const formatTimePickerValue = (date: Date, showSeconds: boolean): string => {
+	const hours = String(date.getHours()).padStart(2, '0');
+	const minutes = String(date.getMinutes()).padStart(2, '0');
+
+	if (!showSeconds) {
+		return `${hours}:${minutes}`;
+	}
+
+	const seconds = String(date.getSeconds()).padStart(2, '0');
+	return `${hours}:${minutes}:${seconds}`;
+};
+
+const applyTimePickerValue = (
+	baseDate: Date,
+	timeValue: string
+): Date | null => {
+	if (!timeValue) {
+		return null;
+	}
+
+	const parts = timeValue.split(':');
+	if (parts.length < 2) {
+		return null;
+	}
+
+	const hours = Number.parseInt(parts[0] ?? '', 10);
+	const minutes = Number.parseInt(parts[1] ?? '', 10);
+	const seconds = Number.parseInt(parts[2] ?? '0', 10);
+
+	if (Number.isNaN(hours) || Number.isNaN(minutes) || Number.isNaN(seconds)) {
+		return null;
+	}
+
+	const nextDate = new Date(baseDate);
+	nextDate.setHours(hours, minutes, seconds, 0);
+	return nextDate;
+};
+
+const renderField = <TData extends Record<string, unknown>>({
+	controller,
 	keyName,
 	schema,
 	path,
@@ -514,12 +728,14 @@ const renderField = ({
 	setObjectExpanded,
 	depth,
 	classNames,
+	descriptionType,
 }: {
+	controller?: SchemaObjectFormControllerIntegration<TData>;
 	keyName: string;
 	schema: z.ZodTypeAny;
 	path: string[];
-	rootValue: Record<string, unknown>;
-	onRootChange: (next: Record<string, unknown>) => void;
+	rootValue: TData;
+	onRootChange: (next: TData) => void;
 	disabled?: boolean;
 	errors?: Record<string, string>;
 	formatKey: (key: string) => string;
@@ -533,11 +749,13 @@ const renderField = ({
 	setObjectExpanded: (path: string[], expanded: boolean) => void;
 	depth: number;
 	classNames?: SchemaObjectFormClassNames;
+	descriptionType: SchemaObjectFormDescriptionType;
 }) => {
-	const { base, isOptional, isNullable } = unwrapSchema(schema);
+	const { base, isOptional, isNullable, isReadonly } = unwrapSchema(schema);
 	const description =
 		getSchemaDescription(schema) ?? getSchemaDescription(base);
 	const currentValue = ObjectUtils.getValueAtPath(rootValue, path);
+	const isFieldDisabled = disabled || isReadonly;
 
 	const onChangeValue = (
 		value: unknown,
@@ -546,12 +764,84 @@ const renderField = ({
 		if (options?.clearTransientError !== false) {
 			clearTransientFieldError(path);
 		}
-		onRootChange(deepSet(rootValue, path, value) as Record<string, unknown>);
+		onRootChange(deepSet(rootValue, path, value) as TData);
 	};
 	const fieldError = getFieldError(errors, path);
 	const fieldId = `schema-field-${path.join('-')}`;
 	const label = formatKey(keyName);
 	const pathKey = path.join('.');
+	const textFieldOptions = getSchemaTextFieldOptions(schema);
+	const temporalFieldOptions = getSchemaTemporalFieldOptions(schema);
+	const shouldRenderTextarea =
+		textFieldOptions.control === 'textarea' && isStringLikeSchema(schema);
+	const currentDateValue =
+		currentValue instanceof Date
+			? currentValue
+			: typeof currentValue === 'string' || typeof currentValue === 'number'
+				? new Date(currentValue)
+				: null;
+	const hasValidDateValue =
+		currentDateValue instanceof Date &&
+		!Number.isNaN(currentDateValue.getTime());
+	const temporalControl = temporalFieldOptions?.control ?? 'date';
+	const showTimeInput =
+		temporalControl === 'time' || temporalControl === 'datetime';
+	const showDateInput =
+		temporalControl === 'date' || temporalControl === 'datetime';
+	const timePickerValue = hasValidDateValue
+		? formatTimePickerValue(
+				currentDateValue,
+				Boolean(temporalFieldOptions?.showSeconds)
+			)
+		: '';
+
+	const jsonOptions = getSchemaJSONFieldOptions(schema);
+	if (jsonOptions?.control === 'json') {
+		return (
+			<div key={path.join('.')} className="block text-xs">
+				<span className="mb-1 flex items-center gap-1">
+					{controller?.RichLabel ? (
+						<controller.RichLabel schemaKey={keyName}>
+							{label}
+						</controller.RichLabel>
+					) : (
+						<span className="block font-medium">{label}</span>
+					)}
+					<RenderFieldDescription
+						type={descriptionType}
+						description={descriptionType === 'hover-icon' ? description : null}
+					/>
+				</span>
+				<JSONEditor
+					id={fieldId}
+					rows={jsonOptions?.rows ?? 8}
+					className={cn(jsonOptions?.rows && 'field-sizing-fixed')}
+					value={currentValue}
+					onChange={(value) => {
+						clearTransientFieldError(path);
+						onChangeValue(value);
+					}}
+					onJsonError={(error) => {
+						if (error && jsonOptions?.validate !== false) {
+							setTransientFieldError(path, error.message);
+						} else if (!error) {
+							clearTransientFieldError(path);
+						}
+					}}
+					disabled={isFieldDisabled}
+				/>
+				<RenderFieldDescription
+					type={descriptionType}
+					description={descriptionType === 'static-block' ? description : null}
+					className="mt-1"
+					slotProps={{
+						span: { asComponent: 'p' },
+					}}
+				/>
+				{renderFieldError(fieldError, classNames)}
+			</div>
+		);
+	}
 
 	if (base instanceof z.ZodObject) {
 		const shape = base.shape;
@@ -570,7 +860,7 @@ const renderField = ({
 					<div className="flex items-center gap-2">
 						<ObjectTileAction
 							type="add"
-							disabled={disabled}
+							disabled={isFieldDisabled}
 							onClick={() => {
 								const parsed = base.safeParse({});
 								const nextValue =
@@ -585,12 +875,28 @@ const renderField = ({
 								onChangeValue(nextValue);
 							}}
 						/>
-						<div className="min-w-0">
-							<span className={getGroupTitleClass(depth)}>{label}</span>
-							{description ? (
-								<p className="text-xs text-muted-foreground">{description}</p>
-							) : null}
-						</div>
+						{descriptionType === 'hover-icon' ? (
+							<span className="min-w-0 flex items-center gap-1">
+								<span className={getGroupTitleClass(depth)}>{label}</span>
+								<RenderFieldDescription
+									type={descriptionType}
+									description={
+										descriptionType === 'hover-icon' ? description : null
+									}
+								/>
+							</span>
+						) : (
+							<div className="min-w-0">
+								<span className={getGroupTitleClass(depth)}>{label}</span>
+								<RenderFieldDescription
+									type={descriptionType}
+									description={description}
+									slotProps={{
+										span: { asComponent: 'p' },
+									}}
+								/>
+							</div>
+						)}
 					</div>
 					{renderFieldError(fieldError, classNames)}
 				</div>
@@ -611,17 +917,33 @@ const renderField = ({
 						) : (
 							<ChevronDownIcon className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
 						)}
-						<span className="min-w-0">
-							<span className={getGroupTitleClass(depth)}>{label}</span>
-							{description ? (
-								<p className="text-xs text-muted-foreground">{description}</p>
-							) : null}
-						</span>
+						{descriptionType === 'hover-icon' ? (
+							<span className="min-w-0 flex items-center gap-1">
+								<span className={getGroupTitleClass(depth)}>{label}</span>
+								<RenderFieldDescription
+									type={descriptionType}
+									description={
+										descriptionType === 'hover-icon' ? description : null
+									}
+								/>
+							</span>
+						) : (
+							<span className="min-w-0">
+								<span className={getGroupTitleClass(depth)}>{label}</span>
+								<RenderFieldDescription
+									type={descriptionType}
+									description={description}
+									slotProps={{
+										span: { asComponent: 'p' },
+									}}
+								/>
+							</span>
+						)}
 					</button>
 					{isRemovableObject ? (
 						<ObjectTileAction
 							type="remove"
-							disabled={disabled}
+							disabled={isFieldDisabled}
 							onClick={() => {
 								onChangeValue(isOptional ? undefined : null);
 							}}
@@ -632,12 +954,14 @@ const renderField = ({
 					<div className={getObjectFieldStackClass(depth)}>
 						{Object.entries(shape).map(([childKey, childSchema]) =>
 							renderField({
+								controller,
 								keyName: childKey,
 								schema: childSchema,
 								path: [...path, childKey],
 								rootValue,
 								onRootChange,
-								disabled,
+								disabled: isFieldDisabled,
+								descriptionType,
 								errors,
 								formatKey,
 								setTransientFieldError,
@@ -671,17 +995,35 @@ const renderField = ({
 					type="checkbox"
 					checked={Boolean(currentValue)}
 					onChange={(event) => onChangeValue(event.target.checked)}
-					disabled={disabled}
+					disabled={isFieldDisabled}
 					className="mt-0.5 size-4 shrink-0"
 				/>
-				<span className="min-w-0">
-					<span className="block wrap-break-word">{label}</span>
-					{description ? (
-						<span className="block wrap-break-word text-muted-foreground">
-							{description}
-						</span>
-					) : null}
-				</span>
+				{descriptionType === 'static-block' ? (
+					<span className="min-w-0">
+						<span className="block wrap-break-word">{label}</span>
+						<RenderFieldDescription
+							type={descriptionType}
+							description={description}
+							className="block wrap-break-word"
+						/>
+					</span>
+				) : (
+					<span className="min-w-0 flex items-center gap-1">
+						{controller?.RichLabel ? (
+							<controller.RichLabel schemaKey={keyName}>
+								{label}
+							</controller.RichLabel>
+						) : (
+							<span className="block font-medium">{label}</span>
+						)}
+						<RenderFieldDescription
+							type={descriptionType}
+							description={
+								descriptionType === 'hover-icon' ? description : null
+							}
+						/>
+					</span>
+				)}
 			</label>
 		);
 	}
@@ -689,7 +1031,19 @@ const renderField = ({
 	if (base instanceof z.ZodNumber) {
 		return (
 			<label key={path.join('.')} htmlFor={fieldId} className="block text-xs">
-				<span className="mb-1 block font-medium">{label}</span>
+				<span className="mb-1 flex items-center gap-1">
+					{controller?.RichLabel ? (
+						<controller.RichLabel schemaKey={keyName}>
+							{label}
+						</controller.RichLabel>
+					) : (
+						<span className="block font-medium">{label}</span>
+					)}
+					<RenderFieldDescription
+						type={descriptionType}
+						description={descriptionType === 'hover-icon' ? description : null}
+					/>
+				</span>
 				<Input
 					id={fieldId}
 					type="number"
@@ -702,13 +1056,181 @@ const renderField = ({
 						const parsed = Number(event.target.value);
 						onChangeValue(Number.isNaN(parsed) ? undefined : parsed);
 					}}
-					disabled={disabled}
+					disabled={isFieldDisabled}
 				/>
-				{description ? (
-					<p className="mt-1 text-muted-foreground">{description}</p>
-				) : null}
+				<RenderFieldDescription
+					type={descriptionType}
+					description={descriptionType === 'static-block' ? description : null}
+					className="mt-1"
+					slotProps={{
+						span: { asComponent: 'p' },
+					}}
+				/>
 				{renderFieldError(fieldError, classNames)}
 			</label>
+		);
+	}
+
+	if (base instanceof z.ZodDate) {
+		return (
+			<div key={path.join('.')} className="block text-xs">
+				<span className="mb-1 flex items-center gap-1">
+					{controller?.RichLabel ? (
+						<controller.RichLabel schemaKey={keyName}>
+							{label}
+						</controller.RichLabel>
+					) : (
+						<span className="block font-medium">{label}</span>
+					)}
+					<RenderFieldDescription
+						type={descriptionType}
+						description={descriptionType === 'hover-icon' ? description : null}
+					/>
+				</span>
+				{isReadonly ? (
+					hasValidDateValue ? (
+						<RelativeTimeCard
+							date={currentDateValue}
+							variant="muted"
+							className="justify-start px-0 text-left"
+							timezones={[
+								'America/Los_Angeles', // NA West
+								'America/New_York', // NA East
+								'Europe/Amsterdam', // EU Central
+							]}
+						/>
+					) : (
+						<p className="text-xs text-muted-foreground italic">No date</p>
+					)
+				) : (
+					<div className="space-y-2">
+						{showDateInput ? (
+							<Popover>
+								<PopoverTrigger asChild>
+									<Button
+										type="button"
+										variant="outline"
+										disabled={isFieldDisabled}
+										className={cn(
+											'w-full justify-between font-normal',
+											!hasValidDateValue && 'text-muted-foreground'
+										)}
+									>
+										{hasValidDateValue ? (
+											currentDateValue.toLocaleDateString()
+										) : (
+											<span>Select {label}</span>
+										)}
+										<CalendarIcon className="size-4" />
+									</Button>
+								</PopoverTrigger>
+								<PopoverContent
+									className="w-auto overflow-hidden p-0"
+									align="start"
+								>
+									<Calendar
+										mode="single"
+										selected={hasValidDateValue ? currentDateValue : undefined}
+										defaultMonth={
+											hasValidDateValue ? currentDateValue : undefined
+										}
+										captionLayout={
+											temporalFieldOptions?.captionLayout ?? 'dropdown'
+										}
+										onSelect={(value) => {
+											if (!value) {
+												onChangeValue(isNullable ? null : undefined);
+												return;
+											}
+
+											if (!showTimeInput) {
+												onChangeValue(value);
+												return;
+											}
+
+											const nextDate = hasValidDateValue
+												? new Date(currentDateValue)
+												: new Date();
+											nextDate.setFullYear(
+												value.getFullYear(),
+												value.getMonth(),
+												value.getDate()
+											);
+											onChangeValue(nextDate);
+										}}
+									/>
+								</PopoverContent>
+							</Popover>
+						) : null}
+						{showTimeInput ? (
+							<TimePickerRoot
+								value={timePickerValue}
+								onValueChange={(value) => {
+									if (!value) {
+										onChangeValue(isNullable ? null : undefined);
+										return;
+									}
+
+									const referenceDate =
+										hasValidDateValue && temporalControl !== 'time'
+											? currentDateValue
+											: new Date();
+									const nextDate = applyTimePickerValue(referenceDate, value);
+									onChangeValue(nextDate ?? (isNullable ? null : undefined));
+								}}
+								showSeconds={Boolean(temporalFieldOptions?.showSeconds)}
+								minuteStep={temporalFieldOptions?.minuteStep}
+								hourStep={temporalFieldOptions?.hourStep}
+								secondStep={temporalFieldOptions?.secondStep}
+								min={temporalFieldOptions?.min}
+								max={temporalFieldOptions?.max}
+								locale={temporalFieldOptions?.locale}
+								disabled={isFieldDisabled}
+								className="w-full "
+							>
+								<TimePickerInputGroup className="w-full">
+									<TimePickerInput
+										segment="hour"
+										aria-label={`${label} hour`}
+									/>
+									<TimePickerSeparator />
+									<TimePickerInput
+										segment="minute"
+										aria-label={`${label} minute`}
+									/>
+									{temporalFieldOptions?.showSeconds ? (
+										<>
+											<TimePickerSeparator />
+											<TimePickerInput
+												segment="second"
+												aria-label={`${label} second`}
+											/>
+										</>
+									) : null}
+									<TimePickerTrigger className="ms-auto" />
+								</TimePickerInputGroup>
+								<TimePickerContent>
+									<TimePickerHour />
+									<TimePickerMinute />
+									{temporalFieldOptions?.showSeconds ? (
+										<TimePickerSecond />
+									) : null}
+									<TimePickerPeriod />
+								</TimePickerContent>
+							</TimePickerRoot>
+						) : null}
+					</div>
+				)}
+				<RenderFieldDescription
+					type={descriptionType}
+					description={descriptionType === 'static-block' ? description : null}
+					className="mt-1"
+					slotProps={{
+						span: { asComponent: 'p' },
+					}}
+				/>
+				{renderFieldError(fieldError, classNames)}
+			</div>
 		);
 	}
 
@@ -722,14 +1244,26 @@ const renderField = ({
 
 		return (
 			<div key={pathKey} className="block text-xs">
-				<span className="mb-1 block font-medium">{label}</span>
+				<span className="mb-1 flex items-center gap-1">
+					{controller?.RichLabel ? (
+						<controller.RichLabel schemaKey={keyName}>
+							{label}
+						</controller.RichLabel>
+					) : (
+						<span className="block font-medium">{label}</span>
+					)}
+					<RenderFieldDescription
+						type={descriptionType}
+						description={descriptionType === 'hover-icon' ? description : null}
+					/>
+				</span>
 				<div className="flex flex-row items-stretch gap-2">
 					{hasExistingValue ? (
 						<Button
 							type="button"
 							size="sm"
 							variant="outline"
-							disabled={disabled}
+							disabled={isFieldDisabled}
 							onClick={() => setSecretVisible(path, !isVisible)}
 							className="h-auto self-stretch"
 						>
@@ -768,15 +1302,20 @@ const renderField = ({
 							}
 							onChangeValue(event.target.value);
 						}}
-						disabled={disabled}
+						disabled={isFieldDisabled}
 						className={cn(
 							isLocked ? 'cursor-not-allowed opacity-80' : undefined
 						)}
 					/>
 				</div>
-				{description ? (
-					<p className="mt-1 text-muted-foreground">{description}</p>
-				) : null}
+				<RenderFieldDescription
+					type={descriptionType}
+					description={descriptionType === 'static-block' ? description : null}
+					className="mt-1"
+					slotProps={{
+						span: { asComponent: 'p' },
+					}}
+				/>
 				{renderFieldError(fieldError, classNames)}
 			</div>
 		);
@@ -793,7 +1332,19 @@ const renderField = ({
 
 		return (
 			<div key={path.join('.')} className="block text-xs">
-				<span className="mb-1 block font-medium">{label}</span>
+				<span className="mb-1 flex items-center gap-1">
+					{controller?.RichLabel ? (
+						<controller.RichLabel schemaKey={keyName}>
+							{label}
+						</controller.RichLabel>
+					) : (
+						<span className="block font-medium">{label}</span>
+					)}
+					<RenderFieldDescription
+						type={descriptionType}
+						description={descriptionType === 'hover-icon' ? description : null}
+					/>
+				</span>
 				<Select
 					value={selectedValue}
 					onValueChange={(nextValue) => {
@@ -802,7 +1353,7 @@ const renderField = ({
 						);
 						onChangeValue(nextOption?.rawValue ?? nextValue);
 					}}
-					disabled={disabled}
+					disabled={isFieldDisabled}
 				>
 					<SelectTrigger className="w-full">
 						<SelectValue placeholder={`Select ${label}`} />
@@ -815,9 +1366,14 @@ const renderField = ({
 						))}
 					</SelectContent>
 				</Select>
-				{description ? (
-					<p className="mt-1 text-muted-foreground">{description}</p>
-				) : null}
+				<RenderFieldDescription
+					type={descriptionType}
+					description={descriptionType === 'static-block' ? description : null}
+					className="mt-1"
+					slotProps={{
+						span: { asComponent: 'p' },
+					}}
+				/>
 				{renderFieldError(fieldError, classNames)}
 			</div>
 		);
@@ -842,7 +1398,15 @@ const renderField = ({
 
 			return (
 				<div key={path.join('.')} className="block text-xs">
-					<span className="mb-1 block font-medium">{label}</span>
+					<span className="mb-1 flex items-center gap-1">
+						<span className="block font-medium">{label}</span>
+						<RenderFieldDescription
+							type={descriptionType}
+							description={
+								descriptionType === 'hover-icon' ? description : null
+							}
+						/>
+					</span>
 					<Select
 						value=""
 						onValueChange={(nextValue) => {
@@ -858,7 +1422,7 @@ const renderField = ({
 								nextOption.rawValue,
 							]);
 						}}
-						disabled={disabled || availableOptions.length === 0}
+						disabled={isFieldDisabled || availableOptions.length === 0}
 					>
 						<SelectTrigger className="w-full">
 							<SelectValue placeholder={`Add ${label}`} />
@@ -900,7 +1464,7 @@ const renderField = ({
 													: next
 											);
 										}}
-										disabled={disabled}
+										disabled={isFieldDisabled}
 										className="text-xs leading-none"
 									>
 										x
@@ -909,9 +1473,16 @@ const renderField = ({
 							))}
 						</div>
 					) : null}
-					{description ? (
-						<p className="mt-1 text-muted-foreground">{description}</p>
-					) : null}
+					<RenderFieldDescription
+						type={descriptionType}
+						description={
+							descriptionType === 'static-block' ? description : null
+						}
+						className="mt-1"
+						slotProps={{
+							span: { asComponent: 'p' },
+						}}
+					/>
 					{renderFieldError(fieldError, classNames)}
 				</div>
 			);
@@ -926,7 +1497,15 @@ const renderField = ({
 
 			return (
 				<div key={path.join('.')} className="block space-y-1 text-xs">
-					<span className="block font-medium">{label}</span>
+					<span className="mb-1 flex items-center gap-1">
+						<span className="block font-medium">{label}</span>
+						<RenderFieldDescription
+							type={descriptionType}
+							description={
+								descriptionType === 'hover-icon' ? description : null
+							}
+						/>
+					</span>
 					<InlineStringListEditor
 						value={items}
 						onChange={(nextItems) => {
@@ -970,12 +1549,19 @@ const renderField = ({
 								clearTransientError: !firstInvalidMessage,
 							});
 						}}
-						editable={!disabled}
+						editable={!isFieldDisabled}
 						placeholder={`Add ${label}...`}
 					/>
-					{description ? (
-						<p className="mt-1 text-muted-foreground">{description}</p>
-					) : null}
+					<RenderFieldDescription
+						type={descriptionType}
+						description={
+							descriptionType === 'static-block' ? description : null
+						}
+						className="mt-1"
+						slotProps={{
+							span: { asComponent: 'p' },
+						}}
+					/>
 					{renderFieldError(fieldError, classNames)}
 				</div>
 			);
@@ -998,12 +1584,13 @@ const renderField = ({
 					label={label}
 					singleLabel={singleLabel}
 					description={description}
+					descriptionType={descriptionType}
 					itemBase={itemBase}
 					items={items}
 					isOptional={isOptional}
 					isNullable={isNullable}
 					depth={depth}
-					disabled={disabled}
+					disabled={isFieldDisabled}
 					fieldError={fieldError}
 					onChangeValue={onChangeValue}
 					isObjectExpanded={isObjectExpanded}
@@ -1015,12 +1602,14 @@ const renderField = ({
 						return Object.entries(itemBase.shape).map(
 							([childKey, childSchema]) =>
 								renderField({
+									controller,
 									keyName: childKey,
 									schema: childSchema,
 									path: [...itemPath, childKey],
 									rootValue,
 									onRootChange,
-									disabled,
+									disabled: isFieldDisabled,
+									descriptionType,
 									errors,
 									formatKey,
 									setTransientFieldError,
@@ -1051,12 +1640,13 @@ const renderField = ({
 					label={label}
 					singleLabel={singleLabel}
 					description={description}
+					descriptionType={descriptionType}
 					itemBase={itemBase}
 					items={items}
 					isOptional={isOptional}
 					isNullable={isNullable}
 					depth={depth}
-					disabled={disabled}
+					disabled={isFieldDisabled}
 					fieldError={fieldError}
 					onChangeValue={onChangeValue}
 					isObjectExpanded={isObjectExpanded}
@@ -1064,13 +1654,15 @@ const renderField = ({
 					setObjectExpanded={setObjectExpanded}
 					classNames={classNames}
 					renderItem={(index) =>
-						renderField({
+						renderField<TData>({
+							controller,
 							keyName: singularize(keyName),
 							schema: itemSchema,
 							path: [...path, String(index)],
 							rootValue,
 							onRootChange,
-							disabled,
+							disabled: isFieldDisabled,
+							descriptionType,
 							errors,
 							formatKey,
 							setTransientFieldError,
@@ -1092,29 +1684,63 @@ const renderField = ({
 
 	return (
 		<label key={path.join('.')} htmlFor={fieldId} className="block text-xs">
-			<span className="mb-1 block font-medium">{label}</span>
-			<Input
-				id={fieldId}
-				type="text"
-				value={typeof currentValue === 'string' ? currentValue : ''}
-				onChange={(event) => {
-					if (event.target.value === '') {
-						onChangeValue(isOptional ? undefined : isNullable ? null : '');
-						return;
-					}
-					onChangeValue(event.target.value);
+			<span className="mb-1 flex items-center gap-1">
+				{controller?.RichLabel ? (
+					<controller.RichLabel schemaKey={keyName}>
+						{label}
+					</controller.RichLabel>
+				) : (
+					<span className="block font-medium">{label}</span>
+				)}
+				<RenderFieldDescription
+					type={descriptionType}
+					description={descriptionType === 'hover-icon' ? description : null}
+				/>
+			</span>
+			{shouldRenderTextarea ? (
+				<Textarea
+					id={fieldId}
+					rows={textFieldOptions.rows ?? 4}
+					className={cn(textFieldOptions.rows && 'field-sizing-fixed')}
+					value={typeof currentValue === 'string' ? currentValue : ''}
+					onChange={(event) => {
+						if (event.target.value === '') {
+							onChangeValue(isOptional ? undefined : isNullable ? null : '');
+							return;
+						}
+						onChangeValue(event.target.value);
+					}}
+					disabled={isFieldDisabled}
+				/>
+			) : (
+				<Input
+					id={fieldId}
+					type="text"
+					value={typeof currentValue === 'string' ? currentValue : ''}
+					onChange={(event) => {
+						if (event.target.value === '') {
+							onChangeValue(isOptional ? undefined : isNullable ? null : '');
+							return;
+						}
+						onChangeValue(event.target.value);
+					}}
+					disabled={isFieldDisabled}
+				/>
+			)}
+			<RenderFieldDescription
+				type={descriptionType}
+				description={descriptionType === 'static-block' ? description : null}
+				className="mt-1"
+				slotProps={{
+					span: { asComponent: 'p' },
 				}}
-				disabled={disabled}
 			/>
-			{description ? (
-				<p className="mt-1 text-muted-foreground">{description}</p>
-			) : null}
 			{renderFieldError(fieldError, classNames)}
 		</label>
 	);
 };
 
-export function SchemaObjectForm({
+export function SchemaObjectForm<TData extends Record<string, unknown>>({
 	schema,
 	value,
 	onChange,
@@ -1126,7 +1752,11 @@ export function SchemaObjectForm({
 	className,
 	classNames,
 	slotProps,
-}: SchemaObjectFormProps): React.JSX.Element {
+	controller,
+	htmlFormProps = {},
+	descriptionType = 'static-block',
+	children,
+}: SchemaObjectFormWithControllerProps<TData>): React.JSX.Element {
 	const [transientErrors, setTransientErrors] = useState<
 		Record<string, string>
 	>({});
@@ -1286,17 +1916,19 @@ export function SchemaObjectForm({
 		classNames?.rootError
 	);
 
-	return (
+	const formContent = (
 		<div {...containerProps}>
 			{errors?.root ? <p {...rootErrorProps}>{errors.root}</p> : null}
 			{Object.entries(shape).map(([key, childSchema]) =>
 				renderField({
 					keyName: key,
 					schema: childSchema,
+					controller,
 					path: [key],
 					rootValue: normalizedValue,
 					onRootChange: onChange,
 					disabled,
+					descriptionType,
 					errors: mergedErrors,
 					formatKey,
 					setTransientFieldError,
@@ -1313,4 +1945,23 @@ export function SchemaObjectForm({
 			)}
 		</div>
 	);
+
+	if (controller) {
+		return (
+			<>
+				{controller.FormError ? <controller.FormError /> : null}
+				<form
+					onSubmit={controller.onSubmit}
+					{...htmlFormProps}
+					className={cn('space-y-4', htmlFormProps.className)}
+				>
+					{formContent}
+					{children}
+					{/* {controller.FormControls ? <controller.FormControls /> : null} */}
+				</form>
+			</>
+		);
+	}
+
+	return formContent;
 }

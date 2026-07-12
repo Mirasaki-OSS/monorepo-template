@@ -3,14 +3,22 @@
 import type { AuthPluginBase, SettingsView } from '@better-auth-ui/core';
 import { useAuth, useAuthenticate } from '@better-auth-ui/react';
 import type { ExtendedViewPaths } from '@md-oss/design-system/components/auth/pages/view-paths';
+import { Button } from '@md-oss/design-system/components/ui/button';
 import {
 	Tabs,
 	TabsContent,
 	TabsList,
 	TabsTrigger,
 } from '@md-oss/design-system/components/ui/tabs';
-import { cn } from '@md-oss/design-system/lib/utils';
+import { findPreviousRoute } from '@md-oss/design-system/lib/route-history';
 import {
+	cn,
+	mergePropsWithClassName,
+	resolveSlot,
+	type WithAsComponent,
+} from '@md-oss/design-system/lib/utils';
+import {
+	ArrowLeftCircleIcon,
 	FingerprintPatternIcon,
 	IdCardIcon,
 	type LucideIcon,
@@ -47,6 +55,10 @@ export type SettingsProps = {
 	view?: ExtendedSettingsView;
 	hideNav?: boolean;
 	icons?: Partial<SettingsIcons>;
+	serverSideGoBackUrl?: string;
+	slotProps?: {
+		backButton?: WithAsComponent<React.ComponentPropsWithoutRef<typeof Button>>;
+	};
 };
 
 /**
@@ -57,6 +69,8 @@ export type SettingsProps = {
  * @param view - Explicit settings view to activate (for example, `"account"` or `"security"`)
  * @param hideNav - When `true`, hides the settings navigation tabs
  * @param icons - Custom icons for the settings views
+ * @param serverSideGoBackUrl - The default/server-side URL to navigate back to when the back button is clicked (overridden by client-side route history when available)
+ * @param slotProps - Props for customizing internal slots like the back button
  * @returns A JSX element rendering the settings layout and the selected settings panel
  */
 export function Settings({
@@ -65,9 +79,18 @@ export function Settings({
 	path,
 	hideNav,
 	icons,
+	serverSideGoBackUrl = '/',
+	slotProps,
 }: SettingsProps) {
-	const { authClient, basePaths, localization, viewPaths, Link, plugins } =
-		useAuth();
+	const {
+		authClient,
+		basePaths,
+		localization,
+		viewPaths,
+		Link,
+		plugins,
+		navigate,
+	} = useAuth();
 	useAuthenticate(authClient);
 
 	if (!view && !path) {
@@ -155,12 +178,49 @@ export function Settings({
 		return <LucideIconComponent className="h-4! w-4! shrink-0 grow-0" />;
 	};
 
+	const goBackUrl =
+		typeof window === 'undefined'
+			? serverSideGoBackUrl
+			: findPreviousRoute(basePaths.settings);
+
+	const [BackButtonEl, backButtonSlotProps] = resolveSlot(
+		Button,
+		slotProps?.backButton
+	);
+
+	const backButtonProps = mergePropsWithClassName(
+		{
+			variant: 'ghost',
+			size: 'icon',
+			disabled: !goBackUrl,
+			onClick: () => {
+				if (goBackUrl) {
+					navigate({ to: goBackUrl });
+				}
+			},
+			suppressHydrationWarning: true,
+			children: <ArrowLeftCircleIcon className="shrink-0" />,
+		},
+		backButtonSlotProps
+	);
+
 	return (
 		<Tabs
 			value={currentView}
 			className={cn('w-full gap-4 md:gap-6', className)}
 		>
-			<div className={cn(hideNav && 'hidden')}>
+			<div className={cn(hideNav && 'hidden', 'flex items-center gap-1')}>
+				{goBackUrl && (
+					<BackButtonEl
+						{...backButtonProps}
+						aria-label={
+							'goBack' in localization.settings &&
+							typeof localization.settings.goBack === 'string'
+								? localization.settings.goBack
+								: 'Go back'
+						}
+					/>
+				)}
 				<TabsList
 					aria-label={localization.settings.settings}
 					className="w-full flex flex-row flex-wrap items-start min-h-max"

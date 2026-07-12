@@ -7,7 +7,7 @@ export class SinglePromiseCache<T> {
 	private cachedPromise: Promise<T> | null = null;
 	private expiresAt: number | null = null;
 
-	constructor(private readonly ttlMs: number) {}
+	constructor(private readonly ttlMs: number | null) {}
 
 	async getOrLoad(loader: PromiseLoader<T>): Promise<T> {
 		const now = Date.now();
@@ -19,6 +19,9 @@ export class SinglePromiseCache<T> {
 		this.cachedPromise = (async () => {
 			try {
 				const result = await loader();
+				if (this.ttlMs === null) {
+					return result;
+				}
 				this.expiresAt = Date.now() + this.ttlMs;
 				setTimeout(() => this.clear(), this.ttlMs);
 				return result;

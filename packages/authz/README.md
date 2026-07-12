@@ -1,0 +1,90 @@
+# @md-oss/authz
+
+CASL-based authorization helpers and RBAC source of truth for server and app consumers.
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Exports](#exports)
+- [RBAC Model](#rbac-model)
+- [Usage](#usage)
+- [Development](#development)
+
+## Overview
+
+This package centralizes authorization concerns for the monorepo. It defines the available roles, permissions, and subjects, and provides helpers to derive an actor, build a CASL ability, and evaluate permissions consistently.
+
+The API/server layer should treat this package as the authoritative source for authorization decisions.
+
+## Exports
+
+The package currently exposes:
+
+- role and permission types: `AuthzRole`, `AuthzAction`, `AuthzSubject`, `AuthzPermission`
+- actor and ability types: `AuthzActor`, `AppAbility`
+- permission source of truth: `rolePermissions`
+- actor and ability helpers: `createActorFromUser`, `buildAbilityForActor`
+- authorization checks: `can`, `hasPermission`, `hasScopePermission`, `permissionsForRoles`
+- access-area checks: `authzAccessAreas`, `accessAreaRules`, `canAccessArea`, `accessibleAreas`
+
+## RBAC Model
+
+Current built-in roles:
+
+- `owner` - full access (`manage` on `all`), admin dashboard access, and access to sensitive system settings
+- `admin` - full access for `User`, admin dashboard access, but no access to sensitive system settings
+- `support` - read access for `User`, with access limited to non-sensitive fields, and access to admin dashboard for support purposes
+- `user` - own read/update/delete access for `User`
+
+Scopes:
+
+- `any` - permission applies to all records for a subject
+- `own` - permission applies to records owned by the actor and must be enforced by policy/service checks
+
+Access areas:
+
+- `dashboard` - base signed-in dashboard access
+- `admin.dashboard` - access to admin dashboard routes/pages
+- `admin.users.read` - read/list users in admin tooling
+- `admin.users.manage` - manage users in admin tooling
+
+`accessAreaRules` is the centralized, extendable map used to resolve these checks.
+
+## Usage
+
+```typescript
+import {
+	canAccessArea,
+	buildAbilityForActor,
+	can,
+	createActorFromUser,
+	hasScopePermission,
+} from '@md-oss/authz';
+
+const actor = createActorFromUser({
+	id: 'user_123',
+	roles: ['user'],
+});
+
+const ability = buildAbilityForActor(actor);
+
+const canReadUsers = can(ability, 'read', 'User');
+const canReadAnyUsers = hasScopePermission(actor.roles, 'read', 'User', 'any');
+const canOpenAdminDashboard = canAccessArea(actor.roles, 'admin.dashboard');
+```
+
+```typescript
+import { rolePermissions } from '@md-oss/authz';
+
+const adminPermissions = rolePermissions.admin;
+```
+
+## Development
+
+```bash
+pnpm --filter @md-oss/authz dev
+pnpm --filter @md-oss/authz build
+pnpm --filter @md-oss/authz typecheck
+```
+
+

@@ -51,7 +51,9 @@ const discordSnowflakeSchema = z
 
 type DiscordSnowflake = z.infer<typeof discordSnowflakeSchema>;
 
-const discordWebhookPathRegex = /^\/api\/webhooks\/\d{17,19}\/[\w-]+$/;
+const discordWebhookPathPattern = '/api/webhooks/\\d{17,19}/[\\w-]+';
+
+const discordWebhookPathRegex = new RegExp(`^${discordWebhookPathPattern}$`);
 
 const allowedDiscordWebhookHosts = new Set([
 	'discord.com',
@@ -61,6 +63,13 @@ const allowedDiscordWebhookHosts = new Set([
 	'canary.discord.com',
 	'canary.discordapp.com',
 ]);
+
+const discordWebhookRegex = new RegExp(
+	`^https:\\/\\/(${[...allowedDiscordWebhookHosts]
+		.map((host) => host.replace(/\./g, '\\.'))
+		.join('|')})${discordWebhookPathPattern}$`,
+	'i'
+);
 
 const discordWebhookUrlSchema = z
 	.url()
@@ -406,6 +415,7 @@ export {
 	discordEmbedsSchema,
 	discordSnowflakeSchema,
 	discordWebhookPathRegex,
+	discordWebhookRegex,
 	discordWebhookUrlSchema,
 	EmbedType,
 	getTotalEmbedCharacters,

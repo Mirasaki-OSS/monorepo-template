@@ -204,3 +204,13 @@
 @utility paused {
 	animation-play-state: paused;
 }
+
+/*---break--- */
+
+/* DiceUI TimePicker */
+@utility scrollbar-none {
+	scrollbar-width: none;
+	&::-webkit-scrollbar {
+		display: none;
+	}
+}

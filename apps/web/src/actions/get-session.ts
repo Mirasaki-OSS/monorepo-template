@@ -1,12 +1,10 @@
 'use server';
 
-import type {
-  AuthenticatedSessionResponse,
-  SessionResponse,
-} from '@md-oss/api/types';
+import type { ServerAuthContext } from '@md-oss/api/context';
 import {
   createHTTPError,
   isHTTPErrorResponse,
+  pickAllowedRequestHeaders,
   statusCodes,
 } from '@md-oss/common/http';
 import { withActionResult } from '@md-oss/design-system/lib/action-result';
@@ -19,8 +17,10 @@ type GetSessionOptions = Exclude<
 >;
 
 export const getSession = async (options: GetSessionOptions = {}) =>
-  await withActionResult<SessionResponse>(
+  await withActionResult<ServerAuthContext | null>(
     async () => {
+      const requestHeaders = await headers();
+
       const { data, error } = await authClient.getSession({
         query: {
           disableCookieCache: false,
@@ -29,13 +29,17 @@ export const getSession = async (options: GetSessionOptions = {}) =>
         },
         fetchOptions: {
           throw: false,
-          headers: await headers(),
+          headers: pickAllowedRequestHeaders(requestHeaders, ['cookie']),
           timeout: 2500,
         },
       });
 
       if (isHTTPErrorResponse(error)) {
         return error;
+      }
+
+      if (!data) {
+        return null;
       }
 
       return data;
@@ -47,7 +51,7 @@ export const getSession = async (options: GetSessionOptions = {}) =>
   );
 
 export const getRequiredSession = async (options: GetSessionOptions = {}) =>
-  await withActionResult<AuthenticatedSessionResponse>(
+  await withActionResult<ServerAuthContext>(
     async () => {
       const sessionResponse = await getSession(options);
 

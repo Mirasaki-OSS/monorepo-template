@@ -1,11 +1,15 @@
+import { buildAbilityForActor } from '@md-oss/authz';
 import type { Context as HonoContext } from 'hono';
 import { auth } from './auth';
+import type { ServerAuthContext } from './types';
 
 export type CreateContextOptions = {
 	context: HonoContext;
 };
 
-export async function createContext({ context }: CreateContextOptions) {
+export async function createContext({
+	context,
+}: CreateContextOptions): Promise<{ auth: ServerAuthContext | null }> {
 	const sessionResponse = await auth.api.getSession({
 		headers: context.req.raw.headers,
 	});
@@ -13,11 +17,16 @@ export async function createContext({ context }: CreateContextOptions) {
 	return {
 		auth: sessionResponse
 			? {
-					user: sessionResponse.user,
-					session: sessionResponse.session,
+					...sessionResponse,
+					ability: buildAbilityForActor(sessionResponse.actor),
 				}
 			: null,
 	};
 }
 
 export type Context = Awaited<ReturnType<typeof createContext>>;
+export type {
+	AuthContext,
+	ClientAuthContext,
+	ServerAuthContext,
+} from './types';

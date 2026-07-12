@@ -1,3 +1,4 @@
+import type { AuthzRole } from '@md-oss/authz';
 import { defineRelations } from 'drizzle-orm';
 import {
 	boolean,
@@ -33,6 +34,11 @@ export const user = pgTable('user', {
 		UserClientReadOnlyMetadata,
 		UserServerMetadata
 	>(),
+	// Start @md-oss/admin fields
+	roles: text('roles').$type<AuthzRole>().default('user').notNull(),
+	banned: boolean('banned').default(false).notNull(),
+	banReason: text('ban_reason'),
+	banExpiresAt: timestamp('ban_expires_at'),
 });
 
 export const session = pgTable(
@@ -50,6 +56,8 @@ export const session = pgTable(
 		userId: text('user_id')
 			.notNull()
 			.references(() => user.id, { onDelete: 'cascade' }),
+		// Start @md-oss/admin fields
+		impersonatedBy: text('impersonated_by'),
 	},
 	(table) => [index('session_userId_idx').on(table.userId)]
 );

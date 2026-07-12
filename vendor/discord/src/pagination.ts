@@ -1,19 +1,37 @@
 import { parseError, StringUtils } from '@md-oss/common';
-import type { EmbedBuilder, RepliableInteraction } from 'discord.js';
 import {
 	ActionRowBuilder,
 	ButtonBuilder,
 	ButtonStyle,
+	EmbedBuilder,
+	type InteractionEditReplyOptions,
+	type InteractionReplyOptions,
 	MessageFlags,
+	type RepliableInteraction,
 	StringSelectMenuBuilder,
 } from 'discord.js';
 import type Client from './client';
 
+type PageContentComponentsType =
+	| 'before-pagination-controls'
+	| 'after-pagination-controls';
+
 type InteractionPaginationOptions = {
 	/**
-	 * Each page can be either a single EmbedBuilder, an array of EmbedBuilders, or a string (for simple text content). The pagination handler will need to determine how to send each page based on its type.
+	 * Each page can be either a message payload, single EmbedBuilder, an array of EmbedBuilders, or a string (for simple text content). The pagination handler will need to determine how to send each page based on its type.
 	 */
-	pages: (EmbedBuilder | EmbedBuilder[] | string)[];
+	pages: (
+		| EmbedBuilder
+		| EmbedBuilder[]
+		| string
+		| (InteractionReplyOptions & InteractionEditReplyOptions)
+	)[];
+	/**
+	 * If pages is an array of message payloads, this option specifies whether the page `components` should be rendered before or after the pagination controls.
+	 *
+	 * @default 'after-pagination-controls'
+	 */
+	pageContentComponentsType?: PageContentComponentsType;
 	/**
 	 * The initial page index to display when the pagination is first sent. This is optional and defaults to 0 (the first page) if not provided. The pagination handler ensures that this index is within the bounds of the pages array.
 	 */
@@ -192,6 +210,7 @@ const handleInteractionPagination = async ({
 	interaction,
 	pagination: {
 		pages,
+		pageContentComponentsType = 'after-pagination-controls',
 		initialPage = 0,
 		timeoutMs = 1000 * 60 * 5,
 		labelGenerator,
@@ -205,11 +224,19 @@ const handleInteractionPagination = async ({
 		pageIndex: number
 	): ReturnType<Client<true>['safeReply']> => {
 		const pageContent = pages[pageIndex];
+
+		if (!pageContent) {
+			throw new Error(`Page content is undefined for page index ${pageIndex}`);
+		}
+
 		const paginationControls = paginationComponentRows({
 			pages: totalPages,
 			currentPage: pageIndex,
 			pageLabelGenerator: labelGenerator,
 		});
+
+		const isEmbedContent =
+			Array.isArray(pageContent) || pageContent instanceof EmbedBuilder;
 
 		if (typeof pageContent === 'string') {
 			return client.safeReply(interaction, {
@@ -217,7 +244,7 @@ const handleInteractionPagination = async ({
 				embeds: [],
 				components: paginationControls,
 			});
-		} else {
+		} else if (isEmbedContent) {
 			const embeds: EmbedBuilder[] = [];
 
 			if (Array.isArray(pageContent)) {
@@ -230,6 +257,14 @@ const handleInteractionPagination = async ({
 				content: '',
 				embeds,
 				components: paginationControls,
+			});
+		} else {
+			return client.safeReply(interaction, {
+				...pageContent,
+				components:
+					pageContentComponentsType === 'before-pagination-controls'
+						? [...(pageContent.components ?? []), ...paginationControls]
+						: [...paginationControls, ...(pageContent.components ?? [])],
 			});
 		}
 	};

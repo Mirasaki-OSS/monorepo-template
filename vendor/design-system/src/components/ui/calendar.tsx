@@ -33,6 +33,12 @@ function Calendar({
 }) {
 	const defaultClassNames = getDefaultClassNames();
 
+	const [timeZone, setTimeZone] = React.useState<string | undefined>(undefined);
+
+	React.useEffect(() => {
+		setTimeZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
+	}, []);
+
 	return (
 		<DayPicker
 			showOutsideDays={showOutsideDays}
@@ -187,6 +193,7 @@ function Calendar({
 				},
 				...components,
 			}}
+			timeZone={timeZone}
 			{...props}
 		/>
 	);

@@ -10,13 +10,18 @@ export default async function SettingsPage({
     path: string;
   }>;
 }) {
-  const { path } = await params;
+  const [{ path }] = await Promise.all([params]);
   return (
     <SettingsPageComponent
       path={path}
       notFound={notFound}
       queryClient={getQueryClient()}
       viewPaths={customExtendedViewPaths}
+      slotProps={{
+        settings: {
+          serverSideGoBackUrl: '/',
+        },
+      }}
     />
   );
 }

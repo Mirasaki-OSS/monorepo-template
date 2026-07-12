@@ -1,7 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { jsonb } from 'drizzle-orm/pg-core';
 
-type MetadataShape = Record<string, unknown>;
+type MetadataShape = Record<string, unknown> | null;
 
 type MetadataColumns<
 	TClient extends MetadataShape,

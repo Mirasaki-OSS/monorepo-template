@@ -1,6 +1,6 @@
 import type { HeadersInit } from './types';
 
-const strippedRequestHeaderNames = [
+export const proxyAndWebsocketHeaders = [
 	'proxy-authorization',
 	'proxy-authenticate',
 	'te',
@@ -10,6 +10,13 @@ const strippedRequestHeaderNames = [
 	'via',
 	'connection',
 	'host',
+] as const;
+
+export const defaultForwardedRequestHeaderNames = [
+	'cookie',
+	'x-forwarded-for',
+	'x-real-ip',
+	'cf-connecting-ip',
 ] as const;
 
 export const mergeHeaders = (
@@ -39,7 +46,7 @@ export const stripProxyAndWebsocketHeaders = (
 ): Record<string, string> => {
 	const resolvedHeaders = normalizeHeaders(headers);
 
-	for (const headerName of strippedRequestHeaderNames) {
+	for (const headerName of proxyAndWebsocketHeaders) {
 		delete resolvedHeaders[headerName];
 	}
 
@@ -53,4 +60,23 @@ export const parseHeaders = (
 	return shouldStripProxyAndWebsocketHeaders
 		? stripProxyAndWebsocketHeaders(headers)
 		: normalizeHeaders(headers);
+};
+
+export const pickAllowedRequestHeaders = (
+	headers: HeadersInit | undefined,
+	allowedHeaderNames: readonly string[] = defaultForwardedRequestHeaderNames
+): Record<string, string> | undefined => {
+	if (!headers) return undefined;
+
+	const normalizedHeaders = normalizeHeaders(headers);
+	const allowedHeaderNameSet = new Set(
+		allowedHeaderNames.map((headerName) => headerName.toLowerCase())
+	);
+	const pickedHeaders = Object.fromEntries(
+		Object.entries(normalizedHeaders).filter(([headerName]) =>
+			allowedHeaderNameSet.has(headerName.toLowerCase())
+		)
+	);
+
+	return Object.keys(pickedHeaders).length > 0 ? pickedHeaders : undefined;
 };

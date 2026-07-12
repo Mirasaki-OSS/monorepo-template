@@ -1,7 +1,9 @@
 import { z } from 'zod/v4';
-import { createTRPCRouter, protectedProcedure, publicProcedure } from '../';
+import { authorizationProcedure, createTRPCRouter, publicProcedure } from '../';
+import { usersRouter } from '../modules/users';
 
 export const appRouter = createTRPCRouter({
+	users: usersRouter,
 	hello: publicProcedure
 		.input(
 			z.object({
@@ -16,7 +18,7 @@ export const appRouter = createTRPCRouter({
 	healthCheck: publicProcedure.query(() => {
 		return 'OK';
 	}),
-	privateData: protectedProcedure.query(({ ctx }) => {
+	privateData: authorizationProcedure('read', 'User').query(({ ctx }) => {
 		return {
 			message: 'This is private',
 			user: ctx.auth.user,

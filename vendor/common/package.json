@@ -510,16 +510,16 @@
 	},
 	"dependencies": {
 		"@md-oss/serdes": "workspace:^",
-		"@t3-oss/env-core": "^0.13.11",
-		"@types/qs": "^6.15.1",
-		"qs": "^6.15.1",
-		"zod": "^4.4.3"
+		"@t3-oss/env-core": "catalog:",
+		"@types/qs": "catalog:",
+		"qs": "catalog:",
+		"zod": "catalog:"
 	},
 	"devDependencies": {
 		"@md-oss/config": "workspace:^",
 		"@md-oss/scripts": "workspace:^",
-		"@types/node": "^25.6.2",
-		"pkgroll": "^2.27.0",
-		"typescript": "^6.0.3"
+		"@types/node": "catalog:",
+		"pkgroll": "catalog:",
+		"typescript": "catalog:"
 	}
 }

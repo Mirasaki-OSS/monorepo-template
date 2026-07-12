@@ -26,6 +26,7 @@ import {
 } from 'discord.js';
 import { type CooldownCollection, CooldownManager } from './cooldown';
 import { ClientListener } from './events';
+import { resolveComponentSeparator } from './interactions';
 import type {
 	ClientComponent,
 	ClientComponentData,
@@ -161,7 +162,7 @@ class Client<Ready extends boolean = boolean> extends DiscordClient<Ready> {
 		interaction: Interaction
 	): ClientComponent<TData> | undefined => {
 		if (
-			interaction.isCommand() ||
+			interaction.isChatInputCommand() ||
 			interaction.isContextMenuCommand() ||
 			interaction.isAutocomplete()
 		) {
@@ -177,7 +178,8 @@ class Client<Ready extends boolean = boolean> extends DiscordClient<Ready> {
 			interaction.isMentionableSelectMenu() ||
 			interaction.isModalSubmit()
 		) {
-			return this.commands.find((c) => c.id === interaction.customId) as
+			const resolvedId = resolveComponentSeparator(interaction.customId);
+			return this.commands.find((c) => c.id === resolvedId) as
 				| ClientComponent<TData>
 				| undefined;
 		}
@@ -302,9 +304,13 @@ class Client<Ready extends boolean = boolean> extends DiscordClient<Ready> {
 		}
 
 		const command = this.getComponentByInteraction(interaction);
+		const identifier =
+			'customId' in interaction
+				? interaction.customId
+				: interaction.commandName;
 
 		if (!command) {
-			console.warn(`No command found for interaction: ${interaction.id}`);
+			console.warn(`No command found for interaction: ${identifier}`);
 			return;
 		}
 

@@ -90,7 +90,7 @@
 		"db:deploy": "node ./scripts/deploy-schema.mjs",
 		"db:ensure": "node ./scripts/ensure-database.mjs",
 		"db:reset": "node ./scripts/reset-database.mjs",
-		"postdb:reset": "node ./scripts/deploy-schema.mjs",
+		"db:seed:dev": "node ./scripts/dev-fake-data/seed-dev-data.mjs",
 		"db:push": "drizzle-kit push",
 		"db:generate": "drizzle-kit generate",
 		"db:studio": "drizzle-kit studio",
@@ -99,16 +99,19 @@
 	"devDependencies": {
 		"@md-oss/config": "workspace:^",
 		"@md-oss/scripts": "workspace:^",
-		"drizzle-kit": "^0.31.10",
-		"pkgroll": "^2.27.0",
-		"typescript": "^6.0.3"
+		"drizzle-kit": "catalog:",
+		"pkgroll": "catalog:",
+		"typescript": "catalog:"
 	},
 	"dependencies": {
+		"@faker-js/faker": "catalog:",
+		"@md-oss/authz": "workspace:^",
+		"@md-oss/common": "workspace:^",
 		"@md-oss/serdes": "workspace:^",
-		"@t3-oss/env-core": "^0.13.11",
-		"@types/pg": "^8.20.0",
-		"drizzle-orm": "1.0.0-rc.2-e38a2ba",
-		"pg": "^8.20.0",
-		"zod": "^4.4.3"
+		"@t3-oss/env-core": "catalog:",
+		"@types/pg": "catalog:",
+		"drizzle-orm": "catalog:",
+		"pg": "catalog:",
+		"zod": "catalog:"
 	}
 }

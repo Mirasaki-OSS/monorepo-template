@@ -17,8 +17,12 @@ const migrationsDir = join(packageRoot, 'drizzle');
 
 const hasGeneratedMigrations =
 	existsSync(migrationsDir) &&
-	readdirSync(migrationsDir, { withFileTypes: true }).some((entry) =>
-		entry.isFile()
+	readdirSync(migrationsDir, { withFileTypes: true }).some(
+		(entry) =>
+			entry.isDirectory() &&
+			readdirSync(join(migrationsDir, entry.name), {
+				withFileTypes: true,
+			}).some((file) => file.isFile())
 	);
 
 const runDrizzleKit = (command) => {

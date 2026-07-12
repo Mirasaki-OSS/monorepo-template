@@ -7,16 +7,12 @@ import { z } from 'zod';
 
 export const clientEnv = () =>
 	createEnv({
-		extends: [authClientEnv()],
+		extends: [authClientEnv(), commonEnv()],
 		client: {
-			NEXT_PUBLIC_APP_NAME: z.string().min(1).default('My App'),
-			NEXT_PUBLIC_APP_URL: z.url().min(1),
 			NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().optional(),
 		},
 		server: {},
 		runtimeEnv: {
-			NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME,
-			NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
 			NEXT_PUBLIC_TURNSTILE_SITE_KEY:
 				process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
 		},

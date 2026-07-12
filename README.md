@@ -1,6 +1,6 @@
 # Monorepo
 
-[![Checked with Biome](https://img.shields.io/badge/Checked_with-Biome-60a5fa?style=flat&logo=biome)](https://biomejs.dev)
+[![Checked with Biome](https://img.shields.io/badge/Checked_with-Biome-60a5fa.png?style=flat&logo=biome)](https://biomejs.dev)
 
 Heavily opinionated monorepo template for modern web development, built with [Next.js](https://nextjs.org/), [Turborepo](https://turborepo.dev/), and more.
 

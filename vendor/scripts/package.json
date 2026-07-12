@@ -87,8 +87,8 @@
 	},
 	"devDependencies": {
 		"@md-oss/config": "workspace:^",
-		"pkgroll": "^2.27.0",
-		"tsx": "^4.21.0",
-		"typescript": "^6.0.3"
+		"pkgroll": "catalog:",
+		"tsx": "catalog:",
+		"typescript": "catalog:"
 	}
 }

@@ -1,5 +1,6 @@
 'use client';
 
+import { cn } from '@md-oss/design-system/lib/utils';
 import { usePathname } from 'fumadocs-core/framework';
 import Link from 'fumadocs-core/link';
 import type * as PageTree from 'fumadocs-core/page-tree';
@@ -8,8 +9,7 @@ import { PageLastUpdate } from 'fumadocs-ui/layouts/notebook/page';
 import { useFooterItems } from 'fumadocs-ui/utils/use-footer-items';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { type ComponentProps, useMemo } from 'react';
-import { cn } from '../../../../lib/cn';
-import { isActive } from '../../../../lib/urls';
+import { isActive } from '@/lib/urls';
 
 // Note: Initially generated using `npx @fumadocs/cli add slots/docs/page/footer` and then customized.
 

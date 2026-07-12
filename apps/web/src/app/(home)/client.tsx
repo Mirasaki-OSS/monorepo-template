@@ -70,7 +70,7 @@ export default function HomePageClient() {
                   allowCopy: true,
                   keepBackground: false,
                 }}
-                code={JSON.stringify(healthCheck.data, null, 2)}
+                code={JSON.stringify(healthCheck.data || '', null, 2)}
               />
             </div>
             <DrawerFooter>

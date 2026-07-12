@@ -31,7 +31,7 @@ const runDocsMiddleware = (request: NextRequest) => {
 };
 
 const authMiddleware = {
-  serverPathMatchers: ['/dashboard'],
+  serverPathMatchers: ['/dashboard', '/admin'],
   optimisticPathMatchers: [],
   async runServer(request: NextRequest) {
     const sessionResponse = await getSession();
@@ -79,6 +79,10 @@ const authMiddleware = {
 
 export default async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
+  const matchesProtectedPath = (matchers: string[]) =>
+    matchers.some(
+      (matcher) => pathname === matcher || pathname.startsWith(`${matcher}/`)
+    );
 
   if (pathname.startsWith(docsRoute)) {
     const response = runDocsMiddleware(request);
@@ -88,19 +92,13 @@ export default async function proxy(request: NextRequest) {
     }
   }
 
-  if (
-    authMiddleware.serverPathMatchers.some((matcher) => pathname === matcher)
-  ) {
+  if (matchesProtectedPath(authMiddleware.serverPathMatchers)) {
     const response = await authMiddleware.runServer(request);
 
     if (response) {
       return response;
     }
-  } else if (
-    authMiddleware.optimisticPathMatchers.some(
-      (matcher) => pathname === matcher
-    )
-  ) {
+  } else if (matchesProtectedPath(authMiddleware.optimisticPathMatchers)) {
     const response = await authMiddleware.runOptimistic(request);
 
     if (response) {
@@ -112,5 +110,5 @@ export default async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard', `/docs:path*`],
+  matcher: ['/dashboard/:path*', '/admin/:path*', `/docs:path*`],
 };
