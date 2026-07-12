@@ -1,5 +1,4 @@
 import { AmbientBlobField } from '@md-oss/design-system/components/animated/ambient-blob';
-import { UserButton } from '@md-oss/design-system/components/auth/user/user-button';
 import { WithPageContainer } from '@md-oss/design-system/components/sections/page-container';
 import { InlineCode } from '@md-oss/design-system/components/ui/inline-code';
 import { cn } from '@md-oss/design-system/lib/utils';
@@ -13,6 +12,7 @@ import {
 import { BookIcon, type LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
+import { AppUserButton } from '@/components/user-button';
 import { baseOptions } from '@/lib/layout.shared';
 
 type LayoutNavMenuItemProps = {
@@ -86,7 +86,7 @@ export default function Layout({ children }: LayoutProps<'/'>) {
         },
         {
           type: 'custom',
-          children: <UserButton size="icon" />,
+          children: <AppUserButton size="icon" />,
           secondary: true,
           on: 'all',
         },

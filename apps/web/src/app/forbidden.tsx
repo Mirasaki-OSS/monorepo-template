@@ -11,6 +11,7 @@ export default function Forbidden() {
       title="Access Denied"
       description="You are not authorized to access this resource."
       variant="default"
+      className="p-4"
     >
       <Link
         href="/"

@@ -3,9 +3,6 @@ packages:
   - packages/*
   - vendor/*
 
-enablePrePostScripts: true # Required for next-sitemap
-
-catalogMode: strict
 catalog:
   '@base-ui/react': ^1.4.1
   '@better-auth-ui/core': ^1.6.8
@@ -116,6 +113,10 @@ catalog:
   yaml: ^2.9.0
   zod: ^4.4.3
   zustand: ^5.0.13
+
+catalogMode: strict
+
+enablePrePostScripts: true
 
 ignoredBuiltDependencies:
   - core-js-pure

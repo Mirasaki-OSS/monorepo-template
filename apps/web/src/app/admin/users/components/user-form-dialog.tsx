@@ -76,6 +76,7 @@ export type UserFormDialogProps = {
   user: UserView | null;
   isLoading?: boolean;
   onCreate?: (payload: { value: UserView }) => void | Promise<void>;
+  onDelete?: (payload: { user: UserView }) => void | Promise<void>;
   onUpdate?: (payload: {
     userId: string;
     value: UserView;
@@ -90,12 +91,17 @@ export const UserFormDialog = ({
   user,
   isLoading = false,
   onCreate,
+  onDelete,
   onUpdate,
 }: UserFormDialogProps) => {
+  const getFormDefaults = React.useCallback((targetUser: UserView | null) => {
+    return targetUser ? structuredClone(targetUser) : createEmptyUser();
+  }, []);
+
   const form = useForm({
     mode: 'onChange',
     resolver: zodResolver(userViewSchema),
-    defaultValues: user ?? createEmptyUser(),
+    defaultValues: getFormDefaults(user),
   });
 
   async function onSubmit(data: UserView) {
@@ -106,12 +112,11 @@ export const UserFormDialog = ({
     }
   }
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: We only want to reset when the user ID changes, not when other properties change
   React.useEffect(() => {
     if (open && user) {
-      form.reset(user ?? createEmptyUser());
+      form.reset(getFormDefaults(user));
     }
-  }, [user?.id]);
+  }, [form, getFormDefaults, open, user]);
 
   const handleClose = React.useCallback(
     (open: boolean) => {
@@ -142,6 +147,9 @@ export const UserFormDialog = ({
               auth={auth}
               value={form.watch()}
               onSubmit={onSubmit}
+              onDeleteUser={() => {
+                void onDelete?.({ user });
+              }}
               disabled={isLoading}
               pieceProps={{ showDescription: true }}
             />

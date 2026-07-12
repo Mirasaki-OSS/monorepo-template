@@ -1,7 +1,6 @@
 /** biome-ignore-all lint/suspicious/noArrayIndexKey: This is a static list of nav items that won't change, so using the index as key is acceptable here. */
 'use client';
 
-import { UserButton } from '@md-oss/design-system/components/auth/user/user-button';
 import {
   Popover,
   PopoverContent,
@@ -29,6 +28,7 @@ import {
   useRef,
   useState,
 } from 'react';
+import { AppUserButton } from '@/components/user-button';
 
 export type HeaderProps = ComponentProps<'header'> & {};
 
@@ -147,7 +147,7 @@ export function Header(props: HeaderProps) {
                 <SidebarIcon />
               </slots.sidebar.trigger>
             )}
-            <UserButton size="icon" />
+            <AppUserButton size="icon" />
           </div>
 
           <div className="flex items-center gap-2 max-md:hidden">
@@ -157,7 +157,7 @@ export function Header(props: HeaderProps) {
               </slots.languageSelect.root>
             )}
             {slots.themeSwitch && <slots.themeSwitch />}
-            <UserButton size="icon" />
+            <AppUserButton size="icon" />
             {sidebarCollapsible && slots.sidebar && navMode === 'top' && (
               <slots.sidebar.collapseTrigger
                 className={cn(

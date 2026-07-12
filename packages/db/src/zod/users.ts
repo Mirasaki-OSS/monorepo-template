@@ -20,11 +20,15 @@ import type { SchemaRefinements } from './refinements';
 
 type UserRefinements = SchemaRefinements<typeof user>;
 
-const userClientMetadataSchema = jsonField(z.object({}).required().nullable());
-const userClientReadOnlyMetadataSchema = jsonField(
-	z.object({}).required().nullable()
+const userClientMetadataSchema = jsonField(
+	z.record(z.string(), z.unknown()).nullable()
 );
-const userServerMetadataSchema = jsonField(z.object({}).required().nullable());
+const userClientReadOnlyMetadataSchema = jsonField(
+	z.record(z.string(), z.unknown()).nullable()
+);
+const userServerMetadataSchema = jsonField(
+	z.record(z.string(), z.unknown()).nullable()
+);
 
 type UserClientMetadata = z.infer<typeof userClientMetadataSchema>;
 type UserClientReadOnlyMetadata = z.infer<

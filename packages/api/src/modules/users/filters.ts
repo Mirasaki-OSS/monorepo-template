@@ -1,3 +1,4 @@
+import { authzRoles, hasPermission, rolePermissions } from '@md-oss/authz';
 import { and, eq, or, sql } from '@md-oss/db';
 import { account, passkey, session, user } from '@md-oss/db/schema';
 import {
@@ -13,6 +14,8 @@ const advancedFilterSchemas = createAdvancedFilterSchemas({
 		'query',
 		'email',
 		'id',
+		'roles',
+		'permissions',
 		'authMethods',
 		'lastSeenAt',
 		'createdAt',
@@ -27,6 +30,80 @@ export const userAdvancedFilterJoinOperatorSchema =
 
 function normalizeAuthMethod(method: string) {
 	return method.trim().toLowerCase();
+}
+
+function normalizeRole(role: string) {
+	return role.trim().toLowerCase();
+}
+
+function getRoleFilterClause(role: string) {
+	const normalizedRole = normalizeRole(role);
+
+	if (
+		!normalizedRole ||
+		!authzRoles.includes(normalizedRole as (typeof authzRoles)[number])
+	) {
+		return undefined;
+	}
+
+	return sql`${user.roles} ~ ${`(^|,)[[:space:]]*${normalizedRole}[[:space:]]*(,|$)`}`;
+}
+
+function getPermissionKey(permission: {
+	action: string;
+	subject: string;
+	scope: string;
+}) {
+	return `${permission.action}:${permission.subject}:${permission.scope}`;
+}
+
+function parsePermissionKey(permissionKey: string) {
+	const [action, subject, scope] = permissionKey.split(':');
+
+	if (!action || !subject || !scope) {
+		return null;
+	}
+
+	return {
+		action,
+		subject,
+		scope,
+	};
+}
+
+const knownPermissionKeys = new Set(
+	Object.values(rolePermissions)
+		.flat()
+		.map((permission) =>
+			getPermissionKey({
+				action: permission.action,
+				subject: permission.subject,
+				scope: permission.scope,
+			})
+		)
+);
+
+function getPermissionFilterClause(permissionKey: string) {
+	const parsedPermission = parsePermissionKey(permissionKey);
+
+	if (!parsedPermission || !knownPermissionKeys.has(permissionKey)) {
+		return undefined;
+	}
+
+	const matchingRoles = authzRoles.filter((role) =>
+		hasPermission(
+			[role],
+			parsedPermission.action as Parameters<typeof hasPermission>[1],
+			parsedPermission.subject as Parameters<typeof hasPermission>[2],
+			parsedPermission.scope as Parameters<typeof hasPermission>[3]
+		)
+	);
+
+	if (matchingRoles.length === 0) {
+		return sql`false`;
+	}
+
+	return or(...matchingRoles.map((role) => getRoleFilterClause(role)));
 }
 
 function getUserAuthMethodFilterClause(method: string) {
@@ -130,6 +207,14 @@ const userAdvancedFilterFieldConfig: Record<
 	id: {
 		kind: 'text',
 		column: user.id,
+	},
+	roles: {
+		kind: 'mapped',
+		getClauseForValue: getRoleFilterClause,
+	},
+	permissions: {
+		kind: 'mapped',
+		getClauseForValue: getPermissionFilterClause,
 	},
 	status: {
 		kind: 'mapped',

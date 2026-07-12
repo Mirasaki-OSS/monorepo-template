@@ -1,6 +1,6 @@
 {
 	"title": "@md-oss/authz",
-	"icon": "LockClosed",
+	"icon": "Lock",
 	"defaultOpen": false,
 	"root": false
 }

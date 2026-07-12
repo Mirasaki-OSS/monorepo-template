@@ -1,5 +1,5 @@
-import { UserButton } from '@md-oss/design-system/components/auth/user/user-button';
 import { cn } from '@md-oss/design-system/lib/utils';
+import { AppUserButton } from '@/components/user-button';
 
 export const AdminHeader = () => {
   return (
@@ -11,7 +11,7 @@ export const AdminHeader = () => {
       <div className="text-sm text-muted-foreground mr-auto">
         Admin Dashboard
       </div>
-      <UserButton size="icon" />
+      <AppUserButton size="icon" />
     </div>
   );
 };

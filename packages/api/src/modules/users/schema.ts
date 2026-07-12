@@ -1,10 +1,17 @@
+import { authzRoleEnum } from '@md-oss/authz';
 import {
 	cursorPaginationOptionsSchema,
 	cursorPaginationOutputSchema,
 	paginationOptionsSchema,
 	paginationOutputSchema,
 } from '@md-oss/database';
-import { publicUserViewSchema, userViewSchema } from '@md-oss/db/zod';
+import {
+	publicUserViewSchema,
+	userClientMetadataSchema,
+	userClientReadOnlyMetadataSchema,
+	userServerMetadataSchema,
+	userViewSchema,
+} from '@md-oss/db/zod';
 import { z } from 'zod/v4';
 import { createAdvancedFilterSchemas } from '../../lib/advanced-filters';
 import {
@@ -12,6 +19,24 @@ import {
 	deleteUserOutputSchema,
 	updateUserInputSchema,
 } from './@me/schema';
+
+export const adminUpdateUserInputSchema = z
+	.object({
+		...updateUserInputSchema.shape,
+		username: z.string().trim().min(3).max(32).nullable().optional(),
+		roles: z.array(authzRoleEnum).min(1).max(10).optional(),
+		banned: z.boolean().optional(),
+		banReason: z.string().trim().max(500).nullable().optional(),
+		banExpiresAt: z.date().nullable().optional(),
+		clientMetadata: userClientMetadataSchema.nullable().optional(),
+		clientReadonlyMetadata: userClientReadOnlyMetadataSchema
+			.nullable()
+			.optional(),
+		serverMetadata: userServerMetadataSchema.nullable().optional(),
+	})
+	.refine((input) => Object.keys(input).length > 0, {
+		message: 'At least one field must be provided',
+	});
 
 export const userListStatusSchema = z.enum(['verified', 'unverified']);
 
@@ -37,12 +62,16 @@ export const userListFiltersSchema = z.object({
 	query: z.string().trim().min(1).max(100).nullable().default(null),
 	status: z.array(userListStatusSchema).default([]),
 	authMethods: z.array(z.string()).default([]),
+	roles: z.array(authzRoleEnum).default([]),
+	permissions: z.array(z.string()).default([]),
 });
 
 export const userAdvancedFilterIds = [
 	'query',
 	'email',
 	'id',
+	'roles',
+	'permissions',
 	'authMethods',
 	'lastSeenAt',
 	'createdAt',
@@ -121,7 +150,7 @@ export const listUsersOutputSchema = paginationOutputSchema(
 
 export const updateUserByIdInputSchema = z.object({
 	id: z.string().min(1),
-	data: updateUserInputSchema,
+	data: adminUpdateUserInputSchema,
 });
 
 export const deleteUserByIdInputSchema = deleteUserInputSchema.extend({

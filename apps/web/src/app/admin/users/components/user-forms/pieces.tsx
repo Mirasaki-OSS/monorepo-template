@@ -3,6 +3,7 @@ import { authzRoles, normalizeRoles } from '@md-oss/authz';
 import { getErrorMessage } from '@md-oss/common';
 import { titleCase } from '@md-oss/common/utils/strings';
 import { DateTimePicker } from '@md-oss/design-system/components/shadcn-studio/date-time-picker';
+import { Badge } from '@md-oss/design-system/components/ui/badge';
 import { Checkbox } from '@md-oss/design-system/components/ui/checkbox';
 import {
   Combobox,
@@ -15,6 +16,7 @@ import {
   ComboboxList,
   useComboboxAnchor,
 } from '@md-oss/design-system/components/ui/combobox';
+import { CopyButton } from '@md-oss/design-system/components/ui/extended/copy-button';
 import {
   Field,
   FieldContent,
@@ -57,7 +59,7 @@ export const userFormFieldsByCategory: Record<
   account: ['email', 'emailVerified', 'createdAt', 'updatedAt'],
   access: ['roles', 'banned', 'banReason', 'banExpiresAt'],
   metadata: ['clientMetadata', 'clientReadonlyMetadata', 'serverMetadata'],
-  danger: ['id', 'authMethods', 'lastSeenAt'], // [DEV] Danger zone has actions like delete, not fields
+  danger: ['id', 'authMethods', 'lastSeenAt'],
 };
 
 export const userFormHasValidationErrors = (
@@ -828,5 +830,104 @@ export const MetadataFieldSet = (props: UserFormPieceProps) => {
         <ServerMetadataField {...props} />
       </FieldGroup>
     </FieldSet>
+  );
+};
+
+export const UserIdField = ({ form, className }: UserFormPieceProps) => {
+  return (
+    <Controller
+      name="id"
+      control={form.control}
+      render={({ field, fieldState }) => (
+        <Field data-invalid={fieldState.invalid} className={className}>
+          <FieldLabel htmlFor="edit-user-form-id">User ID</FieldLabel>
+          <InputGroup>
+            <Input
+              {...field}
+              id="edit-user-form-id"
+              value={field.value ?? ''}
+              readOnly
+              aria-invalid={fieldState.invalid}
+              className="font-mono"
+            />
+            <InputGroupAddon align="inline-end">
+              <CopyButton
+                hideLabel
+                text={field.value ?? ''}
+                aria-label="Copy user ID"
+              />
+            </InputGroupAddon>
+          </InputGroup>
+          <FieldDescription>
+            Stable internal identifier for this user. Read-only.
+          </FieldDescription>
+          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+        </Field>
+      )}
+    />
+  );
+};
+
+export const AuthMethodsField = ({ form, className }: UserFormPieceProps) => {
+  return (
+    <Controller
+      name="authMethods"
+      control={form.control}
+      render={({ field, fieldState }) => {
+        const authMethods = field.value ?? [];
+
+        return (
+          <Field data-invalid={fieldState.invalid} className={className}>
+            <FieldLabel>Auth Methods</FieldLabel>
+            <div className="flex flex-wrap gap-1.5">
+              {authMethods.length ? (
+                authMethods.map((method) => (
+                  <Badge key={method} variant="outline" className="text-[11px]">
+                    {method}
+                  </Badge>
+                ))
+              ) : (
+                <span className="text-xs text-muted-foreground italic">
+                  None
+                </span>
+              )}
+            </div>
+            <FieldDescription>
+              Authentication methods attached to this account. Read-only.
+            </FieldDescription>
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        );
+      }}
+    />
+  );
+};
+
+export const LastSeenAtField = ({ form, className }: UserFormPieceProps) => {
+  return (
+    <Controller
+      name="lastSeenAt"
+      control={form.control}
+      render={({ field, fieldState }) => (
+        <Field data-invalid={fieldState.invalid} className={className}>
+          <FieldLabel htmlFor="edit-user-form-last-seen-at">
+            Last Seen At
+          </FieldLabel>
+          {field.value ? (
+            <RelativeTimeCard
+              date={field.value}
+              variant="muted"
+              className="justify-start"
+            />
+          ) : (
+            <p className="text-sm text-muted-foreground italic">Never seen</p>
+          )}
+          <FieldDescription>
+            Last recorded active session for this user. Read-only.
+          </FieldDescription>
+          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+        </Field>
+      )}
+    />
   );
 };

@@ -1,4 +1,9 @@
 import type { UserView } from '@md-oss/api/types';
+import {
+  authzRoles,
+  permissionsForRoles,
+  rolePermissions,
+} from '@md-oss/authz';
 
 import {
   Fingerprint,
@@ -58,4 +63,63 @@ export const resolveAuthMethodOptions = ({ data }: { data: UserView[] }) => {
         icon: badgeConfig.icon,
       };
     });
+};
+
+export const resolveRoleOptions = () => {
+  return authzRoles.map((role) => ({
+    label: role.charAt(0).toUpperCase() + role.slice(1),
+    value: role,
+  }));
+};
+
+export const toPermissionKey = ({
+  action,
+  subject,
+  scope,
+}: {
+  action: string;
+  subject: string;
+  scope: string;
+}) => `${action}:${subject}:${scope}`;
+
+export const formatPermissionLabel = (permissionKey: string) => {
+  const [action, subject, scope] = permissionKey.split(':');
+  if (!action || !subject || !scope) {
+    return permissionKey;
+  }
+
+  return `${action.toUpperCase()} ${subject} (${scope})`;
+};
+
+export const resolvePermissionOptions = () => {
+  const permissionKeys = Array.from(
+    new Set(
+      Object.values(rolePermissions)
+        .flat()
+        .map((permission) =>
+          toPermissionKey({
+            action: permission.action,
+            subject: permission.subject,
+            scope: permission.scope,
+          })
+        )
+    )
+  ).sort((a, b) => a.localeCompare(b));
+
+  return permissionKeys.map((value) => ({
+    label: formatPermissionLabel(value),
+    value,
+  }));
+};
+
+export const resolveUserPermissionKeys = (user: UserView) => {
+  return permissionsForRoles(user.roles)
+    .map((permission) =>
+      toPermissionKey({
+        action: permission.action,
+        subject: permission.subject,
+        scope: permission.scope,
+      })
+    )
+    .sort((a, b) => a.localeCompare(b));
 };

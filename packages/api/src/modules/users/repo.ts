@@ -1,4 +1,9 @@
-import { type AuthzActor, createActorFromUser } from '@md-oss/authz';
+import {
+	type AuthzActor,
+	type AuthzRole,
+	createActorFromUser,
+	normalizeRoles,
+} from '@md-oss/authz';
 import { and, asc, db, desc, eq, gt, inArray, sql } from '@md-oss/db';
 import { account, passkey, session, user } from '@md-oss/db/schema';
 import {
@@ -8,12 +13,15 @@ import {
 	type UserSelect,
 	type UserView,
 } from '@md-oss/db/zod';
-import type { UpdateUserInput } from './@me/schema';
 import {
 	getAuthMethodsSortRankExpression,
 	getListUserFilters,
 } from './filters';
-import type { ListPublicUsersViewInput, ListUsersInput } from './schema';
+import type {
+	ListPublicUsersViewInput,
+	ListUsersInput,
+	UpdateUserByIdInput,
+} from './schema';
 
 export type TargetUser<ViewType = UserView> = {
 	view: ViewType;
@@ -323,11 +331,34 @@ export async function countUsers(input: ListUsersInput) {
 	return countRows[0]?.totalCount ?? 0;
 }
 
-export async function updateUserById(userId: string, input: UpdateUserInput) {
+export async function updateUserById(
+	userId: string,
+	input: UpdateUserByIdInput['data']
+) {
+	const updateData = {
+		...input,
+		roles:
+			input.roles === undefined
+				? undefined
+				: (normalizeRoles(input.roles).join(',') as AuthzRole),
+		clientMetadata:
+			input.clientMetadata === undefined
+				? undefined
+				: (input.clientMetadata as unknown as (typeof user.$inferInsert)['clientMetadata']),
+		clientReadonlyMetadata:
+			input.clientReadonlyMetadata === undefined
+				? undefined
+				: (input.clientReadonlyMetadata as unknown as (typeof user.$inferInsert)['clientReadonlyMetadata']),
+		serverMetadata:
+			input.serverMetadata === undefined
+				? undefined
+				: (input.serverMetadata as unknown as (typeof user.$inferInsert)['serverMetadata']),
+	};
+
 	const [updated] = await db
 		.update(user)
 		.set({
-			...input,
+			...updateData,
 			updatedAt: new Date(),
 		})
 		.where(eq(user.id, userId))

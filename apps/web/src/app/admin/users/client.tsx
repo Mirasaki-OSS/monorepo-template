@@ -63,6 +63,14 @@ export default function AdminUsersPageClient({
     'authMethods',
     parseAsArrayOf(parseAsString).withDefault([])
   );
+  const [roles] = useQueryState(
+    'roles',
+    parseAsArrayOf(parseAsString).withDefault([])
+  );
+  const [permissions] = useQueryState(
+    'permissions',
+    parseAsArrayOf(parseAsString).withDefault([])
+  );
   const [sorting] = useQueryState(
     'sort',
     getSortingStateParser(sortableColumns).withDefault([])
@@ -88,7 +96,7 @@ export default function AdminUsersPageClient({
     parseAsString.withDefault('and')
   );
 
-  // Sync query, status, authMethods into filters
+  // Sync query, status, authMethods, roles, permissions into filters
   React.useEffect(() => {
     setFilters((prev) => {
       let updated = [...prev] as ListUsersInput['filters'];
@@ -158,9 +166,53 @@ export default function AdminUsersPageClient({
         }
       }
 
+      // Sync roles
+      if (roles.length === 0) {
+        updated = updated.filter((f) => f.id !== 'roles');
+      } else {
+        const rolesIndex = updated.findIndex((f) => f.id === 'roles');
+        if (rolesIndex >= 0) {
+          updated[rolesIndex] = {
+            ...updated[rolesIndex],
+            value: roles,
+          };
+        } else {
+          updated.push({
+            id: 'roles',
+            value: roles,
+            variant: 'multiSelect',
+            operator: 'inArray',
+            filterId: generateId(),
+          });
+        }
+      }
+
+      // Sync permissions
+      if (permissions.length === 0) {
+        updated = updated.filter((f) => f.id !== 'permissions');
+      } else {
+        const permissionsIndex = updated.findIndex(
+          (f) => f.id === 'permissions'
+        );
+        if (permissionsIndex >= 0) {
+          updated[permissionsIndex] = {
+            ...updated[permissionsIndex],
+            value: permissions,
+          };
+        } else {
+          updated.push({
+            id: 'permissions',
+            value: permissions,
+            variant: 'multiSelect',
+            operator: 'inArray',
+            filterId: generateId(),
+          });
+        }
+      }
+
       return updated;
     });
-  }, [query, status, authMethods, setFilters]);
+  }, [query, status, authMethods, roles, permissions, setFilters]);
 
   const apiSorting = React.useMemo<ListUsersInput['sorting']>(() => {
     const mapped = sorting.flatMap((item) => {
@@ -227,6 +279,7 @@ export default function AdminUsersPageClient({
         data={data?.items || []}
         isLoading={isLoading}
         pageCount={data?.pagination?.pageCount ?? 1}
+        onRefresh={handleRefresh}
         RefreshButton={() => (
           <Button
             onClick={handleRefresh}

@@ -25,7 +25,12 @@ import {
   XCircle,
 } from 'lucide-react';
 import { columnMeta } from '@/app/admin/components/data-table';
-import { formatAuthMethodLabel, getAuthMethodBadgeConfig } from '../helpers';
+import {
+  formatAuthMethodLabel,
+  formatPermissionLabel,
+  getAuthMethodBadgeConfig,
+  resolveUserPermissionKeys,
+} from '../helpers';
 
 export type UserColumnMeta = ColumnMeta<UserView, UserView>;
 
@@ -33,10 +38,18 @@ export const userColumnMeta = (meta: UserColumnMeta) => columnMeta(meta);
 
 export const userColumns = ({
   authMethodOptions,
+  roleOptions,
+  permissionOptions,
   openEditDialog,
+  onDeleteUser,
+  isMutating,
 }: {
   authMethodOptions: Array<{ label: string; value: string }>;
+  roleOptions: Array<{ label: string; value: string }>;
+  permissionOptions: Array<{ label: string; value: string }>;
   openEditDialog: (user: UserView) => void;
+  onDeleteUser: (user: UserView) => void;
+  isMutating: boolean;
 }): ColumnDef<UserView>[] =>
   [
     {
@@ -198,6 +211,76 @@ export const userColumns = ({
       enableSorting: true,
     },
     {
+      id: 'roles',
+      size: 200,
+      accessorFn: (row) => row.roles,
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} label="Roles" />
+      ),
+      cell: ({ row }) => {
+        if (!row.original.roles.length) {
+          return <p className="text-xs text-muted-foreground italic">None</p>;
+        }
+
+        return (
+          <div className="flex flex-wrap items-center gap-1.5">
+            {row.original.roles.map((role) => (
+              <Badge
+                key={`${row.original.id}-${role}`}
+                variant="secondary"
+                className="rounded-full px-2 py-0.5 text-[11px] capitalize"
+              >
+                {role}
+              </Badge>
+            ))}
+          </div>
+        );
+      },
+      meta: {
+        label: 'Roles',
+        variant: 'multiSelect',
+        options: roleOptions,
+      },
+      enableColumnFilter: true,
+      enableSorting: false,
+    },
+    {
+      id: 'permissions',
+      size: 260,
+      accessorFn: (row) => resolveUserPermissionKeys(row),
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} label="Permissions" />
+      ),
+      cell: ({ row }) => {
+        const permissions = resolveUserPermissionKeys(row.original);
+
+        if (!permissions.length) {
+          return <p className="text-xs text-muted-foreground italic">None</p>;
+        }
+
+        return (
+          <div className="flex flex-wrap items-center gap-1.5">
+            {permissions.map((permission) => (
+              <Badge
+                key={`${row.original.id}-${permission}`}
+                variant="outline"
+                className="rounded-full px-2 py-0.5 text-[11px]"
+              >
+                {formatPermissionLabel(permission)}
+              </Badge>
+            ))}
+          </div>
+        );
+      },
+      meta: {
+        label: 'Permissions',
+        variant: 'multiSelect',
+        options: permissionOptions,
+      },
+      enableColumnFilter: true,
+      enableSorting: false,
+    },
+    {
       id: 'lastSeenAt',
       size: 50,
       accessorKey: 'lastSeenAt',
@@ -298,12 +381,21 @@ export const userColumns = ({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => openEditDialog(targetUser)}>
+              <DropdownMenuItem
+                onClick={() => openEditDialog(targetUser)}
+                disabled={isMutating}
+              >
                 Edit User
               </DropdownMenuItem>
               <DropdownMenuItem>Impersonate</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
+              <DropdownMenuItem
+                variant="destructive"
+                onClick={() => onDeleteUser(targetUser)}
+                disabled={isMutating}
+              >
+                Delete
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );

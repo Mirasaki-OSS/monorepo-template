@@ -5,8 +5,12 @@ import { validateAdvancedFilters } from '@/app/admin/components/data-table';
 
 export function QuickAdvancedUserFilters({
   authMethodOptions,
+  roleOptions,
+  permissionOptions,
 }: {
   authMethodOptions: Array<{ label: string; value: string }>;
+  roleOptions: Array<{ label: string; value: string }>;
+  permissionOptions: Array<{ label: string; value: string }>;
 }) {
   const [filters, setFilters] = useQueryState(
     'filters',
@@ -14,7 +18,11 @@ export function QuickAdvancedUserFilters({
   );
 
   const setMultiSelectQuickFilter = React.useCallback(
-    (id: 'status' | 'authMethods', value: string, variant: 'multiSelect') => {
+    (
+      id: 'status' | 'authMethods' | 'roles' | 'permissions',
+      value: string,
+      variant: 'multiSelect'
+    ) => {
       void setFilters((prev) => {
         const existing = prev.find((filter) => filter.id === id);
 
@@ -60,7 +68,7 @@ export function QuickAdvancedUserFilters({
   );
 
   const hasMultiSelectFilterValue = React.useCallback(
-    (id: 'status' | 'authMethods', value: string) => {
+    (id: 'status' | 'authMethods' | 'roles' | 'permissions', value: string) => {
       const existing = filters.find((filter) => filter.id === id);
       if (!existing) {
         return false;
@@ -107,6 +115,42 @@ export function QuickAdvancedUserFilters({
             onClick={() =>
               setMultiSelectQuickFilter(
                 'authMethods',
+                item.value,
+                'multiSelect'
+              )
+            }
+          >
+            {item.label}
+          </Button>
+        );
+      })}
+      {roleOptions.map((item) => {
+        const active = hasMultiSelectFilterValue('roles', item.value);
+        return (
+          <Button
+            key={item.value}
+            size="sm"
+            variant={active ? 'default' : 'outline'}
+            className="h-7"
+            onClick={() =>
+              setMultiSelectQuickFilter('roles', item.value, 'multiSelect')
+            }
+          >
+            {item.label}
+          </Button>
+        );
+      })}
+      {permissionOptions.map((item) => {
+        const active = hasMultiSelectFilterValue('permissions', item.value);
+        return (
+          <Button
+            key={item.value}
+            size="sm"
+            variant={active ? 'default' : 'outline'}
+            className="h-7"
+            onClick={() =>
+              setMultiSelectQuickFilter(
+                'permissions',
                 item.value,
                 'multiSelect'
               )
