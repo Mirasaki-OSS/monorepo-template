@@ -88,13 +88,15 @@ fi
 # Remove `vendor/*` from `/package.json#workspaces`
 PACKAGE_JSON_FILE="$PROJECT_ROOT/package.json"
 if file_exists "$PACKAGE_JSON_FILE"; then
-  if grep -q 'vendor/\*' "$PACKAGE_JSON_FILE"; then
-    log_section "Removing 'vendor/*' from package.json workspaces"
-    npx -y json -I -f "$PACKAGE_JSON_FILE" -e 'this.workspaces = this.workspaces.filter(item => item !== "vendor/*");'
-    log_success "'vendor/*' removed from package.json workspaces"
-  else
-    log_info "'vendor/*' not found in package.json workspaces"
-  fi
+  log_section "Removing 'vendor/*' from package.json workspaces"
+  npx -y json -I -f "$PACKAGE_JSON_FILE" -e '
+    if (Array.isArray(this.workspaces)) {
+      this.workspaces = this.workspaces.filter((item) => item !== "vendor/*");
+    } else if (this.workspaces && Array.isArray(this.workspaces.packages)) {
+      this.workspaces.packages = this.workspaces.packages.filter((item) => item !== "vendor/*");
+    }
+  '
+  log_success "package.json workspaces normalized (if present)"
 else
   log_warning "package.json not found, skipping workspaces update"
 fi
