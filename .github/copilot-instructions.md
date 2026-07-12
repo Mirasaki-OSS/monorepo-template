@@ -23,7 +23,7 @@ pnpm dev
 - `ENV=development PROFILE=dev make docker-up` - Development with hot reload
 - `ENV=production PROFILE=deploy make docker-down` - Stop services
 
-See [docker.mdx](../apps/web/content/docs/guides/docker.mdx) for full documentation.
+See [docker.mdx](../apps/web/content/docs/guides/docker/index.mdx) for full documentation.
 
 ---
 
