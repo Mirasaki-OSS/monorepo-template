@@ -2,11 +2,15 @@
 
 import { Input } from '@md-oss/design-system/components/ui/input';
 import { cn } from '@md-oss/design-system/lib/utils';
-import type { ExtendedColumnFilter } from '@md-oss/design-system/types/data-table';
-import type { Column } from '@tanstack/react-table';
+import type {
+	Column,
+	ExtendedColumnFilter,
+	RowData,
+} from '@md-oss/design-system/types/data-table';
 import * as React from 'react';
 
-interface DataTableRangeFilterProps<TData> extends React.ComponentProps<'div'> {
+interface DataTableRangeFilterProps<TData extends RowData>
+	extends React.ComponentProps<'div'> {
 	filter: ExtendedColumnFilter<TData>;
 	column: Column<TData>;
 	inputId: string;
@@ -16,7 +20,7 @@ interface DataTableRangeFilterProps<TData> extends React.ComponentProps<'div'> {
 	) => void;
 }
 
-export function DataTableRangeFilter<TData>({
+export function DataTableRangeFilter<TData extends RowData>({
 	filter,
 	column,
 	inputId,

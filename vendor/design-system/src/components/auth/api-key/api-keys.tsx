@@ -2,6 +2,7 @@
 
 import {
 	type ApiKeyAuthClient,
+	type ListApiKeysData,
 	useAuth,
 	useAuthPlugin,
 	useListApiKeys,
@@ -25,9 +26,11 @@ export function ApiKeys({ className }: ApiKeysProps) {
 	const { authClient } = useAuth();
 	const { localization: apiKeyLocalization } = useAuthPlugin(apiKeyPluginRef);
 
-	const { data: listData, isPending } = useListApiKeys(
+	const { data: _listData, isPending } = useListApiKeys(
 		authClient as ApiKeyAuthClient
 	);
+
+	const listData = (_listData ?? {}) as ListApiKeysData<ApiKeyAuthClient>;
 
 	const [createOpen, setCreateOpen] = useState(false);
 

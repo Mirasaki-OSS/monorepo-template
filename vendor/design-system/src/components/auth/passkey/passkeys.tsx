@@ -1,6 +1,7 @@
 'use client';
 
 import {
+	type ListPasskeysData,
 	type PasskeyAuthClient,
 	useAuth,
 	useAuthPlugin,
@@ -26,9 +27,10 @@ export function Passkeys({ className }: PasskeysProps) {
 	const { authClient } = useAuth();
 	const { localization: passkeyLocalization } = useAuthPlugin(passkeyPluginRef);
 
-	const { data: passkeys, isPending } = useListPasskeys(
+	const { data: _passkeys, isPending } = useListPasskeys(
 		authClient as PasskeyAuthClient
 	);
+	const passkeys = (_passkeys ?? []) as ListPasskeysData<PasskeyAuthClient>;
 
 	const [addOpen, setAddOpen] = useState(false);
 

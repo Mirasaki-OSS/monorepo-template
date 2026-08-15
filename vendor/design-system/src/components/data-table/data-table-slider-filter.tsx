@@ -11,7 +11,7 @@ import {
 import { Separator } from '@md-oss/design-system/components/ui/separator';
 import { Slider } from '@md-oss/design-system/components/ui/slider';
 import { cn } from '@md-oss/design-system/lib/utils';
-import type { Column } from '@tanstack/react-table';
+import type { Column, RowData } from '@md-oss/design-system/types/data-table';
 import { PlusCircle, XCircle } from 'lucide-react';
 import * as React from 'react';
 
@@ -46,12 +46,12 @@ function parseValuesAsNumbers(value: unknown): RangeValue | undefined {
 	return undefined;
 }
 
-interface DataTableSliderFilterProps<TData> {
+interface DataTableSliderFilterProps<TData extends RowData> {
 	column: Column<TData, unknown>;
 	title?: string;
 }
 
-export function DataTableSliderFilter<TData>({
+export function DataTableSliderFilter<TData extends RowData>({
 	column,
 	title,
 }: DataTableSliderFilterProps<TData>) {

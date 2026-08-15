@@ -2,15 +2,15 @@
 
 import { DataTableViewOptions } from '@md-oss/design-system/components/data-table/data-table-view-options';
 import { cn } from '@md-oss/design-system/lib/utils';
-import type { Table } from '@tanstack/react-table';
+import type { RowData, Table } from '@md-oss/design-system/types/data-table';
 import type * as React from 'react';
 
-interface DataTableAdvancedToolbarProps<TData>
+interface DataTableAdvancedToolbarProps<TData extends RowData>
 	extends React.ComponentProps<'div'> {
 	table: Table<TData>;
 }
 
-export function DataTableAdvancedToolbar<TData>({
+export function DataTableAdvancedToolbar<TData extends RowData>({
 	table,
 	children,
 	className,

@@ -45,7 +45,7 @@
 		"script:sl": "tsx ./scripts/node/sync-licenses.ts"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.4.15",
+		"@biomejs/biome": "catalog:",
 		"@changesets/cli": "catalog:",
 		"@md-oss/scripts": "workspace:^",
 		"@turbo/gen": "catalog:",

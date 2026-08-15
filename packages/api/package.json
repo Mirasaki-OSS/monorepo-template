@@ -110,6 +110,7 @@
 	"dependencies": {
 		"@better-auth/api-key": "catalog:",
 		"@better-auth/passkey": "catalog:",
+		"@better-auth/utils": "catalog:",
 		"@md-oss/auth": "workspace:^",
 		"@md-oss/authz": "workspace:^",
 		"@md-oss/cache": "workspace:^",

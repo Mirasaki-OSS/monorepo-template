@@ -334,3 +334,4 @@ export const auth: Auth = createAuth(configWithCustomSession);
  * @see https://github.com/better-auth/better-auth/issues/8623
  */
 export type { PublicKeyCredentialCreationOptionsJSON } from '@better-auth/passkey/client';
+export type { MiddlewareOptions } from 'better-auth';

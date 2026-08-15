@@ -1,17 +1,33 @@
-import type { ColumnSort, Row, RowData } from '@tanstack/react-table';
+import type {
+	CellData,
+	ColumnSort,
+	ColumnVisibilityState,
+	RowData,
+	TableFeatures,
+	Column as TanstackColumn,
+	ColumnDef as TanstackColumnDef,
+	ColumnMeta as TanstackColumnMeta,
+	ReactTable as TanstackReactTable,
+	Row as TanstackRow,
+	TableMeta as TanstackTableMeta,
+	TableOptions as TanstackTableOptions,
+	TableState as TanstackTableState,
+} from '@tanstack/react-table';
 import type { DataTableConfig } from '../config/data-table';
 import type { FilterItemSchema } from '../lib/parsers';
 
-export type * from '@tanstack/react-table';
-
 declare module '@tanstack/react-table' {
 	// biome-ignore lint/correctness/noUnusedVariables: TData is used in the TableMeta interface
-	interface TableMeta<TData extends RowData> {
+	interface TableMeta<TFeatures extends TableFeatures, TData extends RowData> {
 		queryKeys?: QueryKeys;
 	}
 
 	// biome-ignore lint/correctness/noUnusedVariables: TData and TValue are used in the ColumnMeta interface
-	interface ColumnMeta<TData extends RowData, TValue> {
+	interface ColumnMeta<
+		TFeatures extends TableFeatures,
+		TData extends RowData,
+		TValue extends CellData = CellData,
+	> {
 		label?: string;
 		placeholder?: string;
 		variant?: FilterVariant;
@@ -21,6 +37,43 @@ declare module '@tanstack/react-table' {
 		icon?: React.FC<React.SVGProps<SVGSVGElement>>;
 	}
 }
+
+export type Column<TData extends RowData, TValue = unknown> = TanstackColumn<
+	TableFeatures,
+	TData,
+	TValue
+>;
+
+export type ColumnDef<
+	TData extends RowData,
+	TValue = unknown,
+> = TanstackColumnDef<TableFeatures, TData, TValue>;
+
+export type ColumnMeta<
+	TData extends RowData,
+	TValue = unknown,
+> = TanstackColumnMeta<TableFeatures, TData, TValue>;
+
+export type Row<TData extends RowData> = TanstackRow<TableFeatures, TData>;
+
+export type Table<TData extends RowData> = TanstackReactTable<
+	TableFeatures,
+	TData
+>;
+
+export type TableMeta<TData extends RowData> = TanstackTableMeta<
+	TableFeatures,
+	TData
+>;
+
+export type TableOptions<TData extends RowData> = TanstackTableOptions<
+	TableFeatures,
+	TData
+>;
+
+export type TableState = TanstackTableState<TableFeatures>;
+
+export type VisibilityState = ColumnVisibilityState;
 
 export interface QueryKeys {
 	page: string;
@@ -49,7 +102,9 @@ export interface ExtendedColumnFilter<TData> extends FilterItemSchema {
 	id: Extract<keyof TData, string>;
 }
 
-export interface DataTableRowAction<TData> {
+export interface DataTableRowAction<TData extends RowData> {
 	row: Row<TData>;
 	variant: 'update' | 'delete';
 }
+
+export type { CellData, ColumnSort, RowData, TableFeatures };

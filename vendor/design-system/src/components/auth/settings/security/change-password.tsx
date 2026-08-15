@@ -25,6 +25,7 @@ import { Label } from '@md-oss/design-system/components/ui/label';
 import { Skeleton } from '@md-oss/design-system/components/ui/skeleton';
 import { Spinner } from '@md-oss/design-system/components/ui/spinner';
 import { cn } from '@md-oss/design-system/lib/utils';
+import type { Account } from 'better-auth';
 import { Eye, EyeOff } from 'lucide-react';
 import { type SyntheticEvent, useState } from 'react';
 import { toast } from 'sonner';
@@ -45,8 +46,9 @@ export type ChangePasswordProps = {
 export function ChangePassword({ className }: ChangePasswordProps) {
 	const { authClient, emailAndPassword, localization } = useAuth();
 	const { data: session } = useSession(authClient);
-	const { data: accounts, isPending: isAccountsPending } =
+	const { data: _accounts, isPending: isAccountsPending } =
 		useListAccounts(authClient);
+	const accounts = (_accounts ?? []) as Account[];
 
 	const hasCredentialAccount = accounts?.some(
 		(account) => account.providerId === 'credential'

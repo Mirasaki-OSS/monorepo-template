@@ -27,6 +27,7 @@ import { Spinner } from '@md-oss/design-system/components/ui/spinner';
 import { deleteUserPluginRef } from '@md-oss/design-system/lib/auth/plugin-refs';
 import { cn } from '@md-oss/design-system/lib/utils';
 import { useQueryClient } from '@tanstack/react-query';
+import type { Account } from 'better-auth';
 import { TriangleAlert } from 'lucide-react';
 import { type SyntheticEvent, useState } from 'react';
 import { toast } from 'sonner';
@@ -47,7 +48,8 @@ export function DeleteUser({ className }: DeleteUserProps) {
 		sendDeleteAccountVerification,
 	} = useAuthPlugin(deleteUserPluginRef);
 
-	const { data: accounts } = useListAccounts(authClient);
+	const { data: _accounts } = useListAccounts(authClient);
+	const accounts = (_accounts ?? []) as Account[];
 
 	const queryClient = useQueryClient();
 

@@ -5,6 +5,7 @@ import { Card, CardContent } from '@md-oss/design-system/components/ui/card';
 import { Separator } from '@md-oss/design-system/components/ui/separator';
 import { Skeleton } from '@md-oss/design-system/components/ui/skeleton';
 import { cn } from '@md-oss/design-system/lib/utils';
+import type { Account } from 'better-auth';
 import { LinkedAccount } from './linked-account';
 
 export type LinkedAccountsProps = {
@@ -25,7 +26,7 @@ export function LinkedAccounts({ className }: LinkedAccountsProps) {
 
 	const { data: accounts, isPending } = useListAccounts(authClient);
 
-	const linkedAccounts = accounts?.filter(
+	const linkedAccounts = (accounts as Account[])?.filter(
 		(account) => account.providerId !== 'credential'
 	);
 
