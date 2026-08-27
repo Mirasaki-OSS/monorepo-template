@@ -2,7 +2,7 @@ import { createAuthPlugin } from '@better-auth-ui/core';
 import {
 	themePlugin as coreThemePlugin,
 	type ThemeLocalization,
-} from '@better-auth-ui/core/plugins';
+} from '@better-auth-ui/core/plugins/theme';
 
 import { Appearance } from '@md-oss/design-system/components/auth/theme/appearance';
 import { ThemeToggleItem } from '@md-oss/design-system/components/auth/theme/theme-toggle-item';
@@ -69,7 +69,10 @@ export const themePlugin = createAuthPlugin(
 		// No-op `setTheme` baseline keeps core's required option satisfied on the
 		// hook branch (where the consumer doesn't pass a setter); on the static
 		// branch the spread overrides it with the consumer's real setter.
-		const base = coreThemePlugin({ setTheme: () => {}, ...rest });
+		const { id: _id, ...base } = coreThemePlugin({
+			setTheme: () => {},
+			...rest,
+		});
 		return {
 			...base,
 			// Slot components always call `plugin.useTheme()` — invoking the hook

@@ -1,10 +1,10 @@
 'use client';
 
+import { useTranslations } from '@fuma-translate/react';
 import { cn } from '@md-oss/design-system/lib/utils';
 import { usePathname } from 'fumadocs-core/framework';
 import Link from 'fumadocs-core/link';
 import type * as PageTree from 'fumadocs-core/page-tree';
-import { useI18n } from 'fumadocs-ui/contexts/i18n';
 import { PageLastUpdate } from 'fumadocs-ui/layouts/notebook/page';
 import { useFooterItems } from 'fumadocs-ui/utils/use-footer-items';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -69,7 +69,7 @@ export function Footer({
 }
 
 function FooterItem({ item, index }: { item: Item; index: 0 | 1 }) {
-  const { text } = useI18n();
+  const t = useTranslations({ note: 'pagination' });
   const Icon = index === 0 ? ChevronLeft : ChevronRight;
 
   return (
@@ -90,7 +90,8 @@ function FooterItem({ item, index }: { item: Item; index: 0 | 1 }) {
         <p>{item.name}</p>
       </div>
       <p className="text-fd-muted-foreground truncate">
-        {item.description ?? (index === 0 ? text.previousPage : text.nextPage)}
+        {item.description ??
+          (index === 0 ? t('Previous Page') : t('Next Page'))}
       </p>
     </Link>
   );

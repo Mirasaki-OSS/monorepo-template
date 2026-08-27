@@ -9,16 +9,21 @@ import {
 } from '@md-oss/design-system/components/ui/table';
 import { getColumnPinningStyle } from '@md-oss/design-system/lib/data-table';
 import { cn } from '@md-oss/design-system/lib/utils';
-import { flexRender, type Table as TanstackTable } from '@tanstack/react-table';
+import type {
+	RowData,
+	Table as TanstackTable,
+} from '@md-oss/design-system/types/data-table';
+import { flexRender } from '@tanstack/react-table';
 import type * as React from 'react';
 
-interface DataTableProps<TData> extends React.ComponentProps<'div'> {
+interface DataTableProps<TData extends RowData>
+	extends React.ComponentProps<'div'> {
 	table: TanstackTable<TData>;
 	actionBar?: React.ReactNode;
 	useZebraColors?: boolean;
 }
 
-export function DataTable<TData>({
+export function DataTable<TData extends RowData>({
 	table,
 	actionBar,
 	useZebraColors = false,

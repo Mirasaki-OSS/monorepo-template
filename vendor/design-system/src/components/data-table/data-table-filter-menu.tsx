@@ -34,10 +34,12 @@ import { generateId } from '@md-oss/design-system/lib/id';
 import { getFiltersStateParser } from '@md-oss/design-system/lib/parsers';
 import { cn } from '@md-oss/design-system/lib/utils';
 import type {
+	Column,
 	ExtendedColumnFilter,
 	FilterOperator,
+	RowData,
+	Table,
 } from '@md-oss/design-system/types/data-table';
-import type { Column, Table } from '@tanstack/react-table';
 import {
 	BadgeCheck,
 	CalendarIcon,
@@ -54,7 +56,7 @@ const THROTTLE_MS = 50;
 const FILTER_SHORTCUT_KEY = 'f';
 const REMOVE_FILTER_SHORTCUTS = ['backspace', 'delete'];
 
-interface DataTableFilterMenuProps<TData>
+interface DataTableFilterMenuProps<TData extends RowData>
 	extends React.ComponentProps<typeof PopoverContent> {
 	table: Table<TData>;
 	debounceMs?: number;
@@ -63,7 +65,7 @@ interface DataTableFilterMenuProps<TData>
 	disabled?: boolean;
 }
 
-export function DataTableFilterMenu<TData>({
+export function DataTableFilterMenu<TData extends RowData>({
 	table,
 	debounceMs = DEBOUNCE_MS,
 	throttleMs = THROTTLE_MS,
@@ -327,7 +329,7 @@ export function DataTableFilterMenu<TData>({
 	);
 }
 
-interface DataTableFilterItemProps<TData> {
+interface DataTableFilterItemProps<TData extends RowData> {
 	filter: ExtendedColumnFilter<TData>;
 	filterItemId: string;
 	columns: Column<TData>[];
@@ -338,7 +340,7 @@ interface DataTableFilterItemProps<TData> {
 	onFilterRemove: (filterId: string) => void;
 }
 
-function DataTableFilterItem<TData>({
+function DataTableFilterItem<TData extends RowData>({
 	filter,
 	filterItemId,
 	columns,
@@ -505,13 +507,13 @@ function DataTableFilterItem<TData>({
 	}
 }
 
-interface FilterValueSelectorProps<TData> {
+interface FilterValueSelectorProps<TData extends RowData> {
 	column: Column<TData>;
 	value: string;
 	onSelect: (value: string) => void;
 }
 
-function FilterValueSelector<TData>({
+function FilterValueSelector<TData extends RowData>({
 	column,
 	value,
 	onSelect,
@@ -593,7 +595,7 @@ function FilterValueSelector<TData>({
 	}
 }
 
-function onFilterInputRender<TData>({
+function onFilterInputRender<TData extends RowData>({
 	filter,
 	column,
 	inputId,

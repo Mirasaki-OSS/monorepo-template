@@ -11,7 +11,10 @@ import { DataTableSortList } from '@md-oss/design-system/components/data-table/d
 import { DataTableToolbar } from '@md-oss/design-system/components/data-table/data-table-toolbar';
 import { ConfirmationDialog } from '@md-oss/design-system/components/state/confirmation-dialog';
 import { useConfirmationStore } from '@md-oss/design-system/hooks/use-confirmation-store';
-import { useDataTable } from '@md-oss/design-system/hooks/use-data-table';
+import {
+  dataTableFeatures,
+  useDataTable,
+} from '@md-oss/design-system/hooks/use-data-table';
 import type { ColumnDef, Table } from '@md-oss/design-system/types/data-table';
 import React from 'react';
 import { toast } from 'sonner';
@@ -345,10 +348,11 @@ export const UserDataTable: React.FC<UserDataTableProps> = ({
     data,
     columns,
     pageCount,
+    features: dataTableFeatures,
     initialState: {
       sorting: [{ id: 'createdAt', desc: true }],
       pagination: { pageSize: 10, pageIndex: 0 },
-      columnPinning: { left: ['select'], right: ['actions'] },
+      columnPinning: { start: ['select'], end: ['actions'] },
       columnVisibility: { status: false },
     },
     getRowId: (row) => row.id,

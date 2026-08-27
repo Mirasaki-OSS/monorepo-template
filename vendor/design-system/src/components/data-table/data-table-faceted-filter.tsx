@@ -18,19 +18,22 @@ import {
 } from '@md-oss/design-system/components/ui/popover';
 import { Separator } from '@md-oss/design-system/components/ui/separator';
 import { cn } from '@md-oss/design-system/lib/utils';
-import type { Option } from '@md-oss/design-system/types/data-table';
-import type { Column } from '@tanstack/react-table';
+import type {
+	Column,
+	Option,
+	RowData,
+} from '@md-oss/design-system/types/data-table';
 import { Check, PlusCircle, XCircle } from 'lucide-react';
 import * as React from 'react';
 
-interface DataTableFacetedFilterProps<TData, TValue> {
+interface DataTableFacetedFilterProps<TData extends RowData, TValue> {
 	column?: Column<TData, TValue>;
 	title?: string;
 	options: Option[];
 	multiple?: boolean;
 }
 
-export function DataTableFacetedFilter<TData, TValue>({
+export function DataTableFacetedFilter<TData extends RowData, TValue>({
 	column,
 	title,
 	options,

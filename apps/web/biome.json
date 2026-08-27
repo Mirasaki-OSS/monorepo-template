@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.4.12/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.10/schema.json",
   "root": false,
   "extends": ["../../biome.json"],
   "files": {
@@ -10,6 +10,7 @@
       "!dist",
       "!build",
       "!.source",
+      "!public/dependency-graphs",
       "!package.json"
     ]
   },
@@ -21,13 +22,25 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true
+      "preset": "recommended"
     },
     "domains": {
       "next": "recommended",
       "react": "recommended"
     }
   },
+  "overrides": [
+    {
+      "includes": ["src/app/(home)/test/schema-object-form.tsx"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noDuplicateEnumValues": "off"
+          }
+        }
+      }
+    }
+  ],
   "assist": {
     "actions": {
       "source": {

@@ -90,7 +90,9 @@ export const coreClearUserSessionsPlugin: CoreClearUserSessionsPlugin = (
 export const clearUserSessionsPlugin = createAuthPlugin(
 	'clearUserSessions',
 	(options: ClearUserSessionsPluginOptions = {}) => ({
-		...coreClearUserSessionsPlugin(options),
+		...(({ id: _id, ...plugin }) => plugin)(
+			coreClearUserSessionsPlugin(options)
+		),
 		sessionsDangerZoneCards: [ClearUserSessions],
 		views: {
 			settings: { sessions: SessionsSettings },

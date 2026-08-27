@@ -15,17 +15,17 @@ import {
 	PopoverTrigger,
 } from '@md-oss/design-system/components/ui/popover';
 import { cn } from '@md-oss/design-system/lib/utils';
-import type { Table } from '@tanstack/react-table';
+import type { RowData, Table } from '@md-oss/design-system/types/data-table';
 import { Check, Settings2 } from 'lucide-react';
 import * as React from 'react';
 
-interface DataTableViewOptionsProps<TData>
+interface DataTableViewOptionsProps<TData extends RowData>
 	extends React.ComponentProps<typeof PopoverContent> {
 	table: Table<TData>;
 	disabled?: boolean;
 }
 
-export function DataTableViewOptions<TData>({
+export function DataTableViewOptions<TData extends RowData>({
 	table,
 	disabled,
 	...props

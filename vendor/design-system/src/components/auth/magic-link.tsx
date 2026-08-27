@@ -1,12 +1,9 @@
 'use client';
 
 import { authMutationKeys } from '@better-auth-ui/core';
-import {
-	type MagicLinkAuthClient,
-	useAuth,
-	useAuthPlugin,
-	useSignInMagicLink,
-} from '@better-auth-ui/react';
+import type { MagicLinkAuthClient } from '@better-auth-ui/core/plugins/magic-link';
+import { useAuth, useAuthPlugin } from '@better-auth-ui/react';
+import { useSignInMagicLink } from '@better-auth-ui/react/plugins/magic-link';
 import { Button } from '@md-oss/design-system/components/ui/button';
 import {
 	Card,

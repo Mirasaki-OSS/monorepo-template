@@ -1,11 +1,8 @@
 'use client';
 
-import {
-	type UsernameAuthClient,
-	useAuth,
-	useAuthPlugin,
-	useIsUsernameAvailable,
-} from '@better-auth-ui/react';
+import type { UsernameAuthClient } from '@better-auth-ui/core/plugins/username';
+import { useAuth, useAuthPlugin } from '@better-auth-ui/react';
+import { useIsUsernameAvailable } from '@better-auth-ui/react/plugins/username';
 import type { AdditionalFieldProps } from '@md-oss/design-system/components/auth/additional-field';
 import { Field, FieldError } from '@md-oss/design-system/components/ui/field';
 import {

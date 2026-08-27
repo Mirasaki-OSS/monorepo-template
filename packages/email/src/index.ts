@@ -40,7 +40,7 @@ export {
 	type VerificationEmailProps,
 } from '@md-oss/design-system/components/auth/email/verification-email-base';
 
-import { render } from '@react-email/components';
+import { render } from 'react-email';
 import { Resend } from 'resend';
 import { serverEnv } from './env';
 

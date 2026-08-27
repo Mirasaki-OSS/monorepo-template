@@ -19,6 +19,7 @@
   "dependencies": {
     "@better-auth/api-key": "catalog:",
     "@better-auth/passkey": "catalog:",
+    "@fuma-translate/react": "catalog:",
     "@hookform/resolvers": "catalog:",
     "@marsidev/react-turnstile": "catalog:",
     "@md-oss/api": "workspace:^",
@@ -56,7 +57,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.15",
+    "@biomejs/biome": "catalog:",
     "@fumadocs/cli": "catalog:",
     "@tailwindcss/postcss": "catalog:",
     "@tailwindcss/typography": "catalog:",

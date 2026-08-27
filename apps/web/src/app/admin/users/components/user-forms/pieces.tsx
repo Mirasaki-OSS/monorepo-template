@@ -1,4 +1,4 @@
-import type { ClientAuthContext } from '@md-oss/api/types';
+import { type ClientAuthContext, USER_BIO_MAX_LENGTH } from '@md-oss/api/types';
 import { authzRoles, normalizeRoles } from '@md-oss/authz';
 import { getErrorMessage } from '@md-oss/common';
 import { titleCase } from '@md-oss/common/utils/strings';
@@ -69,27 +69,6 @@ export const userFormHasValidationErrors = (
   const fieldNames = userFormFieldsByCategory[category];
   return fieldNames.some((fieldName) => !!form.formState.errors[fieldName]);
 };
-
-// [DONE] name: string;
-// [DONE] email: string;
-// [DONE] emailVerified: boolean;
-// [DONE] image: string | null;
-// [DONE] username: string | null;
-// [DONE] displayUsername: string | null;
-// [DONE] bio: string | null;
-// [DONE] clientMetadata: Record<string, never> | null;
-// [DONE] clientReadonlyMetadata: Record<string, never> | null;
-// [DONE] serverMetadata: Record<string, never> | null;
-// [DONE] roles: ("owner" | "admin" | "support" | "user")[];
-// [DONE] banned: boolean;
-// [DONE] banReason: string | null;
-// [DONE] banExpiresAt: Date | null;
-// [DONE] createdAt: Date;
-// [DONE] updatedAt: Date;
-// DANGER ZONE AND VIRTUAL FIELDS (not stored in DB):
-// id: string;
-// lastSeenAt: Date | null;
-// authMethods: readonly string[];
 
 export type UserFormPieceProps = {
   form: UseUserFormReturn;
@@ -239,7 +218,7 @@ export const BioField = ({
             />
             <InputGroupAddon align="block-end">
               <InputGroupText className="tabular-nums">
-                {field.value?.length ?? 0}/100 characters
+                {field.value?.length ?? 0}/{USER_BIO_MAX_LENGTH} characters
               </InputGroupText>
             </InputGroupAddon>
           </InputGroup>

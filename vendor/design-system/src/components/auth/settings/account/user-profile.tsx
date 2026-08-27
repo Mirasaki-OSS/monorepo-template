@@ -4,12 +4,8 @@ import {
 	type AdditionalFieldValue,
 	parseAdditionalFieldValue,
 } from '@better-auth-ui/core';
-import {
-	type UsernameAuthClient,
-	useAuth,
-	useSession,
-	useUpdateUser,
-} from '@better-auth-ui/react';
+import type { UsernameAuthClient } from '@better-auth-ui/core/plugins/username';
+import { useAuth, useSession, useUpdateUser } from '@better-auth-ui/react';
 import { AdditionalField } from '@md-oss/design-system/components/auth/additional-field';
 import { Button } from '@md-oss/design-system/components/ui/button';
 import {
@@ -88,7 +84,7 @@ export function UserProfile({ className }: UserProfileProps) {
 	return (
 		<div>
 			<h2 className="text-sm font-semibold mb-3">
-				{localization.settings.profile}
+				{localization.settings.userProfile}
 			</h2>
 
 			<form onSubmit={handleSubmit}>

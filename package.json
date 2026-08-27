@@ -17,13 +17,13 @@
 		"check:circular": "node scripts/node/madge-monorepo.mjs --check=circular",
 		"check:orphans": "node scripts/node/madge-monorepo.mjs --check=orphans",
 		"check:outdated": "pnpm outdated -r",
-		"clean": "turbo run clean && git clean -xdf node_modules .turbo .tmp pnpm-lock.yaml deploy/docker/context-report deploy/compose/.buildx-cache",
+		"clean": "turbo run clean && git clean -xdf node_modules .turbo .turbo-cache .tmp pnpm-lock.yaml deploy/docker/context-report deploy/compose/.buildx-cache",
 		"db:generate": "pnpm --filter @md-oss/db db:generate",
 		"db:migrate": "pnpm --filter @md-oss/db db:migrate",
 		"db:push": "pnpm --filter @md-oss/db db:push",
 		"db:reset": "pnpm --filter @md-oss/db db:reset",
 		"db:seed": "pnpm --filter @md-oss/db db:seed:dev -- --count 10000 --batch-size 1000 --seed 42",
-		"dev": "turbo run dev",
+		"dev": "./scripts/bash/ensure-redis.sh && turbo run dev",
 		"lint": "pnpm exec biome lint --write --unsafe",
 		"format": "pnpm exec biome format --write",
 		"gen:app": "turbo gen workspace --type app",
@@ -45,7 +45,7 @@
 		"script:sl": "tsx ./scripts/node/sync-licenses.ts"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.4.15",
+		"@biomejs/biome": "catalog:",
 		"@changesets/cli": "catalog:",
 		"@md-oss/scripts": "workspace:^",
 		"@turbo/gen": "catalog:",
@@ -53,8 +53,20 @@
 		"glob": "catalog:",
 		"lefthook": "catalog:",
 		"madge": "catalog:",
-		"pnpm-update-catalogs": "^1.0.4",
+		"pnpm-update-catalogs": "catalog:",
 		"tsx": "catalog:",
 		"turbo": "catalog:"
+	},
+	"pnpm": {
+		"overrides": {
+			"@better-auth/utils": "0.5.0"
+		},
+		"onlyBuiltDependencies": [
+			"cbor-extract",
+			"esbuild",
+			"lefthook",
+			"pnpm-update-catalogs",
+			"sharp"
+		]
 	}
 }

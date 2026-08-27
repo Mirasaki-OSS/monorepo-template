@@ -1,11 +1,11 @@
 'use client';
 
-import {
-	type ApiKeyAuthClient,
-	useAuth,
-	useAuthPlugin,
-	useListApiKeys,
-} from '@better-auth-ui/react';
+import type {
+	ApiKeyAuthClient,
+	ListApiKeysData,
+} from '@better-auth-ui/core/plugins/api-key';
+import { useAuth, useAuthPlugin } from '@better-auth-ui/react';
+import { useListApiKeys } from '@better-auth-ui/react/plugins/api-key';
 import { Button } from '@md-oss/design-system/components/ui/button';
 import { Card, CardContent } from '@md-oss/design-system/components/ui/card';
 import { Separator } from '@md-oss/design-system/components/ui/separator';
@@ -25,9 +25,11 @@ export function ApiKeys({ className }: ApiKeysProps) {
 	const { authClient } = useAuth();
 	const { localization: apiKeyLocalization } = useAuthPlugin(apiKeyPluginRef);
 
-	const { data: listData, isPending } = useListApiKeys(
+	const { data: _listData, isPending } = useListApiKeys(
 		authClient as ApiKeyAuthClient
 	);
+
+	const listData = (_listData ?? {}) as ListApiKeysData<ApiKeyAuthClient>;
 
 	const [createOpen, setCreateOpen] = useState(false);
 

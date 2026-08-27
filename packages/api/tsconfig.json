@@ -3,7 +3,14 @@
 	"compilerOptions": {
 		"outDir": "./dist",
 		"rootDir": "./src",
-		"jsx": "preserve"
+		"jsx": "preserve",
+		// @better-auth/api-key leaks an unexported internal type (MiddlewareOptions) into the
+		// auth config's inferred type, which TS cannot name for declaration emit (TS4023).
+		// Consumers resolve this package via source (see package.json `exports`), so local
+		// declaration output isn't needed for typechecking.
+		// @see https://github.com/better-auth/better-auth/issues/8623
+		"declaration": false,
+		"declarationMap": false
 	},
 	"include": ["src"],
 	"exclude": ["node_modules", "dist"]

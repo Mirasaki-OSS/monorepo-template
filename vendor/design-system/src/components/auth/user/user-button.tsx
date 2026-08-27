@@ -1,12 +1,9 @@
 'use client';
 
 import type { AuthPluginBase } from '@better-auth-ui/core';
-import {
-	type MultiSessionAuthClient,
-	useAuth,
-	useSession,
-	useSetActiveSession,
-} from '@better-auth-ui/react';
+import type { MultiSessionAuthClient } from '@better-auth-ui/core/plugins/multi-session';
+import { useAuth, useSession } from '@better-auth-ui/react';
+import { useSetActiveSession } from '@better-auth-ui/react/plugins/multi-session';
 import { Button } from '@md-oss/design-system/components/ui/button';
 import {
 	DropdownMenu,

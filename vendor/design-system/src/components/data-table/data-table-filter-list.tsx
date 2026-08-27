@@ -54,11 +54,14 @@ import { generateId } from '@md-oss/design-system/lib/id';
 import { getFiltersStateParser } from '@md-oss/design-system/lib/parsers';
 import { cn } from '@md-oss/design-system/lib/utils';
 import type {
+	Column,
+	ColumnMeta,
 	ExtendedColumnFilter,
 	FilterOperator,
 	JoinOperator,
+	RowData,
+	Table,
 } from '@md-oss/design-system/types/data-table';
-import type { Column, ColumnMeta, Table } from '@tanstack/react-table';
 import {
 	CalendarIcon,
 	Check,
@@ -75,7 +78,7 @@ const THROTTLE_MS = 50;
 const FILTER_SHORTCUT_KEY = 'f';
 const REMOVE_FILTER_SHORTCUTS = ['backspace', 'delete'];
 
-interface DataTableFilterListProps<TData>
+interface DataTableFilterListProps<TData extends RowData>
 	extends React.ComponentProps<typeof PopoverContent> {
 	table: Table<TData>;
 	debounceMs?: number;
@@ -84,7 +87,7 @@ interface DataTableFilterListProps<TData>
 	disabled?: boolean;
 }
 
-export function DataTableFilterList<TData>({
+export function DataTableFilterList<TData extends RowData>({
 	table,
 	debounceMs = DEBOUNCE_MS,
 	throttleMs = THROTTLE_MS,
@@ -324,7 +327,7 @@ export function DataTableFilterList<TData>({
 	);
 }
 
-interface DataTableFilterItemProps<TData> {
+interface DataTableFilterItemProps<TData extends RowData> {
 	filter: ExtendedColumnFilter<TData>;
 	index: number;
 	filterItemId: string;
@@ -338,7 +341,7 @@ interface DataTableFilterItemProps<TData> {
 	onFilterRemove: (filterId: string) => void;
 }
 
-function DataTableFilterItem<TData>({
+function DataTableFilterItem<TData extends RowData>({
 	filter,
 	index,
 	filterItemId,
@@ -557,7 +560,7 @@ function DataTableFilterItem<TData>({
 	);
 }
 
-function onFilterInputRender<TData>({
+function onFilterInputRender<TData extends RowData>({
 	filter,
 	inputId,
 	column,

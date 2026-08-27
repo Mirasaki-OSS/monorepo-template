@@ -1,6 +1,6 @@
 import { cn } from '@md-oss/design-system/lib/utils';
-import { Link, Text } from '@react-email/components';
 import type { ReactNode } from 'react';
+import { Link, Text } from 'react-email';
 import type { EmailClassNames, EmailColors } from './email-styles';
 import { VerificationEmail } from './verification-email-base';
 

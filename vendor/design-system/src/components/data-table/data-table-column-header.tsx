@@ -8,7 +8,7 @@ import {
 	DropdownMenuTrigger,
 } from '@md-oss/design-system/components/ui/dropdown-menu';
 import { cn } from '@md-oss/design-system/lib/utils';
-import type { Column } from '@tanstack/react-table';
+import type { Column, RowData } from '@md-oss/design-system/types/data-table';
 import {
 	ChevronDown,
 	ChevronsUpDown,
@@ -17,13 +17,13 @@ import {
 	X,
 } from 'lucide-react';
 
-interface DataTableColumnHeaderProps<TData, TValue>
+interface DataTableColumnHeaderProps<TData extends RowData, TValue>
 	extends React.ComponentProps<typeof DropdownMenuTrigger> {
 	column: Column<TData, TValue>;
 	label: string;
 }
 
-export function DataTableColumnHeader<TData, TValue>({
+export function DataTableColumnHeader<TData extends RowData, TValue>({
 	column,
 	label,
 	className,

@@ -1,22 +1,27 @@
 import { useDebouncedCallback } from '@md-oss/design-system/hooks/use-debounced-callback';
 import { getSortingStateParser } from '@md-oss/design-system/lib/parsers';
+import type {
+	RowData,
+	TableOptions,
+	TableState,
+	VisibilityState,
+} from '@md-oss/design-system/types/data-table';
 import {
 	type ColumnFiltersState,
-	getCoreRowModel,
-	getFacetedMinMaxValues,
-	getFacetedRowModel,
-	getFacetedUniqueValues,
-	getFilteredRowModel,
-	getPaginationRowModel,
-	getSortedRowModel,
+	createCoreRowModel,
+	createFacetedMinMaxValues,
+	createFacetedRowModel,
+	createFacetedUniqueValues,
+	createFilteredRowModel,
+	createPaginatedRowModel,
+	createSortedRowModel,
 	type PaginationState,
 	type RowSelectionState,
 	type SortingState,
-	type TableOptions,
-	type TableState,
+	stockFeatures,
+	tableFeatures,
 	type Updater,
-	useReactTable,
-	type VisibilityState,
+	useTable,
 } from '@tanstack/react-table';
 import {
 	parseAsArrayOf,
@@ -39,7 +44,18 @@ const ARRAY_SEPARATOR = ',';
 const DEBOUNCE_MS = 300;
 const THROTTLE_MS = 50;
 
-interface UseDataTableProps<TData>
+export const dataTableFeatures = tableFeatures({
+	...stockFeatures,
+	coreRowModel: createCoreRowModel(),
+	filteredRowModel: createFilteredRowModel(),
+	paginatedRowModel: createPaginatedRowModel(),
+	sortedRowModel: createSortedRowModel(),
+	facetedRowModel: createFacetedRowModel(),
+	facetedUniqueValues: createFacetedUniqueValues(),
+	facetedMinMaxValues: createFacetedMinMaxValues(),
+});
+
+interface UseDataTableProps<TData extends RowData>
 	extends Omit<
 			TableOptions<TData>,
 			| 'state'
@@ -64,7 +80,9 @@ interface UseDataTableProps<TData>
 	startTransition?: React.TransitionStartFunction;
 }
 
-export function useDataTable<TData>(props: UseDataTableProps<TData>) {
+export function useDataTable<TData extends RowData>(
+	props: UseDataTableProps<TData>
+) {
 	const {
 		columns,
 		pageCount = -1,
@@ -264,8 +282,9 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
 		[debouncedSetFilterValues, filterableColumns, enableAdvancedFilter]
 	);
 
-	const table = useReactTable({
+	const table = useTable({
 		...tableProps,
+		features: dataTableFeatures,
 		columns,
 		initialState,
 		pageCount,
@@ -286,13 +305,6 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
 		onSortingChange,
 		onColumnFiltersChange,
 		onColumnVisibilityChange: setColumnVisibility,
-		getCoreRowModel: getCoreRowModel(),
-		getFilteredRowModel: getFilteredRowModel(),
-		getPaginationRowModel: getPaginationRowModel(),
-		getSortedRowModel: getSortedRowModel(),
-		getFacetedRowModel: getFacetedRowModel(),
-		getFacetedUniqueValues: getFacetedUniqueValues(),
-		getFacetedMinMaxValues: getFacetedMinMaxValues(),
 		manualPagination: true,
 		manualSorting: true,
 		manualFiltering: true,

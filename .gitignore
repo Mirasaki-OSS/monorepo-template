@@ -1,5 +1,6 @@
 # Turbo and build artifacts
 .turbo
+.turbo-cache
 tsconfig.tsbuildinfo
 .source
 
@@ -30,3 +31,6 @@ deploy/compose/compose.local.yaml
 TODO.md
 .idea
 sandbox
+
+# Redis
+dump.rdb

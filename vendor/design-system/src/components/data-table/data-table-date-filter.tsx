@@ -9,7 +9,7 @@ import {
 } from '@md-oss/design-system/components/ui/popover';
 import { Separator } from '@md-oss/design-system/components/ui/separator';
 import { formatDate } from '@md-oss/design-system/lib/format';
-import type { Column } from '@tanstack/react-table';
+import type { Column, RowData } from '@md-oss/design-system/types/data-table';
 import { CalendarIcon, XCircle } from 'lucide-react';
 import * as React from 'react';
 import type { DateRange } from 'react-day-picker';
@@ -49,13 +49,13 @@ function parseColumnFilterValue(value: unknown) {
 	return [];
 }
 
-interface DataTableDateFilterProps<TData> {
+interface DataTableDateFilterProps<TData extends RowData> {
 	column: Column<TData, unknown>;
 	title?: string;
 	multiple?: boolean;
 }
 
-export function DataTableDateFilter<TData>({
+export function DataTableDateFilter<TData extends RowData>({
 	column,
 	title,
 	multiple,

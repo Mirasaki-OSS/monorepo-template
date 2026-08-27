@@ -55,6 +55,7 @@ const authMiddleware = {
     if (sessionResponse.data === null) {
       const url = new URL('/auth/sign-in', request.url);
       url.searchParams.set('next', request.nextUrl.pathname);
+      url.searchParams.set('redirectTo', request.nextUrl.pathname);
       return NextResponse.redirect(url);
     }
 
@@ -70,6 +71,7 @@ const authMiddleware = {
     if (!sessionCookie) {
       const url = new URL('/auth/sign-in', request.url);
       url.searchParams.set('next', request.nextUrl.pathname);
+      url.searchParams.set('redirectTo', request.nextUrl.pathname);
       return NextResponse.redirect(url);
     }
 

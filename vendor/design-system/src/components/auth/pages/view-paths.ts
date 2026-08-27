@@ -1,6 +1,12 @@
 import type { ViewPaths } from '@better-auth-ui/core';
 import { viewPaths } from '@better-auth-ui/core';
 
+declare module '@better-auth-ui/core' {
+	interface SettingsViewPaths {
+		apiKeys: string;
+	}
+}
+
 export type ExtendedViewPaths = Omit<ViewPaths, 'settings'> & {
 	settings: ViewPaths['settings'] & {
 		apiKeys: string;
@@ -11,6 +17,9 @@ export type ExtendedViewPaths = Omit<ViewPaths, 'settings'> & {
 
 export const extendedViewPaths: ExtendedViewPaths = {
 	...viewPaths,
+	admin: {
+		...viewPaths.admin,
+	},
 	settings: {
 		...viewPaths.settings,
 		apiKeys: 'apiKeys',
@@ -38,5 +47,8 @@ export const mergeViewPaths = (
 	settings: {
 		...defaultPaths.settings,
 		...customPaths?.settings,
+	},
+	admin: {
+		...defaultPaths.admin,
 	},
 });

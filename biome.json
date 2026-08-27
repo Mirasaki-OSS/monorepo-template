@@ -1,5 +1,5 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.4.12/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.5.10/schema.json",
 	"root": true,
 	"vcs": {
 		"enabled": true,
@@ -50,7 +50,7 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true
+			"preset": "recommended"
 		}
 	},
 	"javascript": {
@@ -82,6 +82,27 @@
 					"a11y": {
 						"useSemanticElements": "off",
 						"useFocusableInteractive": "off"
+					}
+				}
+			}
+		},
+		{
+			"includes": ["apps/web/content/docs/**/meta.json"],
+			"linter": {
+				"enabled": false
+			}
+		},
+		{
+			"includes": [
+				"apps/web/src/app/(home)/test/schema-object-form.tsx",
+				"vendor/common/src/constants/bytes.ts",
+				"vendor/common/src/constants/discord.ts",
+				"vendor/common/src/constants/time.ts"
+			],
+			"linter": {
+				"rules": {
+					"suspicious": {
+						"noDuplicateEnumValues": "off"
 					}
 				}
 			}
