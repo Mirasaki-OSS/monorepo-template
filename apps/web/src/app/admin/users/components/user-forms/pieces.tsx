@@ -1,4 +1,4 @@
-import type { ClientAuthContext } from '@md-oss/api/types';
+import { type ClientAuthContext, USER_BIO_MAX_LENGTH } from '@md-oss/api/types';
 import { authzRoles, normalizeRoles } from '@md-oss/authz';
 import { getErrorMessage } from '@md-oss/common';
 import { titleCase } from '@md-oss/common/utils/strings';
@@ -239,7 +239,7 @@ export const BioField = ({
             />
             <InputGroupAddon align="block-end">
               <InputGroupText className="tabular-nums">
-                {field.value?.length ?? 0}/100 characters
+                {field.value?.length ?? 0}/{USER_BIO_MAX_LENGTH} characters
               </InputGroupText>
             </InputGroupAddon>
           </InputGroup>

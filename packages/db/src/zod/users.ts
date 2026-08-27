@@ -44,6 +44,8 @@ const userMetadataSchema = z.object({
 
 type UserMetadata = z.infer<typeof userMetadataSchema>;
 
+export const USER_BIO_MAX_LENGTH = 160;
+
 const userRefinements: UserRefinements = {
 	// Note: Using (schema) => {...} extends the schema, but anything can be overridden entirely
 	id: (schema) =>
@@ -86,7 +88,7 @@ const userRefinements: UserRefinements = {
 				'The display username of the user. Can be used for display purposes and may differ from the actual username.'
 			),
 	bio: (schema) =>
-		schema.max(160).meta({
+		schema.max(USER_BIO_MAX_LENGTH).meta({
 			id: 'bio',
 			title: 'Biography',
 			description: 'A short biography or description of the user.',

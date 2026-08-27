@@ -1,3 +1,4 @@
+import { USER_BIO_MAX_LENGTH } from '@md-oss/db/zod';
 import { z } from 'zod/v4';
 
 export const updateUserInputSchema = z
@@ -5,7 +6,7 @@ export const updateUserInputSchema = z
 		name: z.string().trim().min(1).max(30).optional(),
 		image: z.url().nullable().optional(),
 		displayUsername: z.string().trim().min(1).max(64).nullable().optional(),
-		bio: z.string().trim().max(280).nullable().optional(),
+		bio: z.string().trim().max(USER_BIO_MAX_LENGTH).nullable().optional(),
 	})
 	.refine((input) => Object.keys(input).length > 0, {
 		message: 'At least one field must be provided',
