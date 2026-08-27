@@ -1,0 +1,583 @@
+
+> monorepo@0.0.0 checks /home/mirasaki/dev/work/md/monorepo-template
+> pnpm exec biome check --write --unsafe && turbo run typecheck && pnpm script:fdm
+
+apps/web/biome.json:22:13 deserialize  DEPRECATED  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  i The use of the recommended field has been deprecated, and will removed in the next major version of Biome. Use preset instead.
+  
+    20 │     "indentWidth": 2
+    21 │   },
+  > 22 │   "linter": {
+       │             ^
+  > 23 │     "enabled": true,
+        ...
+  > 30 │     }
+  > 31 │   },
+       │   ^
+    32 │   "assist": {
+    33 │     "actions": {
+  
+  i Migrate the configuration with the proper command
+  
+  $ biome migrate
+  
+
+biome.json:50:12 deserialize  DEPRECATED  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  i The use of the recommended field has been deprecated, and will removed in the next major version of Biome. Use preset instead.
+  
+    48 │ 		"useEditorconfig": false
+    49 │ 	},
+  > 50 │ 	"linter": {
+       │ 	          ^
+  > 51 │ 		"enabled": true,
+  > 52 │ 		"rules": {
+  > 53 │ 			"recommended": true
+  > 54 │ 		}
+  > 55 │ 	},
+       │ 	^
+    56 │ 	"javascript": {
+    57 │ 		"formatter": {
+  
+  i Migrate the configuration with the proper command
+  
+  $ biome migrate
+  
+
+apps/web/src/app/(home)/test/schema-object-form.tsx:10:3 lint/suspicious/noDuplicateEnumValues ━━━━━━━━━━
+
+  ! Duplicate enum member value.
+  
+     8 │   EMBED_TITLE_MAX = 256,
+     9 │   EMBED_DESCRIPTION_MAX = 4096,
+  > 10 │   EMBED_FIELD_NAME_MAX = 256,
+       │   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    11 │   EMBED_FIELD_VALUE_MAX = 1024,
+    12 │   EMBED_FIELDS_MAX = 25,
+  
+  i Another duplicate enum member value.
+  
+    12 │   EMBED_FIELDS_MAX = 25,
+    13 │   EMBED_FOOTER_MAX = 2048,
+  > 14 │   EMBED_AUTHOR_MAX = 256,
+       │   ^^^^^^^^^^^^^^^^^^^^^^
+    15 │   EMBED_PROVIDER_MAX = 256,
+    16 │   EMBED_TOTAL_MAX = 6000,
+  
+  i Another duplicate enum member value.
+  
+    13 │   EMBED_FOOTER_MAX = 2048,
+    14 │   EMBED_AUTHOR_MAX = 256,
+  > 15 │   EMBED_PROVIDER_MAX = 256,
+       │   ^^^^^^^^^^^^^^^^^^^^^^^^
+    16 │   EMBED_TOTAL_MAX = 6000,
+    17 │   MESSAGE_EMBEDS_MAX = 10,
+  
+  i Expected members to have unique values. Duplicate values can lead to bugs that are hard to track down.
+  
+
+vendor/common/src/constants/bytes.ts:12:2 lint/suspicious/noDuplicateEnumValues ━━━━━━━━━━
+
+  ! Duplicate enum member value.
+  
+    10 │ 	YOTTABYTE = 1024 ** 8,
+    11 │ 
+  > 12 │ 	BYTES_PER_KILOBYTE = 1024,
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^^
+    13 │ 	BYTES_PER_MEGABYTE = 1024 ** 2,
+    14 │ 	BYTES_PER_GIGABYTE = 1024 ** 3,
+  
+  i Another duplicate enum member value.
+  
+    19 │ 	BYTES_PER_YOTTABYTE = 1024 ** 8,
+    20 │ 
+  > 21 │ 	KILOBYTES_PER_MEGABYTE = 1024,
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    22 │ 	KILOBYTES_PER_GIGABYTE = 1024 ** 2,
+    23 │ 	KILOBYTES_PER_TERABYTE = 1024 ** 3,
+  
+  i Another duplicate enum member value.
+  
+    27 │ 	KILOBYTES_PER_YOTTABYTE = 1024 ** 7,
+    28 │ 
+  > 29 │ 	MEGABYTES_PER_GIGABYTE = 1024,
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    30 │ 	MEGABYTES_PER_TERABYTE = 1024 ** 2,
+    31 │ 	MEGABYTES_PER_PETABYTE = 1024 ** 3,
+  
+  i Another duplicate enum member value.
+  
+    34 │ 	MEGABYTES_PER_YOTTABYTE = 1024 ** 6,
+    35 │ 
+  > 36 │ 	GIGABYTES_PER_TERABYTE = 1024,
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    37 │ 	GIGABYTES_PER_PETABYTE = 1024 ** 2,
+    38 │ 	GIGABYTES_PER_EXABYTE = 1024 ** 3,
+  
+  i Another duplicate enum member value.
+  
+    40 │ 	GIGABYTES_PER_YOTTABYTE = 1024 ** 5,
+    41 │ 
+  > 42 │ 	TERABYTES_PER_PETABYTE = 1024,
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    43 │ 	TERABYTES_PER_EXABYTE = 1024 ** 2,
+    44 │ 	TERABYTES_PER_ZETTABYTE = 1024 ** 3,
+  
+  i Another duplicate enum member value.
+  
+    45 │ 	TERABYTES_PER_YOTTABYTE = 1024 ** 4,
+    46 │ 
+  > 47 │ 	PETABYTES_PER_EXABYTE = 1024,
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    48 │ 	PETABYTES_PER_ZETTABYTE = 1024 ** 2,
+    49 │ 	PETABYTES_PER_YOTTABYTE = 1024 ** 3,
+  
+  i Another duplicate enum member value.
+  
+    49 │ 	PETABYTES_PER_YOTTABYTE = 1024 ** 3,
+    50 │ 
+  > 51 │ 	EXABYTES_PER_ZETTABYTE = 1024,
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    52 │ 	EXABYTES_PER_YOTTABYTE = 1024 ** 2,
+    53 │ 
+  
+  i Another duplicate enum member value.
+  
+    52 │ 	EXABYTES_PER_YOTTABYTE = 1024 ** 2,
+    53 │ 
+  > 54 │ 	ZETTABYTES_PER_YOTTABYTE = 1024,
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    55 │ }
+    56 │ 
+  
+  i Expected members to have unique values. Duplicate values can lead to bugs that are hard to track down.
+  
+
+vendor/common/src/constants/discord.ts:16:2 lint/suspicious/noDuplicateEnumValues ━━━━━━━━━━
+
+  ! Duplicate enum member value.
+  
+    14 │ 	EMBED_DESCRIPTION_MAX = 4096,
+    15 │ 	EMBED_FIELDS_MAX = 25,
+  > 16 │ 	EMBED_FIELD_NAME_MAX = 256,
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^
+    17 │ 	EMBED_FIELD_VALUE_MAX = 1024,
+    18 │ 	EMBED_FOOTER_MAX = 2048,
+  
+  i Another duplicate enum member value.
+  
+    17 │ 	EMBED_FIELD_VALUE_MAX = 1024,
+    18 │ 	EMBED_FOOTER_MAX = 2048,
+  > 19 │ 	EMBED_AUTHOR_MAX = 256,
+       │ 	^^^^^^^^^^^^^^^^^^^^^^
+    20 │ 	EMBED_PROVIDER_MAX = 256,
+    21 │ 	EMBED_TOTAL_MAX = 6000,
+  
+  i Another duplicate enum member value.
+  
+    18 │ 	EMBED_FOOTER_MAX = 2048,
+    19 │ 	EMBED_AUTHOR_MAX = 256,
+  > 20 │ 	EMBED_PROVIDER_MAX = 256,
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^
+    21 │ 	EMBED_TOTAL_MAX = 6000,
+    22 │ 
+  
+  i Another duplicate enum member value.
+  
+    28 │ 	// User/Server
+    29 │ 	USERNAME_MAX = 32,
+  > 30 │ 	NICKNAME_MAX = 32,
+       │ 	^^^^^^^^^^^^^^^^^
+    31 │ 	REASON_MAX = 512,
+    32 │ 	GUILD_NAME_MAX = 100,
+  
+  i Another duplicate enum member value.
+  
+    31 │ 	REASON_MAX = 512,
+    32 │ 	GUILD_NAME_MAX = 100,
+  > 33 │ 	CHANNEL_NAME_MAX = 100,
+       │ 	^^^^^^^^^^^^^^^^^^^^^^
+    34 │ 	ROLE_NAME_MAX = 100,
+    35 │ 
+  
+  i Another duplicate enum member value.
+  
+    32 │ 	GUILD_NAME_MAX = 100,
+    33 │ 	CHANNEL_NAME_MAX = 100,
+  > 34 │ 	ROLE_NAME_MAX = 100,
+       │ 	^^^^^^^^^^^^^^^^^^^
+    35 │ 
+    36 │ 	// Reactions
+  
+  i Another duplicate enum member value.
+  
+    42 │ 	// Interactions - Chat Input commands
+  > 43 │ 	CHAT_INPUT_NAME_MAX = 32,
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^
+    44 │ 	CHAT_INPUT_DESCRIPTION_MAX = 100,
+    45 │ 	CHAT_INPUT_OPTIONS_MAX = 25,
+  
+  i Another duplicate enum member value.
+  
+    42 │ 	// Interactions - Chat Input commands
+    43 │ 	CHAT_INPUT_NAME_MAX = 32,
+  > 44 │ 	CHAT_INPUT_DESCRIPTION_MAX = 100,
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    45 │ 	CHAT_INPUT_OPTIONS_MAX = 25,
+    46 │ 	CHAT_INPUT_OPTION_NAME_MAX = 32,
+  
+  i Another duplicate enum member value.
+  
+    43 │ 	CHAT_INPUT_NAME_MAX = 32,
+    44 │ 	CHAT_INPUT_DESCRIPTION_MAX = 100,
+  > 45 │ 	CHAT_INPUT_OPTIONS_MAX = 25,
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    46 │ 	CHAT_INPUT_OPTION_NAME_MAX = 32,
+    47 │ 	CHAT_INPUT_OPTION_DESCRIPTION_MAX = 100,
+  
+  i Another duplicate enum member value.
+  
+    44 │ 	CHAT_INPUT_DESCRIPTION_MAX = 100,
+    45 │ 	CHAT_INPUT_OPTIONS_MAX = 25,
+  > 46 │ 	CHAT_INPUT_OPTION_NAME_MAX = 32,
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    47 │ 	CHAT_INPUT_OPTION_DESCRIPTION_MAX = 100,
+    48 │ 
+  
+  i Another duplicate enum member value.
+  
+    45 │ 	CHAT_INPUT_OPTIONS_MAX = 25,
+    46 │ 	CHAT_INPUT_OPTION_NAME_MAX = 32,
+  > 47 │ 	CHAT_INPUT_OPTION_DESCRIPTION_MAX = 100,
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    48 │ 
+    49 │ 	// Interactions - Context Menu commands
+  
+  i Another duplicate enum member value.
+  
+    49 │ 	// Interactions - Context Menu commands
+  > 50 │ 	CONTEXT_MENU_NAME_MAX = 32,
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^
+    51 │ 
+    52 │ 	// Interactions - Autocomplete
+  
+  i Another duplicate enum member value.
+  
+    52 │ 	// Interactions - Autocomplete
+  > 53 │ 	AUTOCOMPLETE_OPTIONS_MAX = 25,
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    54 │ 	AUTOCOMPLETE_OPTION_NAME_MAX = 100,
+    55 │ 	AUTOCOMPLETE_OPTION_VALUE_MAX = 100,
+  
+  i Another duplicate enum member value.
+  
+    52 │ 	// Interactions - Autocomplete
+    53 │ 	AUTOCOMPLETE_OPTIONS_MAX = 25,
+  > 54 │ 	AUTOCOMPLETE_OPTION_NAME_MAX = 100,
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    55 │ 	AUTOCOMPLETE_OPTION_VALUE_MAX = 100,
+    56 │ }
+  
+  i Another duplicate enum member value.
+  
+    53 │ 	AUTOCOMPLETE_OPTIONS_MAX = 25,
+    54 │ 	AUTOCOMPLETE_OPTION_NAME_MAX = 100,
+  > 55 │ 	AUTOCOMPLETE_OPTION_VALUE_MAX = 100,
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    56 │ }
+    57 │ 
+  
+  i Expected members to have unique values. Duplicate values can lead to bugs that are hard to track down.
+  
+
+vendor/common/src/constants/time.ts:18:2 lint/suspicious/noDuplicateEnumValues ━━━━━━━━━━
+
+  ! Duplicate enum member value.
+  
+    16 │ 	JULIAN_YEAR = 365.25 * 24 * 60 * 60 * 1000, // Standard astronomical year
+    17 │ 
+  > 18 │ 	MILLISECONDS_PER_SECOND = 1000,
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    19 │ 	MILLISECONDS_PER_MINUTE = 60 * 1000,
+    20 │ 	MILLISECONDS_PER_HOUR = 60 * 60 * 1000,
+  
+  i Another duplicate enum member value.
+  
+    37 │ 	SECONDS_PER_YEAR_366 = 366 * 24 * 60 * 60,
+    38 │ 
+  > 39 │ 	MINUTES_PER_HOUR = 60,
+       │ 	^^^^^^^^^^^^^^^^^^^^^
+    40 │ 	MINUTES_PER_DAY = 24 * 60,
+    41 │ 	MINUTES_PER_WEEK = 7 * 24 * 60,
+  
+  i Another duplicate enum member value.
+  
+    66 │ 	MONTHS_PER_YEAR = 12,
+  > 67 │ 	QUARTERS_PER_YEAR = 4,
+       │ 	^^^^^^^^^^^^^^^^^^^^^
+    68 │ 	DECADES_PER_CENTURY = 10,
+    69 │ 	CENTURIES_PER_MILLENNIUM = 10,
+  
+  i Another duplicate enum member value.
+  
+    67 │ 	QUARTERS_PER_YEAR = 4,
+    68 │ 	DECADES_PER_CENTURY = 10,
+  > 69 │ 	CENTURIES_PER_MILLENNIUM = 10,
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    70 │ }
+    71 │ 
+  
+  i Expected members to have unique values. Duplicate values can lead to bugs that are hard to track down.
+  
+
+vendor/design-system/src/components/ui/chart.tsx:94:4 suppressions/unused ━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    92 │ 	return (
+    93 │ 		<style
+  > 94 │ 			// biome-ignore lint/security/noDangerouslySetInnerHtml: This is necessary to inject dynamic CSS variables based on the theme configuration.
+       │ 			^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    95 │ 			dangerouslySetInnerHTML={{
+    96 │ 				__html: Object.entries(THEMES)
+  
+
+vendor/design-system/src/lib/compose-refs.ts:60:2 suppressions/unused ━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    58 │  */
+    59 │ function useComposedRefs<T>(...refs: PossibleRef<T>[]): React.RefCallback<T> {
+  > 60 │ 	// biome-ignore lint/correctness/useExhaustiveDependencies: we don't want to re-run this callback when the refs change
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    61 │ 	return React.useCallback(composeRefs(...refs), refs);
+    62 │ }
+  
+
+vendor/design-system/src/types/data-table.ts:20:2 suppressions/unused ━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    19 │ declare module '@tanstack/react-table' {
+  > 20 │ 	// biome-ignore lint/correctness/noUnusedVariables: TData is used in the TableMeta interface
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    21 │ 	interface TableMeta<TFeatures extends TableFeatures, TData extends RowData> {
+    22 │ 		queryKeys?: QueryKeys;
+  
+
+vendor/design-system/src/types/data-table.ts:25:2 suppressions/unused ━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    23 │ 	}
+    24 │ 
+  > 25 │ 	// biome-ignore lint/correctness/noUnusedVariables: TData and TValue are used in the ColumnMeta interface
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    26 │ 	interface ColumnMeta<
+    27 │ 		TFeatures extends TableFeatures,
+  
+
+Checked 588 files in 266ms. No fixes applied.
+Found 8 warnings.
+Found 2 infos.
+• turbo 2.10.12
+
+   • Packages in scope: @md-oss/analytics, @md-oss/api, @md-oss/api-types, @md-oss/auth, @md-oss/authz, @md-oss/cache, @md-oss/cli, @md-oss/common, @md-oss/config, @md-oss/database, @md-oss/db, @md-oss/design-system, @md-oss/discord, @md-oss/email, @md-oss/http-client, @md-oss/migrations, @md-oss/mutex, @md-oss/observability, @md-oss/scripts, @md-oss/security, @md-oss/serdes, @md-oss/server, @md-oss/utils, @md-oss/web
+   • Running typecheck in 24 packages
+   • Remote caching disabled
+
+@md-oss/scripts:typecheck: cache hit, replaying logs bbee4f53f9d88f05
+@md-oss/scripts:typecheck: 
+@md-oss/scripts:typecheck: > @md-oss/scripts@0.10.0 typecheck /home/mirasaki/dev/work/md/monorepo-template/vendor/scripts
+@md-oss/scripts:typecheck: > tsc --noEmit
+@md-oss/scripts:typecheck: 
+@md-oss/serdes:typecheck: cache hit, replaying logs aaa971e6b17fb908
+@md-oss/migrations:typecheck: cache hit, replaying logs 4608fae3e5327adf
+@md-oss/utils:typecheck: cache hit, replaying logs afa3d08560a2a5e4
+@md-oss/serdes:typecheck: 
+@md-oss/serdes:typecheck: > @md-oss/serdes@0.10.0 typecheck /home/mirasaki/dev/work/md/monorepo-template/vendor/serdes
+@md-oss/serdes:typecheck: > tsc --noEmit
+@md-oss/serdes:typecheck: 
+@md-oss/database:typecheck: cache hit, replaying logs eeab2c52b6155b87
+@md-oss/mutex:typecheck: cache hit, replaying logs f8a478e0e38be086
+@md-oss/utils:typecheck: 
+@md-oss/utils:typecheck: > @md-oss/utils@0.0.0 typecheck /home/mirasaki/dev/work/md/monorepo-template/packages/utils
+@md-oss/utils:typecheck: > tsc --noEmit
+@md-oss/analytics:typecheck: cache hit, replaying logs 82b8bd2ed69c5341
+@md-oss/utils:typecheck: 
+@md-oss/database:typecheck: 
+@md-oss/database:typecheck: > @md-oss/database@0.10.0 typecheck /home/mirasaki/dev/work/md/monorepo-template/vendor/database
+@md-oss/migrations:typecheck: 
+@md-oss/database:typecheck: > tsc --noEmit
+@md-oss/database:typecheck: 
+@md-oss/analytics:typecheck: 
+@md-oss/mutex:typecheck: 
+@md-oss/mutex:typecheck: > @md-oss/mutex@0.10.0 typecheck /home/mirasaki/dev/work/md/monorepo-template/vendor/mutex
+@md-oss/mutex:typecheck: > tsc --noEmit
+@md-oss/mutex:typecheck: 
+@md-oss/migrations:typecheck: > @md-oss/migrations@0.10.0 typecheck /home/mirasaki/dev/work/md/monorepo-template/vendor/migrations
+@md-oss/migrations:typecheck: > tsc --noEmit
+@md-oss/migrations:typecheck: 
+@md-oss/common:typecheck: cache hit, replaying logs 828af649a5661464
+@md-oss/analytics:typecheck: > @md-oss/analytics@0.10.0 typecheck /home/mirasaki/dev/work/md/monorepo-template/vendor/analytics
+@md-oss/analytics:typecheck: > tsc --noEmit
+@md-oss/analytics:typecheck: 
+@md-oss/common:typecheck: 
+@md-oss/common:typecheck: > @md-oss/common@0.10.0 typecheck /home/mirasaki/dev/work/md/monorepo-template/vendor/common
+@md-oss/common:typecheck: > tsc --noEmit
+@md-oss/common:typecheck: 
+@md-oss/design-system:typecheck: cache miss, executing c0738af7c766233c
+@md-oss/observability:typecheck: cache hit, replaying logs 55cb6690e462a2f4
+@md-oss/observability:typecheck: 
+@md-oss/observability:typecheck: > @md-oss/observability@0.10.0 typecheck /home/mirasaki/dev/work/md/monorepo-template/vendor/observability
+@md-oss/observability:typecheck: > tsc --noEmit
+@md-oss/observability:typecheck: 
+@md-oss/discord:typecheck: cache hit, replaying logs de0edf99f62aac3a
+@md-oss/http-client:typecheck: cache hit, replaying logs f245b6f45d4a7355
+@md-oss/authz:typecheck: cache hit, replaying logs 8d213b80c61182f4
+@md-oss/discord:typecheck: 
+@md-oss/cli:typecheck: cache hit, replaying logs e02e4e8003769a1f
+@md-oss/discord:typecheck: > @md-oss/discord@0.10.0 typecheck /home/mirasaki/dev/work/md/monorepo-template/vendor/discord
+@md-oss/discord:typecheck: > tsc --noEmit
+@md-oss/discord:typecheck: 
+@md-oss/cli:typecheck: 
+@md-oss/cli:typecheck: > @md-oss/cli@0.0.0 typecheck /home/mirasaki/dev/work/md/monorepo-template/apps/cli
+@md-oss/http-client:typecheck: 
+@md-oss/http-client:typecheck: > @md-oss/http-client@0.10.0 typecheck /home/mirasaki/dev/work/md/monorepo-template/vendor/http-client
+@md-oss/http-client:typecheck: > tsc --noEmit
+@md-oss/http-client:typecheck: 
+@md-oss/cache:typecheck: cache hit, replaying logs 2a6c705a24341026
+@md-oss/authz:typecheck: 
+@md-oss/authz:typecheck: > @md-oss/authz@0.0.0 typecheck /home/mirasaki/dev/work/md/monorepo-template/packages/authz
+@md-oss/authz:typecheck: > tsc --noEmit
+@md-oss/cli:typecheck: > tsc --noEmit
+@md-oss/cli:typecheck: 
+@md-oss/cache:typecheck: 
+@md-oss/security:typecheck: cache hit, replaying logs a0e223228e266824
+@md-oss/security:typecheck: 
+@md-oss/security:typecheck: > @md-oss/security@0.10.0 typecheck /home/mirasaki/dev/work/md/monorepo-template/vendor/security
+@md-oss/security:typecheck: > tsc --noEmit
+@md-oss/security:typecheck: 
+@md-oss/api-types:typecheck: cache hit, replaying logs a200d38e59df8752
+@md-oss/api-types:typecheck: 
+@md-oss/api-types:typecheck: > @md-oss/api-types@0.10.0 typecheck /home/mirasaki/dev/work/md/monorepo-template/vendor/api-types
+@md-oss/api-types:typecheck: > tsc --noEmit
+@md-oss/authz:typecheck: 
+@md-oss/api-types:typecheck: 
+@md-oss/cache:typecheck: > @md-oss/cache@0.10.0 typecheck /home/mirasaki/dev/work/md/monorepo-template/vendor/cache
+@md-oss/cache:typecheck: > tsc --noEmit
+@md-oss/cache:typecheck: 
+@md-oss/db:typecheck: cache miss, executing d5cc06a254b3e081
+@md-oss/db:typecheck: 
+@md-oss/db:typecheck: > @md-oss/db@0.0.0 typecheck /home/mirasaki/dev/work/md/monorepo-template/packages/db
+@md-oss/db:typecheck: > tsc --noEmit
+@md-oss/db:typecheck: 
+@md-oss/design-system:typecheck: 
+@md-oss/design-system:typecheck: > @md-oss/design-system@0.10.0 typecheck /home/mirasaki/dev/work/md/monorepo-template/vendor/design-system
+@md-oss/design-system:typecheck: > tsc --noEmit
+@md-oss/design-system:typecheck: 
+@md-oss/auth:typecheck: cache miss, executing 4c887f07f9493222
+@md-oss/auth:typecheck: 
+@md-oss/auth:typecheck: > @md-oss/auth@0.0.0 typecheck /home/mirasaki/dev/work/md/monorepo-template/packages/auth
+@md-oss/auth:typecheck: > tsc --noEmit
+@md-oss/auth:typecheck: 
+@md-oss/email:typecheck: cache miss, executing 2da56708265fcdfd
+@md-oss/email:typecheck: 
+@md-oss/email:typecheck: > @md-oss/email@0.0.0 typecheck /home/mirasaki/dev/work/md/monorepo-template/packages/email
+@md-oss/email:typecheck: > tsc --noEmit
+@md-oss/email:typecheck: 
+@md-oss/api:typecheck: cache miss, executing e2eaed321c99cad3
+@md-oss/api:typecheck: 
+@md-oss/api:typecheck: > @md-oss/api@0.0.0 typecheck /home/mirasaki/dev/work/md/monorepo-template/packages/api
+@md-oss/api:typecheck: > tsc --noEmit
+@md-oss/api:typecheck: 
+@md-oss/server:typecheck: cache miss, executing a781752b82bcff73
+@md-oss/web:typecheck: cache miss, executing 99479725e89f44a3
+@md-oss/web:typecheck: 
+@md-oss/web:typecheck: > @md-oss/web@0.0.0 typecheck /home/mirasaki/dev/work/md/monorepo-template/apps/web
+@md-oss/web:typecheck: > pnpm docs:sync && fumadocs-mdx && next typegen && tsc --noEmit
+@md-oss/web:typecheck: 
+@md-oss/server:typecheck: 
+@md-oss/server:typecheck: > @md-oss/server@0.0.0 typecheck /home/mirasaki/dev/work/md/monorepo-template/apps/server
+@md-oss/server:typecheck: > tsc --noEmit
+@md-oss/server:typecheck: 
+@md-oss/web:typecheck: 
+@md-oss/web:typecheck: > @md-oss/web@0.0.0 docs:sync /home/mirasaki/dev/work/md/monorepo-template/apps/web
+@md-oss/web:typecheck: > node ./scripts/materialize-external-docs.mjs
+@md-oss/web:typecheck: 
+@md-oss/web:typecheck: External docs materialized.
+@md-oss/web:typecheck: Manifest written to apps/web/.source/materialized-docs.json
+@md-oss/web:typecheck: [MDX] generated files in 24.653265000000033ms
+@md-oss/web:typecheck: [MDX] generated files in 21.733691999999905ms
+@md-oss/web:typecheck: Generating route types...
+@md-oss/web:typecheck: [MDX] started dev server
+@md-oss/web:typecheck: ✓ Types generated successfully
+@md-oss/web:typecheck: [MDX] closing dev server
+
+ Tasks:    23 successful, 23 total
+Cached:    16 cached, 23 total
+  Time:    10.719s 
+
+
+> monorepo@0.0.0 script:fdm /home/mirasaki/dev/work/md/monorepo-template
+> pnpm dedupe && pnpm exec md-oss-find-dependency-mismatches
+
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Progress: resolved 59, reused 59, downloaded 0, added 0
+Progress: resolved 103, reused 103, downloaded 0, added 0
+Progress: resolved 126, reused 114, downloaded 0, added 0
+Progress: resolved 379, reused 333, downloaded 0, added 0
+Progress: resolved 652, reused 571, downloaded 0, added 0
+Progress: resolved 849, reused 727, downloaded 0, added 0
+Progress: resolved 1261, reused 1050, downloaded 0, added 0
+Progress: resolved 1639, reused 1422, downloaded 0, added 0
+Progress: resolved 1728, reused 1512, downloaded 0, added 0
+ WARN  7 deprecated subdependencies found: glob@10.5.0, glob@7.2.3, glob@8.1.0, inflight@1.0.6, rimraf@3.0.2, uid-number@0.0.6, whatwg-encoding@3.1.1
+Already up to date
+Progress: resolved 1825, reused 1587, downloaded 0, added 0
+Progress: resolved 1825, reused 1587, downloaded 0, added 0, done
+apps/web postinstall$ fumadocs-mdx
+apps/web postinstall: [MDX] generated files in 24.419489ms
+apps/web postinstall: Done
+ WARN  Issues with peer dependencies found
+.
+└─┬ pnpm-update-catalogs 1.0.4
+  └─┬ @pnpm/config 1002.7.2
+    ├── ✕ unmet peer @pnpm/logger@">=5.1.0 <1001.0.0": found 1001.0.1
+    └─┬ @pnpm/pnpmfile 1001.1.1
+      ├── ✕ unmet peer @pnpm/logger@">=5.1.0 <1001.0.0": found 1001.0.1
+      └─┬ @pnpm/core-loggers 1000.2.0
+        └── ✕ unmet peer @pnpm/logger@">=5.1.0 <1001.0.0": found 1001.0.1
+
+packages/api
+└─┬ pkgroll 2.28.1
+  └─┬ rollup-plugin-import-trace 1.0.1
+    └── ✕ unmet peer vite@"^5.0.0 || ^6.0.0 || ^7.0.0": found 8.0.8
+
+Processed @md-oss/cli
+Processed @md-oss/server
+Processed @md-oss/web
+Processed @md-oss/api
+Processed @md-oss/auth
+Processed @md-oss/authz
+Processed @md-oss/db
+Processed @md-oss/email
+Processed @md-oss/utils
+Processed @md-oss/analytics
+Processed @md-oss/api-types
+Processed @md-oss/cache
+Processed @md-oss/common
+Processed @md-oss/config
+Processed @md-oss/database
+Processed @md-oss/design-system
+Processed @md-oss/discord
+Processed @md-oss/http-client
+Processed @md-oss/migrations
+Processed @md-oss/mutex
+Processed @md-oss/observability
+Processed @md-oss/scripts
+Processed @md-oss/security
+Processed @md-oss/serdes
+
+No dependency version mismatches found.
