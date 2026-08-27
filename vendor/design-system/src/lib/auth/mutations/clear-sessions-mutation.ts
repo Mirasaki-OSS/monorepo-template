@@ -1,5 +1,6 @@
+import type { AuthClient } from '@better-auth-ui/core';
 import { authMutationKeys } from '@better-auth-ui/core';
-import { type AuthClient, useAuthPlugin } from '@better-auth-ui/react';
+import { useAuthPlugin } from '@better-auth-ui/react';
 import { mutationOptions, useMutation } from '@tanstack/react-query';
 import type { BetterFetchError } from 'better-auth/react';
 import { clearUserSessionsPluginRef } from '../plugin-refs';

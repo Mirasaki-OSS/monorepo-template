@@ -2,7 +2,7 @@ import { createAuthPlugin } from '@better-auth-ui/core';
 import {
 	usernamePlugin as coreUsernamePlugin,
 	type UsernamePluginOptions,
-} from '@better-auth-ui/core/plugins';
+} from '@better-auth-ui/core/plugins/username';
 
 import { SignInUsername } from '@md-oss/design-system/components/auth/username/sign-in-username';
 import { UsernameField } from '@md-oss/design-system/components/auth/username/username-field';
@@ -10,7 +10,7 @@ import { UsernameField } from '@md-oss/design-system/components/auth/username/us
 export const usernamePlugin = createAuthPlugin(
 	coreUsernamePlugin.id,
 	(options: UsernamePluginOptions = {}) => {
-		const core = coreUsernamePlugin(options);
+		const { id: _id, ...core } = coreUsernamePlugin(options);
 
 		return {
 			...core,

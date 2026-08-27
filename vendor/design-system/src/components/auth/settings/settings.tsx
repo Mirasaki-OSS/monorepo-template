@@ -113,9 +113,8 @@ export function Settings({
 
 	const castPlugins = plugins as (AuthPluginBase & {
 		settingsTabs?: {
-			id: string;
-			viewPathSettingsKey: string;
-			pluginLocalizationKey: string;
+			view: string;
+			label: React.ReactNode;
 			component: React.ComponentType;
 		}[];
 	})[];
@@ -123,9 +122,9 @@ export function Settings({
 	const settingsTabsFromPlugins = castPlugins.flatMap((plugin) =>
 		plugin.settingsTabs
 			? plugin.settingsTabs.map((tab) => ({
-					id: tab.id,
-					viewPathSettingsKey: tab.viewPathSettingsKey,
-					pluginLocalizationKey: tab.pluginLocalizationKey,
+					pluginId: plugin.id,
+					view: tab.view,
+					label: tab.label,
 					component: tab.component,
 				}))
 			: []
@@ -268,49 +267,25 @@ export function Settings({
 					)}
 
 					{settingsTabsFromPlugins.map((tab) => {
-						const plugin = plugins.find((p) => p.id === tab.id);
-
-						if (!plugin) {
-							console.warn(
-								`Plugin with id "${tab.id}" not found for settings tab.`
-							);
-							return null;
-						}
-
-						const localizationKey =
-							tab.pluginLocalizationKey as keyof typeof localization;
-						const localizedLabel = plugin.localization
-							? plugin.localization[localizationKey] || tab.id
-							: tab.id;
-
-						if (typeof localizedLabel !== 'string') {
-							console.warn(
-								`Localization for key "${localizationKey}" not found in plugin "${plugin.id}".`
-							);
-							return null;
-						}
-
 						const viewPath =
-							viewPaths.settings[
-								tab.viewPathSettingsKey as keyof typeof viewPaths.settings
-							];
+							viewPaths.settings[tab.view as keyof typeof viewPaths.settings];
 
 						if (!viewPath) {
 							console.warn(
-								`View path for settings key "${tab.viewPathSettingsKey}" not found in viewPaths.settings.`
+								`View path for settings key "${tab.view}" not found in viewPaths.settings.`
 							);
 							return null;
 						}
 
 						return (
 							<TabsTriggerWithOverflow
-								key={tab.id}
-								value={tab.viewPathSettingsKey}
+								key={`${tab.pluginId}-${tab.view}`}
+								value={tab.view}
 								asChild
 							>
 								<Link href={`${basePaths.settings}/${viewPath}`}>
-									<RenderIcon view={tab.viewPathSettingsKey} />
-									{localizedLabel}
+									<RenderIcon view={tab.view} />
+									{tab.label}
 								</Link>
 							</TabsTriggerWithOverflow>
 						);
@@ -340,21 +315,19 @@ export function Settings({
 
 			{settingsTabsFromPlugins.map((tab) => {
 				const viewPath =
-					viewPaths.settings[
-						tab.viewPathSettingsKey as keyof typeof viewPaths.settings
-					];
+					viewPaths.settings[tab.view as keyof typeof viewPaths.settings];
 
 				if (!viewPath) {
 					console.warn(
-						`View path for settings key "${tab.viewPathSettingsKey}" not found in viewPaths.settings. Skipping rendering of settings tab content for plugin "${tab.id}".`
+						`View path for settings key "${tab.view}" not found in viewPaths.settings. Skipping rendering of settings tab content for plugin "${tab.pluginId}".`
 					);
 					return null;
 				}
 
 				return (
 					<TabsContent
-						key={tab.id}
-						value={tab.viewPathSettingsKey}
+						key={`${tab.pluginId}-${tab.view}`}
+						value={tab.view}
 						tabIndex={-1}
 					>
 						<tab.component />

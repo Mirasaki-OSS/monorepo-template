@@ -1,10 +1,7 @@
 'use client';
 
-import {
-	type ListedApiKey,
-	useAuth,
-	useAuthPlugin,
-} from '@better-auth-ui/react';
+import type { ListedApiKey } from '@better-auth-ui/core/plugins/api-key';
+import { useAuth, useAuthPlugin } from '@better-auth-ui/react';
 import { Button } from '@md-oss/design-system/components/ui/button';
 import { Card, CardContent } from '@md-oss/design-system/components/ui/card';
 import { apiKeyPluginRef } from '@md-oss/design-system/lib/auth/plugin-refs';

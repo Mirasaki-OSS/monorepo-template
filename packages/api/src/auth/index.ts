@@ -193,9 +193,6 @@ const config = {
 		enabled: true,
 		storage: 'memory',
 	},
-	experimental: {
-		joins: false,
-	},
 	secrets: [
 		{
 			value: parsedEnv.BETTER_AUTH_SECRET,
@@ -247,9 +244,12 @@ const config = {
 				fieldName: 'bio',
 				required: false,
 				validator: {
-					input: z.string().max(160, {
-						error: 'Bio must be 160 characters or less',
-					}),
+					input: z
+						.string()
+						.max(160, {
+							error: 'Bio must be 160 characters or less',
+						})
+						.nullable(),
 				},
 			},
 		},

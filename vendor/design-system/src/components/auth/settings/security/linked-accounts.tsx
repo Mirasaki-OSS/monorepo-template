@@ -5,7 +5,7 @@ import { Card, CardContent } from '@md-oss/design-system/components/ui/card';
 import { Separator } from '@md-oss/design-system/components/ui/separator';
 import { Skeleton } from '@md-oss/design-system/components/ui/skeleton';
 import { cn } from '@md-oss/design-system/lib/utils';
-import type { Account } from 'better-auth';
+import type { Account, SocialProvider } from 'better-auth';
 import { LinkedAccount } from './linked-account';
 
 export type LinkedAccountsProps = {
@@ -37,7 +37,7 @@ export function LinkedAccounts({ className }: LinkedAccountsProps) {
 			provider: account.providerId,
 		})) ?? []),
 		...(socialProviders?.map((provider) => ({
-			key: provider,
+			key: String(provider),
 			account: undefined,
 			provider,
 		})) ?? []),
@@ -53,7 +53,7 @@ export function LinkedAccounts({ className }: LinkedAccountsProps) {
 				<CardContent className="p-0">
 					{isPending
 						? socialProviders?.map((provider, index) => (
-								<div key={provider}>
+								<div key={String(provider)}>
 									{index > 0 && <Separator />}
 									<AccountRowSkeleton />
 								</div>
@@ -64,7 +64,7 @@ export function LinkedAccounts({ className }: LinkedAccountsProps) {
 
 									<LinkedAccount
 										account={row.account}
-										provider={row.provider}
+										provider={row.provider as SocialProvider}
 									/>
 								</div>
 							))}

@@ -17,7 +17,7 @@
 		"check:circular": "node scripts/node/madge-monorepo.mjs --check=circular",
 		"check:orphans": "node scripts/node/madge-monorepo.mjs --check=orphans",
 		"check:outdated": "pnpm outdated -r",
-		"clean": "turbo run clean && git clean -xdf node_modules .turbo .tmp pnpm-lock.yaml deploy/docker/context-report deploy/compose/.buildx-cache",
+		"clean": "turbo run clean && git clean -xdf node_modules .turbo .turbo-cache .tmp pnpm-lock.yaml deploy/docker/context-report deploy/compose/.buildx-cache",
 		"db:generate": "pnpm --filter @md-oss/db db:generate",
 		"db:migrate": "pnpm --filter @md-oss/db db:migrate",
 		"db:push": "pnpm --filter @md-oss/db db:push",
@@ -53,8 +53,20 @@
 		"glob": "catalog:",
 		"lefthook": "catalog:",
 		"madge": "catalog:",
-		"pnpm-update-catalogs": "^1.0.4",
+		"pnpm-update-catalogs": "catalog:",
 		"tsx": "catalog:",
 		"turbo": "catalog:"
+	},
+	"pnpm": {
+		"overrides": {
+			"@better-auth/utils": "0.5.0"
+		},
+		"onlyBuiltDependencies": [
+			"cbor-extract",
+			"esbuild",
+			"lefthook",
+			"pnpm-update-catalogs",
+			"sharp"
+		]
 	}
 }

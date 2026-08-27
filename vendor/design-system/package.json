@@ -2005,7 +2005,7 @@
 		"@dnd-kit/utilities": "catalog:",
 		"@md-oss/common": "workspace:^",
 		"@radix-ui/react-slot": "catalog:",
-		"@react-email/components": "catalog:",
+		"react-email": "catalog:",
 		"@tanstack/react-pacer": "catalog:",
 		"@tanstack/react-query": "catalog:",
 		"@tanstack/react-table": "catalog:",

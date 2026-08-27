@@ -5,10 +5,16 @@ import {
 import type { ComponentType, PropsWithChildren, ReactNode } from 'react';
 import { ErrorToaster } from './error-toaster';
 import type { PartialExtendedViewPaths } from './pages/view-paths';
+import '../../lib/auth/auth-plugin';
 
 export * from '@better-auth-ui/react';
 export * from '@better-auth-ui/react/email';
-export * from '@better-auth-ui/react/plugins';
+export * from '@better-auth-ui/react/plugins/api-key';
+export * from '@better-auth-ui/react/plugins/captcha';
+export * from '@better-auth-ui/react/plugins/magic-link';
+export * from '@better-auth-ui/react/plugins/multi-session';
+export * from '@better-auth-ui/react/plugins/passkey';
+export * from '@better-auth-ui/react/plugins/username';
 
 declare module '@better-auth-ui/core' {
 	interface AuthConfig {
@@ -44,8 +50,8 @@ export function AuthProvider({ children, ...config }: AuthProviderProps) {
 	const resolvedViewPaths: PartialExtendedViewPaths = {
 		auth: {
 			...config.viewPaths?.auth,
-			...(config.plugins?.find((p) => p.name === 'magic-link')?.viewPaths
-				?.auth || {}),
+			...(config.plugins?.find((p) => p.id === 'magicLink')?.viewPaths?.auth ||
+				{}),
 		},
 		settings: {
 			...config.viewPaths?.settings,

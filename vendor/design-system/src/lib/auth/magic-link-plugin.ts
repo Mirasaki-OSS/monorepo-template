@@ -2,7 +2,7 @@ import { createAuthPlugin } from '@better-auth-ui/core';
 import {
 	magicLinkPlugin as coreMagicLinkPlugin,
 	type MagicLinkPluginOptions,
-} from '@better-auth-ui/core/plugins';
+} from '@better-auth-ui/core/plugins/magic-link';
 
 import { MagicLink } from '@md-oss/design-system/components/auth/magic-link';
 import { MagicLinkButton } from '@md-oss/design-system/components/auth/magic-link-button';
@@ -10,7 +10,7 @@ import { MagicLinkButton } from '@md-oss/design-system/components/auth/magic-lin
 export const magicLinkPlugin = createAuthPlugin(
 	coreMagicLinkPlugin.id,
 	(options: MagicLinkPluginOptions = {}) => ({
-		...coreMagicLinkPlugin(options),
+		...(({ id: _id, ...plugin }) => plugin)(coreMagicLinkPlugin(options)),
 		authButtons: [MagicLinkButton],
 		views: {
 			auth: { magicLink: MagicLink },

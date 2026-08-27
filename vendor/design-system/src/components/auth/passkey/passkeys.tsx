@@ -1,12 +1,11 @@
 'use client';
 
-import {
-	type ListPasskeysData,
-	type PasskeyAuthClient,
-	useAuth,
-	useAuthPlugin,
-	useListPasskeys,
-} from '@better-auth-ui/react';
+import type {
+	ListPasskeysData,
+	PasskeyAuthClient,
+} from '@better-auth-ui/core/plugins/passkey';
+import { useAuth, useAuthPlugin } from '@better-auth-ui/react';
+import { useListPasskeys } from '@better-auth-ui/react/plugins/passkey';
 import { Button } from '@md-oss/design-system/components/ui/button';
 import { Card, CardContent } from '@md-oss/design-system/components/ui/card';
 import { Separator } from '@md-oss/design-system/components/ui/separator';

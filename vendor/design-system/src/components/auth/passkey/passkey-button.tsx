@@ -1,12 +1,9 @@
 'use client';
 
 import { type AuthView, authMutationKeys } from '@better-auth-ui/core';
-import {
-	type PasskeyAuthClient,
-	useAuth,
-	useAuthPlugin,
-	useSignInPasskey,
-} from '@better-auth-ui/react';
+import type { PasskeyAuthClient } from '@better-auth-ui/core/plugins/passkey';
+import { useAuth, useAuthPlugin } from '@better-auth-ui/react';
+import { useSignInPasskey } from '@better-auth-ui/react/plugins/passkey';
 import { Button } from '@md-oss/design-system/components/ui/button';
 import { Spinner } from '@md-oss/design-system/components/ui/spinner';
 import { passkeyPluginRef } from '@md-oss/design-system/lib/auth/plugin-refs';

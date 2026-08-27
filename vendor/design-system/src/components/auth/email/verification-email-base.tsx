@@ -1,4 +1,5 @@
 import { cn } from '@md-oss/design-system/lib/utils';
+import type { ReactNode } from 'react';
 import {
 	Body,
 	Button,
@@ -14,8 +15,7 @@ import {
 	Section,
 	Tailwind,
 	Text,
-} from '@react-email/components';
-import type { ReactNode } from 'react';
+} from 'react-email';
 import {
 	type EmailClassNames,
 	type EmailColors,

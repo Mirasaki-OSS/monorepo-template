@@ -1,10 +1,7 @@
 'use client';
 
-import {
-	type UsernameAuthClient,
-	useAuth,
-	useSession,
-} from '@better-auth-ui/react';
+import type { UsernameAuthClient } from '@better-auth-ui/core/plugins/username';
+import { useAuth, useSession } from '@better-auth-ui/react';
 import {
 	Avatar,
 	AvatarFallback,

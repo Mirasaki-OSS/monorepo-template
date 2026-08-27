@@ -54,7 +54,7 @@
 	},
 	"dependencies": {
 		"@md-oss/design-system": "workspace:^",
-		"@react-email/components": "catalog:",
+		"react-email": "catalog:",
 		"@t3-oss/env-core": "catalog:",
 		"resend": "catalog:",
 		"zod": "catalog:"
