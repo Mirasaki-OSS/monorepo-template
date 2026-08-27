@@ -504,7 +504,7 @@ const copyPackageDocs = async (sourceDir, targetDir) => {
     const meta = JSON.parse(await readFile(metaPath, 'utf8'));
     await writeFile(
       path.join(targetDir, 'meta.json'),
-      `${JSON.stringify(meta, null, '\t')}\n`,
+      `${JSON.stringify(meta, null, 2)}\n`,
       'utf8'
     );
   }
