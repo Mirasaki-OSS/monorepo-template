@@ -501,10 +501,11 @@ const copyPackageDocs = async (sourceDir, targetDir) => {
   const metaPath = path.join(docsDir, 'meta.json');
   const hasMeta = await exists(metaPath);
   if (hasMeta) {
-    const meta = JSON.parse(await readFile(metaPath, 'utf8'));
+    const metaContent = await readFile(metaPath, 'utf8');
+    JSON.parse(metaContent);
     await writeFile(
       path.join(targetDir, 'meta.json'),
-      `${JSON.stringify(meta, null, 2)}\n`,
+      `${metaContent.replace(/^\t+/gmu, (indent) => '  '.repeat(indent.length))}`,
       'utf8'
     );
   }
