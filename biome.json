@@ -85,6 +85,12 @@
 					}
 				}
 			}
+		},
+		{
+			"includes": ["apps/web/content/docs/**/meta.json"],
+			"linter": {
+				"enabled": false
+			}
 		}
 	]
 }
