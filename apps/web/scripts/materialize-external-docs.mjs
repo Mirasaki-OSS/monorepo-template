@@ -1,5 +1,5 @@
 import { execSync } from 'node:child_process';
-import { cp, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
 const APP_ROOT = process.cwd();
@@ -501,7 +501,12 @@ const copyPackageDocs = async (sourceDir, targetDir) => {
   const metaPath = path.join(docsDir, 'meta.json');
   const hasMeta = await exists(metaPath);
   if (hasMeta) {
-    await cp(metaPath, path.join(targetDir, 'meta.json'));
+    const meta = JSON.parse(await readFile(metaPath, 'utf8'));
+    await writeFile(
+      path.join(targetDir, 'meta.json'),
+      `${JSON.stringify(meta, null, '\t')}\n`,
+      'utf8'
+    );
   }
 
   let copiedDocsFiles = 0;
