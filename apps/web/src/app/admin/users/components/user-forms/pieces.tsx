@@ -70,27 +70,6 @@ export const userFormHasValidationErrors = (
   return fieldNames.some((fieldName) => !!form.formState.errors[fieldName]);
 };
 
-// [DONE] name: string;
-// [DONE] email: string;
-// [DONE] emailVerified: boolean;
-// [DONE] image: string | null;
-// [DONE] username: string | null;
-// [DONE] displayUsername: string | null;
-// [DONE] bio: string | null;
-// [DONE] clientMetadata: Record<string, never> | null;
-// [DONE] clientReadonlyMetadata: Record<string, never> | null;
-// [DONE] serverMetadata: Record<string, never> | null;
-// [DONE] roles: ("owner" | "admin" | "support" | "user")[];
-// [DONE] banned: boolean;
-// [DONE] banReason: string | null;
-// [DONE] banExpiresAt: Date | null;
-// [DONE] createdAt: Date;
-// [DONE] updatedAt: Date;
-// DANGER ZONE AND VIRTUAL FIELDS (not stored in DB):
-// id: string;
-// lastSeenAt: Date | null;
-// authMethods: readonly string[];
-
 export type UserFormPieceProps = {
   form: UseUserFormReturn;
   auth: ClientAuthContext | null;
