@@ -23,7 +23,7 @@
 		"db:push": "pnpm --filter @md-oss/db db:push",
 		"db:reset": "pnpm --filter @md-oss/db db:reset",
 		"db:seed": "pnpm --filter @md-oss/db db:seed:dev -- --count 10000 --batch-size 1000 --seed 42",
-		"dev": "turbo run dev",
+		"dev": "./scripts/bash/ensure-redis.sh && turbo run dev",
 		"lint": "pnpm exec biome lint --write --unsafe",
 		"format": "pnpm exec biome format --write",
 		"gen:app": "turbo gen workspace --type app",
