@@ -172,10 +172,10 @@ catalogs:
       specifier: ^14.27.0
       version: 14.27.0
     drizzle-kit:
-      specifier: 1.0.0-rc.4
+      specifier: ^1.0.0-rc.4
       version: 1.0.0-rc.4
     drizzle-orm:
-      specifier: 1.0.0-rc.4
+      specifier: ^1.0.0-rc.4
       version: 1.0.0-rc.4
     embla-carousel-react:
       specifier: ^8.6.0
